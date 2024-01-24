@@ -2,14 +2,16 @@
 
 ## Team members
 The members of the team are:
-- *enter full name 1 here*
-- *enter full name 2 here*
-- *enter full name 3 here*
-- *enter full name 4 here*
-- *enter full name 5 here*
+- YARA NIROUKH
+- FABIHA CHOUDHURY
+- RIYA GILL
+- XINYAO (Anna) LIAO
+- HANNAH PORTEOUS
+- YIQING REN
+- KATY WAKEMAN
 
 ## Project structure
-The project is called `task_manager`.  It currently consists of a single app `tasks`.
+The project is called `peer_support_network`.  It currently consists of a single app `peer_support`.
 
 ## Deployed version of the application
 The deployed version of the application can be found at [*enter url here*](*enter_url_here*).
@@ -50,4 +52,4 @@ $ python3 manage.py test
 ## Sources
 The packages used by this application are specified in `requirements.txt`
 
-*Declare are other sources here, and remove this line*
+Initial scaffolding by Jeroen Keppens
