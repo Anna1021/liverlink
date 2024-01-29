@@ -40,3 +40,28 @@ class User(AbstractUser):
         """Return a URL to a miniature version of the user's gravatar."""
         
         return self.gravatar(size=60)
+
+class Message(models.Model):
+    sender = models.ForeignKey(User,null=True,on_delete=models.SET_NULL,unique=False)
+    content = models.CharField(max_length=100)
+    read = models.BooleanField()
+
+class Conversation(models.Model):
+    name = models.CharField(max_length=20,null=True)
+    group = models.BooleanField()
+    users = models.ManyToManyField(User)
+    messages = models.ManyToManyField(Message)
+
+    def display_name(self, current_user):
+        if not self.group:
+            other_member = self.users.exclude(username=current_user.username)[0]
+            return other_member.username
+        else:
+            if self.name is None:
+                members = self.users.all()
+                return ", ".join([i.username for i in members]) #automatically ordered by username
+            return self.name
+
+
+
+    

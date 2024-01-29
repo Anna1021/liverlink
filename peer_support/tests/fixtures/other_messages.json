@@ -1,0 +1,20 @@
+[
+    {
+      "model": "peer_support.message",
+      "pk": 2,
+      "fields": {
+        "sender": 1,
+        "content":"Heyyy",
+        "read": false
+      }
+    },
+    {
+        "model": "peer_support.message",
+        "pk": 3,
+        "fields": {
+          "sender": 3,
+          "content":"Yo",
+          "read": false
+        }
+      }
+  ]
