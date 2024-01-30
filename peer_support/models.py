@@ -17,6 +17,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
     email = models.EmailField(unique=True, blank=False)
+    unread_conversations = models.ManyToManyField('Conversation')
 
 
     class Meta:
@@ -41,10 +42,12 @@ class User(AbstractUser):
         
         return self.gravatar(size=60)
 
+    def update_unread_conversations(self,conversation):
+        self.unread_conversations.add(conversation)
+
 class Message(models.Model):
     sender = models.ForeignKey(User,null=True,on_delete=models.SET_NULL,unique=False)
     content = models.CharField(max_length=100)
-    read = models.BooleanField()
 
 class Conversation(models.Model):
     name = models.CharField(max_length=20,null=True)
@@ -61,6 +64,21 @@ class Conversation(models.Model):
                 members = self.users.all()
                 return ", ".join([i.username for i in members]) #automatically ordered by username
             return self.name
+
+    def add_user(self,user):
+        if self.group:
+            self.users.add(user)
+
+    def remove_user(self,user):
+        if self.group:
+            self.users.remove(user)
+            if self.users.count()==0:
+                Message.objects.filter(pk=self.pk).delete() #completely deletes conversation if no member left
+
+    def send(self,message):
+        self.messages.add(message)
+        for user in self.users.exclude(username=message.sender.username):
+            user.update_unread_conversations(self)
 
 
 
