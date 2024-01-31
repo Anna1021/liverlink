@@ -1,0 +1,8 @@
+{% extends 'base_content.html' %}
+{% block content %}
+{% for message in conversation_messages %}
+    {{message.sender}} : {{message.content}}
+{% empty %}
+Type out your first message in the box below!
+{% endfor %}
+{% endblock %}

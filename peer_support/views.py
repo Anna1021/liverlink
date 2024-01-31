@@ -10,7 +10,8 @@ from django.views.generic.edit import FormView, UpdateView
 from django.urls import reverse
 from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm,MessageForm
 from peer_support.helpers import login_prohibited
-
+from .models import Conversation
+from django.urls import reverse_lazy
 
 @login_required
 def dashboard(request):
@@ -155,3 +156,29 @@ class SignUpView(LoginProhibitedMixin, FormView):
 class ConversationView(LoginRequiredMixin, FormView):
     form_class = MessageForm
     template_name = "conversation.html"
+
+    def get(self,request,conversation_id):
+        conversation = Conversation.objects.get(id=conversation_id)
+        current_user = request.user
+        if current_user not in conversation.users.all():
+            messages.error(request,"You do not have access to this conversation.")
+            return reverse_lazy("conversation")
+        form = MessageForm(user=current_user)
+        context = {"form":form}
+        return render(request,self.template_name,context)
+
+    def post(self,request,conversation_id):
+        """Post request for user to send message to conversation"""
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            print(":3")
+            form.save()
+            return render(request,self.template_name,{'form':MessageForm(request.user)})
+        else:
+            print(":(")
+            messages.error(request,"This message is not valid")
+            return render(request,self.template_name,{'form':form})
+
+        
+
+        
