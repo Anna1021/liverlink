@@ -17,6 +17,12 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
     email = models.EmailField(unique=True, blank=False)
+    age = models.PositiveSmallIntegerField(blank=True, null=True)
+    gender = models.CharField(max_length=50, blank=True)
+    location = models.CharField(max_length=50, blank=True)
+    ethniticity = models.CharField(max_length=50, blank=True)
+    language = models.CharField(max_length=50, blank=True)
+    bio = models.TextField(blank=True)
 
 
     class Meta:
@@ -40,3 +46,17 @@ class User(AbstractUser):
         """Return a URL to a miniature version of the user's gravatar."""
         
         return self.gravatar(size=60)
+
+class Patient(User):
+    """Model used for patient authentication, and patient related information."""
+
+    disease = models.CharField(max_length=50, blank=True)
+    age_of_diagnosis = models.PositiveSmallIntegerField(blank=True, null=True)
+
+
+class Parent(User):
+    """Model used for parent authentication, and parent related information."""
+    
+    child_condition = models.CharField(max_length=50, blank=True)
+    child_age_of_diagnosis = models.PositiveSmallIntegerField(blank=True, null=True)
+    
