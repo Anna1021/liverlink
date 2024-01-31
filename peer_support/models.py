@@ -2,6 +2,9 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from libgravatar import Gravatar
+from django import template
+
+register = template.Library()
 
 class User(AbstractUser):
     """Model used for user authentication, and team member related information."""
@@ -17,7 +20,8 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
     email = models.EmailField(unique=True, blank=False)
-    unread_conversations = models.ManyToManyField('Conversation')
+    conversations = models.ManyToManyField('Conversation')
+    unread_messages = models.ManyToManyField('Message')
 
 
     class Meta:
@@ -50,24 +54,32 @@ class Message(models.Model):
     content = models.CharField(max_length=100)
 
 class Conversation(models.Model):
-    name = models.CharField(max_length=20,null=True)
-    group = models.BooleanField()
     users = models.ManyToManyField(User)
     messages = models.ManyToManyField(Message)
 
+    @register.simple_tag
     def display_name(self, current_user):
-        if not self.group:
-            other_member = self.users.exclude(username=current_user.username)[0]
-            return other_member.username
-        else:
-            if self.name is None:
-                members = self.users.all()
-                return ", ".join([i.username for i in members]) #automatically ordered by username
-            return self.name
+        other_member = self.users.exclude(username=current_user.username)[0]
+        return other_member.username
 
     def add_user(self,user):
         if self.group:
             self.users.add(user)
+
+    def send(self,message):
+        self.messages.add(message)
+        for user in self.users.exclude(username=message.sender.username):
+            user.update_unread_conversations(self)
+
+    def as_group(self):
+        """Return object as an instance of GroupConversation"""
+        try:
+            return self.groupconversation
+        except GroupConversation.DoesNotExist:
+            return None
+
+class GroupConversation(Conversation):
+    name = models.CharField(max_length=20,null=True)
 
     def remove_user(self,user):
         if self.group:
@@ -75,11 +87,10 @@ class Conversation(models.Model):
             if self.users.count()==0:
                 Message.objects.filter(pk=self.pk).delete() #completely deletes conversation if no member left
 
-    def send(self,message):
-        self.messages.add(message)
-        for user in self.users.exclude(username=message.sender.username):
-            user.update_unread_conversations(self)
-
-
+    def display_name(self):
+        if self.name is None:
+            members = self.users.all()
+            return ", ".join([i.username for i in members]) #automatically ordered by username
+        return self.name
 
     

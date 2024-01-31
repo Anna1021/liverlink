@@ -1,0 +1,11 @@
+[
+    {
+      "model": "peer_support.groupconversation",
+      "pk": 1,
+      "fields": {
+        "name":null,
+        "users": [1,3,4]
+      }
+    }
+
+  ]

@@ -1,0 +1,13 @@
+{% extends 'base_content.html' %}
+{% block content %}
+<ul>
+    {% for conversation in user.conversations %}
+        {% if conversation.as_group != None %}
+        {{conversation.as_group.display_name}}
+        {% else %}
+        {{conversation.display_name user}}
+    {% empty %}
+    No conversations!
+    {% endfor %}
+</ul>
+{% endblock %}

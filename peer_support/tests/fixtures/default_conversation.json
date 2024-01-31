@@ -3,9 +3,7 @@
       "model": "peer_support.conversation",
       "pk": 1,
       "fields": {
-        "name":null,
         "users": [1,2],
-        "group":false,
         "messages":[1]
       }
     }

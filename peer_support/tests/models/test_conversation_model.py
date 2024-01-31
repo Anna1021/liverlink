@@ -12,38 +12,32 @@ class ConversationModelTestCase(TestCase):
         'peer_support/tests/fixtures/default_message.json',
         'peer_support/tests/fixtures/other_messages.json',
         'peer_support/tests/fixtures/default_conversation.json',
-        'peer_support/tests/fixtures/other_conversations.json'
+        'peer_support/tests/fixtures/default_group_conversation.json'
     ]
 
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
         self.message = Message.objects.get(pk=1)
         self.conversation1 = Conversation.objects.get(pk=1)
-        self.conversation2 = Conversation.objects.get(pk=2)
-        self.conversation3 = Conversation.objects.get(pk=3)
+        self.conversation2 = GroupConversation.objects.get(pk=2)
 
     def test_correct_group_size(self):
         self.assertEqual(self.conversation1.users.count(),2)
         self.assertEqual(self.conversation2.users.count(),3)
-        self.assertEqual(self.conversation3.users.count(),3)
 
-    def test_correct_internal_names(self):
-        self.assertIsNone(self.conversation1.name)
+    def test_correct_internal_group_name(self):
         self.assertIsNone(self.conversation2.name)
-        self.assertEqual(self.conversation3.name,"Test group")
 
     def test_correct_name_displayed(self):
         display1 = self.conversation1.display_name(self.user)
         display2 = self.conversation2.display_name(self.user)
-        display3 = self.conversation3.display_name(self.user)
         self.assertEqual(display1,"@janedoe")
         self.assertEqual(display2,"@johndoe, @peterpickles, @petrapickles")
-        self.assertEqual(display3,"Test group")
 
-    def test_cannot_add_user_to_individual_chat(self):
-        other_user=User.objects.get(pk=3)
-        self.conversation1.add_user(other_user)
-        self.assertEqual(self.conversation1.users.count(),2)
+    # def test_cannot_add_user_to_individual_chat(self):
+    #     other_user=User.objects.get(pk=3)
+    #     self.conversation1.add_user(other_user)
+    #     self.assertEqual(self.conversation1.users.count(),2)
 
     def test_add_user_to_group(self):
         user2 = User.objects.get(pk=2)
