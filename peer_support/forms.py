@@ -2,7 +2,8 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.core.validators import RegexValidator
-from .models import User
+from .models import User, Question, Response
+
 
 class LogInForm(forms.Form):
     """Form enabling registered users to log in."""
@@ -108,3 +109,30 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             password=self.cleaned_data.get('new_password'),
         )
         return user
+
+class NewQuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['title', 'body']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'autofocus': True,
+                'placeholder': 'Query Title'
+            })
+        }
+
+class NewResponseForm(forms.ModelForm):
+    class Meta:
+        model = Response
+        fields = ['body']
+
+class NewReplyForm(forms.ModelForm):
+    class Meta:
+        model = Response
+        fields = ['body']
+        widgets = {
+            'body': forms.Textarea(attrs={
+                'rows': 2,
+                'placeholder': 'What are your thoughts?'
+            })
+        }

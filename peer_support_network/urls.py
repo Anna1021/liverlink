@@ -27,4 +27,8 @@ urlpatterns = [
     path('password/', views.PasswordView.as_view(), name='password'),
     path('profile/', views.ProfileUpdateView.as_view(), name='profile'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
+    path('resources/', views.resources, name='resources'),
+    path('question/<int:id>', views.questionPage, name='question'),
+    path('new-question/', views.newQuestionPage, name='new-question'),
+    path('reply', views.replyPage, name='reply')
 ]
