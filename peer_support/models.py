@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from libgravatar import Gravatar
 from django import template
+from django.utils import timezone
 
 register = template.Library()
 
@@ -46,12 +47,13 @@ class User(AbstractUser):
         
         return self.gravatar(size=60)
 
-    def update_unread_conversations(self,conversation):
-        self.unread_conversations.add(conversation)
+    def update_unread_messages(self,message):
+        self.unread_messages.add(message)
 
 class Message(models.Model):
     sender = models.ForeignKey(User,null=True,on_delete=models.SET_NULL,unique=False)
     content = models.CharField(max_length=100)
+    send_time = models.DateTimeField(default=timezone.now)
 
 class Conversation(models.Model):
     users = models.ManyToManyField(User)
@@ -69,7 +71,7 @@ class Conversation(models.Model):
     def send(self,message):
         self.messages.add(message)
         for user in self.users.exclude(username=message.sender.username):
-            user.update_unread_conversations(self)
+            user.update_unread_messages(message)
 
     def as_group(self):
         """Return object as an instance of GroupConversation"""

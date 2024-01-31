@@ -4,7 +4,8 @@
       "pk": 2,
       "fields": {
         "sender": 1,
-        "content":"Heyyy"
+        "content":"Heyyy",
+        "send_time":"2024-01-20T10:00:00Z"
       }
     },
     {
@@ -12,7 +13,8 @@
         "pk": 3,
         "fields": {
           "sender": 3,
-          "content":"Yo"
+          "content":"Yo",
+          "send_time":"2024-01-20T10:00:00Z"
         }
       }
   ]

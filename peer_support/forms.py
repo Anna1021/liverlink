@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.core.validators import RegexValidator
 from .models import User,Message
+from django.utils import timezone
 
 class LogInForm(forms.Form):
     """Form enabling registered users to log in."""
@@ -109,7 +110,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
         )
         return user
 
-class MessageForm(forms.modelForm):
+class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ['content']
@@ -120,10 +121,10 @@ class MessageForm(forms.modelForm):
         super().__init__(**kwargs)
         self.user = user
 
-    def save():
+    def save(self):
         super().save(commit=False)
         message = Message.objects.create(
             sender=self.user,
-            content=self.cleaned_data().get('content')
+            content=self.cleaned_data.get('content')
         )
         return message

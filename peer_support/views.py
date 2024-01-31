@@ -8,7 +8,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 from django.urls import reverse
-from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm
+from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm,MessageForm
 from peer_support.helpers import login_prohibited
 
 

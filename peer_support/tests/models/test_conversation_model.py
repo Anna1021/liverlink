@@ -18,15 +18,15 @@ class ConversationModelTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
         self.message = Message.objects.get(pk=1)
-        self.conversation1 = Conversation.objects.get(pk=1)
-        self.conversation2 = GroupConversation.objects.get(pk=2)
+        self.conversation = Conversation.objects.get(pk=1)
+        self.group_conversation = GroupConversation.objects.get(pk=2)
 
     def test_correct_group_size(self):
-        self.assertEqual(self.conversation1.users.count(),2)
-        self.assertEqual(self.conversation2.users.count(),3)
+        self.assertEqual(self.conversation.users.count(),2)
+        self.assertEqual(self.group_conversation2.users.count(),3)
 
     def test_correct_internal_group_name(self):
-        self.assertIsNone(self.conversation2.name)
+        self.assertIsNone(self.group_conversation.name)
 
     def test_correct_name_displayed(self):
         display1 = self.conversation1.display_name(self.user)
