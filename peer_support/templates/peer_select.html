@@ -1,0 +1,40 @@
+{% extends 'base_content.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>All users</h2>
+            <hr>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                    Sort Options
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <form method="get" class="px-4 py-3">
+                        {% csrf_token %}
+                        {% include 'partials/bootstrap_form.html' with form=form %}
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </form>
+                </div>
+            </div>
+
+            
+
+
+            <div style="overflow-y:auto;">
+            <hr>
+            {% if users|length == 0 %}
+                <p>No users</p>
+            {% else %}
+                {% for user in users %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ user.username }}
+                    <a href="" class="btn btn-secondary btn-sm ms-auto">Add friend</a>
+                </li>                
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

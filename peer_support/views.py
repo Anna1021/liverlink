@@ -11,6 +11,9 @@ from django.urls import reverse
 from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm
 from peer_support.helpers import login_prohibited
 
+from peer_support.models import User
+from peer_support.forms import SortPeerForm
+
 
 @login_required
 def dashboard(request):
@@ -151,3 +154,17 @@ class SignUpView(LoginProhibitedMixin, FormView):
 
     def get_success_url(self):
         return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
+    
+class PeerView(LoginRequiredMixin, View):
+    """Displays the page for viewing all users on network."""
+
+    template_name = 'peer_select.html'
+
+    def get(self, request):
+        users = User.objects.distinct()
+        form = SortPeerForm(user=request.user, data=request.GET)
+
+        if form.is_valid():
+            users = form.filter_users(users)
+
+        return render(request, self.template_name, {'users': users, 'form': form})

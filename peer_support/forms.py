@@ -108,3 +108,23 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             password=self.cleaned_data.get('new_password'),
         )
         return user
+    
+class SortPeerForm(forms.Form):
+
+    Username =  forms.ChoiceField(choices=[('asc', 'Ascending'), ('desc', 'Descending')], required=False)
+
+    def __init__(self, user, *args, **kwargs):
+        """Initialise query set with users tasks"""
+
+        super(SortPeerForm, self).__init__(*args, **kwargs)
+
+    def filter_users(self, users):
+        """Filters users based on critera provided"""
+        
+        due_date_order = self.cleaned_data.get('Username')  
+        if due_date_order == 'asc':
+            users = users.order_by('username')
+        elif due_date_order == 'desc':
+            users = users.order_by('-username')
+
+        return users
