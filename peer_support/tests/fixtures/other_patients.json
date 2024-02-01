@@ -14,7 +14,6 @@
       "pk": 3,
       "fields": {
         "user_ptr": 3,
-        "bio": "Hi, I'm Petra Pickles! I'm a student at King's College London.",
         "condition": "Cirrhosis",
         "age_of_diagnosis": 13,
         "is_active": true

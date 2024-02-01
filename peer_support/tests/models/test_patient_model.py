@@ -1,7 +1,7 @@
 """Unit tests for the Patient model."""
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from peer_support.models import User, Patient
+from peer_support.models import Patient
 
 class PatientModelTestCase(TestCase):
     """Unit tests for the Patient model."""
