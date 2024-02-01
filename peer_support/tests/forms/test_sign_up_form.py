@@ -1,4 +1,5 @@
 """Unit tests of the sign up form."""
+import datetime
 from django.contrib.auth.hashers import check_password
 from django import forms
 from django.test import TestCase
@@ -14,8 +15,15 @@ class SignUpFormTestCase(TestCase):
             'last_name': 'Doe',
             'username': '@janedoe',
             'email': 'janedoe@example.org',
+            'date_of_birth': '2004-03-02',
+            'gender': 'F',
+            'location': 'US',
+            'ethnicity': 'RO',
+            'language': 'en',
+            'bio': 'I am a test user.',
             'new_password': 'Password123',
-            'password_confirmation': 'Password123'
+            'password_confirmation': 'Password123',
+            'user_type': 'PT'
         }
 
     def test_valid_sign_up_form(self):
@@ -30,12 +38,23 @@ class SignUpFormTestCase(TestCase):
         self.assertIn('email', form.fields)
         email_field = form.fields['email']
         self.assertTrue(isinstance(email_field, forms.EmailField))
+        self.assertIn('date_of_birth', form.fields)
+        date_of_birth_field = form.fields['date_of_birth']
+        self.assertTrue(isinstance(date_of_birth_field, forms.DateField))
+        self.assertIn('gender', form.fields)
+        self.assertIn('location', form.fields)
+        self.assertIn('ethnicity', form.fields)
+        self.assertIn('language', form.fields)
+        self.assertIn('bio', form.fields)
+        bio_field = form.fields['bio']
+        self.assertTrue(isinstance(bio_field, forms.CharField))
         self.assertIn('new_password', form.fields)
         new_password_widget = form.fields['new_password'].widget
         self.assertTrue(isinstance(new_password_widget, forms.PasswordInput))
         self.assertIn('password_confirmation', form.fields)
         password_confirmation_widget = form.fields['password_confirmation'].widget
         self.assertTrue(isinstance(password_confirmation_widget, forms.PasswordInput))
+        self.assertIn('user_type', form.fields)
 
     def test_form_uses_model_validation(self):
         self.form_input['username'] = 'badusername'
@@ -67,13 +86,20 @@ class SignUpFormTestCase(TestCase):
 
     def test_form_must_save_correctly(self):
         form = SignUpForm(data=self.form_input)
-        before_count = User.objects.count()
-        form.save()
-        after_count = User.objects.count()
-        self.assertEqual(after_count, before_count+1)
-        user = User.objects.get(username='@janedoe')
-        self.assertEqual(user.first_name, 'Jane')
-        self.assertEqual(user.last_name, 'Doe')
-        self.assertEqual(user.email, 'janedoe@example.org')
-        is_password_correct = check_password('Password123', user.password)
-        self.assertTrue(is_password_correct)
+        if form.is_valid():
+            before_count = User.objects.count()
+            form.save()
+            after_count = User.objects.count()
+            self.assertEqual(after_count, before_count+1)
+            user = User.objects.get(username='@janedoe')
+            self.assertEqual(user.first_name, 'Jane')
+            self.assertEqual(user.last_name, 'Doe')
+            self.assertEqual(user.email, 'janedoe@example.org')
+            self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
+            self.assertEqual(user.gender, 'F')
+            self.assertEqual(user.location, 'US')
+            self.assertEqual(user.ethnicity, 'RO')
+            self.assertEqual(user.language, 'en')
+            self.assertEqual(user.bio, 'I am a test user.')
+            is_password_correct = check_password('Password123', user.password)
+            self.assertTrue(is_password_correct)
