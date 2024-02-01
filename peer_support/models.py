@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from libgravatar import Gravatar
 import pycountry
+from django.core.validators import MinValueValidator
 
 
 GENDER_CHOICES = [
@@ -96,7 +97,7 @@ class Patient(User):
     """Model used for patient authentication, and patient related information."""
 
     condition = models.CharField(max_length=50, blank=True, null=True)
-    age_of_diagnosis = models.PositiveSmallIntegerField(blank=True, null=True)
+    age_of_diagnosis = models.PositiveIntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
 
     class Meta:
         verbose_name = 'Patient'
@@ -108,7 +109,7 @@ class Parent(User):
     
     # child = models.ForeignKey(Patient, on_delete=models.CASCADE, blank=True, null=True)
     child_condition = models.CharField(max_length=50, blank=True, null=True)
-    child_age_of_diagnosis = models.PositiveSmallIntegerField(blank=True, null=True)
+    child_age_of_diagnosis = models.PositiveSmallIntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
 
     class Meta:
         verbose_name = 'Parent'

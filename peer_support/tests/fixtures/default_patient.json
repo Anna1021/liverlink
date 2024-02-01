@@ -1,0 +1,12 @@
+[
+    {
+        "model": "peer_support.patient",
+        "pk": 1,
+        "fields": {
+            "user_ptr": 1,
+            "condition": "Hepatitis",
+            "age_of_diagnosis": 20,
+            "is_active": true
+        }
+    }
+]
