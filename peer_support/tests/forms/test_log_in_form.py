@@ -1,7 +1,7 @@
 """Unit tests of the log in form."""
 from django import forms
 from django.test import TestCase
-from peer_support.forms.forms import LogInForm
+from peer_support.forms import LogInForm
 from peer_support.models import User
 
 class LogInFormTestCase(TestCase):

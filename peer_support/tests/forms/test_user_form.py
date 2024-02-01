@@ -1,7 +1,7 @@
 """Unit tests of the user form."""
 from django import forms
 from django.test import TestCase
-from peer_support.forms.forms import UserForm
+from peer_support.forms import UserForm
 from peer_support.models import User
 
 class UserFormTestCase(TestCase):
