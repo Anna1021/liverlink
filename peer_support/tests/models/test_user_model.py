@@ -128,6 +128,69 @@ class UserModelTestCase(TestCase):
         self.assertEqual(full_name, "John Doe")
 
 
+    def test_date_of_birth_may_be_blank(self):
+        self.user.date_of_birth = None
+        self._assert_user_is_valid()
+
+    def test_date_of_birth_must_be_in_past(self):
+        self.user.date_of_birth = '3000-01-01'
+        self._assert_user_is_invalid()
+
+    def test_date_of_birth_need_not_be_unique(self):
+        second_user = User.objects.get(username='@janedoe')
+        self.user.date_of_birth = second_user.date_of_birth
+        self._assert_user_is_valid()
+
+
+    def test_gender_may_be_blank(self):
+        self.user.gender = None
+        self._assert_user_is_valid()
+
+    def test_gender_can_only_be_one_of_the_choices(self):
+        self.user.gender = "Alien"
+        self._assert_user_is_invalid()
+
+
+    def test_location_may_be_blank(self):
+        self.user.location = None
+        self._assert_user_is_valid()
+
+    def test_location_can_only_be_one_of_the_choices(self):
+        self.user.location = 'Mars'
+        self._assert_user_is_invalid()
+
+    
+    def test_ethnicity_may_be_blank(self):
+        self.user.ethnicity = None
+        self._assert_user_is_valid()
+
+    def test_ethnicity_can_only_be_one_of_the_choices(self):
+        self.user.ethnicity = 'Martian'
+        self._assert_user_is_invalid()
+
+
+    def test_language_may_be_blank(self):
+        self.user.language = None
+        self._assert_user_is_valid()
+
+    def test_language_can_only_be_one_of_the_choices(self):
+        self.user.language = 'Martian'
+        self._assert_user_is_invalid()
+
+
+    def test_bio_may_be_blank(self):
+        self.user.bio = ''
+        self._assert_user_is_valid()
+
+    def test_bio_may_contain_500_characters(self):
+        self.user.bio = 'x' * 500
+        self._assert_user_is_valid()
+
+    def test_bio_must_not_contain_more_than_500_characters(self):
+        self.user.bio = 'x' * 501
+        self._assert_user_is_invalid()
+
+
     def test_default_gravatar(self):
         actual_gravatar_url = self.user.gravatar()
         expected_gravatar_url = self._gravatar_url(size=120)
