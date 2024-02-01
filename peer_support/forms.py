@@ -111,20 +111,40 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     
 class SortPeerForm(forms.Form):
 
-    Username =  forms.ChoiceField(choices=[('asc', 'Ascending'), ('desc', 'Descending')], required=False)
+    Username =  forms.ChoiceField(choices=[('asc', 'Ascending'), ('desc', 'Descending'), ('', 'Any')], required=False)
 
     def __init__(self, user, *args, **kwargs):
         """Initialise query set with users tasks"""
 
         super(SortPeerForm, self).__init__(*args, **kwargs)
 
+    def sort_users(self, users):
+        """Sorts users based on critera provided"""
+        
+        username_order = self.cleaned_data.get('Username')  
+        if username_order == 'asc':
+            users = users.order_by('username')
+        elif username_order == 'desc':
+            users = users.order_by('-username')
+
+        return users
+
+class FilterPeerForm(forms.Form):
+
+    Email =  forms.ChoiceField(choices=[('a-n', 'A-N'), ('m-z', 'M-Z'),('', 'Any')], required=False)
+
+    def __init__(self, user, *args, **kwargs):
+        """Initialise query set with users tasks"""
+
+        super(FilterPeerForm, self).__init__(*args, **kwargs)
+
     def filter_users(self, users):
         """Filters users based on critera provided"""
         
-        due_date_order = self.cleaned_data.get('Username')  
-        if due_date_order == 'asc':
-            users = users.order_by('username')
-        elif due_date_order == 'desc':
-            users = users.order_by('-username')
+        email_filter = self.cleaned_data.get('Email')  
+        if email_filter == 'a-n':
+            users = User.objects.filter(email__regex=r'^[a-nA-N]')
+        elif email_filter == 'm-z':
+            users = User.objects.filter(email__regex=r'^[m-zM-Z]')
 
         return users

@@ -3,22 +3,28 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h2>All users</h2>
+            <h2>Add friend</h2>
             <hr>
-            <div class="dropdown">
+            <div class="dropdownSort">
+                <form method="get" class="px-4 py-3">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
                     Sort Options
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <form method="get" class="px-4 py-3">
                         {% csrf_token %}
-                        {% include 'partials/bootstrap_form.html' with form=form %}
-                        <button type="submit" class="btn btn-primary">Apply</button>
-                    </form>
+                        {% include 'partials/bootstrap_form.html' with form=formSort %}
                 </div>
-            </div>
 
-            
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                    Filter Options
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% csrf_token %}
+                        {% include 'partials/bootstrap_form.html' with form=formFilter %}
+                </div>
+                <button type="submit" class="btn btn-primary">Apply</button>
+                </form>
+            </div>
 
 
             <div style="overflow-y:auto;">

@@ -12,7 +12,7 @@ from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm
 from peer_support.helpers import login_prohibited
 
 from peer_support.models import User
-from peer_support.forms import SortPeerForm
+from peer_support.forms import SortPeerForm, FilterPeerForm
 
 
 @login_required
@@ -151,7 +151,6 @@ class SignUpView(LoginProhibitedMixin, FormView):
         self.object = form.save()
         login(self.request, self.object)
         return super().form_valid(form)
-
     def get_success_url(self):
         return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
     
@@ -162,9 +161,14 @@ class PeerView(LoginRequiredMixin, View):
 
     def get(self, request):
         users = User.objects.distinct()
-        form = SortPeerForm(user=request.user, data=request.GET)
+        formSort = SortPeerForm(user=request.user, data=request.GET)
+        formFilter = FilterPeerForm(user=request.user, data=request.GET)
 
-        if form.is_valid():
-            users = form.filter_users(users)
+        if formFilter.is_valid():
+            users =formFilter.filter_users(users)
+            
+        if formSort.is_valid():
+            users = formSort.sort_users(users)
+        
 
-        return render(request, self.template_name, {'users': users, 'form': form})
+        return render(request, self.template_name, {'users': users, 'formSort': formSort, 'formFilter': formFilter})
