@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.forms import PasswordForm
+from peer_support.forms.forms import PasswordForm
 from peer_support.models import User
 from peer_support.tests.helpers import reverse_with_next
 

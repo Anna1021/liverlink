@@ -2,7 +2,7 @@
 from django.contrib.auth.hashers import check_password
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.forms import SignUpForm
+from peer_support.forms.forms import SignUpForm
 from peer_support.models import User
 from peer_support.tests.helpers import LogInTester
 
