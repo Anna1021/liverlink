@@ -63,11 +63,11 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50, blank=False)
     email = models.EmailField(unique=True, blank=False)
     date_of_birth = models.DateField(blank=True, null=True)
-    gender = models.CharField(max_length=50, choices=GENDER_CHOICES, blank=True)
-    location = models.CharField(max_length=50, choices=COUNTRY_CHOICES, blank=True)
-    ethnicity = models.CharField(max_length=50, choices=ETHNICITY_CHOICES, blank=True)
-    language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, blank=True)
-    bio = models.TextField(blank=True)
+    gender = models.CharField(max_length=50,choices=GENDER_CHOICES, blank=True)
+    location = models.CharField(max_length=50,choices=COUNTRY_CHOICES, blank=True)
+    ethnicity = models.CharField(max_length=50,choices=ETHNICITY_CHOICES, blank=True)
+    language = models.CharField(max_length=50,choices=LANGUAGE_CHOICES, blank=True)
+    bio = models.CharField(max_length=500, blank=True)
 
 
     class Meta:

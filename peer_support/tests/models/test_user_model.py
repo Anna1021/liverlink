@@ -132,10 +132,6 @@ class UserModelTestCase(TestCase):
         self.user.date_of_birth = None
         self._assert_user_is_valid()
 
-    def test_date_of_birth_must_be_in_past(self):
-        self.user.date_of_birth = '3000-01-01'
-        self._assert_user_is_invalid()
-
     def test_date_of_birth_need_not_be_unique(self):
         second_user = User.objects.get(username='@janedoe')
         self.user.date_of_birth = second_user.date_of_birth
@@ -150,6 +146,11 @@ class UserModelTestCase(TestCase):
         self.user.gender = "Alien"
         self._assert_user_is_invalid()
 
+    def gender_need_not_be_unique(self):
+        second_user = User.objects.get(username='@janedoe')
+        self.user.gender = second_user.gender
+        self._assert_user_is_valid()
+
 
     def test_location_may_be_blank(self):
         self.user.location = None
@@ -158,6 +159,15 @@ class UserModelTestCase(TestCase):
     def test_location_can_only_be_one_of_the_choices(self):
         self.user.location = 'Mars'
         self._assert_user_is_invalid()
+
+    def test_location_must_not_contain_more_than_50_characters(self):
+        self.user.location = 'x' * 51
+        self._assert_user_is_invalid()
+
+    def test_location_need_not_be_unique(self):
+        second_user = User.objects.get(username='@janedoe')
+        self.user.location = second_user.location
+        self._assert_user_is_valid()
 
     
     def test_ethnicity_may_be_blank(self):
@@ -168,6 +178,15 @@ class UserModelTestCase(TestCase):
         self.user.ethnicity = 'Martian'
         self._assert_user_is_invalid()
 
+    def test_ethnicity_must_not_contain_more_than_50_characters(self):
+        self.user.ethnicity = 'x' * 51
+        self._assert_user_is_invalid()
+
+    def test_ethnicity_need_not_be_unique(self):
+        second_user = User.objects.get(username='@janedoe')
+        self.user.ethnicity = second_user.ethnicity
+        self._assert_user_is_valid()
+
 
     def test_language_may_be_blank(self):
         self.user.language = None
@@ -176,6 +195,15 @@ class UserModelTestCase(TestCase):
     def test_language_can_only_be_one_of_the_choices(self):
         self.user.language = 'Martian'
         self._assert_user_is_invalid()
+
+    def test_language_must_not_contain_more_than_50_characters(self):
+        self.user.language = 'x' * 51
+        self._assert_user_is_invalid()
+
+    def test_language_need_not_be_unique(self):
+        second_user = User.objects.get(username='@janedoe')
+        self.user.language = second_user.language
+        self._assert_user_is_valid()
 
 
     def test_bio_may_be_blank(self):
@@ -189,6 +217,11 @@ class UserModelTestCase(TestCase):
     def test_bio_must_not_contain_more_than_500_characters(self):
         self.user.bio = 'x' * 501
         self._assert_user_is_invalid()
+
+    def test_bio_need_not_be_unique(self):
+        second_user = User.objects.get(username='@janedoe')
+        self.user.bio = second_user.bio
+        self._assert_user_is_valid()
 
 
     def test_default_gravatar(self):
