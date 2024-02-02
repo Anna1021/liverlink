@@ -8,7 +8,8 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 from django.urls import reverse
-from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm
+from peer_support.forms import LogInForm, PasswordForm, UserForm, PatientForm, ParentForm, SignUpForm
+from peer_support.models import Patient, Parent
 from peer_support.helpers import login_prohibited
 
 
@@ -122,9 +123,18 @@ class PasswordView(LoginRequiredMixin, FormView):
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """Display user profile editing screen, and handle profile modifications."""
 
-    model = UserForm
     template_name = "profile.html"
-    form_class = UserForm
+    form_class = ""
+
+    def get_form_class(self):
+        """Decide form class based on model of current user."""
+        # TODO: fails to show prefilled fields (eg. condition, age of diagnosis blank for patient)
+        if Patient.objects.filter(id=self.request.user.id).exists():
+            return PatientForm
+        elif Parent.objects.filter(id=self.request.user.id).exists():
+            return ParentForm
+        else:
+            return UserForm #update for mentor model
 
     def get_object(self):
         """Return the object (user) to be updated."""

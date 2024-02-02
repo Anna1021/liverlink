@@ -28,7 +28,25 @@ class UserForm(forms.ModelForm):
         """Form options."""
 
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email']
+        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio']
+
+class PatientForm(UserForm):
+    """Form to update patient profiles."""
+
+    class Meta:
+        """Form options."""
+
+        model = Patient
+        fields = UserForm.Meta.fields + ['condition', 'age_of_diagnosis']
+
+class ParentForm(UserForm):
+    """Form to update parent profiles."""
+
+    class Meta:
+        """Form options."""
+
+        model = Parent
+        fields = UserForm.Meta.fields + ['child_condition', 'child_age_of_diagnosis']
 
 class NewPasswordMixin(forms.Form):
     """Form mixing for new_password and password_confirmation fields."""
