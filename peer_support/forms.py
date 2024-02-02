@@ -29,6 +29,10 @@ class UserForm(forms.ModelForm):
 
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio']
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 3}),
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+        }
 
 class PatientForm(UserForm):
     """Form to update patient profiles."""
@@ -38,6 +42,7 @@ class PatientForm(UserForm):
 
         model = Patient
         fields = UserForm.Meta.fields + ['condition', 'age_of_diagnosis']
+        widgets = UserForm.Meta.widgets
 
 class ParentForm(UserForm):
     """Form to update parent profiles."""
@@ -47,6 +52,7 @@ class ParentForm(UserForm):
 
         model = Parent
         fields = UserForm.Meta.fields + ['child_condition', 'child_age_of_diagnosis']
+        widgets = UserForm.Meta.widgets
 
 class NewPasswordMixin(forms.Form):
     """Form mixing for new_password and password_confirmation fields."""

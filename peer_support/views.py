@@ -127,7 +127,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ""
 
     def get_form_class(self):
-        """Decide form class based on model of current user."""
+        """Return form class based on model of current user."""
         # TODO: fails to show prefilled fields (eg. condition, age of diagnosis blank for patient)
         if Patient.objects.filter(id=self.request.user.id).exists():
             return PatientForm
@@ -145,6 +145,17 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         """Return redirect URL after successful update."""
         messages.add_message(self.request, messages.SUCCESS, "Profile updated!")
         return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
+    
+
+def deactivate_user(request):
+    """Deactivate the current user's account."""
+
+    user = request.user
+    user.is_active = False
+    user.save()
+    messages.add_message(request, messages.SUCCESS, "Profile successfully deactivated!") # does not display on :8000 - only on /log_in or /sign_up, whichever is accessed first
+    logout(request)
+    return redirect('home')
 
 
 class SignUpView(LoginProhibitedMixin, FormView):
