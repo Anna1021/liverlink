@@ -3,14 +3,31 @@
 <div class="container">
   <div class="row">
     <div class="col-12">
-      <h1>Edit profile</h1>
-      <!-- gravatar = <img src="{{ user.mini_gravatar }}" style="max-height:20px; max-width:20px">   </img>-->
+      <h1>Profile settings</h1>
+      <div class="col-2">
+        <div style="padding: 10px"></div>
+        <img src="{{ user.gravatar }}" class="ps-gravatar">   </img>
+        <div style="padding: 10px"></div>
+        <div class="divider"></div>
+        <div style="padding: 5px"></div>
+        <ul class="ps-list">
+          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-gear ps-icons"> </i>Personal information</a></li>
+          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-lock ps-icons"> </i>Password & security</a></li>
+          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-person ps-icons"> </i>Other users</a></li>
+          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-bell ps-icons"> </i>Notifications</a></li>
+          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-brightness-low ps-icons"> </i>Accessibility</a></li>
+        </ul>
+      </div>
+      <div class="col-8">
+
+      </div>
+      <div class="col-2"></div>
       <form action="{% url 'profile' %}" method="post">
         {% csrf_token %}
         {% include 'partials/bootstrap_form.html' with form=form %}
         <span><input type="submit" value="Update" class="btn btn-primary"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate_user">Deactivate account</button></span>
       </form>
-      {% include 'partials/customise-profile/deactivate_user.html' %}
+      {% include 'partials/profile-settings/deactivate_user.html' %}
     </div>
   </div>
   <row> <!-- footer -->
