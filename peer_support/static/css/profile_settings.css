@@ -2,16 +2,13 @@
  * Text styling for profile settings
  */
 
-h1.ps-title-text {
-
-}
-
-p.ps-header-text {
-    
+.ps-title-text {
+    font-size: 25px;
+    font-weight: 600;
 }
 
 .divider {
-    border-top: 1px solid #a8a8a8;
+    border-top: 1px solid #DADADA;
 }
 
 /*
@@ -52,4 +49,14 @@ img.ps-gravatar {
 i.ps-icons {
     color: black;
     font-size: small;
+}
+
+/*
+ * Content positioning
+ */
+
+.ps-col {
+    vertical-align: top;
+    display: inline-block;
+    margin-right: 35px;
 }

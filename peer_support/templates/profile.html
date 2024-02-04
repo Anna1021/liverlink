@@ -3,8 +3,8 @@
 <div class="container">
   <div class="row">
     <div class="col-12">
-      <h1>Profile settings</h1>
-      <div class="col-2">
+      <h2>Profile settings</h2>
+      <div class="col-2 ps-col">
         <div style="padding: 10px"></div>
         <img src="{{ user.gravatar }}" class="ps-gravatar">   </img>
         <div style="padding: 10px"></div>
@@ -18,15 +18,19 @@
           <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-brightness-low ps-icons"> </i>Accessibility</a></li>
         </ul>
       </div>
-      <div class="col-8">
-
+      <div class="col-8 ps-col">
+        <div class="ps-title-text">Personal information</div>
+        <div style="padding: 5px"></div>
+        <div class="divider"></div>
+        <div style="padding: 5px"></div>
+        <form action="{% url 'profile' %}" method="post">
+          {% csrf_token %}
+          {% include 'partials/bootstrap_form.html' with form=form %}
+          <span><input type="submit" value="Update" class="btn btn-primary"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate_user">Deactivate account</button></span>
+        </form>
       </div>
-      <div class="col-2"></div>
-      <form action="{% url 'profile' %}" method="post">
-        {% csrf_token %}
-        {% include 'partials/bootstrap_form.html' with form=form %}
-        <span><input type="submit" value="Update" class="btn btn-primary"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate_user">Deactivate account</button></span>
-      </form>
+      <div class="col-2 ps-col"></div>
+
       {% include 'partials/profile-settings/deactivate_user.html' %}
     </div>
   </div>
