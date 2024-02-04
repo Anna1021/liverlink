@@ -159,14 +159,14 @@ class ConversationView(LoginRequiredMixin, FormView):
 
     def get(self,request,conversation_id):
         if conversation_id==0:
-            return render(request,self.template_name)
+            return render(request,self.template_name,{'user_conversations':request.user.conversations.all()})
         conversation = Conversation.objects.get(id=conversation_id)
         current_user = request.user
         if current_user not in conversation.users.all():
             messages.error(request,"You do not have access to this conversation.")
             return reverse_lazy("conversation")
         form = MessageForm(user=current_user)
-        context = {"form":form, 'conversation':conversation}
+        context = {"form":form, 'conversation':conversation,'user_conversations':request.user.conversations.all()}
         return render(request,self.template_name,context)
 
     def post(self,request,conversation_id):
@@ -175,10 +175,10 @@ class ConversationView(LoginRequiredMixin, FormView):
         form = MessageForm(data=request.POST,user=request.user)
         if form.is_valid() and request.user in conversation.users.all():
             form.save()
-            return render(request,self.template_name,{'form':MessageForm(user=request.user),'conversation':conversation})
+            return render(request,self.template_name,{'form':MessageForm(user=request.user),'conversation':conversation,'user_conversations':request.user.conversations.all})
         else:
             messages.error(request,"This message is not valid")
-            return render(request,self.template_name,{'form':form,'conversation':conversation})
+            return render(request,self.template_name,{'form':form,'conversation':conversation,'user_conversations':request.user.conversations.all})
 
         
 

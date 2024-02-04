@@ -1,6 +1,6 @@
 <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
 <ul>
-    {% for conversation in user.conversations.all %}
+    {% for conversation in user_conversations %}
         {% if conversation.as_group != None %}
         {{conversation.as_group.display_name}}
         {% else %}
