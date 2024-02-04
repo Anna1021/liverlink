@@ -91,11 +91,16 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     """Form enabling unregistered users to sign up."""
 
     USER_TYPE_CHOICES = [
+        ('', ''),
         ('PT', 'Patient'),
         ('PR', 'Parent'),
     ]
     
-    user_type = forms.ChoiceField(choices=USER_TYPE_CHOICES)
+    user_type = forms.ChoiceField(initial='', choices=USER_TYPE_CHOICES, required=True)
+    condition = forms.CharField(required=False)
+    age_of_diagnosis = forms.IntegerField(required=False)
+    child_condition = forms.CharField(required=False)
+    child_age_of_diagnosis = forms.IntegerField(required=False)
 
     class Meta:
         """Form options."""
@@ -134,8 +139,8 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             user = Patient.objects.create_user(**user_data)
         elif user_type == 'PR':
             user_data.update({
-                'childs_condition': self.cleaned_data.get('childs_condition'),
-                'childs_age_of_diagnosis': self.cleaned_data.get('childs_age_of_diagnosis'),
+                'child_condition': self.cleaned_data.get('child_condition'),
+                'child_age_of_diagnosis': self.cleaned_data.get('child_age_of_diagnosis'),
             })
             user = Parent.objects.create_user(**user_data)
 

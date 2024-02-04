@@ -18,10 +18,10 @@ class PatientAdmin(admin.ModelAdmin):
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio', 'condition', 'age_of_diagnosis'
     ] 
 
-# @admin.register(Parent)
-# class ParentAdmin(admin.ModelAdmin):
-#     """Configuration of the admin interface for parents."""
+@admin.register(Parent)
+class ParentAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for parents."""
 
-#     list_display = [
-#         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio', 'childs_condition', 'childs_age_of_diagnosis'
-#     ]
+    list_display = [
+        'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio', 'child_condition', 'child_age_of_diagnosis'
+    ]
