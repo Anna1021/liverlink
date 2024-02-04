@@ -144,6 +144,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
 class SortPeerForm(forms.Form):
 
     Username =  forms.ChoiceField(choices=[('asc', 'Ascending'), ('desc', 'Descending'), ('', 'Any')], required=False)
+    Age =  forms.ChoiceField(choices=[('asc', 'Ascending'), ('desc', 'Descending'), ('', 'Any')], required=False)
 
     def __init__(self, user, *args, **kwargs):
         """Initialise query set with users tasks"""
@@ -158,25 +159,83 @@ class SortPeerForm(forms.Form):
             users = users.order_by('username')
         elif username_order == 'desc':
             users = users.order_by('-username')
+            
 
         return users
 
+from django.utils import timezone
+from datetime import timedelta
 class FilterPeerForm(forms.Form):
+    USER_TYPE_CHOICES=[('patient','Patient'), ('parent', 'Parent')]
+    ALL_CHOICE = [('any', 'Any')]
 
-    Email =  forms.ChoiceField(choices=[('a-n', 'A-N'), ('m-z', 'M-Z'),('', 'Any')], required=False)
+    user_type=forms.MultipleChoiceField(choices=USER_TYPE_CHOICES,widget=forms.CheckboxSelectMultiple,required=False)
+    min_age = forms.IntegerField(required=False, min_value=0, max_value=100)
+    max_age = forms.IntegerField(required=False, min_value=0, max_value=100)
+    gender = forms.MultipleChoiceField(choices=ALL_CHOICE+User.GENDER_CHOICES,widget=forms.CheckboxSelectMultiple,required=False)
+    language = forms.ChoiceField(choices=ALL_CHOICE+User.LANGUAGE_CHOICES,required=False)
+    ethnicity= forms.ChoiceField(choices=ALL_CHOICE+User.ETHNICITY_CHOICES,required=False)
+    country = forms.ChoiceField(choices=ALL_CHOICE+User.COUNTRY_CHOICES,required=False)
+    
 
     def __init__(self, user, *args, **kwargs):
         """Initialise query set with users tasks"""
 
         super(FilterPeerForm, self).__init__(*args, **kwargs)
-
+        self.fields['gender'].initial = ['any']
+        self.fields['user_type'].initial = ['patient','parent']
+        
     def filter_users(self, users):
         """Filters users based on critera provided"""
-        
-        email_filter = self.cleaned_data.get('Email')  
-        if email_filter == 'a-n':
-            users = User.objects.filter(email__regex=r'^[a-nA-N]')
-        elif email_filter == 'm-z':
-            users = User.objects.filter(email__regex=r'^[m-zM-Z]')
+        user_type = self.cleaned_data.get('user_type')
+        combined_queryset = User.objects.none()
 
+        if "patient" in user_type:
+            patients = User.objects.filter(patient__isnull=False).distinct()
+            combined_queryset = combined_queryset | patients
+        if "parent" in user_type:
+            parents = User.objects.filter(parent__isnull=False).distinct()
+            print(parents)
+            combined_queryset = combined_queryset | parents
+
+        users = users & combined_queryset.distinct()
+
+        current_date = timezone.now().date()
+        min_age = self.cleaned_data.get('min_age')
+        max_age = self.cleaned_data.get('max_age')
+        if min_age is not None:
+            min_birth_date = current_date - timedelta(days=365.25 * min_age)
+            users = users.filter(date_of_birth__lte=min_birth_date)
+        if max_age is not None:
+            max_birth_date = current_date - timedelta(days=365.25 * (max_age + 1))
+            users = users.filter(date_of_birth__gte=max_birth_date)
+
+        genders = self.cleaned_data.get('gender')
+        if "any" not in genders:
+            users = users.filter(gender__in=genders)
+
+        language =self.cleaned_data.get('language')
+        if "any" not in language:
+            users = users.filter(language__in=language)
+
+        ethnicity =self.cleaned_data.get('ethnicity')
+        if "any" not in ethnicity:
+            users = users.filter(ethnicity__in=ethnicity)
+        
+        country =self.cleaned_data.get('ethnicity')
+        if "any" not in country:
+            users = users.filter(location__in=country)
+
+        return users
+
+class PeerSearchForm(forms.Form):
+    search = forms.CharField(max_length=255, required=False, help_text="Enter a username or part of it to search.")
+
+    def __init__(self,user, *args, **kwargs):
+        super().__init__(*args, **kwargs)  # Removed the user parameter as it's not used
+
+    def search_users(self, users):
+        search_term = self.cleaned_data.get('search', '').strip()
+        if search_term:
+            users = users.filter(username__icontains=search_term)
         return users

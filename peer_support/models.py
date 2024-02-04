@@ -6,51 +6,53 @@ import pycountry
 from django.core.validators import MinValueValidator
 
 
-GENDER_CHOICES = [
+
+class User(AbstractUser):
+    """Model used for user authentication, and team member related information."""
+
+
+    GENDER_CHOICES = [
     ('M', 'Male'),
     ('F', 'Female'),
     ('O', 'Other'),
     ('N', 'Prefer not to say'),
-]
+    ]
 
-ETHNICITY_CHOICES = [
-    ('Asian or Asian British', [
-        ('IN', 'Indian'),
-        ('PK', 'Pakistani'),
-        ('BD', 'Bangladeshi'),
-        ('CH', 'Chinese'),
-        ('OA', 'Any other Asian background'),
-    ]),
-    ('Black, Black British, Caribbean or African', [
-        ('CB', 'Caribbean'),
-        ('AF', 'African'),
-        ('OB', 'Any other Black, Black British, or Caribbean background'),
-    ]),
-    ('Mixed or multiple ethnic groups', [
-        ('WC', 'White and Black Caribbean'),
-        ('WA', 'White and Black African'),
-        ('WS', 'White and Asian'),
-        ('OM', 'Any other Mixed or multiple ethnic background'),
-    ]),
-    ('White', [
-        ('BR', 'English, Welsh, Scottish, Northern Irish or British'),
-        ('IR', 'Irish'),
-        ('GT', 'Gypsy or Irish Traveller'),
-        ('RO', 'Roma'),
-        ('OW', 'Any other White background'),
-    ]),
-    ('Other ethnic group', [
-        ('AR', 'Arab'),
-        ('OG', 'Any other ethnic group'),
-    ]),
-]
+    ETHNICITY_CHOICES = [
+        ('Asian or Asian British', [
+            ('IN', 'Indian'),
+            ('PK', 'Pakistani'),
+            ('BD', 'Bangladeshi'),
+            ('CH', 'Chinese'),
+            ('OA', 'Any other Asian background'),
+        ]),
+        ('Black, Black British, Caribbean or African', [
+            ('CB', 'Caribbean'),
+            ('AF', 'African'),
+            ('OB', 'Any other Black, Black British, or Caribbean background'),
+        ]),
+        ('Mixed or multiple ethnic groups', [
+            ('WC', 'White and Black Caribbean'),
+            ('WA', 'White and Black African'),
+            ('WS', 'White and Asian'),
+            ('OM', 'Any other Mixed or multiple ethnic background'),
+        ]),
+        ('White', [
+            ('BR', 'English, Welsh, Scottish, Northern Irish or British'),
+            ('IR', 'Irish'),
+            ('GT', 'Gypsy or Irish Traveller'),
+            ('RO', 'Roma'),
+            ('OW', 'Any other White background'),
+        ]),
+        ('Other ethnic group', [
+            ('AR', 'Arab'),
+            ('OG', 'Any other ethnic group'),
+        ]),
+    ]
 
-LANGUAGE_CHOICES = [(lang.alpha_2, lang.name) for lang in pycountry.languages if hasattr(lang, 'alpha_2')]
+    LANGUAGE_CHOICES = [(lang.alpha_2, lang.name) for lang in pycountry.languages if hasattr(lang, 'alpha_2')]
 
-COUNTRY_CHOICES = [(country.alpha_2, country.name) for country in pycountry.countries]
-
-class User(AbstractUser):
-    """Model used for user authentication, and team member related information."""
+    COUNTRY_CHOICES = [(country.alpha_2, country.name) for country in pycountry.countries]
 
     username = models.CharField(
         max_length=30,
