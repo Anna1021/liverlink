@@ -123,7 +123,7 @@ class PasswordView(LoginRequiredMixin, FormView):
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """Display user profile editing screen, and handle profile modifications."""
 
-    template_name = "profile.html"
+    template_name = "personal_information.html"
     form_class = ""
 
     def get_form_class(self):

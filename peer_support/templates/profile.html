@@ -11,27 +11,22 @@
         <div class="divider"></div>
         <div style="padding: 5px"></div>
         <ul class="ps-list">
-          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-gear ps-icons"> </i>Personal information</a></li>
-          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-lock ps-icons"> </i>Password & security</a></li>
+          <li class="ps-list-item"><a class="ps-link" href="{% url 'profile' %}"><i class="bi bi-gear ps-icons"> </i>Personal information</a></li>
+          <li class="ps-list-item"><a class="ps-link" href="{% url 'password' %}"><i class="bi bi-lock ps-icons"> </i>Password & security</a></li>
           <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-person ps-icons"> </i>Other users</a></li>
           <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-bell ps-icons"> </i>Notifications</a></li>
           <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-brightness-low ps-icons"> </i>Accessibility</a></li>
         </ul>
       </div>
       <div class="col-8 ps-col">
-        <div class="ps-title-text">Personal information</div>
+        {% block title %}{% endblock %}
         <div style="padding: 5px"></div>
         <div class="divider"></div>
         <div style="padding: 5px"></div>
-        <form action="{% url 'profile' %}" method="post">
-          {% csrf_token %}
-          {% include 'partials/bootstrap_form.html' with form=form %}
-          <span><input type="submit" value="Update" class="btn btn-primary"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate_user">Deactivate account</button></span>
-        </form>
+        {% block page %}
+        {% endblock %}
       </div>
       <div class="col-2 ps-col"></div>
-
-      {% include 'partials/profile-settings/deactivate_user.html' %}
     </div>
   </div>
   <row> <!-- footer -->

@@ -7,6 +7,12 @@
     font-weight: 600;
 }
 
+.ps-subheading-text {
+    font-size: 18px;
+    font-weight: 500;
+    padding-bottom: 5px;
+}
+
 .divider {
     border-top: 1px solid #DADADA;
 }
