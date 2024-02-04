@@ -25,3 +25,18 @@ $(document).ready(function() {
       }
     });
   });
+
+  $('#id_country').change(function() {
+    var selectedCountry = $(this).val();
+    if(selectedCountry) {
+        $.ajax({
+            url: '/get_cities/',
+            data: {
+                'country': selectedCountry
+            },
+            success: function (data) {
+                $('#id_city').html(data);
+            }
+        });
+    }
+});
