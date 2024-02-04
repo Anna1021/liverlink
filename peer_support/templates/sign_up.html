@@ -1,4 +1,5 @@
 {% extends 'base_content.html' %}
+{% load static %}
 {% block content %}
 <div class="container">
   <div class="row">
@@ -13,33 +14,5 @@
   </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-$(document).ready(function() {
-  // Hide the fields initially
-  $('#id_condition').parent().hide();
-  $('#id_age_of_diagnosis').parent().hide();
-  $('#id_child_condition').parent().hide();
-  $('#id_child_age_of_diagnosis').parent().hide();
-
-  // Show or hide the fields when the user type changes
-  $('#id_user_type').change(function() {
-    if ($(this).val() == 'PT') {
-      $('#id_condition').parent().show();
-      $('#id_age_of_diagnosis').parent().show();
-      $('#id_child_condition').parent().hide();
-      $('#id_child_age_of_diagnosis').parent().hide();
-    } else if ($(this).val() == 'PR') {
-      $('#id_condition').parent().hide();
-      $('#id_age_of_diagnosis').parent().hide();
-      $('#id_child_condition').parent().show();
-      $('#id_child_age_of_diagnosis').parent().show();
-    } else {
-      $('#id_condition').parent().hide();
-      $('#id_age_of_diagnosis').parent().hide();
-      $('#id_child_condition').parent().hide();
-      $('#id_child_age_of_diagnosis').parent().hide();
-    }
-  });
-});
-</script>
+<script src="{% static 'js/sign_up.js' %}"></script>
 {% endblock %}
