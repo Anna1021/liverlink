@@ -5,8 +5,6 @@ from libgravatar import Gravatar
 from django import template
 from django.utils import timezone
 
-register = template.Library()
-
 class User(AbstractUser):
     """Model used for user authentication, and team member related information."""
 
@@ -59,16 +57,12 @@ class Conversation(models.Model):
     users = models.ManyToManyField(User)
     messages = models.ManyToManyField(Message)
 
-    @register.simple_tag
-    def display_name(self, current_user):
-        other_member = self.users.exclude(username=current_user.username)[0]
-        return other_member.username
-
     def add_user(self,user):
-        if self.group:
-            self.users.add(user)
+        """Adds user to a group"""
+        self.users.add(user)
 
     def send(self,message):
+        """Sends message to the conversation"""
         self.messages.add(message)
         for user in self.users.exclude(username=message.sender.username):
             user.update_unread_messages(message)
@@ -79,6 +73,12 @@ class Conversation(models.Model):
             return self.groupconversation
         except GroupConversation.DoesNotExist:
             return None
+
+    def get_first_member(self):
+        return self.users.all([0])
+
+    def get_second_member(self):
+        return self.users.all([1])    
 
 class GroupConversation(Conversation):
     name = models.CharField(max_length=20,null=True)

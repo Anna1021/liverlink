@@ -158,26 +158,27 @@ class ConversationView(LoginRequiredMixin, FormView):
     template_name = "conversation.html"
 
     def get(self,request,conversation_id):
+        if conversation_id==0:
+            return render(request,self.template_name)
         conversation = Conversation.objects.get(id=conversation_id)
         current_user = request.user
         if current_user not in conversation.users.all():
             messages.error(request,"You do not have access to this conversation.")
             return reverse_lazy("conversation")
         form = MessageForm(user=current_user)
-        context = {"form":form}
+        context = {"form":form, 'conversation':conversation}
         return render(request,self.template_name,context)
 
     def post(self,request,conversation_id):
         """Post request for user to send message to conversation"""
-        form = MessageForm(request.POST)
-        if form.is_valid():
-            print(":3")
+        conversation = Conversation.objects.get(id=conversation_id)
+        form = MessageForm(data=request.POST,user=request.user)
+        if form.is_valid() and request.user in conversation.users.all():
             form.save()
-            return render(request,self.template_name,{'form':MessageForm(request.user)})
+            return render(request,self.template_name,{'form':MessageForm(user=request.user),'conversation':conversation})
         else:
-            print(":(")
             messages.error(request,"This message is not valid")
-            return render(request,self.template_name,{'form':form})
+            return render(request,self.template_name,{'form':form,'conversation':conversation})
 
         
 

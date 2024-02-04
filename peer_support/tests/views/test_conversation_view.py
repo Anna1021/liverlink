@@ -35,10 +35,15 @@ class ConversationViewTestCase(TestCase):
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
 
+    def test_get_when_no_conversation_selected(self):
+        response = self.client.get('/conversation/0')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation.html')
+
     def test_unsuccessful_message_send(self):
         self.form_input['content'] = ''
         before_count = Message.objects.count()
-        response = self.client.post(self.url, self.form_input)
+        response = self.client.post(self.url, data=self.form_input)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
@@ -49,11 +54,11 @@ class ConversationViewTestCase(TestCase):
 
     def test_successful_message_send(self):
         before_count = Message.objects.count()
-        response = self.client.post(self.url, self.form_input)
+        response = self.client.post(self.url, data=self.form_input)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count+1)
-        self.assertRedirects(response.status_code, 200)
-        self.assertTemplateUsed(response, 'dashboard.html')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation.html')
         message = Message.objects.get(pk=2)
         self.assertEqual(message.sender, self.user)
         self.assertEqual(message.content, 'Ploof')

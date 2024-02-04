@@ -1,13 +1,17 @@
-{% extends 'base_content.html' %}
-{% block content %}
+<nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
 <ul>
-    {% for conversation in user.conversations %}
+    {% for conversation in user.conversations.all %}
         {% if conversation.as_group != None %}
         {{conversation.as_group.display_name}}
         {% else %}
-        {{conversation.display_name user}}
+            {% if user == conversation.get_first_member %}
+                {{conversation.get_second_member}}
+            {% else %}
+                {{conversation.get_first_member}}
+            {% endif %}
+        {% endif %}
     {% empty %}
     No conversations!
     {% endfor %}
 </ul>
-{% endblock %}
+</nav>
