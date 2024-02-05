@@ -128,7 +128,6 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_form_class(self):
         """Return form class based on model of current user."""
-        # TODO: fails to show prefilled fields (eg. condition, age of diagnosis blank for patient)
         if Patient.objects.filter(id=self.request.user.id).exists():
             return PatientForm
         elif Parent.objects.filter(id=self.request.user.id).exists():

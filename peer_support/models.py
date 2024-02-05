@@ -115,3 +115,32 @@ class Parent(User):
         verbose_name = 'Parent'
         verbose_name_plural = 'Parents'
     
+class UserProfile(models.Model):
+    """Model used for user profile settings (preferences)."""
+
+    # TODO: Choices should be updated
+    THEME_CHOICES = [
+    ('DF', 'Default theme'),
+    ('LM', 'Light mode'),
+    ('DM', 'Dark mode'),
+    ]
+
+    FONT_CHOICES = [
+    ('DF', 'Default font'),
+    ('AR', 'Arial'),
+    ('CA', 'Calibri'),
+    ]
+
+    FONT_SIZE_CHOICES = [
+    ('DF', 'Default size'),
+    ('LG', 'Large'),
+    ('XL', 'Extra large'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    theme = models.CharField(max_length=50, choices=THEME_CHOICES, default='DF')
+    font = models.CharField(max_length=50, choices=FONT_CHOICES, default='DF')
+    font_size = models.CharField(max_length=50, choices=FONT_SIZE_CHOICES, default='DF')
+    friends = models.ManyToManyField(User, related_name='friends_with')
+    blocked_users = models.ManyToManyField(User, related_name='blocked_by')
+

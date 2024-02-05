@@ -1,11 +1,19 @@
 from django.contrib import admin
-from .models import User, Patient, Parent
+from .models import User, UserProfile, Patient, Parent
 
 # Register your models here.
+
+class UserProfileInline(admin.StackedInline):
+    """Configuration of the admin interface for user profiles."""
+    """Adds the user profile interface to the user interface."""
+    model = UserProfile
+    can_delete = False
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for users."""
     
+    inlines = [UserProfileInline]
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio'
     ]
