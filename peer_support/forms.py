@@ -152,10 +152,11 @@ class MessageForm(forms.ModelForm):
         model = Message
         fields = ['content']
 
-    def __init__(self, user=None, **kwargs):
+    def __init__(self,conversation, user=None, **kwargs):
         """Construct new form instance with a user instance."""
         
         super().__init__(**kwargs)
+        self.conversation = conversation
         self.user = user
 
     def save(self):
@@ -164,4 +165,5 @@ class MessageForm(forms.ModelForm):
             sender=self.user,
             content=self.cleaned_data.get('content')
         )
+        self.conversation.send(message)
         return message

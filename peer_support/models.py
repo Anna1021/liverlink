@@ -132,6 +132,9 @@ class Message(models.Model):
     content = models.CharField(max_length=100)
     send_time = models.DateTimeField(default=timezone.now)
 
+    def delete(self):
+        Message.objects.filter(pk=self.pk).delete()
+
 class Conversation(models.Model):
     users = models.ManyToManyField(User)
     messages = models.ManyToManyField(Message)
@@ -159,14 +162,18 @@ class Conversation(models.Model):
     def get_second_member(self):
         return self.users.all([1])    
 
+    def delete(self):
+        for message in self.messages.all():
+            message.delete()
+        Conversation.objects.filter(pk=self.pk).delete()
+
 class GroupConversation(Conversation):
     name = models.CharField(max_length=20,null=True)
 
     def remove_user(self,user):
-        if self.group:
-            self.users.remove(user)
-            if self.users.count()==0:
-                Message.objects.filter(pk=self.pk).delete() #completely deletes conversation if no member left
+        self.users.remove(user)
+        if self.users.count()==0:
+            self.delete() #completely deletes conversation if no member left
 
     def display_name(self):
         if self.name is None:

@@ -43,7 +43,7 @@ class ConversationViewTestCase(TestCase):
     def test_unsuccessful_message_send(self):
         self.form_input['content'] = ''
         before_count = Message.objects.count()
-        response = self.client.post(self.url, data=self.form_input)
+        response = self.client.post(self.url,data=self.form_input)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)

@@ -66,6 +66,12 @@ class ConversationModelTestCase(TestCase):
         User.objects.filter(username='@johndoe').delete()
         self.assertNotIn(self.user,self.group_conversation.users.all())
 
+    def test_conversation_deleted_when_user_list_empty(self):
+        before_count = Conversation.objects.count()
+        for user in self.group_conversation.users.all():
+            self.group_conversation.remove_user(user)
+        after_count = Conversation.objects.count()
+        self.assertEqual(after_count,before_count-1)
     
 
     # def test_sending_updates_non_sender_notifications(self):
