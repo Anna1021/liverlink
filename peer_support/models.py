@@ -4,7 +4,6 @@ from django.db import models
 from libgravatar import Gravatar
 
 
-
 class User(AbstractUser):
     """Model used for user authentication, and team member related information."""
 
@@ -19,7 +18,6 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
     email = models.EmailField(unique=True, blank=False)
-
 
     class Meta:
         """Model options."""
@@ -40,8 +38,9 @@ class User(AbstractUser):
 
     def mini_gravatar(self):
         """Return a URL to a miniature version of the user's gravatar."""
-        
+
         return self.gravatar(size=60)
+
 
 class Question(models.Model):
     author = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
@@ -53,8 +52,10 @@ class Question(models.Model):
     def __str__(self):
         return self.title
 
+    # return the response directly to the question, will not return the response of another response
     def get_responses(self):
         return self.responses.filter(parent=None)
+
 
 class Response(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=models.CASCADE)

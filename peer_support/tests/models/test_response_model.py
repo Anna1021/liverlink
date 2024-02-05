@@ -1,11 +1,9 @@
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 from peer_support.models import Question, Response, User
 from django.core.exceptions import ValidationError
 
 
 class ResponseModelTestCase(TestCase):
-    User = get_user_model()
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json'
