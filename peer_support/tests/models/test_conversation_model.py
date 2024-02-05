@@ -61,6 +61,13 @@ class ConversationModelTestCase(TestCase):
         self.conversation.send(new_message)
         self.assertEqual(self.conversation.messages.count(),2)
 
+    def test_user_not_in_group_when_user_deleted(self):
+        self.assertIn(self.user,self.group_conversation.users.all())
+        User.objects.filter(username='@johndoe').delete()
+        self.assertNotIn(self.user,self.group_conversation.users.all())
+
+    
+
     # def test_sending_updates_non_sender_notifications(self):
     #     new_message = Message.objects.get(pk=2)
     #     other_user = User.objects.get(pk=2)

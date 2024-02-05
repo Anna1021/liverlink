@@ -25,6 +25,14 @@ class MessageModelTestCase(TestCase):
     def test_contents_must_have_at_least_one_character(self):
         self.message.content = ""
         self._assert_message_is_invalid()
+
+    def test_message_still_exists_after_sender_deleted(self):
+        before_count = Message.objects.count()
+        User.objects.filter(username='@johndoe').delete()
+        after_count = Message.objects.count()
+        self.assertEqual(before_count,after_count)
+        msg = Message.objects.get(pk=1)
+        self.assertIsNone(msg.sender)
         
     def _assert_message_is_valid(self):
         try:
