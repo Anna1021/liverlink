@@ -8,6 +8,12 @@
       "username": "@johndoe",
       "email": "johndoe@example.org",
       "password": "pbkdf2_sha256$260000$4BNvFuAWoTT1XVU8D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
+      "date_of_birth": "1990-01-01",
+      "gender": "M",
+      "location": "GB",
+      "ethnicity": "BR",
+      "language": "en",
+      "bio": "I'm a test user",
       "is_active": true
     }
   }
