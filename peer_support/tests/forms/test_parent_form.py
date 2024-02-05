@@ -1,15 +1,16 @@
-"""Unit tests of the user form."""
+"""Unit tests of the parent form."""
 import datetime
 from django import forms
 from django.test import TestCase
-from peer_support.forms import UserForm
-from peer_support.models import User
+from peer_support.forms import UserForm, ParentForm
+from peer_support.models import Parent
 
-class UserFormTestCase(TestCase):
-    """Unit tests of the user form."""
+class ParentFormTestCase(TestCase):
+    """Unit tests of the parent form."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
+        'peer_support/tests/fixtures/default_parent.json',
     ]
 
     def setUp(self):
@@ -23,11 +24,13 @@ class UserFormTestCase(TestCase):
             'location': 'US',
             'ethnicity': 'RO',
             'language': 'en',
-            'bio': 'I am a test user.',
+            'bio': 'I am a test patient.',
+            'child_condition': 'Haemochromatosis',
+            'child_age_of_diagnosis': 21,
         }
 
     def test_form_has_necessary_fields(self):
-        form = UserForm()
+        form = ParentForm()
         self.assertIn('first_name', form.fields)
         self.assertIn('last_name', form.fields)
         self.assertIn('username', form.fields)
@@ -54,22 +57,29 @@ class UserFormTestCase(TestCase):
         self.assertIn('bio', form.fields)
         bio_widget = form.fields['bio'].widget
         self.assertTrue(isinstance(bio_widget, forms.Textarea))
+        self.assertIn('child_condition', form.fields)
+        self.assertIn('child_age_of_diagnosis', form.fields)
+        caod_widget = form.fields['child_age_of_diagnosis'].widget
+        self.assertTrue(isinstance(caod_widget, forms.NumberInput))
+
+    def test_parent_form_is_subclass_of_user_form(self):
+        self.assertTrue(issubclass(ParentForm, UserForm))
 
     def test_valid_user_form(self):
-        form = UserForm(data=self.form_input)
+        form = ParentForm(data=self.form_input)
         self.assertTrue(form.is_valid())
 
     def test_form_uses_model_validation(self):
         self.form_input['username'] = 'badusername'
-        form = UserForm(data=self.form_input)
+        form = ParentForm(data=self.form_input)
         self.assertFalse(form.is_valid())
 
     def test_form_must_save_correctly(self):
-        user = User.objects.get(username='@johndoe')
-        form = UserForm(instance=user, data=self.form_input)
-        before_count = User.objects.count()
+        user = Parent.objects.get(username='@johndoe')
+        form = ParentForm(instance=user, data=self.form_input)
+        before_count = Parent.objects.count()
         form.save()
-        after_count = User.objects.count()
+        after_count = Parent.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(user.username, '@janedoe')
         self.assertEqual(user.first_name, 'Jane')
@@ -80,5 +90,7 @@ class UserFormTestCase(TestCase):
         self.assertEqual(user.location, 'US')
         self.assertEqual(user.ethnicity, 'RO')
         self.assertEqual(user.language, 'en')
-        self.assertEqual(user.bio, 'I am a test user.')
+        self.assertEqual(user.bio, 'I am a test patient.'),
+        self.assertEqual(user.child_condition, 'Haemochromatosis'),
+        self.assertEqual(user.child_age_of_diagnosis, 21),
         self.assertEqual(before_count, after_count)
