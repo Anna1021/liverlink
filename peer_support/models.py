@@ -47,9 +47,15 @@ class User(AbstractUser):
         ]),
     ]
 
-    LANGUAGE_CHOICES = [(lang.alpha_2, lang.name) for lang in pycountry.languages if hasattr(lang, 'alpha_2')]
+    LANGUAGE_CHOICES = sorted(
+        [(lang.alpha_2, lang.name) for lang in pycountry.languages if hasattr(lang, 'alpha_2')],
+        key=lambda x: x[1]
+    )
 
-    COUNTRY_CHOICES = [(country.alpha_2, country.name) for country in pycountry.countries]
+    COUNTRY_CHOICES = sorted(
+        [(country.alpha_2, country.name) for country in pycountry.countries],
+        key=lambda x: x[1]
+    )
 
     username = models.CharField(
         max_length=30,

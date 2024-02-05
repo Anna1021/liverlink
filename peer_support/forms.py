@@ -91,7 +91,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     """Form enabling unregistered users to sign up."""
 
     USER_TYPE_CHOICES = [
-        ('', ''),
+        ('', '---------'),
         ('PT', 'Patient'),
         ('PR', 'Parent'),
     ]
