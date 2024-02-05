@@ -1,15 +1,31 @@
 {% extends 'base_content.html' %}
 {% load static %}
 {% block content %}
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <h1>Sign up</h1>
-      <form action="{% url 'sign_up' %}" method="post">
-        {% csrf_token %}
-        {% include 'partials/bootstrap_form.html' with form=form %}
-        <input type="submit" value="Sign up" class="btn btn-primary">
-      </form>
+{% load static %}
+<div id="cover-image">
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+      <div id="loginBox" class="row p-3 text-white shadow box-area custom-rounded my-3" style="background-color:#2E2D38">
+
+      <!-- Left box image -->
+      <div class="col-md-5 d-flex justify-content-center align-items-center flex-column">
+        <!-- put logo in here -->
+        <img src="{% static 'images/pulseLogoColouredBackground.png' %}" alt="Peer Support Logo" class="img-fluid mt-2" style="width:300px;">
+      </div>
+
+      <!-- Right box form -->
+      <div class="col-md-7">
+        <div class="row align-items-center">
+          <h1>Sign up</h1>
+            <form action="{% url 'sign_up' %}" method="post">
+              {% csrf_token %}
+              {% include 'partials/bootstrap_form.html' with form=form %}
+              <p>Already have an account? <a href='{% url 'log_in' %}'>
+                Log in here
+              </a> </p>
+              <input type="submit" value="Sign up" class="btn btn-primary">
+            </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>
