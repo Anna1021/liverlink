@@ -1,0 +1,44 @@
+[
+    {
+        "model": "peer_support.userprofile",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "theme": "DF",
+            "font": "CA",
+            "font_size": "XL",
+            "friends": [
+                1
+            ],
+            "blocked_users": [
+                3
+            ]
+            }
+    },
+    {
+        "model": "peer_support.userprofile",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "theme": "LM",
+            "font": "AR",
+            "font_size": "XL",
+            "friends": [
+                1
+            ],
+            "blocked_users": []
+            }
+    },
+    {
+        "model": "peer_support.userprofile",
+        "pk": 4,
+        "fields": {
+            "user": 4,
+            "theme": "DM",
+            "font": "DF",
+            "font_size": "LG",
+            "friends": [],
+            "blocked_users": []
+            }
+    }
+]
