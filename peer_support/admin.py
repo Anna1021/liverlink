@@ -22,6 +22,7 @@ class UserAdmin(admin.ModelAdmin):
 class PatientAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for patients."""
 
+    inlines = [UserProfileInline]
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio', 'condition', 'age_of_diagnosis'
     ] 
@@ -30,6 +31,7 @@ class PatientAdmin(admin.ModelAdmin):
 # class ParentAdmin(admin.ModelAdmin):
 #     """Configuration of the admin interface for parents."""
 
+#     inlines = [UserProfileInline]
 #     list_display = [
 #         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio', 'childs_condition', 'childs_age_of_diagnosis'
 #     ]
