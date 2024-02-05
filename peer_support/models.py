@@ -4,6 +4,7 @@ from django.db import models
 from libgravatar import Gravatar
 import pycountry
 from django.core.validators import MinValueValidator
+from django.utils import timezone
 
 class User(AbstractUser):
     """Model used for user authentication, and team member related information."""
@@ -74,6 +75,8 @@ class User(AbstractUser):
     ethnicity = models.CharField(max_length=50,choices=ETHNICITY_CHOICES, blank=True)
     language = models.CharField(max_length=50,choices=LANGUAGE_CHOICES, blank=True)
     bio = models.CharField(max_length=500, blank=True)
+    conversations = models.ManyToManyField('Conversation')
+    unread_messages = models.ManyToManyField('Message')
 
     # TODO:
     # - 
@@ -98,6 +101,9 @@ class User(AbstractUser):
         """Return a URL to a miniature version of the user's gravatar."""
         
         return self.gravatar(size=60)
+      
+    def update_unread_messages(self,message):
+        self.unread_messages.add(message)
 
 class Patient(User):
     """Model used for patient authentication, and patient related information."""
@@ -120,4 +126,52 @@ class Parent(User):
     class Meta:
         verbose_name = 'Parent'
         verbose_name_plural = 'Parents'
+
+class Message(models.Model):
+    sender = models.ForeignKey(User,null=True,on_delete=models.SET_NULL,unique=False)
+    content = models.CharField(max_length=100)
+    send_time = models.DateTimeField(default=timezone.now)
+
+class Conversation(models.Model):
+    users = models.ManyToManyField(User)
+    messages = models.ManyToManyField(Message)
+
+    def add_user(self,user):
+        """Adds user to a group"""
+        self.users.add(user)
+
+    def send(self,message):
+        """Sends message to the conversation"""
+        self.messages.add(message)
+        for user in self.users.exclude(username=message.sender.username):
+            user.update_unread_messages(message)
+
+    def as_group(self):
+        """Return object as an instance of GroupConversation"""
+        try:
+            return self.groupconversation
+        except GroupConversation.DoesNotExist:
+            return None
+
+    def get_first_member(self):
+        return self.users.all([0])
+
+    def get_second_member(self):
+        return self.users.all([1])    
+
+class GroupConversation(Conversation):
+    name = models.CharField(max_length=20,null=True)
+
+    def remove_user(self,user):
+        if self.group:
+            self.users.remove(user)
+            if self.users.count()==0:
+                Message.objects.filter(pk=self.pk).delete() #completely deletes conversation if no member left
+
+    def display_name(self):
+        if self.name is None:
+            members = self.users.all()
+            return ", ".join([i.username for i in members]) #automatically ordered by username
+        return self.name
+
     

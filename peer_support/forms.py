@@ -2,7 +2,8 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.core.validators import RegexValidator
-from .models import User, Parent, Patient
+from .models import User, Parent, Patient,Message
+from django.utils import timezone
 
 class LogInForm(forms.Form):
     """Form enabling registered users to log in."""
@@ -145,3 +146,22 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             user = Parent.objects.create_user(**user_data)
 
         return user
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['content']
+
+    def __init__(self, user=None, **kwargs):
+        """Construct new form instance with a user instance."""
+        
+        super().__init__(**kwargs)
+        self.user = user
+
+    def save(self):
+        super().save(commit=False)
+        message = Message.objects.create(
+            sender=self.user,
+            content=self.cleaned_data.get('content')
+        )
+        return message
