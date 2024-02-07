@@ -6,7 +6,7 @@
     <hr>
 
     <div class="row">
-        <form method="get" class="px-4 py-3">
+        <form method="get" class="px-4 py-3" novalidate>
             {% csrf_token %}
             {% include 'partials/bootstrap_form.html' with form=formSearch %}
             <div class="SortFilter">
@@ -26,6 +26,13 @@
                     {% include 'partials/bootstrap_form.html' with form=formSort %}
                 </div>
             </div>
+            {% if formSort.non_field_errors %}
+                <div class="error">
+                    {% for error in formSort.non_field_errors %}
+                        <p style="color: red;">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <div>
                 <button type="submit" class="btn btn-secondary btn-sm my-3" style="margin-bottom: 0;" >Apply</button>   
             </div>
@@ -53,3 +60,23 @@
     {% endif %}
     </div>
 {% endblock %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Disable Bootstrap's automatic validation on form submission
+        var forms = document.querySelectorAll('.needs-validation');
+    
+        Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent form submission
+                event.stopPropagation(); // Stop propagation
+    
+                form.classList.add('was-validated'); // Add Bootstrap validation class if you need
+    
+                // Optionally, you can remove the class or do something else here.
+            }, false);
+        });
+    });
+    </script>
+    

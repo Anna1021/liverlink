@@ -12,7 +12,7 @@ from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm
 from peer_support.helpers import login_prohibited
 
 from peer_support.models import User
-from peer_support.forms import SortPeerForm, FilterPeerForm,PeerSearchForm
+from peer_support.forms import SortPeerForm, FilterPeerForm,SearchPeerForm
 
 
 @login_required
@@ -161,10 +161,9 @@ class PeerView(LoginRequiredMixin, View):
 
     def get(self, request):
         users = User.objects.distinct()
-        formSearch=PeerSearchForm(user=request.user,data=request.GET)
-        formSort = SortPeerForm(user=request.user, data=request.GET)
-        formFilter = FilterPeerForm(user=request.user, data=request.GET)
-
+        formSearch=SearchPeerForm(data=request.GET)
+        formSort = SortPeerForm( data=request.GET)
+        formFilter = FilterPeerForm( data=request.GET)
         if formSearch.is_valid():
             users =formSearch.search_users(users)
         if formFilter.is_valid():

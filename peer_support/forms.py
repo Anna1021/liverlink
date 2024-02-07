@@ -130,7 +130,6 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 'condition': self.cleaned_data.get('condition'),
                 'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
             })
-            print(user_data)
             user = Patient.objects.create_user(**user_data)
         elif user_type == 'PR':
             user_data.update({
@@ -141,27 +140,40 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
 
         return user
     
+
 class SortPeerForm(forms.Form):
+    ALL_CHOICE = [('', 'None')]
+    Username = forms.ChoiceField(choices=ALL_CHOICE+[('asc', 'Ascending'), ('desc', 'Descending')], required=False, label="Username")
+    Age = forms.ChoiceField(choices=ALL_CHOICE+[('asc', 'Ascending'), ('desc', 'Descending')], required=False, label="Age")
 
-    Username =  forms.ChoiceField(choices=[('asc', 'Ascending'), ('desc', 'Descending'), ('', 'Any')], required=False)
-    Age =  forms.ChoiceField(choices=[('asc', 'Ascending'), ('desc', 'Descending'), ('', 'Any')], required=False)
+    def clean(self):
+        cleaned_data = super().clean()
+        username_order = cleaned_data.get('Username')
+        age_order = cleaned_data.get('Age')
 
-    def __init__(self, user, *args, **kwargs):
-        """Initialise query set with users tasks"""
-
-        super(SortPeerForm, self).__init__(*args, **kwargs)
+        if username_order and age_order:
+            self.add_error(None, 'Please choose only one sorting criterion: either Username or Age.')
+        elif username_order == '' and age_order == '':
+            pass
+        return cleaned_data
 
     def sort_users(self, users):
-        """Sorts users based on critera provided"""
-        
-        username_order = self.cleaned_data.get('Username')  
+        """Sorts users based on the selected criterion."""
+        cleaned_data = self.cleaned_data 
+        username_order = cleaned_data.get('Username')
+        age_order = cleaned_data.get('Age')
+
         if username_order == 'asc':
             users = users.order_by('username')
         elif username_order == 'desc':
             users = users.order_by('-username')
-            
+        elif age_order == 'asc':
+            users = users.order_by('date_of_birth')
+        elif age_order == 'desc':
+            users = users.order_by('-date_of_birth')
 
         return users
+
 
 from django.utils import timezone
 from datetime import timedelta
@@ -172,67 +184,66 @@ class FilterPeerForm(forms.Form):
     user_type=forms.MultipleChoiceField(choices=USER_TYPE_CHOICES,widget=forms.CheckboxSelectMultiple,required=False)
     min_age = forms.IntegerField(required=False, min_value=0, max_value=100)
     max_age = forms.IntegerField(required=False, min_value=0, max_value=100)
-    gender = forms.MultipleChoiceField(choices=ALL_CHOICE+User.GENDER_CHOICES,widget=forms.CheckboxSelectMultiple,required=False)
+    gender = forms.MultipleChoiceField(choices=User.GENDER_CHOICES,widget=forms.CheckboxSelectMultiple,required=False)
     language = forms.ChoiceField(choices=ALL_CHOICE+User.LANGUAGE_CHOICES,required=False)
     ethnicity= forms.ChoiceField(choices=ALL_CHOICE+User.ETHNICITY_CHOICES,required=False)
     country = forms.ChoiceField(choices=ALL_CHOICE+User.COUNTRY_CHOICES,required=False)
     
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Initialise query set with users tasks"""
 
         super(FilterPeerForm, self).__init__(*args, **kwargs)
-        self.fields['gender'].initial = ['any']
-        self.fields['user_type'].initial = ['patient','parent']
         
     def filter_users(self, users):
         """Filters users based on critera provided"""
         user_type = self.cleaned_data.get('user_type')
-        combined_queryset = User.objects.none()
+        if user_type:
+            combined_queryset = User.objects.none()
+            if "patient" in user_type:
+                patients = User.objects.filter(patient__isnull=False).distinct()
+                combined_queryset = combined_queryset | patients
+            if "parent" in user_type:
+                parents = User.objects.filter(parent__isnull=False)
+                combined_queryset = combined_queryset | parents
+            
+            users = users.distinct() & combined_queryset.distinct()
 
-        if "patient" in user_type:
-            patients = User.objects.filter(patient__isnull=False).distinct()
-            combined_queryset = combined_queryset | patients
-        if "parent" in user_type:
-            parents = User.objects.filter(parent__isnull=False).distinct()
-            print(parents)
-            combined_queryset = combined_queryset | parents
-
-        users = users & combined_queryset.distinct()
+        genders = self.cleaned_data.get('gender')
+        if genders:
+            users = users.filter(gender__in=genders)
 
         current_date = timezone.now().date()
         min_age = self.cleaned_data.get('min_age')
         max_age = self.cleaned_data.get('max_age')
+
         if min_age is not None:
             min_birth_date = current_date - timedelta(days=365.25 * min_age)
             users = users.filter(date_of_birth__lte=min_birth_date)
+
         if max_age is not None:
             max_birth_date = current_date - timedelta(days=365.25 * (max_age + 1))
             users = users.filter(date_of_birth__gte=max_birth_date)
 
-        genders = self.cleaned_data.get('gender')
-        if "any" not in genders:
-            users = users.filter(gender__in=genders)
-
         language =self.cleaned_data.get('language')
-        if "any" not in language:
-            users = users.filter(language__in=language)
+        if language and "any" != language:
+            users = users.filter(language=language)
 
         ethnicity =self.cleaned_data.get('ethnicity')
-        if "any" not in ethnicity:
-            users = users.filter(ethnicity__in=ethnicity)
-        
-        country =self.cleaned_data.get('ethnicity')
-        if "any" not in country:
-            users = users.filter(location__in=country)
+        if ethnicity and "any" != ethnicity:
+            users = users.filter(ethnicity=ethnicity)
+            
+        country =self.cleaned_data.get('country')
+        if country and "any" != country:
+            users = users.filter(location=country)
 
         return users
 
-class PeerSearchForm(forms.Form):
-    search = forms.CharField(max_length=255, required=False, help_text="Enter a username or part of it to search.")
+class SearchPeerForm(forms.Form):
+    search = forms.CharField(max_length=255, required=False)
 
-    def __init__(self,user, *args, **kwargs):
-        super().__init__(*args, **kwargs)  # Removed the user parameter as it's not used
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs) 
 
     def search_users(self, users):
         search_term = self.cleaned_data.get('search', '').strip()
