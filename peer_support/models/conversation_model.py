@@ -1,5 +1,5 @@
 from django.db import models
-from peer_support.models import User, Message, GroupConversation
+from peer_support.models import User, Message
 
 class Conversation(models.Model):
     users = models.ManyToManyField(User)
@@ -26,10 +26,7 @@ class Conversation(models.Model):
         return self.users.all([0])
 
     def get_second_member(self):
-        return self.users.all([1])   
-
-from django.db import models
-from peer_support.models import Conversation, Message
+        return self.users.all([1])    
 
 class GroupConversation(Conversation):
     name = models.CharField(max_length=20,null=True)
@@ -38,10 +35,10 @@ class GroupConversation(Conversation):
         if self.group:
             self.users.remove(user)
             if self.users.count()==0:
-                Message.objects.filter(pk=self.pk).delete()
+                Message.objects.filter(pk=self.pk).delete() #completely deletes conversation if no member left
 
     def display_name(self):
         if self.name is None:
             members = self.users.all()
-            return ", ".join([i.username for i in members])
-        return self.name 
+            return ", ".join([i.username for i in members]) #automatically ordered by username
+        return self.name

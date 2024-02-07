@@ -1,6 +1,6 @@
 from django import forms
 from peer_support.models import User, Parent, Patient
-from helpers import NewPasswordMixin
+from .helpers import NewPasswordMixin
 
 class SignUpForm(NewPasswordMixin, forms.ModelForm):
     """Form enabling unregistered users to sign up."""
@@ -50,7 +50,6 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 'condition': self.cleaned_data.get('condition'),
                 'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
             })
-            print(user_data)
             user = Patient.objects.create_user(**user_data)
         elif user_type == 'PR':
             user_data.update({
