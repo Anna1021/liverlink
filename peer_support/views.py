@@ -8,10 +8,9 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 from django.urls import reverse
-from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm,MessageForm
+from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm
 from peer_support.helpers import login_prohibited
-from .models import Conversation
-from django.urls import reverse_lazy
+
 
 @login_required
 def dashboard(request):
@@ -136,7 +135,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         """Return redirect URL after successful update."""
         messages.add_message(self.request, messages.SUCCESS, "Profile updated!")
         return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
-    
+     
 
 class SignUpView(LoginProhibitedMixin, FormView):
     """Display the sign up screen and handle sign ups."""
@@ -152,34 +151,3 @@ class SignUpView(LoginProhibitedMixin, FormView):
 
     def get_success_url(self):
         return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
-
-class ConversationView(LoginRequiredMixin, FormView):
-    form_class = MessageForm
-    template_name = "conversation.html"
-
-    def get(self,request,conversation_id):
-        if conversation_id==0:
-            return render(request,self.template_name,{'user_conversations':request.user.conversations.all()})
-        conversation = Conversation.objects.get(id=conversation_id)
-        current_user = request.user
-        if current_user not in conversation.users.all():
-            messages.error(request,"You do not have access to this conversation.")
-            return reverse_lazy("conversation")
-        form = MessageForm(user=current_user)
-        context = {"form":form, 'conversation':conversation,'user_conversations':request.user.conversations.all()}
-        return render(request,self.template_name,context)
-
-    def post(self,request,conversation_id):
-        """Post request for user to send message to conversation"""
-        conversation = Conversation.objects.get(id=conversation_id)
-        form = MessageForm(data=request.POST,user=request.user)
-        if form.is_valid() and request.user in conversation.users.all():
-            form.save()
-            return render(request,self.template_name,{'form':MessageForm(user=request.user),'conversation':conversation,'user_conversations':request.user.conversations.all})
-        else:
-            messages.error(request,"This message is not valid")
-            return render(request,self.template_name,{'form':form,'conversation':conversation,'user_conversations':request.user.conversations.all})
-
-        
-
-        
