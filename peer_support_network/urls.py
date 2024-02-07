@@ -16,15 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from peer_support.views import viewsR
+from peer_support import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', viewsR.home, name='home'),
-    path('dashboard/', viewsR.dashboard, name='dashboard'),
-    path('log_in/', viewsR.LogInView.as_view(), name='log_in'),
-    path('log_out/', viewsR.log_out, name='log_out'),
-    path('password/', viewsR.PasswordView.as_view(), name='password'),
-    path('profile/', viewsR.ProfileUpdateView.as_view(), name='profile'),
-    path('sign_up/', viewsR.SignUpView.as_view(), name='sign_up'),
+    path('', views.home, name='home'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('log_in/', views.LogInView.as_view(), name='log_in'),
+    path('log_out/', views.log_out, name='log_out'),
+    path('password/', views.PasswordView.as_view(), name='password'),
+    path('profile/', views.ProfileUpdateView.as_view(), name='profile'),
+    path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
+    path('conversation/<int:conversation_id>',views.ConversationView.as_view(),name="conversation"),
 ]
