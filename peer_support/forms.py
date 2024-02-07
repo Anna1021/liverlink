@@ -135,7 +135,6 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 'condition': self.cleaned_data.get('condition'),
                 'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
             })
-            print(user_data)
             user = Patient.objects.create_user(**user_data)
         elif user_type == 'PR':
             user_data.update({
