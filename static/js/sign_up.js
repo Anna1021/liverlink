@@ -25,11 +25,11 @@ $(document).ready(function() {
       }
     });
 
+    // Only show the hospital field if the user is from the United Kingdom
     $('#id_hospital').parent().hide();
 
-    // Show or hide the hospital field based on location
     $('#id_location').change(function() {
-      if ($(this).val() == 'GB') {  // Replace 'some_value' with the condition value
+      if ($(this).val() == 'GB') {
           $('#id_hospital').parent().show();
       } else {
           $('#id_hospital').parent().hide();

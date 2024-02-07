@@ -27,9 +27,6 @@ class User(AbstractUser):
     language = models.CharField(max_length=50,choices=LANGUAGE_CHOICES, blank=True)
     bio = models.CharField(max_length=500, blank=True)
 
-    # TODO:
-    # - Include hospitals (only UK hospitals for now)
-
     class Meta:
         """Model options."""
 

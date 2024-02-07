@@ -265,3 +265,9 @@ HOSPITAL_CHOICES = [
     ("York and Scarborough Teaching Hospitals NHS Foundation Trust", "York and Scarborough Teaching Hospitals NHS Foundation Trust"),
     ("Yorkshire Ambulance Service NHS Trust", "Yorkshire Ambulance Service NHS Trust")
 ]
+
+USER_TYPE_CHOICES = [
+    ('', '---------'),
+    ('PT', 'Patient'),
+    ('PR', 'Parent'),
+]

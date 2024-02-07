@@ -17,7 +17,8 @@ class SignUpFormTestCase(TestCase):
             'email': 'janedoe@example.org',
             'date_of_birth': '2004-03-02',
             'gender': 'F',
-            'location': 'US',
+            'location': 'GB',
+            'hospital': 'Croydon Health Services NHS Trust',
             'ethnicity': 'RO',
             'language': 'en',
             'bio': 'I am a test user.',
@@ -45,6 +46,7 @@ class SignUpFormTestCase(TestCase):
         self.assertTrue(isinstance(date_of_birth_field, forms.DateField))
         self.assertIn('gender', form.fields)
         self.assertIn('location', form.fields)
+        self.assertIn('hospital', form.fields)
         self.assertIn('ethnicity', form.fields)
         self.assertIn('language', form.fields)
         self.assertIn('bio', form.fields)
@@ -101,7 +103,8 @@ class SignUpFormTestCase(TestCase):
             self.assertEqual(user.email, 'janedoe@example.org')
             self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
             self.assertEqual(user.gender, 'F')
-            self.assertEqual(user.location, 'US')
+            self.assertEqual(user.location, 'GB')
+            self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
             self.assertEqual(user.ethnicity, 'RO')
             self.assertEqual(user.language, 'en')
             self.assertEqual(user.bio, 'I am a test user.')
@@ -126,7 +129,8 @@ class SignUpFormTestCase(TestCase):
             self.assertEqual(user.email, 'janedoe@example.org')
             self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
             self.assertEqual(user.gender, 'F')
-            self.assertEqual(user.location, 'US')
+            self.assertEqual(user.location, 'GB')
+            self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
             self.assertEqual(user.ethnicity, 'RO')
             self.assertEqual(user.language, 'en')
             self.assertEqual(user.bio, 'I am a test user.')
