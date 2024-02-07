@@ -79,7 +79,8 @@ class User(AbstractUser):
     unread_messages = models.ManyToManyField('Message')
 
     # TODO:
-    # - 
+    # - Include hospitals
+
     class Meta:
         """Model options."""
 
