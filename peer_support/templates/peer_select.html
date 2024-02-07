@@ -15,7 +15,19 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     {% csrf_token %}
-                    {{ formFilter.as_p }}
+                    {% for field in formFilter %}
+                        {% if field.name in "age_of_diagnosis_min,age_of_diagnosis_max,condition,child_age_of_diagnosis_min,child_age_of_diagnosis_max,child_condition" %}
+                            <div class="id_{{ field.name }}_wrapper">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                                {{ field }}
+                            </div>
+                        {% else %}
+                            <div class="{{ field.name }}_wrapper">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                                {{ field }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
@@ -61,4 +73,49 @@
     </div>
 
 
+{% endblock %}
+
+{% block javascript %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const userTypeCheckboxes = document.querySelectorAll('input[name="user_type"]');
+    const patientFields = ['id_age_of_diagnosis_min', 'id_age_of_diagnosis_max', 'id_condition'];
+    const parentFields = ['id_child_age_of_diagnosis_min', 'id_child_age_of_diagnosis_max', 'id_child_condition'];
+
+    function toggleFields() {
+        let userTypes = [];
+        userTypeCheckboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                userTypes.push(checkbox.value);
+            }
+        });
+
+        function displayFields(fieldIds, display) {
+            fieldIds.forEach(function(fieldId) {
+                const fieldWrapper = document.querySelector('.' + fieldId + '_wrapper');
+                if (fieldWrapper) {
+                    fieldWrapper.style.display = display ? '' : 'none';
+                }
+            });
+        }
+        if (userTypes.includes('patient')) {
+            displayFields(patientFields, true);
+        } else {
+            displayFields(patientFields, false);
+        }
+        if (userTypes.includes('parent')) {
+            displayFields(parentFields, true);
+        } else {
+            displayFields(parentFields, false);
+        }
+        if (userTypes.length === 0) {
+            displayFields(patientFields.concat(parentFields), false);
+        }
+    }
+    userTypeCheckboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', toggleFields);
+    });
+    toggleFields();
+});
+</script>
 {% endblock %}

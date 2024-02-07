@@ -32,6 +32,15 @@ class PeerSelectViewTestCase(TestCase):
         self.assertIsInstance(response.context['formFilter'], FilterPeerForm)
         self.assertIsInstance(response.context['formSearch'], SearchPeerForm)
 
+    def test_all_forms_shown(self):
+        self.client.login(username=self.user.username, password='Password123')
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'name="gender"') 
+        self.assertContains(response, 'name="language"')
+        self.assertContains(response, 'name="Username"')
+        self.assertContains(response, 'name="search"')
+
     def test_get_profile_redirects_when_not_logged_in(self):
         self.client.logout()
         redirect_url = reverse_with_next('log_in', self.url)
