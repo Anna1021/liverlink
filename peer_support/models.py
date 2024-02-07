@@ -76,7 +76,8 @@ class User(AbstractUser):
     bio = models.CharField(max_length=500, blank=True)
 
     # TODO:
-    # - 
+    # - Include hospitals
+
     class Meta:
         """Model options."""
 
