@@ -34,7 +34,7 @@ class UserForm(forms.ModelForm):
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }
 
-class PatientForm(UserForm, forms.ModelForm):
+class PatientForm(forms.ModelForm):
     """Form to update patient profiles."""
 
     class Meta:
@@ -44,7 +44,7 @@ class PatientForm(UserForm, forms.ModelForm):
         fields = UserForm.Meta.fields + ['condition', 'age_of_diagnosis']
         widgets = UserForm.Meta.widgets
 
-class ParentForm(UserForm, forms.ModelForm):
+class ParentForm(forms.ModelForm):
     """Form to update parent profiles."""
 
     class Meta:
