@@ -59,24 +59,6 @@
         {% endfor %}
     {% endif %}
     </div>
-{% endblock %}
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Disable Bootstrap's automatic validation on form submission
-        var forms = document.querySelectorAll('.needs-validation');
-    
-        Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent form submission
-                event.stopPropagation(); // Stop propagation
-    
-                form.classList.add('was-validated'); // Add Bootstrap validation class if you need
-    
-                // Optionally, you can remove the class or do something else here.
-            }, false);
-        });
-    });
-    </script>
-    
+
+{% endblock %}

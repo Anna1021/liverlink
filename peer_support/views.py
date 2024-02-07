@@ -158,7 +158,7 @@ class PeerView(LoginRequiredMixin, View):
     template_name = 'peer_select.html'
 
     def get(self, request):
-        users = User.objects.distinct()
+        users = User.objects.exclude(is_staff=True).exclude(id=request.user.id).distinct()
         formSearch=SearchPeerForm(data=request.GET)
         formSort = SortPeerForm( data=request.GET)
         formFilter = FilterPeerForm( data=request.GET)

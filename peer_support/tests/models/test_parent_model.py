@@ -8,13 +8,14 @@ class ParentModelTestCase(TestCase):
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
-        'peer_support/tests/fixtures/other_users.json',
+        'peer_support/tests/fixtures/other_users_parents.json',
         'peer_support/tests/fixtures/default_parent.json',
         'peer_support/tests/fixtures/other_parents.json'
     ]
 
     def setUp(self):
-        self.parent = Parent.objects.get(username='@johndoe')
+        self.parent = Parent.objects.get(username='@alexsmith')
+        self.second_parent = Parent.objects.get(username='@sambennet')
 
     def test_valid_parent(self):
         self._assert_parent_is_valid()
@@ -24,8 +25,7 @@ class ParentModelTestCase(TestCase):
         self._assert_parent_is_valid()
 
     def test_child_condition_need_not_be_unique(self):
-        second_parent = Parent.objects.get(username='@janedoe')
-        self.parent.child_condition = second_parent.child_condition
+        self.parent.child_condition = self.second_parent.child_condition
         self._assert_parent_is_valid()
 
     def test_child_condition_can_be_50_characters_long(self):
@@ -42,8 +42,7 @@ class ParentModelTestCase(TestCase):
         self._assert_parent_is_valid()
 
     def test_child_age_of_diagnosis_need_not_be_unique(self):
-        second_parent = Parent.objects.get(username='@janedoe')
-        self.parent.child_age_of_diagnosis = second_parent.child_age_of_diagnosis
+        self.parent.child_age_of_diagnosis = self.second_parent.child_age_of_diagnosis
         self._assert_parent_is_valid()
 
     def test_child_age_of_diagnosis_cannot_be_negative(self):

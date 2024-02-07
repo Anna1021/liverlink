@@ -10,8 +10,10 @@ class FilterPeerFormTestCase(TestCase):
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/default_parent.json',
-        'peer_support/tests/fixtures/other_users.json',
+        'peer_support/tests/fixtures/other_users_patients.json',
+        'peer_support/tests/fixtures/other_users_parents.json',
         'peer_support/tests/fixtures/other_patients.json',
+        'peer_support/tests/fixtures/other_parents.json',
     ]
 
     def setUp(self):
@@ -21,6 +23,7 @@ class FilterPeerFormTestCase(TestCase):
             'language': 'any',
             'ethnicity': 'any',
             'country': 'any',
+            
         }
 
     def test_form_initialization(self):
@@ -133,3 +136,69 @@ class FilterPeerFormTestCase(TestCase):
         self.assertIn(User.objects.get(username='@janedoe'), results)
         self.assertNotIn(User.objects.get(username='@petrapickles'), results)
         self.assertNotIn(User.objects.get(username='@peterpickles'), results)
+
+    def test_patient_age_of_dio_min(self):
+        min_age = 3
+        form_data = self.showAll
+        form_data['user_type'] = ['patient']       
+        form_data['age_of_diagnosis_min'] = min_age
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertTrue(user.patient.age_of_diagnosis >= min_age)
+        
+    def test_patient_age_of_dio_max(self):
+        max_age = 15
+        form_data = self.showAll
+        form_data['user_type'] = ['patient']       
+        form_data['age_of_diagnosis_max'] = max_age
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertTrue(user.patient.age_of_diagnosis <= max_age)
+    
+    def test_patient_condition(self):
+        condition = "Haemochromatosis"
+        form_data = self.showAll
+        form_data['user_type'] = ['patient']        
+        form_data['condition'] = condition
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertEqual(user.patient.condition, condition)
+
+    def test_parent_child_age_of_dio_min(self):
+        min_age = 5
+        form_data = self.showAll
+        form_data['user_type'] = ['parent']        
+        form_data['child_age_of_diagnosis_min'] = min_age
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertTrue(user.parent.child_age_of_diagnosis >= min_age)
+
+    def test_parent_child_age_of_dio_max(self):
+        max_age = 15
+        form_data = self.showAll
+        form_data['user_type'] = ['parent']
+        form_data['child_age_of_diagnosis_max'] = max_age
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertTrue(user.parent.child_age_of_diagnosis <= max_age)
+
+    def test_parent_child_condition(self):
+        child_condition = "Cirrhosis"
+        form_data = self.showAll.copy()
+        form_data['user_type'] = ['parent']
+        form_data['child_condition'] = child_condition
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertEqual(user.parent.child_condition, child_condition)

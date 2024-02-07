@@ -11,7 +11,8 @@ class PeerSelectViewTestCase(TestCase):
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/default_parent.json',
-        'peer_support/tests/fixtures/other_users.json',
+        'peer_support/tests/fixtures/default_admin.json',
+        'peer_support/tests/fixtures/other_users_patients.json',
         'peer_support/tests/fixtures/other_patients.json',
     ]
 
@@ -39,7 +40,7 @@ class PeerSelectViewTestCase(TestCase):
 
     def test_form_filter_functionality(self):
         self.client.login(username=self.user.username, password='Password123')
-        filter_params = {'gender': ['F'], 'language': 'en'}  # Adjust based on actual form fields
+        filter_params = {'gender': ['F'], 'language': 'en'}  
         response = self.client.get(self.url, filter_params)
         self.assertEqual(response.status_code, 200)
         filtered_users = list(response.context['users'])
@@ -58,12 +59,12 @@ class PeerSelectViewTestCase(TestCase):
     
     def test_search_functionality(self):
         self.client.login(username=self.user.username, password='Password123')
-        sort_params = {'search': 'john'}
+        sort_params = {'search': 'jane'}
         response = self.client.get(f"{self.url}?{urlencode(sort_params)}")
         self.assertEqual(response.status_code, 200)    
         search_users = response.context['users']
-        self.assertTrue(any(user.username == '@johndoe' for user in search_users))
-        self.assertEqual(len(search_users), 1, "Should only find one user matching 'john'")
+        self.assertTrue(any(user.username == '@janedoe' for user in search_users))
+        self.assertEqual(len(search_users), 1, "Should only find one user matching 'jane'")
 
     def test_invalid_filter_form_submission(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -83,6 +84,22 @@ class PeerSelectViewTestCase(TestCase):
         invalid_sort_params = {'search': search_term}
         response = self.client.get(self.url, invalid_sort_params)
         self.assertFalse(response.context['formSearch'].is_valid())
+
+    
+    def test_exclude_user(self):
+        self.client.login(username=self.user.username, password='Password123')
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        users = response.context['users']
+        self.assertNotIn(self.user, users)
+
+    def test_exclude_admin(self):
+        self.client.login(username=self.user.username, password='Password123')
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        users = response.context['users']
+        for user in users:
+            self.assertFalse(user.is_staff or user.is_superuser, "Admin users should not be included in the list.")
 
     def test_add_friend(self):
         pass

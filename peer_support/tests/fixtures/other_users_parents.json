@@ -1,0 +1,53 @@
+[
+  {
+    "model": "peer_support.user",
+    "pk": 5,
+    "fields": {
+      "first_name": "Alex",
+      "last_name": "Smith",
+      "username": "@alexsmith",
+      "email": "alexsmith@example.com",
+      "password": "pbkdf2_sha256$260000$4BNvFuAWoTT1XVU8D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
+      "date_of_birth": "1988-08-12",
+      "gender": "M",
+      "location": "US",
+      "ethnicity": "OW",
+      "bio": "Hi, I'm Alex Smith, an avid reader and tech enthusiast.",
+      "is_active": true
+    }
+  },
+  {
+    "model": "peer_support.user",
+    "pk": 6,
+    "fields": {
+      "first_name": "Samantha",
+      "last_name": "Bennet",
+      "username": "@sambennet",
+      "email": "sambennet@example.com",
+      "password": "pbkdf2_sha256$260000$4BNvFuAWoTT1XVU8D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
+      "date_of_birth": "1992-05-16",
+      "gender": "F",
+      "location": "CA",
+      "ethnicity": "BR",
+      "bio": "Outdoor lover and software developer. Based in Toronto.",
+      "is_active": true
+    }
+  },
+  {
+    "model": "peer_support.user",
+    "pk": 7,
+    "fields": {
+      "first_name": "Mohamed",
+      "last_name": "Al-Farsi",
+      "username": "@mohamedalf",
+      "email": "mohamedalf@example.com",
+      "password": "pbkdf2_sha256$260000$4BNvFuAWoTT1XVU8D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
+      "date_of_birth": "1974-12-03",
+      "gender": "M",
+      "location": "EG",
+      "ethnicity": "AR",
+      "bio": "Entrepreneur and public speaker. Passionate about innovation in finance.",
+      "is_active": true
+    }
+  }
+]

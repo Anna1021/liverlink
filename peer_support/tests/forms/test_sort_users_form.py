@@ -7,7 +7,7 @@ class SortPeerFormTestCase(TestCase):
     """Unit test of SortPeerForm"""
 
     fixtures = [
-        'peer_support/tests/fixtures/other_users.json',
+        'peer_support/tests/fixtures/other_users_patients.json',
         'peer_support/tests/fixtures/other_patients.json'
     ]
 
