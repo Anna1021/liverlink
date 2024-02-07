@@ -156,8 +156,9 @@ class SignUpView(LoginProhibitedMixin, FormView):
 
 def resources(request):
     questions = Question.objects.all().order_by("-created_at")
-    context = {"questions": questions}
-    return render(request, 'resources.html',context)
+    questions = Question.objects.order_by('-created_at')
+    context = {'questions': questions}
+    return render(request, 'resources.html', context)
 
 @login_required(login_url='log_in')
 def newQuestionPage(request):
@@ -170,6 +171,7 @@ def newQuestionPage(request):
                 question = form.save(commit=False)
                 question.author = request.user
                 question.save()
+                return redirect('resources')
         except Exception as e:
             print(e)
             raise
@@ -202,7 +204,7 @@ def questionPage(request, id):
     return render(request, 'question.html', context)
 
 
-@login_required(login_url='register')
+@login_required(login_url='log_in')
 def replyPage(request):
     if request.method == 'POST':
         try:
@@ -220,4 +222,4 @@ def replyPage(request):
             print(e)
             raise
 
-    return redirect('index')
+    return render(request, 'resources.html')

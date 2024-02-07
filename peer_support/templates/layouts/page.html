@@ -4,11 +4,12 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}?{% now "U" %}"/>
+      <link href="{% static 'stylesheets/resources.css' %}?{% now "U" %}" rel="stylesheet">
     <script src="{% static 'js/main.js' %}?{% now "U" %}"></script>
     <title></title>
   </head>
   <body>
-  <div style="width: auto; height: auto; overflow: scroll;">
+
     <div class="main">
     {% include 'navbar.html' %}
     {% block content %}
