@@ -5,7 +5,7 @@ from libgravatar import Gravatar
 import pycountry
 
 class User(AbstractUser):
-    """Model used for user authentication, and team member related information."""
+    """Model used for user authentication and related information."""
 
     GENDER_CHOICES = [
         ('M', 'Male'),

@@ -35,10 +35,10 @@ class GroupConversation(Conversation):
         if self.group:
             self.users.remove(user)
             if self.users.count()==0:
-                Message.objects.filter(pk=self.pk).delete() #completely deletes conversation if no member left
+                Message.objects.filter(pk=self.pk).delete() 
 
     def display_name(self):
         if self.name is None:
             members = self.users.all()
-            return ", ".join([i.username for i in members]) #automatically ordered by username
+            return ", ".join([i.username for i in members]) 
         return self.name

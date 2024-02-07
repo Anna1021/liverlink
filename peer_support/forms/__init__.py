@@ -1,4 +1,4 @@
-"""Forms for the tasks app."""
+"""Forms for the peer_support app."""
 
 from .helpers import NewPasswordMixin
 from .log_in_form import LogInForm

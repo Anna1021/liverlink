@@ -7,6 +7,7 @@ from peer_support.models import Conversation
 from peer_support.forms import MessageForm
 
 class ConversationView(LoginRequiredMixin, FormView):
+    """Display the users conversation """
     form_class = MessageForm
     template_name = "conversation.html"
 
