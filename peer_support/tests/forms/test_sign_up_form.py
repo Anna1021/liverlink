@@ -25,7 +25,7 @@ class SignUpFormTestCase(TestCase):
             'new_password': 'Password123',
             'password_confirmation': 'Password123',
             'user_type': 'PT',
-            'condition': 'Diabetes',
+            'condition': 'Cancer',
             'age_of_diagnosis': 5,
         }
 
@@ -108,14 +108,14 @@ class SignUpFormTestCase(TestCase):
             self.assertEqual(user.ethnicity, 'RO')
             self.assertEqual(user.language, 'en')
             self.assertEqual(user.bio, 'I am a test user.')
-            self.assertEqual(user.condition, 'Diabetes')
+            self.assertEqual(user.condition, 'Cancer')
             self.assertEqual(user.age_of_diagnosis, 5)
             is_password_correct = check_password('Password123', user.password)
             self.assertTrue(is_password_correct)
 
     def test_form_must_save_correctly_with_parent(self):
         self.form_input['user_type'] = 'PR'
-        self.form_input['child_condition'] = 'Diabetes'
+        self.form_input['child_condition'] = 'Cancer'
         self.form_input['child_age_of_diagnosis'] = 5
         form = SignUpForm(data=self.form_input)
         if form.is_valid():
@@ -134,7 +134,7 @@ class SignUpFormTestCase(TestCase):
             self.assertEqual(user.ethnicity, 'RO')
             self.assertEqual(user.language, 'en')
             self.assertEqual(user.bio, 'I am a test user.')
-            self.assertEqual(user.child_condition, 'Diabetes')
+            self.assertEqual(user.child_condition, 'Cancer')
             self.assertEqual(user.child_age_of_diagnosis, 5)
             is_password_correct = check_password('Password123', user.password)
             self.assertTrue(is_password_correct)

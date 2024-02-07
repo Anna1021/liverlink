@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.core.validators import RegexValidator
 from .models import User, Parent, Patient
-from .choices import USER_TYPE_CHOICES
+from .choices import USER_TYPE_CHOICES, CONDITION_CHOICES
 
 class LogInForm(forms.Form):
     """Form enabling registered users to log in."""
@@ -92,9 +92,9 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     """Form enabling unregistered users to sign up."""
     
     user_type = forms.ChoiceField(initial='', choices=USER_TYPE_CHOICES, required=True)
-    condition = forms.CharField(required=False)
+    condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
     age_of_diagnosis = forms.IntegerField(required=False)
-    child_condition = forms.CharField(required=False)
+    child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
     child_age_of_diagnosis = forms.IntegerField(required=False)
 
     class Meta:

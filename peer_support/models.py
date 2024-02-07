@@ -2,7 +2,7 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from libgravatar import Gravatar
-from .choices import GENDER_CHOICES, ETHNICITY_CHOICES, LANGUAGE_CHOICES, COUNTRY_CHOICES, HOSPITAL_CHOICES
+from .choices import GENDER_CHOICES, ETHNICITY_CHOICES, LANGUAGE_CHOICES, COUNTRY_CHOICES, HOSPITAL_CHOICES, CONDITION_CHOICES
 from django.core.validators import MinValueValidator
 
 class User(AbstractUser):
@@ -52,7 +52,7 @@ class User(AbstractUser):
 class Patient(User):
     """Model used for patient authentication, and patient related information."""
 
-    condition = models.CharField(max_length=50, blank=True, null=True)
+    condition = models.CharField(max_length=100, blank=True, null=True)
     age_of_diagnosis = models.PositiveIntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
 
     class Meta:
@@ -64,7 +64,7 @@ class Parent(User):
     """Model used for parent authentication, and parent related information."""
     
     # child = models.ForeignKey(Patient, on_delete=models.CASCADE, blank=True, null=True)
-    child_condition = models.CharField(max_length=50, blank=True, null=True)
+    child_condition = models.CharField(max_length=100, blank=True, null=True)
     child_age_of_diagnosis = models.PositiveSmallIntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
 
     class Meta:

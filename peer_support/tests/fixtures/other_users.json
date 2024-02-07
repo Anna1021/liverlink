@@ -11,6 +11,7 @@
       "date_of_birth": "2004-03-02",
       "gender": "F",
       "location": "GB",
+      "hospital": "Guy’s and St Thomas’ NHS Foundation Trust",
       "ethnicity": "OM",
       "bio": "Hi, I'm Jane Doe",
       "is_active": true

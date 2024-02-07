@@ -34,5 +34,5 @@ $(document).ready(function() {
       } else {
           $('#id_hospital').parent().hide();
       }
-  });
+    });
 });
