@@ -24,4 +24,15 @@ $(document).ready(function() {
         $('#id_child_age_of_diagnosis').parent().hide();
       }
     });
+
+    $('#id_hospital').parent().hide();
+
+    // Show or hide the hospital field based on location
+    $('#id_location').change(function() {
+      if ($(this).val() == 'GB') {  // Replace 'some_value' with the condition value
+          $('#id_hospital').parent().show();
+      } else {
+          $('#id_hospital').parent().hide();
+      }
   });
+});
