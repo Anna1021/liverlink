@@ -1,17 +1,12 @@
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.models import User
-from django.contrib import messages
-from django.test import TestCase
-from django.urls import reverse
 from peer_support.forms import FilterPeerForm,SortPeerForm,SearchPeerForm
 from peer_support.models import User
 from peer_support.tests.helpers import reverse_with_next
-from django.contrib.auth import get_user_model
 from django.utils.http import urlencode
 
 class PeerSelectViewTestCase(TestCase):
-    """Tests of the home view."""
+    """Tests of the Peer Select view."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',

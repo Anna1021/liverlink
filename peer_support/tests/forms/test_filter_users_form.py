@@ -5,7 +5,7 @@ from peer_support.models import User
 
 
 class FilterPeerFormTestCase(TestCase):
-    """Test for the filter user form"""
+    """Test for the FilterPeerForm"""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',

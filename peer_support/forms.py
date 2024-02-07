@@ -142,6 +142,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     
 
 class SortPeerForm(forms.Form):
+    """Form enabling the sorting of users"""
     ALL_CHOICE = [('', 'None')]
     Username = forms.ChoiceField(choices=ALL_CHOICE+[('asc', 'Ascending'), ('desc', 'Descending')], required=False, label="Username")
     Age = forms.ChoiceField(choices=ALL_CHOICE+[('asc', 'Ascending'), ('desc', 'Descending')], required=False, label="Age")
@@ -178,6 +179,7 @@ class SortPeerForm(forms.Form):
 from django.utils import timezone
 from datetime import timedelta
 class FilterPeerForm(forms.Form):
+    """Form enabling the filtering of users"""
     USER_TYPE_CHOICES=[('patient','Patient'), ('parent', 'Parent')]
     ALL_CHOICE = [('any', 'Any')]
 
@@ -240,6 +242,7 @@ class FilterPeerForm(forms.Form):
         return users
 
 class SearchPeerForm(forms.Form):
+    """Form enabling the searching of users"""
     search = forms.CharField(max_length=255, required=False)
 
     def __init__(self, *args, **kwargs):

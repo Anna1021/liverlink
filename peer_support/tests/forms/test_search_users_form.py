@@ -3,6 +3,7 @@ from peer_support.forms import SearchPeerForm
 from peer_support.models import User
 
 class SearchPeerFormTestCase(TestCase):
+    """Unit test of SearchPeerForm """
     fixtures = [
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',

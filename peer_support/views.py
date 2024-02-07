@@ -8,11 +8,9 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 from django.urls import reverse
-from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm
+from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm, SortPeerForm, FilterPeerForm,SearchPeerForm
 from peer_support.helpers import login_prohibited
-
 from peer_support.models import User
-from peer_support.forms import SortPeerForm, FilterPeerForm,SearchPeerForm
 
 
 @login_required

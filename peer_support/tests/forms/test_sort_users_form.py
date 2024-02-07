@@ -4,7 +4,7 @@ from django.test import TestCase
 from peer_support.models import User
 
 class SortPeerFormTestCase(TestCase):
-    """Test for sort form of users"""
+    """Unit test of SortPeerForm"""
 
     fixtures = [
         'peer_support/tests/fixtures/other_users.json',
