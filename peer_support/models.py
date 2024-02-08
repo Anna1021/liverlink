@@ -127,6 +127,17 @@ class Parent(User):
         verbose_name = 'Parent'
         verbose_name_plural = 'Parents'
 
+class Mentor(User):
+    """Model used for mentor authentication, and mentor related information."""
+    
+    mentor_condition = models.CharField(max_length=50, blank=True, null=True)
+    mentor_age_of_diagnosis = models.PositiveIntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
+    # qualifications ??
+
+    class Meta:
+        verbose_name = 'Mentor'
+        verbose_name_plural = 'Mentors'
+
 class Message(models.Model):
     sender = models.ForeignKey(User,null=True,on_delete=models.SET_NULL,unique=False)
     content = models.CharField(max_length=100)

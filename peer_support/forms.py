@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.core.validators import RegexValidator
-from .models import User, Parent, Patient,Message
+from .models import User, Parent, Patient, Message, Mentor
 from django.utils import timezone
 
 class LogInForm(forms.Form):
@@ -95,6 +95,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
         ('', '---------'),
         ('PT', 'Patient'),
         ('PR', 'Parent'),
+        ('MT', 'Mentor'),
     ]
     
     user_type = forms.ChoiceField(initial='', choices=USER_TYPE_CHOICES, required=True)
@@ -102,6 +103,9 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     age_of_diagnosis = forms.IntegerField(required=False)
     child_condition = forms.CharField(required=False)
     child_age_of_diagnosis = forms.IntegerField(required=False)
+    mentor_condition = forms.CharField(required=False)
+    mentor_age_of_diagnosis = forms.IntegerField(required=False)
+    
 
     class Meta:
         """Form options."""
@@ -144,6 +148,13 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 'child_age_of_diagnosis': self.cleaned_data.get('child_age_of_diagnosis'),
             })
             user = Parent.objects.create_user(**user_data)
+        elif user_type == 'MT':
+            user_data.update({
+                'mentor_condition': self.cleaned_data.get('mentor_condition'),
+                'mentor_age_of_diagnosis': self.cleaned_data.get('mentor_age_of_diagnosis'),
+            })
+            print(user_data)
+            user = Mentor.objects.create_user(**user_data)
 
         return user
 

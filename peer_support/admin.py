@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Patient, Parent
+from .models import User, Patient, Parent, Mentor
 
 # Register your models here.
 @admin.register(User)
@@ -24,4 +24,12 @@ class ParentAdmin(admin.ModelAdmin):
 
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio', 'child_condition', 'child_age_of_diagnosis'
+    ]
+
+@admin.register(Mentor)
+class MentorAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for mentors."""
+
+    list_display = [
+        'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio', 'mentor_condition', 'mentor_age_of_diagnosis'
     ]
