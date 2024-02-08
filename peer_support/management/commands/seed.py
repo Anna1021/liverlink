@@ -1,19 +1,19 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from peer_support.models import User, Parent, Patient
+from peer_support.models import Parent, Patient
 
 import pytz
 from faker import Faker
 from random import randint, random
 
 patient_fixtures = [
-    {'username': '@johndoe', 'email': 'john.doe@example.org', 'first_name': 'John', 'last_name': 'Doe', 'date_of_birth': '2000-01-01', 'gender': 'M', 'location': 'GB', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am John.', 'condition': 'Diabetes', 'age_of_diagnosis': 5},
+    {'username': '@johndoe', 'email': 'john.doe@example.org', 'first_name': 'John', 'last_name': 'Doe', 'date_of_birth': '2000-01-01', 'gender': 'M', 'location': 'GB', 'hospital': 'Croydon Health Services NHS Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am John.', 'condition': 'Diabetes', 'age_of_diagnosis': 5},
     {'username': '@janedoe', 'email': 'jane.doe@example.org', 'first_name': 'Jane', 'last_name': 'Doe', 'date_of_birth': '2008-01-01', 'gender': 'F', 'location': 'FR', 'ethnicity': 'RO', 'language': 'fr', 'bio': 'Hi, I am Jane.', 'condition': 'Hepatitis A', 'age_of_diagnosis': 10},
     {'username': '@charlie', 'email': 'charlie.johnson@example.org', 'first_name': 'Charlie', 'last_name': 'Johnson', 'date_of_birth': '2006-01-01', 'gender': 'O', 'location': 'BD', 'ethnicity': 'IN', 'language': 'bn', 'bio': 'Hi, I am Charlie.', 'condition': 'Liver cancer', 'age_of_diagnosis': 15},
 ]
 
 parent_fixtures = [
-    {'username': '@jackjones', 'email': 'jack.jones@example.org', 'first_name': 'Jack', 'last_name': 'Jones', 'date_of_birth': '1980-01-01', 'gender': 'M', 'location': 'GB', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am Jack.', 'child_condition': 'Diabetes', 'child_age_of_diagnosis': 5},
+    {'username': '@jackjones', 'email': 'jack.jones@example.org', 'first_name': 'Jack', 'last_name': 'Jones', 'date_of_birth': '1980-01-01', 'gender': 'M', 'location': 'GB', 'hospital': 'Croydon Health Services NHS Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am Jack.', 'child_condition': 'Diabetes', 'child_age_of_diagnosis': 5},
     {'username': '@jilljones', 'email': 'jill.jones@example.org', 'first_name': 'Jill', 'last_name': 'Jones', 'date_of_birth': '1985-04-20', 'gender': 'F', 'location': 'FR', 'ethnicity': 'RO', 'language': 'fr', 'bio': 'Hi, I am Jill.', 'child_condition': 'Hepatitis A', 'child_age_of_diagnosis': 10},
     {'username': '@jamescaesar', 'email': 'james.caesar@example.org', 'first_name': 'James', 'last_name': 'Caesar', 'date_of_birth': '1992-03-02', 'gender': 'O', 'location': 'BD', 'ethnicity': 'BD', 'language': 'bn', 'bio': 'Hi, I am James.', 'child_condition': 'Liver cancer', 'child_age_of_diagnosis': 15},
 ]
@@ -76,12 +76,13 @@ class Command(BaseCommand):
         date_of_birth = self.faker.date_of_birth(minimum_age=16, maximum_age=100)
         gender = self.faker.random_element(elements=('M', 'F', 'O', 'N'))
         location = self.faker.country()
+        hospital = self.faker.random_element(elements=('Croydon Health Services NHS Trust', 'King’s College Hospital NHS Foundation Trust', 'Guy’s and St Thomas’ NHS Foundation Trust', 'Great Ormond Street Hospital For Children NHS Foundation Trust'))
         ethnicity = self.faker.random_element(elements=('White', 'Black', 'Asian', 'Mixed', 'Other'))
         language = self.faker.language_code()
         bio = self.faker.text(max_nb_chars=100)
         condition = self.faker.random_element(elements=('Diabetes', 'Hepatitis A', 'Liver cancer', 'Cysts', 'Other'))
         age_of_diagnosis = randint(0, 20)
-        self.try_create_patient({'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'ethnicity': ethnicity, 'language': language, 'bio': bio, 'condition': condition, 'age_of_diagnosis': age_of_diagnosis})
+        self.try_create_patient({'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital,'ethnicity': ethnicity, 'language': language, 'bio': bio, 'condition': condition, 'age_of_diagnosis': age_of_diagnosis})
 
     def generate_parent(self):
         first_name = self.faker.first_name()
@@ -91,12 +92,13 @@ class Command(BaseCommand):
         date_of_birth = self.faker.date_of_birth(minimum_age=16, maximum_age=100)
         gender = self.faker.random_element(elements=('M', 'F', 'O', 'N'))
         location = self.faker.country_code()
+        hospital = self.faker.random_element(elements=('Croydon Health Services NHS Trust', 'King’s College Hospital NHS Foundation Trust', 'Guy’s and St Thomas’ NHS Foundation Trust', 'Great Ormond Street Hospital For Children NHS Foundation Trust'))
         ethnicity = self.faker.random_element(elements=('BR', 'AF', 'BD', 'WC', 'OG'))
         language = self.faker.language_code()
         bio = self.faker.text(max_nb_chars=100)
         child_condition = self.faker.random_element(elements=('Diabetes', 'Hepatitis A', 'Liver cancer', 'Cysts', 'Other'))
         child_age_of_diagnosis = randint(0, 30)
-        self.create_parent({'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'ethnicity': ethnicity, 'language': language, 'bio': bio, 'child_condition': child_condition, 'child_age_of_diagnosis': child_age_of_diagnosis})
+        self.create_parent({'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital, 'ethnicity': ethnicity, 'language': language, 'bio': bio, 'child_condition': child_condition, 'child_age_of_diagnosis': child_age_of_diagnosis})
 
     def try_create_patient(self, data):
         try:
@@ -120,6 +122,7 @@ class Command(BaseCommand):
             date_of_birth=data['date_of_birth'],
             gender=data['gender'],
             location=data['location'],
+            hospital=data['hospital'],
             ethnicity=data['ethnicity'],
             language=data['language'],
             bio=data['bio'],
@@ -137,6 +140,7 @@ class Command(BaseCommand):
             date_of_birth=data['date_of_birth'],
             gender=data['gender'],
             location=data['location'],
+            hospital=data['hospital'],
             ethnicity=data['ethnicity'],
             language=data['language'],
             bio=data['bio'],
