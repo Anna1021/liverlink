@@ -4,9 +4,10 @@ from django.db import models
 from libgravatar import Gravatar
 from .choices import GENDER_CHOICES, ETHNICITY_CHOICES, LANGUAGE_CHOICES, COUNTRY_CHOICES, HOSPITAL_CHOICES, CONDITION_CHOICES
 from django.core.validators import MinValueValidator
+import pycountry
 
 class User(AbstractUser):
-    """Model used for user authentication, and team member related information."""
+    """Model used for user authentication and related information."""
 
     username = models.CharField(
         max_length=30,
@@ -48,26 +49,4 @@ class User(AbstractUser):
         """Return a URL to a miniature version of the user's gravatar."""
         
         return self.gravatar(size=60)
-
-class Patient(User):
-    """Model used for patient authentication, and patient related information."""
-
-    condition = models.CharField(max_length=100, blank=True, null=True)
-    age_of_diagnosis = models.PositiveIntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
-
-    class Meta:
-        verbose_name = 'Patient'
-        verbose_name_plural = 'Patients'
-
-
-class Parent(User):
-    """Model used for parent authentication, and parent related information."""
-    
-    # child = models.ForeignKey(Patient, on_delete=models.CASCADE, blank=True, null=True)
-    child_condition = models.CharField(max_length=100, blank=True, null=True)
-    child_age_of_diagnosis = models.PositiveSmallIntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
-
-    class Meta:
-        verbose_name = 'Parent'
-        verbose_name_plural = 'Parents'
-    
+      
