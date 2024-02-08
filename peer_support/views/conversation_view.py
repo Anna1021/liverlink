@@ -20,6 +20,7 @@ class ConversationView(LoginRequiredMixin, FormView):
             messages.error(request,"You do not have access to this conversation.")
             return reverse_lazy("conversation")
         form = MessageForm(conversation,user=current_user)
+        print(request.user.conversations.all())
         context = {"form":form, 'conversation':conversation,'user_conversations':request.user.conversations.all()}
         return render(request,self.template_name,context)
 

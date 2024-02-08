@@ -73,8 +73,8 @@ class User(AbstractUser):
     ethnicity = models.CharField(max_length=50,choices=ETHNICITY_CHOICES, blank=True)
     language = models.CharField(max_length=50,choices=LANGUAGE_CHOICES, blank=True)
     bio = models.CharField(max_length=500, blank=True)
-    conversations = models.ManyToManyField('Conversation')
-    unread_messages = models.ManyToManyField('Message')
+    conversations = models.ManyToManyField('Conversation',blank=True)
+    unread_messages = models.ManyToManyField('Message',blank=True)
 
     class Meta:
         """Model options."""

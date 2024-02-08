@@ -23,10 +23,10 @@ class Conversation(models.Model):
             return None
 
     def get_first_member(self):
-        return self.users.all([0])
+        return self.users.all()[0]
 
     def get_second_member(self):
-        return self.users.all([1])    
+        return self.users.all()[1]    
 
 class GroupConversation(Conversation):
     name = models.CharField(max_length=20,null=True)

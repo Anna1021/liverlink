@@ -1,6 +1,7 @@
 <nav class="col-md-4 d-md-block sidebar collapse">
 <ul>
     {% for conversation in user_conversations %}
+    <a href="{% url 'conversation' conversation.id %}">
         {% if conversation.as_group != None %}
         {{conversation.as_group.display_name}}
         {% else %}
@@ -10,6 +11,7 @@
                 {{conversation.get_first_member}}
             {% endif %}
         {% endif %}
+    </a>
     {% empty %}
     No conversations!
     {% endfor %}
