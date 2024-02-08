@@ -1,4 +1,6 @@
 .scrollable-container {
     max-height: 550px;
     overflow-y: auto;
+    width: 752px; /* adjust the width to suit your needs */
+    word-wrap: break-word;
 }
