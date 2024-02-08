@@ -314,7 +314,7 @@ CONDITION_CHOICES = [
     ("Liver cancer", "Liver cancer"),
     ("Liver cysts", "Liver cysts"),
     ("Liver haemangioma", "Liver haemangioma"),
-    ("Metabolic dysfunction-associated steatotic liver disease (MASLD) (Previously called NAFLD)", "Metabolic dysfunction-associated steatotic liver disease (MASLD) (Previously called NAFLD)"),
+    ("Metabolic dysfunction-associated steatotic liver disease (MASLD)", "Metabolic dysfunction-associated steatotic liver disease (MASLD)"),
     ("Non-alcohol related fatty liver disease (NAFLD)", "Non-alcohol related fatty liver disease (NAFLD)"),
     ("Porphyria", "Porphyria"),
     ("Portal hypertension", "Portal hypertension"),
