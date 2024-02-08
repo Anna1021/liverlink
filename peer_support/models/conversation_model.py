@@ -3,7 +3,7 @@ from peer_support.models import User, Message
 
 class Conversation(models.Model):
     users = models.ManyToManyField(User)
-    messages = models.ManyToManyField(Message)
+    messages = models.ManyToManyField(Message,blank=True)
 
     def add_user(self,user):
         """Adds user to a group"""
