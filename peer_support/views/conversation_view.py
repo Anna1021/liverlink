@@ -7,7 +7,7 @@ from peer_support.models import Conversation
 from peer_support.forms import MessageForm
 
 class ConversationView(LoginRequiredMixin, FormView):
-    """Display the users conversation """
+    """Displays the user's conversation"""
     form_class = MessageForm
     template_name = "conversation.html"
 
@@ -19,17 +19,17 @@ class ConversationView(LoginRequiredMixin, FormView):
         if current_user not in conversation.users.all():
             messages.error(request,"You do not have access to this conversation.")
             return reverse_lazy("conversation")
-        form = MessageForm(user=current_user)
+        form = MessageForm(conversation,user=current_user)
         context = {"form":form, 'conversation':conversation,'user_conversations':request.user.conversations.all()}
         return render(request,self.template_name,context)
 
     def post(self,request,conversation_id):
         """Post request for user to send message to conversation"""
         conversation = Conversation.objects.get(id=conversation_id)
-        form = MessageForm(data=request.POST,user=request.user)
+        form = MessageForm(conversation,data=request.POST,user=request.user)
         if form.is_valid() and request.user in conversation.users.all():
             form.save()
-            return render(request,self.template_name,{'form':MessageForm(user=request.user),'conversation':conversation,'user_conversations':request.user.conversations.all})
+            return render(request,self.template_name,{'form':MessageForm(conversation,user=request.user),'conversation':conversation,'user_conversations':request.user.conversations.all})
         else:
             messages.error(request,"This message is not valid")
             return render(request,self.template_name,{'form':form,'conversation':conversation,'user_conversations':request.user.conversations.all})
