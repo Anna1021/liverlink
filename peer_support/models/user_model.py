@@ -3,11 +3,9 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from libgravatar import Gravatar
 import pycountry
-from django.core.validators import MinValueValidator
-from django.utils import timezone
 
 class User(AbstractUser):
-    """Model used for user authentication, and team member related information."""
+    """Model used for user authentication and related information."""
 
     GENDER_CHOICES = [
         ('M', 'Male'),
@@ -78,8 +76,6 @@ class User(AbstractUser):
     conversations = models.ManyToManyField('Conversation')
     unread_messages = models.ManyToManyField('Message')
 
-    # TODO:
-    # - 
     class Meta:
         """Model options."""
 
@@ -104,6 +100,7 @@ class User(AbstractUser):
       
     def update_unread_messages(self,message):
         self.unread_messages.add(message)
+<<<<<<< HEAD:peer_support/models.py
 
 class Patient(User):
     """Model used for patient authentication, and patient related information."""
@@ -182,3 +179,5 @@ class GroupConversation(Conversation):
         return self.name
 
     
+=======
+>>>>>>> 3b5f2b2f42d885d6fe321d0899a5811c0cb0f4ee:peer_support/models/user_model.py

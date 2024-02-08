@@ -4,6 +4,7 @@ from peer_support.models import User
 from peer_support.forms import PasswordForm
 
 class PasswordFormTestCase(TestCase):
+    """Unit test for password form"""
 
     fixtures = ['peer_support/tests/fixtures/default_user.json']
 
