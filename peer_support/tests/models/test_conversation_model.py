@@ -1,10 +1,9 @@
 """Unit tests for the Conversation model."""
-from django.core.exceptions import ValidationError
 from django.test import TestCase
-from peer_support.models import User,Message,Conversation,GroupConversation
+from peer_support.models import User,Message,Conversation
 
 class ConversationModelTestCase(TestCase):
-    """Unit tests for the Message model."""
+    """Unit tests for the Conversation model."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
