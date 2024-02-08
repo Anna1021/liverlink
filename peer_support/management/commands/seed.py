@@ -126,8 +126,8 @@ class Command(BaseCommand):
             ethnicity=data['ethnicity'],
             language=data['language'],
             bio=data['bio'],
-            condition=self.faker.random_element(elements=('Diabetes', 'Hepatitis A', 'Liver cancer', 'Cysts', 'Other')),
-            age_of_diagnosis=randint(0, 30),
+            condition=['condition'],
+            age_of_diagnosis=['age_of_diagnosis'],
         )
 
     def create_parent(self, data):
@@ -144,8 +144,8 @@ class Command(BaseCommand):
             ethnicity=data['ethnicity'],
             language=data['language'],
             bio=data['bio'],
-            child_condition=self.faker.random_element(elements=('Diabetes', 'Hepatitis A', 'Liver cancer', 'Cysts', 'Other')),
-            child_age_of_diagnosis=randint(0, 30),
+            child_condition=['child_condition'],
+            child_age_of_diagnosis=['child_age_of_diagnosis'],
         )
 
 def create_username(first_name, last_name):
