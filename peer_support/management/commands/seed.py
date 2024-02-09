@@ -110,40 +110,10 @@ class Command(BaseCommand):
             pass
 
     def create_patient(self, data):
-        Patient.objects.create(
-            username=data['username'],
-            email=data['email'],
-            password=Command.DEFAULT_PASSWORD,
-            first_name=data['first_name'],
-            last_name=data['last_name'],
-            date_of_birth=data['date_of_birth'],
-            gender=data['gender'],
-            location=data['location'],
-            hospital=data['hospital'],
-            ethnicity=data['ethnicity'],
-            language=data['language'],
-            bio=data['bio'],
-            condition=data['condition'],
-            age_of_diagnosis=data['age_of_diagnosis'],
-        )
+        Patient.objects.create(**data)
 
     def create_parent(self, data):
-        Parent.objects.create(
-            username=data['username'],
-            email=data['email'],
-            password=Command.DEFAULT_PASSWORD,
-            first_name=data['first_name'],
-            last_name=data['last_name'],
-            date_of_birth=data['date_of_birth'],
-            gender=data['gender'],
-            location=data['location'],
-            hospital=data['hospital'],
-            ethnicity=data['ethnicity'],
-            language=data['language'],
-            bio=data['bio'],
-            child_condition=data['child_condition'],
-            child_age_of_diagnosis=data['child_age_of_diagnosis'],
-        )
+        Parent.objects.create(**data)
 
 def create_username(first_name, last_name):
     return '@' + first_name.lower() + last_name.lower()
