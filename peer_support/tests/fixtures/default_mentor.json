@@ -1,0 +1,12 @@
+[
+    {
+        "model": "peer_support.mentor",
+        "pk": 1,
+        "fields": {
+            "user_ptr": 1,
+            "mentor_condition": "Hepatitis",
+            "mentor_age_of_diagnosis": 20,
+            "is_active": true
+        }
+    }
+]

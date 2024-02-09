@@ -1,0 +1,32 @@
+[
+    {
+      "model": "peer_support.mentor",
+      "pk": 2,
+      "fields": {
+        "user_ptr": 2,
+        "mentor_condition": "Biliary atresia",
+        "mentor_age_of_diagnosis": 2,
+        "is_active": true
+      }
+    },
+    {
+      "model": "peer_support.mentor",
+      "pk": 3,
+      "fields": {
+        "user_ptr": 3,
+        "mentor_condition": "Cirrhosis",
+        "mentor_age_of_diagnosis": 13,
+        "is_active": true
+      }
+    },
+    {
+      "model": "peer_support.mentor",
+      "pk": 4,
+      "fields": {
+        "user_ptr": 4,
+        "mentor_condition": "Haemochromatosis",
+        "mentor_age_of_diagnosis": 45,
+        "is_active": true
+      }
+    }
+  ]

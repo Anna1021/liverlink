@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import check_password
 from django import forms
 from django.test import TestCase
 from peer_support.forms import SignUpForm
-from peer_support.models import Patient, Parent
+from peer_support.models import Patient, Parent, Mentor
 
 class SignUpFormTestCase(TestCase):
     """Unit tests of the sign up form."""
@@ -132,5 +132,30 @@ class SignUpFormTestCase(TestCase):
             self.assertEqual(user.bio, 'I am a test user.')
             self.assertEqual(user.child_condition, 'Diabetes')
             self.assertEqual(user.child_age_of_diagnosis, 5)
+            is_password_correct = check_password('Password123', user.password)
+            self.assertTrue(is_password_correct)
+
+    def test_form_must_save_correctly_with_mentor(self):
+        self.form_input['user_type'] = 'MT'
+        self.form_input['mentor_condition'] = 'Diabetes'
+        self.form_input['mentor_age_of_diagnosis'] = 5
+        form = SignUpForm(data=self.form_input)
+        if form.is_valid():
+            before_count = Mentor.objects.count()
+            form.save()
+            after_count = Mentor.objects.count()
+            self.assertEqual(after_count, before_count+1)
+            user = Mentor.objects.get(username='@janedoe')
+            self.assertEqual(user.first_name, 'Jane')
+            self.assertEqual(user.last_name, 'Doe')
+            self.assertEqual(user.email, 'janedoe@example.org')
+            self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
+            self.assertEqual(user.gender, 'F')
+            self.assertEqual(user.location, 'US')
+            self.assertEqual(user.ethnicity, 'RO')
+            self.assertEqual(user.language, 'en')
+            self.assertEqual(user.bio, 'I am a test user.')
+            self.assertEqual(user.mentor_condition, 'Diabetes')
+            self.assertEqual(user.mentor_age_of_diagnosis, 5)
             is_password_correct = check_password('Password123', user.password)
             self.assertTrue(is_password_correct)
