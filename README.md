@@ -53,5 +53,4 @@ $ python3 manage.py test
 The packages used by this application are specified in `requirements.txt`
 
 Initial scaffolding by Jeroen Keppens
-
-https://emckclac-my.sharepoint.com/:w:/r/personal/k22007695_kcl_ac_uk/Documents/Sources.docx?d=w4b5451478d90421b82411597291b0083&csf=1&web=1&e=GOoBhi
+https://emckclac-my.sharepoint.com/:w:/r/personal/k22007695_kcl_ac_uk/Documents/Sources.docx?d=w4b5451478d90421b82411597291b0083&csf=1&web=1&e=P43xZq

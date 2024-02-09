@@ -1,0 +1,18 @@
+[
+    {
+        "model": "peer_support.user",
+        "pk": 8,
+        "fields": {
+        "username": "@admin",
+        "first_name": "Admin",
+        "last_name": "User",
+        "email": "admin@example.com",
+        "is_staff": true,
+        "is_active": true,
+        "is_superuser": true,
+        "password": "placeholder_for_password",
+        "gender": "N",
+        "location": "US"
+        }
+    }
+]
