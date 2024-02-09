@@ -69,23 +69,7 @@ class Command(BaseCommand):
             parent_count = Parent.objects.count()
         print("Parent seeding complete.      ")
 
-    def generate_patient(self):
-        first_name = self.faker.first_name()
-        last_name = self.faker.last_name()
-        email = create_email(first_name, last_name)
-        username = create_username(first_name, last_name)
-        date_of_birth = self.faker.date_of_birth(minimum_age=16, maximum_age=25)
-        gender = self.faker.random_element(elements=(tuple(gender[0] for gender in GENDER_CHOICES)))
-        location = self.faker.country_code()
-        hospital = self.faker.random_element(elements=(tuple(hospital[0] for hospital in HOSPITAL_CHOICES)))
-        ethnicity = self.faker.random_element(elements=[ethnicity[0] for group in ETHNICITY_CHOICES for ethnicity in group[1]])
-        language = self.faker.language_code()
-        bio = self.faker.text(max_nb_chars=100)
-        condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
-        age_of_diagnosis = randint(0, 20)
-        self.try_create_patient({'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital,'ethnicity': ethnicity, 'language': language, 'bio': bio, 'condition': condition, 'age_of_diagnosis': age_of_diagnosis})
-
-    def generate_parent(self):
+    def generate_user_data(self):
         first_name = self.faker.first_name()
         last_name = self.faker.last_name()
         email = create_email(first_name, last_name)
@@ -97,10 +81,22 @@ class Command(BaseCommand):
         ethnicity = self.faker.random_element(elements=[ethnicity[0] for group in ETHNICITY_CHOICES for ethnicity in group[1]])
         language = self.faker.language_code()
         bio = self.faker.text(max_nb_chars=100)
+        return {'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital, 'ethnicity': ethnicity, 'language': language, 'bio': bio}
+
+    def generate_patient(self):
+        user_data = self.generate_user_data()
+        condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
+        age_of_diagnosis = randint(0, 20)
+        user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis})
+        self.try_create_patient(user_data)
+
+    def generate_parent(self):
+        user_data = self.generate_user_data()
         child_condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
         child_age_of_diagnosis = randint(0, 30)
-        self.try_create_parent({'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital, 'ethnicity': ethnicity, 'language': language, 'bio': bio, 'child_condition': child_condition, 'child_age_of_diagnosis': child_age_of_diagnosis})
-
+        user_data.update({'child_condition': child_condition, 'child_age_of_diagnosis': child_age_of_diagnosis})
+        self.try_create_parent(user_data)
+        
     def try_create_patient(self, data):
         try:
             self.create_patient(data)
