@@ -1,8 +1,10 @@
 from django.core.management.base import BaseCommand
+
 from peer_support.models import Parent, Patient
+
 from faker import Faker
 from random import randint
-from peer_support.models.model_choices import GENDER_CHOICES, HOSPITAL_CHOICES, ETHNICITY_CHOICES
+from peer_support.models.model_choices import *
 from peer_support.forms.form_choices import CONDITION_CHOICES
 
 patient_fixtures = [
@@ -67,7 +69,23 @@ class Command(BaseCommand):
             parent_count = Parent.objects.count()
         print("Parent seeding complete.      ")
 
-    def generate_user_data(self):
+    def generate_patient(self):
+        first_name = self.faker.first_name()
+        last_name = self.faker.last_name()
+        email = create_email(first_name, last_name)
+        username = create_username(first_name, last_name)
+        date_of_birth = self.faker.date_of_birth(minimum_age=16, maximum_age=25)
+        gender = self.faker.random_element(elements=(tuple(gender[0] for gender in GENDER_CHOICES)))
+        location = self.faker.country_code()
+        hospital = self.faker.random_element(elements=(tuple(hospital[0] for hospital in HOSPITAL_CHOICES)))
+        ethnicity = self.faker.random_element(elements=[ethnicity[0] for group in ETHNICITY_CHOICES for ethnicity in group[1]])
+        language = self.faker.language_code()
+        bio = self.faker.text(max_nb_chars=100)
+        condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
+        age_of_diagnosis = randint(0, 20)
+        self.try_create_patient({'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital,'ethnicity': ethnicity, 'language': language, 'bio': bio, 'condition': condition, 'age_of_diagnosis': age_of_diagnosis})
+
+    def generate_parent(self):
         first_name = self.faker.first_name()
         last_name = self.faker.last_name()
         email = create_email(first_name, last_name)
@@ -79,21 +97,9 @@ class Command(BaseCommand):
         ethnicity = self.faker.random_element(elements=[ethnicity[0] for group in ETHNICITY_CHOICES for ethnicity in group[1]])
         language = self.faker.language_code()
         bio = self.faker.text(max_nb_chars=100)
-        return {'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital, 'ethnicity': ethnicity, 'language': language, 'bio': bio}
-
-    def generate_patient(self):
-        user_data = self.generate_user_data()
-        condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
-        age_of_diagnosis = randint(0, 20)
-        user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis})
-        self.try_create_patient(user_data)
-
-    def generate_parent(self):
-        user_data = self.generate_user_data()
         child_condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
         child_age_of_diagnosis = randint(0, 30)
-        user_data.update({'child_condition': child_condition, 'child_age_of_diagnosis': child_age_of_diagnosis})
-        self.create_parent(user_data)
+        self.try_create_parent({'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital, 'ethnicity': ethnicity, 'language': language, 'bio': bio, 'child_condition': child_condition, 'child_age_of_diagnosis': child_age_of_diagnosis})
 
     def try_create_patient(self, data):
         try:
@@ -107,8 +113,8 @@ class Command(BaseCommand):
         except:
             pass
 
-    def create_user(self, model, data):
-        return model.objects.create(
+    def create_patient(self, data):
+        Patient.objects.create(
             username=data['username'],
             email=data['email'],
             password=Command.DEFAULT_PASSWORD,
@@ -121,14 +127,27 @@ class Command(BaseCommand):
             ethnicity=data['ethnicity'],
             language=data['language'],
             bio=data['bio'],
-            **data
+            condition=data['condition'],
+            age_of_diagnosis=data['age_of_diagnosis'],
         )
 
-    def create_patient(self, data):
-        self.create_user(Patient, data)
-
     def create_parent(self, data):
-        self.create_user(Parent, data)
+        Parent.objects.create(
+            username=data['username'],
+            email=data['email'],
+            password=Command.DEFAULT_PASSWORD,
+            first_name=data['first_name'],
+            last_name=data['last_name'],
+            date_of_birth=data['date_of_birth'],
+            gender=data['gender'],
+            location=data['location'],
+            hospital=data['hospital'],
+            ethnicity=data['ethnicity'],
+            language=data['language'],
+            bio=data['bio'],
+            child_condition=data['child_condition'],
+            child_age_of_diagnosis=data['child_age_of_diagnosis'],
+        )
 
 def create_username(first_name, last_name):
     return '@' + first_name.lower() + last_name.lower()
