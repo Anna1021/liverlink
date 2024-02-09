@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from peer_support.models import User
-from .choices import GENDER_CHOICES, ETHNICITY_CHOICES, LANGUAGE_CHOICES, COUNTRY_CHOICES, HOSPITAL_CHOICES, CONDITION_CHOICES
 
 class Patient(User):
     """Model used for patient authentication, and patient related information."""

@@ -138,3 +138,4 @@ class SignUpFormTestCase(TestCase):
             self.assertEqual(user.child_age_of_diagnosis, 5)
             is_password_correct = check_password('Password123', user.password)
             self.assertTrue(is_password_correct)
+        

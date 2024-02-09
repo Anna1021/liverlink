@@ -1,7 +1,7 @@
 from django import forms
 from peer_support.models import User, Parent, Patient
 from .helpers import NewPasswordMixin
-from peer_support.models.choices import USER_TYPE_CHOICES, CONDITION_CHOICES
+from .form_choices import USER_TYPE_CHOICES, CONDITION_CHOICES
 
 class SignUpForm(NewPasswordMixin, forms.ModelForm):
     """Form enabling unregistered users to sign up."""
