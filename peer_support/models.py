@@ -118,7 +118,6 @@ class Parent(User):
 class UserProfile(models.Model):
     """Model used for user profile settings (preferences)."""
 
-    # TODO: Choices should be updated
     THEME_CHOICES = [
     ('DF', 'Default theme'),
     ('LM', 'Light mode'),
@@ -141,6 +140,4 @@ class UserProfile(models.Model):
     theme = models.CharField(max_length=50, choices=THEME_CHOICES, default='DF')
     font = models.CharField(max_length=50, choices=FONT_CHOICES, default='DF')
     font_size = models.CharField(max_length=50, choices=FONT_SIZE_CHOICES, default='DF')
-    friends = models.ManyToManyField(User, related_name='friends_with')
-    blocked_users = models.ManyToManyField(User, related_name='blocked_by')
 

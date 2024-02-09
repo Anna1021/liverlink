@@ -133,7 +133,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         elif Parent.objects.filter(id=self.request.user.id).exists():
             return ParentForm
         else:
-            return UserForm #update for mentor model
+            return UserForm
 
     def get_object(self):
         """Return the object (user) to be updated."""
@@ -152,7 +152,7 @@ def deactivate_user(request):
     user = request.user
     user.is_active = False
     user.save()
-    messages.add_message(request, messages.SUCCESS, "Profile successfully deactivated!") # does not display on :8000 - only on /log_in or /sign_up, whichever is accessed first
+    messages.add_message(request, messages.SUCCESS, "Profile successfully deactivated!")
     logout(request)
     return redirect('home')
 
