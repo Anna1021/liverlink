@@ -1,49 +1,30 @@
 {% extends 'base_content.html' %}
+{% load static %}
 {% block content %}
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <h1>Sign up</h1>
-      <form action="{% url 'sign_up' %}" method="post">
-        {% csrf_token %}
-        {% include 'partials/bootstrap_form.html' with form=form %}
-        <div id="patient_fields" style="display: none; margin-bottom: 20px;">
-          <div class="form-group">
-            <label for="id_condition">Condition:</label>
-            <input type="text" id="id_condition" name="condition" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="id_age_of_diagnosis">Age of Diagnosis:</label>
-            <input type="number" id="id_age_of_diagnosis" name="age_of_diagnosis" class="form-control">
-          </div>
+<div id="cover-image">
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+      <div id="loginBox" class="row p-3 text-white shadow box-area custom-rounded my-3" style="background-color:#2E2D38">
+
+      <!-- Left box image -->
+      {% include 'partials/cover_image.html' %}
+
+      <!-- Right box form -->
+      <div class="col-md-7">
+        <div class="row align-items-center">
+          <h1>Sign up</h1>
+            <form action="{% url 'sign_up' %}" method="post">
+              {% csrf_token %}
+              {% include 'partials/bootstrap_form.html' with form=form %}
+              <p>Already have an account? <a href='{% url 'log_in' %}'>
+                Log in here
+              </a> </p>
+              <input type="submit" value="Sign up" class="btn btn-primary">
+            </form>
         </div>
-        <div id="parent_fields" style="display: none; margin-bottom: 20px;">
-          <div class="form-group">
-            <label for="id_childs_condition">Child's Condition:</label>
-            <input type="text" id="id_childs_condition" name="childs_condition" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="id_childs_age_of_diagnosis">Child's Age of Diagnosis:</label>
-            <input type="number" id="id_childs_age_of_diagnosis" name="childs_age_of_diagnosis" class="form-control">
-          </div>
-        </div>
-        <input type="submit" value="Sign up" class="btn btn-primary">
-      </form>
+      </div>
     </div>
   </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#id_user_type').change(function() {
-        if ($(this).val() == 'PT') {
-            $('#patient_fields').show();
-            $('#parent_fields').hide();
-        } else if ($(this).val() == 'PR') {
-            $('#parent_fields').show();
-            $('#patient_fields').hide();
-        }
-    });
-});
-</script>
+<script src="{% static 'js/sign_up.js' %}"></script>
 {% endblock %}
