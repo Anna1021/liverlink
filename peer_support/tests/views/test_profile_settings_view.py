@@ -74,7 +74,7 @@ class ProfileViewTest(TestCase):
         self.assertTemplateUsed(response, 'profile.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PatientForm))
-        self.assertEqual(form.instance, self.patient) #AssertionError: <SimpleLazyObject: <User: @johndoe>> != <Patient: @johndoe>
+        self.assertEqual(form.instance, self.patient)
 
     def test_get_profile_redirects_when_not_logged_in(self):
         redirect_url = reverse_with_next('log_in', self.url)
@@ -208,8 +208,8 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.parent.ethnicity, 'RO'),
         self.assertEqual(self.parent.language, 'en'),
         self.assertEqual(self.parent.bio, "I am a test patient."),
-        self.assertEqual(self.parent.condition, "Haemochromatosis"),
-        self.assertEqual(self.parent.age_of_diagnosis, 21)
+        self.assertEqual(self.parent.child_condition, "Haemochromatosis"),
+        self.assertEqual(self.parent.child_age_of_diagnosis, 21)
 
     def test_post_profile_redirects_when_not_logged_in(self):
         redirect_url = reverse_with_next('log_in', self.url)

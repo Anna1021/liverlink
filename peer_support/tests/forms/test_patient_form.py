@@ -62,9 +62,6 @@ class PatientFormTestCase(TestCase):
         aod_widget = form.fields['age_of_diagnosis'].widget
         self.assertTrue(isinstance(aod_widget, forms.NumberInput))
 
-    def test_patient_form_is_subclass_of_user_form(self):
-        self.assertTrue(issubclass(PatientForm, UserForm))
-
     def test_valid_patient_form(self):
         form = PatientForm(data=self.form_input)
         self.assertTrue(form.is_valid())

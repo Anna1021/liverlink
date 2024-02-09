@@ -6,14 +6,7 @@
             "user": 1,
             "theme": "DF",
             "font": "DF",
-            "font_size": "DF",
-            "friends": [
-                2,
-                3
-            ],
-            "blocked_users": [
-                4
-            ]
+            "font_size": "DF"
             }
     }
 ]

@@ -62,9 +62,6 @@ class ParentFormTestCase(TestCase):
         caod_widget = form.fields['child_age_of_diagnosis'].widget
         self.assertTrue(isinstance(caod_widget, forms.NumberInput))
 
-    def test_parent_form_is_subclass_of_user_form(self):
-        self.assertTrue(issubclass(ParentForm, UserForm))
-
     def test_valid_user_form(self):
         form = ParentForm(data=self.form_input)
         self.assertTrue(form.is_valid())

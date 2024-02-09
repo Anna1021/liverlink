@@ -6,13 +6,7 @@
             "user": 2,
             "theme": "DF",
             "font": "CA",
-            "font_size": "XL",
-            "friends": [
-                1
-            ],
-            "blocked_users": [
-                3
-            ]
+            "font_size": "XL"
             }
     },
     {
@@ -22,11 +16,7 @@
             "user": 3,
             "theme": "LM",
             "font": "AR",
-            "font_size": "XL",
-            "friends": [
-                1
-            ],
-            "blocked_users": []
+            "font_size": "XL"
             }
     },
     {
@@ -36,9 +26,7 @@
             "user": 4,
             "theme": "DM",
             "font": "DF",
-            "font_size": "LG",
-            "friends": [],
-            "blocked_users": []
+            "font_size": "LG"
             }
     }
 ]
