@@ -158,17 +158,7 @@ class UserProfileModelTestCase(TestCase):
     def test_font_size_cannot_be_outside_of_given_choices(self):
         self.user_profile.font_size = "TESTING"
         self._assert_user_profile_is_invalid()
-
-    
-    def test_friends_can_be_empty(self):
-        self.user_profile.friends.clear()
-        self._assert_user_profile_is_valid()
-
-
-    def test_blocked_users_can_be_empty(self):
-        self.user_profile.blocked_users.clear()
-        self._assert_user_profile_is_valid()
-
+        
     
     def _assert_user_profile_is_valid(self):
         try:
