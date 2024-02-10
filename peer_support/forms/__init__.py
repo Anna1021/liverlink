@@ -9,3 +9,4 @@ from .message_form import MessageForm
 from .filter_peer_from import FilterPeerForm
 from .sort_peer_form import SortPeerForm
 from .search_peer_form import SearchPeerForm
+from .conversation_form import ConversationForm

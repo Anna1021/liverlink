@@ -1,6 +1,18 @@
 {% extends 'partials/conversation_menu.html' %}
 {% block convo %}
 {% if conversation %}
+<h2>
+    {% if conversation.as_group != None %}
+        {{conversation.as_group.display_name}}
+    {% else %}
+        {% if user == conversation.get_first_member %}
+            {{conversation.get_second_member}}
+        {% else %}
+            {{conversation.get_first_member}}
+        {% endif %}
+    {% endif %}
+</h2>
+
 {% for message in conversation.messages.all %}
 <p>{{message.sender}} : {{message.content}}</p>
 {% empty %}

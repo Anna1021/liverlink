@@ -1,0 +1,18 @@
+{% extends 'partials/conversation_menu.html' %}
+{% load user_tags %}
+{% load static %}
+{% block convo %}
+
+<div class="row">
+    <form method="post" class="px-4 py-3" novalidate>
+        {% csrf_token %}
+        {% include 'partials/bootstrap_form.html' with form=form %}
+        <button type="submit" id="direct">Message directly</button>
+        <button type="submit" id="group">Create group chat</button>
+    </form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'js/create_conversation.js' %}"></script>
+
+{% endblock %}
+
