@@ -1,17 +1,32 @@
 {% extends 'partials/conversation_menu.html' %}
 {% block convo %}
 {% if conversation %}
-<h2>
-    {% if conversation.as_group != None %}
-        {{conversation.as_group.display_name}}
-    {% else %}
-        {% if user == conversation.get_first_member %}
-            {{conversation.get_second_member}}
-        {% else %}
-            {{conversation.get_first_member}}
-        {% endif %}
-    {% endif %}
-</h2>
+<div class="row">
+    <div class="col-md-6">
+        <h2>
+            {% if conversation.as_group != None %}
+                {{conversation.as_group.display_name}}
+            {% else %}
+                {% if user == conversation.get_first_member %}
+                    {{conversation.get_second_member}}
+                {% else %}
+                    {{conversation.get_first_member}}
+                {% endif %}
+            {% endif %}
+        </h2>
+    </div>
+    <div class="col-md-2">
+        <a class="nav-link" href="#" id="user-account-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="bi-info-circle"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-account-dropdown">
+            <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">View user details</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">Delete conversation</a></li>
+        </ul>
+    </div>
+
+</div>
 
 {% for message in conversation.messages.all %}
 <p>{{message.sender}} : {{message.content}}</p>
