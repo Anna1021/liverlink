@@ -5,6 +5,10 @@ class Conversation(models.Model):
     users = models.ManyToManyField(User)
     messages = models.ManyToManyField(Message,blank=True)
 
+    def __str__(self):
+        members = self.users.all()
+        return ", ".join([i.username for i in members]) 
+
     def add_user(self,user):
         """Adds user to a group"""
         self.users.add(user)
@@ -37,8 +41,7 @@ class GroupConversation(Conversation):
             if self.users.count()==0:
                 Message.objects.filter(pk=self.pk).delete() 
 
-    def display_name(self):
+    def __str__(self):
         if self.name is None:
-            members = self.users.all()
-            return ", ".join([i.username for i in members]) 
+            return super().__str__(self)
         return self.name
