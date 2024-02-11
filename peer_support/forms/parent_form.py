@@ -1,13 +1,13 @@
 from django import forms
 from peer_support.forms import UserForm
-from peer_support.models import Patient
+from peer_support.models import Parent
 
-class PatientForm(forms.ModelForm):
-    """Form to update patient profiles."""
+class ParentForm(forms.ModelForm):
+    """Form to update parent profiles."""
 
     class Meta:
         """Form options."""
 
-        model = Patient
-        fields = UserForm.Meta.fields + ['condition', 'age_of_diagnosis']
+        model = Parent
+        fields = UserForm.Meta.fields + ['child_condition', 'child_age_of_diagnosis']
         widgets = UserForm.Meta.widgets

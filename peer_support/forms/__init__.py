@@ -6,3 +6,5 @@ from .password_form import PasswordForm
 from .sign_up_form import SignUpForm
 from .user_form import UserForm
 from peer_support.forms.message_form import MessageForm
+from .patient_form import PatientForm
+from .parent_form import ParentForm 
