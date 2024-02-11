@@ -42,9 +42,8 @@ class UserProfileModelTestCase(TestCase):
         self.assertEqual(new_user.id, user_profile.id) # New user ID is the same as new user profile ID
 
     def test_user_profile_is_automatically_created_when_new_patient_is_created(self):
-        # ! Does not work - check against latest merge
         before_count = UserProfile.objects.count()
-        Patient.objects.create_user(username="@tester", 
+        Patient.objects.create(username="@tester", 
                                     first_name="test", 
                                     last_name="account", 
                                     email="test@test.org",
@@ -65,9 +64,8 @@ class UserProfileModelTestCase(TestCase):
         self.assertEqual(new_patient.id, user_profile.id) # New patient ID is the same as new user profile ID
 
     def test_user_profile_is_automatically_created_when_new_parent_is_created(self):
-        # ! Does not work - check against latest merge
         before_count = UserProfile.objects.count()
-        Parent.objects.create_user(username="@tester", 
+        Parent.objects.create(username="@tester", 
                                     first_name="test", 
                                     last_name="account", 
                                     email="test@test.org",

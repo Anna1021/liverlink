@@ -31,6 +31,7 @@ class PatientAdmin(admin.ModelAdmin):
 class ParentAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for parents."""
 
+    inlines = [UserProfileInline]
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'child_condition', 'child_age_of_diagnosis'
     ]
