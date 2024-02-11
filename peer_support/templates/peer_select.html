@@ -29,7 +29,6 @@
                         {% endif %}
                     {% endfor %}
                 </div>
-            
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
                     Sort Options
                 </button>
@@ -38,13 +37,6 @@
                     {% include 'partials/bootstrap_form.html' with form=formSort %}
                 </div>
             </div>
-            {% if formSort.non_field_errors %}
-                <div class="error">
-                    {% for error in formSort.non_field_errors %}
-                        <p style="color: red;">{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
             <div>
                 <button type="submit" class="btn btn-secondary btn-sm my-3" style="margin-bottom: 0;" >Apply</button>   
             </div>
