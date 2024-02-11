@@ -2,17 +2,18 @@ from django.test import TestCase
 from peer_support.forms import SortPeerForm 
 from django.test import TestCase
 from peer_support.models import User
+from datetime import date
 
 class SortPeerFormTestCase(TestCase):
     """Unit test of SortPeerForm"""
 
-    fixtures = [
-        'peer_support/tests/fixtures/other_users_patients.json',
-        'peer_support/tests/fixtures/other_patients.json'
-    ]
-
     def setUp(self):
-        self.users = User.objects.all().order_by('id') 
+        today = date.today()
+        User.objects.create(username="@janedoe", email="janedoe@example.com", date_of_birth=date(today.year - 30, today.month, today.day))
+        User.objects.create(username="@peterpickles", email="peterpickles@example.com", date_of_birth=date(today.year - 25, today.month, today.day))
+        User.objects.create(username="@petrapickles", email="petrapickles@example.com", date_of_birth=date(today.year - 20, today.month, today.day))
+
+        self.users = User.objects.all().order_by('id')
 
     def test_form_has_necessary_fields(self):
         form = SortPeerForm()
@@ -52,8 +53,8 @@ class SortPeerFormTestCase(TestCase):
         form = SortPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users)
-        self.assertEqual(sorted_users[0].username, "@peterpickles")
-        self.assertEqual(sorted_users[1].username, "@petrapickles")
+        self.assertEqual(sorted_users[0].username, "@petrapickles")
+        self.assertEqual(sorted_users[1].username, "@peterpickles")
         self.assertEqual(sorted_users[2].username, "@janedoe")
 
     def test_sort_users_by_age_descending(self):
@@ -62,5 +63,6 @@ class SortPeerFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users)
         self.assertEqual(sorted_users[0].username, "@janedoe")
-        self.assertEqual(sorted_users[1].username, "@petrapickles")
-        self.assertEqual(sorted_users[2].username, "@peterpickles")
+        self.assertEqual(sorted_users[1].username, "@peterpickles")
+        self.assertEqual(sorted_users[2].username, "@petrapickles")
+        

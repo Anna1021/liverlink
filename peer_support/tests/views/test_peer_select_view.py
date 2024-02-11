@@ -12,7 +12,7 @@ class PeerSelectViewTestCase(TestCase):
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/default_parent.json',
         'peer_support/tests/fixtures/default_admin.json',
-        'peer_support/tests/fixtures/other_users_patients.json',
+        'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
     ]
 
@@ -59,12 +59,14 @@ class PeerSelectViewTestCase(TestCase):
 
     def test_form_sort_functionality(self):
         self.client.login(username=self.user.username, password='Password123')
-        sort_params = {'sort_by': 'username'}
-        response = self.client.get(self.url, sort_params)
+        sort_data = {'Username': 'asc'}
+        response = self.client.get(self.url, sort_data)
         self.assertEqual(response.status_code, 200)
         sorted_users = response.context['users']
-        usernames = [user.username for user in sorted_users]
-        self.assertEqual(usernames, sorted(usernames))
+        sorted_usernames = [user.username for user in sorted_users]
+        manual_sorted_users = sorted_users.order_by('username')
+        manual_sorted_usernames = [user.username for user in manual_sorted_users]
+        self.assertEqual(sorted_usernames,manual_sorted_usernames)
     
     def test_search_functionality(self):
         self.client.login(username=self.user.username, password='Password123')

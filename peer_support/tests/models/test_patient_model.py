@@ -8,7 +8,7 @@ class PatientModelTestCase(TestCase):
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
-        'peer_support/tests/fixtures/other_users_patients.json',
+        'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/default_patient.json',
         'peer_support/tests/fixtures/other_patients.json'
     ]

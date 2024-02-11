@@ -2,6 +2,7 @@ from django import forms
 from peer_support.models import User
 from django.utils import timezone
 from datetime import timedelta
+from peer_support.models.model_choices import GENDER_CHOICES, ETHNICITY_CHOICES, LANGUAGE_CHOICES, COUNTRY_CHOICES, HOSPITAL_CHOICES
 
 class FilterPeerForm(forms.Form):
     """Form enabling the filtering of users"""
@@ -11,10 +12,10 @@ class FilterPeerForm(forms.Form):
     user_type=forms.MultipleChoiceField(choices=USER_TYPE_CHOICES,widget=forms.CheckboxSelectMultiple,required=False)
     min_age = forms.IntegerField(required=False, min_value=0, max_value=100)
     max_age = forms.IntegerField(required=False, min_value=0, max_value=100)
-    gender = forms.MultipleChoiceField(choices=User.GENDER_CHOICES,widget=forms.CheckboxSelectMultiple,required=False)
-    language = forms.ChoiceField(choices=ALL_CHOICE+User.LANGUAGE_CHOICES,required=False)
-    ethnicity= forms.ChoiceField(choices=ALL_CHOICE+User.ETHNICITY_CHOICES,required=False)
-    country = forms.ChoiceField(choices=ALL_CHOICE+User.COUNTRY_CHOICES,required=False)
+    gender = forms.MultipleChoiceField(choices=GENDER_CHOICES,widget=forms.CheckboxSelectMultiple,required=False)
+    language = forms.ChoiceField(choices=ALL_CHOICE+LANGUAGE_CHOICES,required=False)
+    ethnicity= forms.ChoiceField(choices=ALL_CHOICE+ETHNICITY_CHOICES,required=False)
+    country = forms.ChoiceField(choices=ALL_CHOICE+COUNTRY_CHOICES,required=False)
 
     age_of_diagnosis_min = forms.IntegerField(required=False)
     age_of_diagnosis_max = forms.IntegerField(required=False)

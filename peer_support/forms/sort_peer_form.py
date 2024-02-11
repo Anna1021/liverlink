@@ -28,8 +28,8 @@ class SortPeerForm(forms.Form):
         elif username_order == 'desc':
             users = users.order_by('-username')
         elif age_order == 'asc':
-            users = users.order_by('date_of_birth')
-        elif age_order == 'desc':
             users = users.order_by('-date_of_birth')
+        elif age_order == 'desc':
+            users = users.order_by('date_of_birth')
 
         return users

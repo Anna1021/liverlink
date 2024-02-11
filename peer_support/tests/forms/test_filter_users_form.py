@@ -10,8 +10,7 @@ class FilterPeerFormTestCase(TestCase):
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/default_parent.json',
-        'peer_support/tests/fixtures/other_users_patients.json',
-        'peer_support/tests/fixtures/other_users_parents.json',
+        'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/other_parents.json',
     ]
