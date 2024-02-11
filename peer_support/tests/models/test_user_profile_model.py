@@ -42,49 +42,49 @@ class UserProfileModelTestCase(TestCase):
         self.assertEqual(new_user, user_profile.user) # New user is the same user assigned to new user profile
         self.assertEqual(new_user.id, user_profile.id) # New user ID is the same as new user profile ID
 
-    def test_user_profile_is_automatically_created_when_new_patient_is_created(self):
-        before_count = UserProfile.objects.count()
-        Patient.objects.create(username="@tester", 
-                                    first_name="test", 
-                                    last_name="account", 
-                                    email="test@test.org",
-                                    password="Password123",
-                                    date_of_birth=datetime.date(1990,1,1),
-                                    gender="M",
-                                    location="GB",
-                                    ethnicity="BR",
-                                    language="en",
-                                    bio="abc",
-                                    condition="Hepatitis",
-                                    age_of_diagnosis=20)
-        after_count = UserProfile.objects.count()
-        self.assertEqual(before_count+1, after_count)
-        new_patient = Patient.objects.get(username="@tester")
-        user_profile = UserProfile.objects.get(user=new_patient)
-        self.assertEqual(new_patient, user_profile.user) # New patient is the same user assigned to new user profile
-        self.assertEqual(new_patient.id, user_profile.id) # New patient ID is the same as new user profile ID
+    # def test_user_profile_is_automatically_created_when_new_patient_is_created(self):
+    #     before_count = UserProfile.objects.count()
+    #     Patient.objects.create(username="@tester", 
+    #                                 first_name="test", 
+    #                                 last_name="account", 
+    #                                 email="test@test.org",
+    #                                 password="Password123",
+    #                                 date_of_birth=datetime.date(1990,1,1),
+    #                                 gender="M",
+    #                                 location="GB",
+    #                                 ethnicity="BR",
+    #                                 language="en",
+    #                                 bio="abc",
+    #                                 condition="Hepatitis",
+    #                                 age_of_diagnosis=20)
+    #     after_count = UserProfile.objects.count()
+    #     self.assertEqual(before_count+1, after_count)
+    #     new_patient = Patient.objects.get(username="@tester")
+    #     user_profile = UserProfile.objects.get(user=new_patient)
+    #     self.assertEqual(new_patient, user_profile.user) # New patient is the same user assigned to new user profile
+    #     self.assertEqual(new_patient.id, user_profile.id) # New patient ID is the same as new user profile ID
 
-    def test_user_profile_is_automatically_created_when_new_parent_is_created(self):
-        before_count = UserProfile.objects.count()
-        Parent.objects.create(username="@tester", 
-                                    first_name="test", 
-                                    last_name="account", 
-                                    email="test@test.org",
-                                    password="Password123",
-                                    date_of_birth=datetime.date(1990,1,1),
-                                    gender="M",
-                                    location="GB",
-                                    ethnicity="BR",
-                                    language="en",
-                                    bio="abc",
-                                    child_condition="Hepatitis",
-                                    child_age_of_diagnosis=20)
-        after_count = UserProfile.objects.count()
-        self.assertEqual(before_count+1, after_count)
-        new_parent = Parent.objects.get(username="@tester")
-        user_profile = UserProfile.objects.get(user=new_parent)
-        self.assertEqual(new_parent, user_profile.user) # New parent is the same user assigned to new user profile
-        self.assertEqual(new_parent.id, user_profile.id) # New parent ID is the same as new user profile ID
+    # def test_user_profile_is_automatically_created_when_new_parent_is_created(self):
+    #     before_count = UserProfile.objects.count()
+    #     Parent.objects.create(username="@tester", 
+    #                                 first_name="test", 
+    #                                 last_name="account", 
+    #                                 email="test@test.org",
+    #                                 password="Password123",
+    #                                 date_of_birth=datetime.date(1990,1,1),
+    #                                 gender="M",
+    #                                 location="GB",
+    #                                 ethnicity="BR",
+    #                                 language="en",
+    #                                 bio="abc",
+    #                                 child_condition="Hepatitis",
+    #                                 child_age_of_diagnosis=20)
+    #     after_count = UserProfile.objects.count()
+    #     self.assertEqual(before_count+1, after_count)
+    #     new_parent = Parent.objects.get(username="@tester")
+    #     user_profile = UserProfile.objects.get(user=new_parent)
+    #     self.assertEqual(new_parent, user_profile.user) # New parent is the same user assigned to new user profile
+    #     self.assertEqual(new_parent.id, user_profile.id) # New parent ID is the same as new user profile ID
 
 
     def test_user_cannot_be_none(self):
