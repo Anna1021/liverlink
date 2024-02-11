@@ -8,9 +8,9 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     
     user_type = forms.ChoiceField(initial='', choices=USER_TYPE_CHOICES, required=True)
     condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
-    age_of_diagnosis = forms.IntegerField(required=False)
+    age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
     child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
-    child_age_of_diagnosis = forms.IntegerField(required=False)
+    child_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
 
     class Meta:
         """Form options."""
