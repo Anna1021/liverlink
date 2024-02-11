@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import check_password
 from django import forms
 from django.test import TestCase
 from peer_support.forms import SignUpForm
-from peer_support.models import User
+from peer_support.models import Patient, Parent
 
 class SignUpFormTestCase(TestCase):
     """Unit tests of the sign up form."""
@@ -17,13 +17,16 @@ class SignUpFormTestCase(TestCase):
             'email': 'janedoe@example.org',
             'date_of_birth': '2004-03-02',
             'gender': 'F',
-            'location': 'US',
+            'location': 'GB',
+            'hospital': 'Croydon Health Services NHS Trust',
             'ethnicity': 'RO',
             'language': 'en',
             'bio': 'I am a test user.',
             'new_password': 'Password123',
             'password_confirmation': 'Password123',
-            'user_type': 'PT'
+            'user_type': 'PT',
+            'condition': 'Cancer',
+            'age_of_diagnosis': 5,
         }
 
     def test_valid_sign_up_form(self):
@@ -43,6 +46,7 @@ class SignUpFormTestCase(TestCase):
         self.assertTrue(isinstance(date_of_birth_field, forms.DateField))
         self.assertIn('gender', form.fields)
         self.assertIn('location', form.fields)
+        self.assertIn('hospital', form.fields)
         self.assertIn('ethnicity', form.fields)
         self.assertIn('language', form.fields)
         self.assertIn('bio', form.fields)
@@ -55,6 +59,8 @@ class SignUpFormTestCase(TestCase):
         password_confirmation_widget = form.fields['password_confirmation'].widget
         self.assertTrue(isinstance(password_confirmation_widget, forms.PasswordInput))
         self.assertIn('user_type', form.fields)
+        self.assertIn('condition', form.fields)
+        self.assertIn('age_of_diagnosis', form.fields)
 
     def test_form_uses_model_validation(self):
         self.form_input['username'] = 'badusername'
@@ -84,22 +90,52 @@ class SignUpFormTestCase(TestCase):
         form = SignUpForm(data=self.form_input)
         self.assertFalse(form.is_valid())
 
-    def test_form_must_save_correctly(self):
+    def test_form_must_save_correctly_with_patient(self):
         form = SignUpForm(data=self.form_input)
         if form.is_valid():
-            before_count = User.objects.count()
+            before_count = Patient.objects.count()
             form.save()
-            after_count = User.objects.count()
+            after_count = Patient.objects.count()
             self.assertEqual(after_count, before_count+1)
-            user = User.objects.get(username='@janedoe')
+            user = Patient.objects.get(username='@janedoe')
             self.assertEqual(user.first_name, 'Jane')
             self.assertEqual(user.last_name, 'Doe')
             self.assertEqual(user.email, 'janedoe@example.org')
             self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
             self.assertEqual(user.gender, 'F')
-            self.assertEqual(user.location, 'US')
+            self.assertEqual(user.location, 'GB')
+            self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
             self.assertEqual(user.ethnicity, 'RO')
             self.assertEqual(user.language, 'en')
             self.assertEqual(user.bio, 'I am a test user.')
+            self.assertEqual(user.condition, 'Cancer')
+            self.assertEqual(user.age_of_diagnosis, 5)
             is_password_correct = check_password('Password123', user.password)
             self.assertTrue(is_password_correct)
+
+    def test_form_must_save_correctly_with_parent(self):
+        self.form_input['user_type'] = 'PR'
+        self.form_input['child_condition'] = 'Cancer'
+        self.form_input['child_age_of_diagnosis'] = 5
+        form = SignUpForm(data=self.form_input)
+        if form.is_valid():
+            before_count = Parent.objects.count()
+            form.save()
+            after_count = Parent.objects.count()
+            self.assertEqual(after_count, before_count+1)
+            user = Parent.objects.get(username='@janedoe')
+            self.assertEqual(user.first_name, 'Jane')
+            self.assertEqual(user.last_name, 'Doe')
+            self.assertEqual(user.email, 'janedoe@example.org')
+            self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
+            self.assertEqual(user.gender, 'F')
+            self.assertEqual(user.location, 'GB')
+            self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
+            self.assertEqual(user.ethnicity, 'RO')
+            self.assertEqual(user.language, 'en')
+            self.assertEqual(user.bio, 'I am a test user.')
+            self.assertEqual(user.child_condition, 'Cancer')
+            self.assertEqual(user.child_age_of_diagnosis, 5)
+            is_password_correct = check_password('Password123', user.password)
+            self.assertTrue(is_password_correct)
+        

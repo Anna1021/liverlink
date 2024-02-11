@@ -169,6 +169,24 @@ class UserModelTestCase(TestCase):
         self.user.location = second_user.location
         self._assert_user_is_valid()
 
+
+    def test_hospital_may_be_blank(self):
+        self.user.hospital = None
+        self._assert_user_is_valid()
+
+    def test_hospital_can_only_be_one_of_the_choices(self):
+        self.user.hospital = 'Mars General'
+        self._assert_user_is_invalid()
+
+    def test_hospital_must_not_contain_more_than_500_characters(self):
+        self.user.hospital = 'x' * 501
+        self._assert_user_is_invalid()
+
+    def test_hospital_need_not_be_unique(self):
+        second_user = User.objects.get(username='@janedoe')
+        self.user.hospital = second_user.hospital
+        self._assert_user_is_valid()
+
     
     def test_ethnicity_may_be_blank(self):
         self.user.ethnicity = None
