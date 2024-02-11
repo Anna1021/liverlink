@@ -28,12 +28,12 @@ class ParentModelTestCase(TestCase):
         self.parent.child_condition = self.second_parent.child_condition
         self._assert_parent_is_valid()
 
-    def test_child_condition_can_be_50_characters_long(self):
-        self.parent.child_condition = 'x' * 50
+    def test_child_condition_can_be_100_characters_long(self):
+        self.parent.child_condition = 'x' * 100
         self._assert_parent_is_valid()
 
-    def test_child_condition_cannot_be_over_50_characters_long(self):
-        self.parent.child_condition = 'x' * 51
+    def test_child_condition_cannot_be_over_100_characters_long(self):
+        self.parent.child_condition = 'x' * 101
         self._assert_parent_is_invalid()
 
     

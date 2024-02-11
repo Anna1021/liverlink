@@ -5,7 +5,7 @@ from peer_support.models import User
 class Patient(User):
     """Model used for patient authentication, and patient related information."""
 
-    condition = models.CharField(max_length=50, blank=True, null=True)
+    condition = models.CharField(max_length=100, blank=True, null=True)
     age_of_diagnosis = models.PositiveIntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
 
     class Meta:
