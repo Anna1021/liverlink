@@ -1,26 +1,9 @@
 from django.db import models
 from peer_support.models import User
+from .model_choices import THEME_CHOICES, FONT_CHOICES, FONT_SIZE_CHOICES
 
 class UserProfile(models.Model):
     """Model used for user profile settings (preferences)."""
-
-    THEME_CHOICES = [
-    ('DF', 'Default theme'),
-    ('LM', 'Light mode'),
-    ('DM', 'Dark mode'),
-    ]
-
-    FONT_CHOICES = [
-    ('DF', 'Default font'),
-    ('AR', 'Arial'),
-    ('CA', 'Calibri'),
-    ]
-
-    FONT_SIZE_CHOICES = [
-    ('DF', 'Default size'),
-    ('LG', 'Large'),
-    ('XL', 'Extra large'),
-    ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     theme = models.CharField(max_length=50, choices=THEME_CHOICES, default='DF')

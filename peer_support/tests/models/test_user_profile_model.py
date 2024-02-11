@@ -3,6 +3,7 @@ import datetime
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from peer_support.models import User, Patient, Parent, UserProfile
+from peer_support.models.model_choices import THEME_CHOICES, FONT_CHOICES, FONT_SIZE_CHOICES
 
 class UserProfileModelTestCase(TestCase):
     """Unit tests for the UserProfile model."""
@@ -111,7 +112,7 @@ class UserProfileModelTestCase(TestCase):
         self._assert_user_profile_is_valid()
     
     def test_theme_can_be_within_given_choices(self):
-        for choice in UserProfile.THEME_CHOICES:
+        for choice in THEME_CHOICES:
             self.user_profile.theme = choice[0]
             self._assert_user_profile_is_valid()
 
@@ -130,7 +131,7 @@ class UserProfileModelTestCase(TestCase):
         self._assert_user_profile_is_valid()
     
     def test_font_can_be_within_given_choices(self):
-        for choice in UserProfile.FONT_CHOICES:
+        for choice in FONT_CHOICES:
             self.user_profile.font = choice[0]
             self._assert_user_profile_is_valid()
 
@@ -149,7 +150,7 @@ class UserProfileModelTestCase(TestCase):
         self._assert_user_profile_is_valid()
     
     def test_font_size_can_be_within_given_choices(self):
-        for choice in UserProfile.FONT_SIZE_CHOICES:
+        for choice in FONT_SIZE_CHOICES:
             self.user_profile.font_size = choice[0]
             self._assert_user_profile_is_valid()
 
