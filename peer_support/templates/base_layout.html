@@ -1,0 +1,21 @@
+{% extends 'base_content.html' %}
+{% block content %}
+{% load static %}
+<div id="cover-image">
+  <div class="container pl-0">
+    <div class="row">
+      <!-- left row -->
+      <div class="col-md-3 mt-2">
+        {%include "left_navbar.html" %}
+      </div>
+      <!-- right row -->
+      <div class="col-md-9 mt-2">
+        <div class="card bg-dark shadow box-area">
+            {% block page %}
+            {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

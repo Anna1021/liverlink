@@ -17,21 +17,15 @@ class SortPeerFormTestCase(TestCase):
 
     def test_form_has_necessary_fields(self):
         form = SortPeerForm()
-        self.assertIn('Username', form.fields)
-        self.assertIn('Age', form.fields)
+        self.assertIn('sort_by', form.fields)
 
     def test_form_accepts_valid_input(self):
-        form_data = {'Username': 'asc'}
+        form_data = {'sort_by': 'username_asc'}
         form = SortPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
-
-    def test_form_rejects_both_criteria_selected(self):
-        form_data = {'Username': 'asc', 'Age': 'desc'}
-        form = SortPeerForm(data=form_data)
-        self.assertFalse(form.is_valid())
         
     def test_sort_users_by_username_ascending(self):
-        form_data = {'Username': 'asc'}
+        form_data = {'sort_by': 'username_asc'}
         form = SortPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users)
@@ -40,7 +34,7 @@ class SortPeerFormTestCase(TestCase):
         self.assertEqual(sorted_users[2].username, "@petrapickles")
 
     def test_sort_users_by_username_descending(self):
-        form_data = {'Username': 'desc'}
+        form_data = {'sort_by': 'username_desc'}
         form = SortPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users)
@@ -49,7 +43,7 @@ class SortPeerFormTestCase(TestCase):
         self.assertEqual(sorted_users[2].username, "@janedoe")
 
     def test_sort_users_by_age_ascending(self):
-        form_data = {'Age': 'asc'}
+        form_data = {'sort_by': 'age_asc'}
         form = SortPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users)
@@ -58,7 +52,7 @@ class SortPeerFormTestCase(TestCase):
         self.assertEqual(sorted_users[2].username, "@janedoe")
 
     def test_sort_users_by_age_descending(self):
-        form_data = {'Age': 'desc'}
+        form_data = {'sort_by': 'age_desc'}
         form = SortPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users)

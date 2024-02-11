@@ -6,6 +6,6 @@ from .password_form import PasswordForm
 from .sign_up_form import SignUpForm
 from .user_form import UserForm
 from .message_form import MessageForm
-from .filter_peer_from import FilterPeerForm
+from .filter_peer_form import FilterPeerForm
 from .sort_peer_form import SortPeerForm
 from .search_peer_form import SearchPeerForm

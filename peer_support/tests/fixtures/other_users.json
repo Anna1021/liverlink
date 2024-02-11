@@ -29,6 +29,7 @@
       "date_of_birth": "2000-01-01",
       "gender": "O",
       "location": "BD",
+      "hospital": "Airedale NHS Foundation Trust",
       "ethnicity": "BD",
       "bio": "Hi, I'm Petra Pickles! I'm a student at King's College London.",
       "is_active": true
