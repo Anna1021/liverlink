@@ -2,10 +2,10 @@
 {% block convo %}
 {% if conversation %}
 <div class="row">
-    <div class="col-md-6">
-        <h2>
+    <div class="col-md-9">
+        <h3>
             {% if conversation.as_group != None %}
-                {{conversation.as_group.display_name}}
+                {{conversation.as_group}}
             {% else %}
                 {% if user == conversation.get_first_member %}
                     {{conversation.get_second_member}}
@@ -13,9 +13,9 @@
                     {{conversation.get_first_member}}
                 {% endif %}
             {% endif %}
-        </h2>
+        </h3>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
         <a class="nav-link" href="#" id="user-account-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <span class="bi-info-circle"></span>
         </a>
@@ -27,18 +27,23 @@
     </div>
 
 </div>
-
-{% for message in conversation.messages.all %}
-<p>{{message.sender}} : {{message.content}}</p>
-{% empty %}
-Type out your first message in the box below!
-{% endfor %}
-<form method="post">
-    {% csrf_token %}
-    {{ form.content }}
-    <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
-</form>
-{% else %}
-Pick a conversation or start a new conversation!
-{% endif %}
+<div>
+    {% for message in conversation.messages.all %}
+    {% if message.sender == user %}
+    <p class="message-bubble self-message">{{message}}</p>
+    {% else %}
+    <p class="message-bubble other-message">{{message}}</p>
+    {% endif %}
+    {% empty %}
+    Type out your first message in the box below!
+    {% endfor %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.content }}
+        <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
+    </form>
+    {% else %}
+    Pick a conversation or start a new conversation!
+    {% endif %}
+</div>
 {% endblock %}

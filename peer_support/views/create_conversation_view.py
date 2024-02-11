@@ -18,8 +18,11 @@ class CreateConversationView(LoginRequiredMixin, FormView):
     def post(self,request):
         """Post request for user to send message to conversation"""
         form = ConversationForm(request.user,data = request.POST)
+        create_group = False
+        if request.POST.get('group'):
+            create_group=True
         if form.is_valid():
-            conversation = form.save(request.user)
+            conversation = form.save(request.user,create_group)
             return redirect(reverse("conversation",kwargs={'conversation_id':conversation.id}),{'form':MessageForm(conversation,user=request.user),'conversation':conversation,'user_conversations':request.user.conversations.all()})
         else:
             return render(request,self.template_name,{'form':form,'user_conversations':request.user.conversations.all})

@@ -1,5 +1,5 @@
 from django import forms
-from peer_support.models import Conversation,User
+from peer_support.models import Conversation,GroupConversation,User
 
 class ConversationForm(forms.ModelForm):
     class Meta:
@@ -16,19 +16,21 @@ class ConversationForm(forms.ModelForm):
     def save(self,current_user,group=False):
         super().save(commit=False)
         new_users = self.cleaned_data.get('users')
+        new_users |= User.objects.filter(username = current_user.username)
         if not group:
-            existing = Conversation.objects.filter(users__in=new_users)
+            existing = set(Conversation.objects.all())
+            for user in new_users:
+                filtered = User.objects.filter(username=user.username)
+                existing = existing.intersection(set(Conversation.objects.filter(users__in=filtered)))
             print(existing)
-            if existing.count() > 1:
-                conversation = existing[0]
+            if len(existing) > 0:
+                conversation = list(existing)[0]
             else:
-                new_users |= User.objects.filter(username = current_user.username)
                 conversation = Conversation.objects.create()
                 for user in new_users:
                     conversation.add_user(user)
                     user.conversations.add(conversation)
         else:
-            new_users |= User.objects.filter(username = current_user.username)
             conversation = GroupConversation.objects.create()
             for user in new_users:
                 conversation.add_user(user)

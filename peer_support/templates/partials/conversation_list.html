@@ -1,9 +1,10 @@
 <nav class="col-md-4 d-md-block sidebar collapse">
-<ul>
+<ul class="conversation-list">
     {% for conversation in user_conversations %}
-    <a href="{% url 'conversation' conversation.id %}">
+    <li>
+    <a href="{% url 'conversation' conversation.id %}" class="conversation-card">
         {% if conversation.as_group != None %}
-        {{conversation.as_group.display_name}}
+        {{conversation.as_group}}
         {% else %}
             {% if user == conversation.get_first_member %}
                 {{conversation.get_second_member}}
@@ -14,6 +15,9 @@
     </a>
     {% empty %}
     No conversations!
+    </li>
     {% endfor %}
+    
 </ul>
+<a href="{% url 'create_conversation' %}" class="text-center fs-3"><i class="bi-pencil-square"></i></a>
 </nav>

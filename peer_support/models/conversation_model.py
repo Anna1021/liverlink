@@ -43,5 +43,5 @@ class GroupConversation(Conversation):
 
     def __str__(self):
         if self.name is None:
-            return super().__str__(self)
+            return super().__str__()
         return self.name
