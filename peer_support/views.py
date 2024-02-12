@@ -11,6 +11,7 @@ from django.urls import reverse
 from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm,MessageForm
 from peer_support.helpers import login_prohibited
 from .models import Conversation
+from .utils import create_referral, claim_referral
 from django.urls import reverse_lazy
 
 @login_required
@@ -18,6 +19,7 @@ def dashboard(request):
     """Display the current user's dashboard."""
 
     current_user = request.user
+    referral = create_referral(current_user)
     return render(request, 'dashboard.html', {'user': current_user})
 
 
