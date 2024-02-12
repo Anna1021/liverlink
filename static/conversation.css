@@ -1,0 +1,29 @@
+/* conversation name cards */
+.conversation-card {
+    width :max-content;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin:0;
+}
+
+.conversation-list {
+    overflow-x: clip;
+    overflow-y: scroll;
+    height:100%;
+    list-style-type: none;
+}
+
+/* message bubbles */
+.message-bubble {
+    border-radius: 25px;
+    padding : 5px;
+    margin: 5px;
+}
+
+.self-message{
+    background-color: azure;
+}
+
+.other-message{
+    background-color: bisque;
+}

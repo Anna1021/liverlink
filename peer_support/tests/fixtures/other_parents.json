@@ -3,7 +3,7 @@
       "model": "peer_support.parent",
       "pk": 2,
       "fields": {
-        "user_ptr": 2,
+        "user_ptr": 5,
         "child_condition": "Biliary atresia",
         "child_age_of_diagnosis": 2,
         "is_active": true
@@ -13,7 +13,7 @@
       "model": "peer_support.parent",
       "pk": 3,
       "fields": {
-        "user_ptr": 3,
+        "user_ptr": 6,
         "child_condition": "Cirrhosis",
         "child_age_of_diagnosis": 13,
         "is_active": true
@@ -23,7 +23,7 @@
       "model": "peer_support.parent",
       "pk": 4,
       "fields": {
-        "user_ptr": 4,
+        "user_ptr": 7,
         "child_condition": "Haemochromatosis",
         "child_age_of_diagnosis": 45,
         "is_active": true
