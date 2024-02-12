@@ -15,19 +15,7 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     {% csrf_token %}
-                    {% for field in formFilter %}
-                        {% if field.name in "age_of_diagnosis_min,age_of_diagnosis_max,condition,child_age_of_diagnosis_min,child_age_of_diagnosis_max,child_condition" %}
-                            <div class="id_{{ field.name }}_wrapper">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                                {{ field }}
-                            </div>
-                        {% else %}
-                            <div class="{{ field.name }}_wrapper">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                                {{ field }}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                    {{formFilter.as_p}}
                 </div>
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
                     Sort Options
@@ -58,5 +46,7 @@
     {% endif %}
     </div>
 
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="{% static 'js/peer_select.js' %}"></script>
 {% endblock %}
