@@ -11,6 +11,7 @@ class SearchPeerForm(forms.Form):
         super().__init__(*args, **kwargs) 
 
     def search_users(self, users):
+        """Searches for term in username"""
         search_term = self.cleaned_data.get('search', '').strip()
         if search_term:
             users = users.filter(username__icontains=search_term)

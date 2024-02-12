@@ -1,3 +1,4 @@
+"""Unit test of javascript in peer_select view"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.chrome.service import Service
@@ -8,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 class JavascriptTest(StaticLiveServerTestCase):
+    """Unit test of javascript in peer_select view"""
     fixtures = ['peer_support/tests/fixtures/default_user.json']
 
     @classmethod

@@ -15,6 +15,7 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     {% csrf_token %}
+                    <!-- Wraps the dynamic fields to allow -->
                     {% for field in formFilter %}
                         {% if field.name in "age_of_diagnosis_min,age_of_diagnosis_max,condition,child_age_of_diagnosis_min,child_age_of_diagnosis_max,child_condition" %}
                             <div class="id_{{ field.name }}_wrapper">

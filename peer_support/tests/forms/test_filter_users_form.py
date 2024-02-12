@@ -1,3 +1,4 @@
+"""Unit test for the FilterPeerForm"""
 from django.test import TestCase
 from peer_support.forms import FilterPeerForm 
 from django.test import TestCase
@@ -5,7 +6,7 @@ from peer_support.models import User
 
 
 class FilterPeerFormTestCase(TestCase):
-    """Test for the FilterPeerForm"""
+    """Unit test for the FilterPeerForm"""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',

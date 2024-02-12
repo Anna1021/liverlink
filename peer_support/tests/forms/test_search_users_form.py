@@ -1,3 +1,4 @@
+"""Unit test of SearchPeerForm """
 from django.test import TestCase
 from peer_support.forms import SearchPeerForm
 from peer_support.models import User

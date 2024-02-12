@@ -33,6 +33,7 @@ class FilterPeerForm(forms.Form):
         super(FilterPeerForm, self).__init__(*args, **kwargs)
 
     def clean(self):
+        """Validation of age fields"""
         cleaned_data = super().clean()
         min_age = cleaned_data.get('min_age')
         max_age = cleaned_data.get('max_age')
@@ -55,6 +56,7 @@ class FilterPeerForm(forms.Form):
         return cleaned_data
     
     def filter_by_user_type(self,user_type):
+        """Generates a list of users based on user type"""
         age_of_diagnosis_min = self.cleaned_data.get('age_of_diagnosis_min')
         age_of_diagnosis_max = self.cleaned_data.get('age_of_diagnosis_max')
         condition =self.cleaned_data.get('condition')
