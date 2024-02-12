@@ -19,7 +19,6 @@ class JavascriptTest(StaticLiveServerTestCase):
         chrome_options.add_argument("--headless") 
         service = Service(ChromeDriverManager().install())
         service.log_path = 'NUL'
-        #cls.selenium = WebDriver()
         cls.selenium = WebDriver(service=Service(), options=chrome_options)
         cls.selenium.implicitly_wait(10)
         
