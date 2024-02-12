@@ -44,7 +44,7 @@ class User(AbstractUser):
 
 class Question(models.Model):
     author = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200, null=False)
+    title = models.CharField(max_length=150, null=False)
     body = models.TextField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

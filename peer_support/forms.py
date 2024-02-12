@@ -1,7 +1,7 @@
 """Forms for the peer_support app."""
 from django import forms
 from django.contrib.auth import authenticate
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MaxLengthValidator
 from .models import User, Question, Response
 
 
@@ -111,15 +111,20 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
         return user
 
 class NewQuestionForm(forms.ModelForm):
+    title = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'autofocus': True,
+            'placeholder': 'Query Title'
+        }),
+        max_length=150,
+        validators=[
+            MaxLengthValidator(150, message="Title cannot be more than 150 characters long")
+        ]
+    )
     class Meta:
         model = Question
         fields = ['title', 'body']
-        widgets = {
-            'title': forms.TextInput(attrs={
-                'autofocus': True,
-                'placeholder': 'Query Title'
-            })
-        }
+
 
 class NewResponseForm(forms.ModelForm):
     class Meta:
@@ -132,7 +137,7 @@ class NewReplyForm(forms.ModelForm):
         fields = ['body']
         widgets = {
             'body': forms.Textarea(attrs={
-                'rows': 2,
+                'rows': 5,
                 'placeholder': 'What are your thoughts?'
             })
         }

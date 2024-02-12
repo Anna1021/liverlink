@@ -59,6 +59,10 @@ class QuestionModelTest(TestCase):
         with self.assertRaises(Question.DoesNotExist):
             Question.objects.get(id=question_id)
 
+    def test_title_must_not_contain_more_than_150_characters(self):
+        self.user.last_name = 'x' * 151
+        self._assert_user_is_invalid()
+
     def test_question_string_representation(self):
         question = Question.objects.get(id=1)
         self.assertEqual(str(question), 'Test Question')

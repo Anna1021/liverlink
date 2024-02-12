@@ -1,20 +1,58 @@
 {% extends 'layouts/page.html' %}
+
 {% block content %}
 <div class="page">
-<h1 class="title">All questions</h1>
-<div class="scrollable-container">
-{% for question in questions %}
-<div class="question-list-item">
-  <a href="{% url 'question' question.id %}">
-    <p class="question-list-item-title">
-      {{question.title}}
-    </p>
-    <p class="question-list-item-author">
-      by {{question.author.username}}
-    </p>
-  </a>
-</div>
-{% endfor %}
+  <!-- Questions Section -->
+  <div class="section">
+    <h1 class="title">All questions</h1>
+    <div class="scrollable-container">
+      {% for question in questions %}
+      <div class="question-list-item">
+        <a href="{% url 'question' question.id %}">
+          <p class="question-list-item-title">
+            {{question.title}}
+          </p>
+          <p class="question-list-item-author">
+            by {{question.author.username}}
+          </p>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Types of Liver Disease Section -->
+  <div class="section">
+  <div class="types-of-liver-disease">
+    <h2>Types of Liver Disease</h2>
+    <p>There are several types of liver disease, which can have different causes.</p>
+    <table>
+      <tr>
+        <th>Condition</th>
+        <th>Possible causes</th>
+      </tr>
+      <tr>
+        <td>Alcohol-related liver disease</td>
+        <td>Regularly drinking too much alcohol</td>
+      </tr>
+      <tr>
+        <td>Non-alcoholic fatty liver disease</td>
+        <td>Being very overweight (obese) – this may cause fat to build up in the liver</td>
+      </tr>
+      <tr>
+        <td>Hepatitis</td>
+        <td>Catching a viral infection or regularly drinking too much alcohol</td>
+      </tr>
+      <tr>
+        <td>Haemochromatosis</td>
+        <td>A gene that runs in families and may be passed from parents to children</td>
+      </tr>
+      <tr>
+        <td>Primary biliary cholangitis</td>
+        <td>May be caused by a problem with the immune system</td>
+      </tr>
+    </table>
+  </div>
 </div>
 </div>
 {% endblock %}
