@@ -36,7 +36,7 @@ class ConversationModelTestCase(TestCase):
     
 
     def test_correct_group_name_displayed(self):
-        display = self.group_conversation.display_name()
+        display = str(self.group_conversation)
         self.assertEqual(display,"@johndoe, @peterpickles, @petrapickles")
 
     # def test_cannot_add_user_to_individual_chat(self):

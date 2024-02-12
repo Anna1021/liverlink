@@ -7,5 +7,8 @@ class Message(models.Model):
     content = models.CharField(max_length=100)
     send_time = models.DateTimeField(default=timezone.now)
 
+    def delete(self):
+        Message.objects.remove(pk=self.pk)
+
     def __str__(self):
         return str(self.sender)+": "+self.content

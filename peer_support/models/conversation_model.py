@@ -16,8 +16,8 @@ class Conversation(models.Model):
     def send(self,message):
         """Sends message to the conversation"""
         self.messages.add(message)
-        for user in self.users.exclude(username=message.sender.username):
-            user.update_unread_messages(message)
+        # for user in self.users.exclude(username=message.sender.username):
+        #     user.update_unread_messages(message)
 
     def as_group(self):
         """Return object as an instance of GroupConversation"""
@@ -30,16 +30,20 @@ class Conversation(models.Model):
         return self.users.all()[0]
 
     def get_second_member(self):
-        return self.users.all()[1]    
+        return self.users.all()[1]  
+
+    def delete(self):
+        for message in self.messages.all():
+            message.delete() 
+        Conversation.objects.filter(pk=self.pk).delete()  
 
 class GroupConversation(Conversation):
     name = models.CharField(max_length=20,null=True)
 
     def remove_user(self,user):
-        if self.group:
-            self.users.remove(user)
-            if self.users.count()==0:
-                Message.objects.filter(pk=self.pk).delete() 
+        self.users.remove(user)
+        if self.users.count()==0:
+            self.delete() 
 
     def __str__(self):
         if self.name is None:
