@@ -47,30 +47,8 @@
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="{% static 'js/peer_select.js' %}"></script>
 <script>
-    $(document).ready(function() {
-        $('.add-friend-btn').click(function() {
-            var userId = $(this).data('user-id');
-            var addButton = $(this);
-            sendFriendRequest(userId, addButton);
-        });
-    
-        function sendFriendRequest(userId, addButton) {
-            $.ajax({
-                url : "{% url 'send_friend_request' 0 %}".replace('0', userId),
-                type: 'GET', 
-                success: function(response) {
-                    addButton.prop('disabled', true);
-                    addButton.removeClass('btn-secondary').addClass('btn-success');
-                    addButton.text('✓ Friend added'); 
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    alert('Error: Unable to send friend request');
-                }
-            });
-        }
-    });
+    var sendFriendRequestUrl = "{% url 'send_friend_request' 0 %}";
 </script>
+<script src="{% static 'js/peer_select.js' %}"></script>
 {% endblock %}

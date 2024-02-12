@@ -1,4 +1,26 @@
-$(document).ready(function() {
+$(document).ready(function () {
+    $('.add-friend-btn').click(function() {
+        var userId = $(this).data('user-id');
+        var addButton = $(this);
+        sendFriendRequest(userId, addButton);
+    });
+
+    function sendFriendRequest(userId, addButton) {
+        $.ajax({
+            url : sendFriendRequestUrl.replace('0', userId),
+            type: 'GET', 
+            success: function() {
+                addButton.prop('disabled', true);
+                addButton.removeClass('btn-secondary').addClass('btn-success');
+                addButton.text('✓ Friend added'); 
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+                alert('Error: Unable to send friend request');
+            }
+        });
+    }
+    
     // Initially hide all conditional fields
     function hideAllConditionalFields() {
         $('#id_age_of_diagnosis_min').parent().hide();
@@ -17,7 +39,7 @@ $(document).ready(function() {
         hideAllConditionalFields();
 
         // Check each user type checkbox to determine which fields to show
-        $("input[name='user_type']").each(function() {
+        $("input[name='user_type']").each(function () {
             if ($(this).is(':checked')) {
                 var userType = $(this).val(); // 'patient' or 'parent'
                 if (userType === 'patient') {
@@ -41,3 +63,4 @@ $(document).ready(function() {
     // Initial call to set the correct visibility state based on the current checkbox state
     updateFieldVisibility();
 });
+
