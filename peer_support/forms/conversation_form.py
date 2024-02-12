@@ -2,6 +2,7 @@ from django import forms
 from peer_support.models import Conversation,GroupConversation,User
 
 class ConversationForm(forms.ModelForm):
+    """Form enabling users to create a new conversation"""
     class Meta:
         model = Conversation
         fields = ['users']
@@ -14,6 +15,7 @@ class ConversationForm(forms.ModelForm):
         self.fields['users'].queryset = User.objects.exclude(username=user.username)
 
     def save(self,current_user,group=False):
+        """Create a new conversation or fetch an existing one"""
         super().save(commit=False)
         new_users = self.cleaned_data.get('users')
         new_users |= User.objects.filter(username = current_user.username)

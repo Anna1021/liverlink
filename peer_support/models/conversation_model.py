@@ -2,19 +2,21 @@ from django.db import models
 from peer_support.models import User, Message
 
 class Conversation(models.Model):
+    """Model used for direct conversations between two users"""
     users = models.ManyToManyField(User)
     messages = models.ManyToManyField(Message,blank=True)
 
     def __str__(self):
+        """Return a string representing the display name of the conversation"""
         members = self.users.all()
         return ", ".join([i.username for i in members]) 
 
     def add_user(self,user):
-        """Adds user to a group"""
+        """Add user to a group"""
         self.users.add(user)
 
     def send(self,message):
-        """Sends message to the conversation"""
+        """Send message to the conversation"""
         self.messages.add(message)
         # for user in self.users.exclude(username=message.sender.username):
         #     user.update_unread_messages(message)
@@ -27,25 +29,31 @@ class Conversation(models.Model):
             return None
 
     def get_first_member(self):
+        """Return first member of the conversation"""
         return self.users.all()[0]
 
     def get_second_member(self):
+        """Return second member of the conversation"""
         return self.users.all()[1]  
 
     def delete(self):
+        """Delete conversation and its messages"""
         for message in self.messages.all():
             message.delete() 
         Conversation.objects.filter(pk=self.pk).delete()  
 
 class GroupConversation(Conversation):
+    """Model used for group conversations between 2+ users"""
     name = models.CharField(max_length=20,null=True)
 
     def remove_user(self,user):
+        """Remove user from group and delete self if no users in group"""
         self.users.remove(user)
         if self.users.count()==0:
             self.delete() 
 
     def __str__(self):
+        """Return a string representing the display name of the conversation"""
         if self.name is None:
             return super().__str__()
         return self.name
