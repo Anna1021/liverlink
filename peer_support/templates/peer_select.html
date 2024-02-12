@@ -40,13 +40,34 @@
         {% for user in users %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
             {{ user.username }}
-            <a href="" class="btn btn-secondary btn-sm ms-auto">Add friend</a>
+            <a href="#" class="btn btn-secondary btn-sm ms-auto add-friend-btn" data-user-id="{{ user.id }}">Add friend</a>
         </li>                
         {% endfor %}
     {% endif %}
     </div>
-
-    
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="{% static 'js/peer_select.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        $('.add-friend-btn').click(function() {
+            var userId = $(this).data('user-id');
+            sendFriendRequest(userId);
+        });
+    
+        function sendFriendRequest(userId) {
+            $.ajax({
+                url : "{% url 'send_friend_request' 0 %}".replace('0', userId),
+                type: 'GET', 
+                success: function(response) {
+                    alert('Friend request sent');
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('Error: Unable to send friend request');
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

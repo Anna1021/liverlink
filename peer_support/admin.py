@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import User, Patient, Parent, Conversation
+from .models import User, Patient, Parent, Conversation, FriendRequest
 
 # Register your models here.
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for users."""
-    
+
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio'
     ]
@@ -33,4 +33,12 @@ class ConversationAdmin(admin.ModelAdmin):
     filter_vertical = ('users','messages')
     list_display = [
         'id'
+    ]
+
+@admin.register(FriendRequest)
+class FriendRequestAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for friend requests."""
+
+    list_display = [
+        'id','sender', 'receiver', 'is_accepted'
     ]

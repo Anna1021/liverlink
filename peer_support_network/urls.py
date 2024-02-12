@@ -27,7 +27,8 @@ urlpatterns = [
     path('password/', views.PasswordView.as_view(), name='password'),
     path('profile/', views.ProfileUpdateView.as_view(), name='profile'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
-    path('conversation/<int:conversation_id>',views.ConversationView.as_view(),name='conversation'),
+    path('conversation/<int:conversation_id>',views.ConversationView.as_view() ,name='conversation'),
     path('peer_select/', views.PeerView.as_view(), name='peer_select'),
-    path('create_conversation/',views.CreateConversationView.as_view(),name='create_conversation')
+    path('create_conversation/', views.CreateConversationView.as_view(), name='create_conversation'),
+    path('send_friend_request/<int:user_id>', views.send_friend_request, name='send_friend_request'),
 ]
