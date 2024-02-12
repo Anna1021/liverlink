@@ -1,40 +1,43 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const userTypeCheckboxes = document.querySelectorAll('input[name="user_type"]');
-    const patientFields = ['id_age_of_diagnosis_min', 'id_age_of_diagnosis_max', 'id_condition'];
-    const parentFields = ['id_child_age_of_diagnosis_min', 'id_child_age_of_diagnosis_max', 'id_child_condition'];
+$(document).ready(function() {
+    // Initially hide all conditional fields
+    function hideAllConditionalFields() {
+        $('#id_age_of_diagnosis_min').parent().hide();
+        $('#id_age_of_diagnosis_max').parent().hide();
+        $('#id_condition').parent().hide();
+        $('#id_child_age_of_diagnosis_min').parent().hide();
+        $('#id_child_age_of_diagnosis_max').parent().hide();
+        $('#id_child_condition').parent().hide();
+    }
 
-    function toggleFields() {
-        let userTypes = [];
-        userTypeCheckboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                userTypes.push(checkbox.value);
+    hideAllConditionalFields();
+
+    // Function to show/hide fields based on the checkbox selection
+    function updateFieldVisibility() {
+        // Hide all fields initially
+        hideAllConditionalFields();
+
+        // Check each user type checkbox to determine which fields to show
+        $("input[name='user_type']").each(function() {
+            if ($(this).is(':checked')) {
+                var userType = $(this).val(); // 'patient' or 'parent'
+                if (userType === 'patient') {
+                    // Show patient-related fields
+                    $('#id_age_of_diagnosis_min').parent().show();
+                    $('#id_age_of_diagnosis_max').parent().show();
+                    $('#id_condition').parent().show();
+                } else if (userType === 'parent') {
+                    // Show parent-related fields
+                    $('#id_child_age_of_diagnosis_min').parent().show();
+                    $('#id_child_age_of_diagnosis_max').parent().show();
+                    $('#id_child_condition').parent().show();
+                }
             }
         });
-
-        function displayFields(fieldIds, display) {
-            fieldIds.forEach(function(fieldId) {
-                const fieldWrapper = document.querySelector('.' + fieldId + '_wrapper');
-                if (fieldWrapper) {
-                    fieldWrapper.style.display = display ? '' : 'none';
-                }
-            });
-        }
-        if (userTypes.includes('patient')) {
-            displayFields(patientFields, true);
-        } else {
-            displayFields(patientFields, false);
-        }
-        if (userTypes.includes('parent')) {
-            displayFields(parentFields, true);
-        } else {
-            displayFields(parentFields, false);
-        }
-        if (userTypes.length === 0) {
-            displayFields(patientFields.concat(parentFields), false);
-        }
     }
-    userTypeCheckboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', toggleFields);
-    });
-    toggleFields();
+
+    // Bind the change event to user type checkboxes
+    $("input[name='user_type']").change(updateFieldVisibility);
+
+    // Initial call to set the correct visibility state based on the current checkbox state
+    updateFieldVisibility();
 });
