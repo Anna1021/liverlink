@@ -3,6 +3,7 @@ from peer_support.models import User
 from django.utils import timezone
 from datetime import timedelta
 from peer_support.models.model_choices import GENDER_CHOICES, ETHNICITY_CHOICES, LANGUAGE_CHOICES, COUNTRY_CHOICES, HOSPITAL_CHOICES
+from peer_support.forms.form_choices import CONDITION_CHOICES
 
 class FilterPeerForm(forms.Form):
     """Form enabling the filtering of users"""
@@ -20,11 +21,11 @@ class FilterPeerForm(forms.Form):
 
     age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
-    condition=forms.CharField(max_length=255, required=False)
+    condition=forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
 
     child_age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     child_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
-    child_condition=forms.CharField(max_length=255, required=False)
+    child_condition=forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
     
 
     def __init__(self, *args, **kwargs):
