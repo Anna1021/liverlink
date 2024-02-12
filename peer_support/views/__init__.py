@@ -8,3 +8,6 @@ from .password_view import PasswordView
 from .profile_update_view import ProfileUpdateView
 from .sign_up_view import SignUpView
 from .view_mixins import LoginProhibitedMixin
+from .conversation_view import ConversationView
+from .peer_select_view import PeerView
+from .create_conversation_view import CreateConversationView
