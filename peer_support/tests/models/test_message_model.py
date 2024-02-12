@@ -1,7 +1,7 @@
 """Unit tests for the Message model."""
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from peer_support.models import User,Message
+from peer_support.models import User,Message, Conversation
 
 class MessageModelTestCase(TestCase):
     """Unit tests for the Message model."""
@@ -9,7 +9,8 @@ class MessageModelTestCase(TestCase):
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json',
-        'peer_support/tests/fixtures/default_message.json'
+        'peer_support/tests/fixtures/default_message.json',
+        'peer_support/tests/fixtures/default_conversation.json',
     ]
 
     def setUp(self):
@@ -33,6 +34,14 @@ class MessageModelTestCase(TestCase):
         self.assertEqual(before_count,after_count)
         msg = Message.objects.get(pk=1)
         self.assertIsNone(msg.sender)
+
+    def test_message_deleted_after_conversation_deleted(self):
+        conversation = Conversation.objects.get(pk=1)
+        number_messages_in_conversation = conversation.messages.count()
+        before_count = Message.objects.count()
+        conversation.delete()
+        after_count = Message.objects.count()
+        self.assertEqual(after_count,before_count-number_messages_in_conversation)
         
     def _assert_message_is_valid(self):
         try:

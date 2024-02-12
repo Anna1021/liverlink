@@ -8,7 +8,7 @@ class Message(models.Model):
     send_time = models.DateTimeField(default=timezone.now)
 
     def delete(self):
-        Message.objects.remove(pk=self.pk)
+        Message.objects.filter(pk=self.pk).delete()
 
     def __str__(self):
         return str(self.sender)+": "+self.content
