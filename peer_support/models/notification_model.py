@@ -1,5 +1,5 @@
 from django.db import models
-from .user_model import User
+from peer_support.models import User
 
 class Notification(models.Model):
     """Model used for notifications."""
