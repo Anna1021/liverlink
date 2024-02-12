@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views import View
 from peer_support.forms import SortPeerForm, FilterPeerForm,SearchPeerForm
 from peer_support.models import User
+from django.contrib import messages
 
 
 class PeerView(LoginRequiredMixin, View):
@@ -19,8 +20,9 @@ class PeerView(LoginRequiredMixin, View):
             users =formSearch.search_users(users)
         if formFilter.is_valid():
             users =formFilter.filter_users(users)
+        else:
+            messages.add_message(request, messages.ERROR, "Age invalid")
         if formSort.is_valid():
             users = formSort.sort_users(users)
-        
-
+            
         return render(request, self.template_name, {'users': users, 'formSort': formSort, 'formFilter': formFilter, 'formSearch': formSearch})

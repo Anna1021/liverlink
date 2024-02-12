@@ -12,7 +12,7 @@ class PeerSelectViewTestCase(TestCase):
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/default_parent.json',
         'peer_support/tests/fixtures/default_admin.json',
-        'peer_support/tests/fixtures/other_users_patients.json',
+        'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
     ]
 
@@ -38,7 +38,7 @@ class PeerSelectViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'name="gender"') 
         self.assertContains(response, 'name="language"')
-        self.assertContains(response, 'name="Username"')
+        self.assertContains(response, 'name="sort_by"')
         self.assertContains(response, 'name="search"')
 
     def test_get_profile_redirects_when_not_logged_in(self):
@@ -59,12 +59,14 @@ class PeerSelectViewTestCase(TestCase):
 
     def test_form_sort_functionality(self):
         self.client.login(username=self.user.username, password='Password123')
-        sort_params = {'sort_by': 'username'}
-        response = self.client.get(self.url, sort_params)
+        sort_data = {'sort_by': 'username_asc'}
+        response = self.client.get(self.url, sort_data)
         self.assertEqual(response.status_code, 200)
         sorted_users = response.context['users']
-        usernames = [user.username for user in sorted_users]
-        self.assertEqual(usernames, sorted(usernames))
+        sorted_usernames = [user.username for user in sorted_users]
+        manual_sorted_users = sorted_users.order_by('username')
+        manual_sorted_usernames = [user.username for user in manual_sorted_users]
+        self.assertEqual(sorted_usernames,manual_sorted_usernames)
     
     def test_search_functionality(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -77,15 +79,15 @@ class PeerSelectViewTestCase(TestCase):
 
     def test_invalid_filter_form_submission(self):
         self.client.login(username=self.user.username, password='Password123')
-        invalid_filter_params = {'gender': 'InvalidGender', 'language': 'xx'}  # Assuming 'xx' is not a valid language choice
+        invalid_filter_params = {'gender': 'InvalidGender', 'language': 'xx'}
         response = self.client.get(self.url, invalid_filter_params)
         self.assertFalse(response.context['formFilter'].is_valid())
 
     def test_invalid_sort_form_submission(self):
         self.client.login(username=self.user.username, password='Password123')
-        invalid_sort_params = {'Username': 'asc', 'Age': 'asc'}
+        invalid_sort_params = {'sort_by': 'InvalidSort'} 
         response = self.client.get(self.url, invalid_sort_params)
-        self.assertFalse(response.context['formSort'].is_valid())
+        self.assertFalse(response.context['formSort'].is_valid(), "Form was expected to be invalid but was valid")
 
     def test_search_max_length_exceeded(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -93,7 +95,6 @@ class PeerSelectViewTestCase(TestCase):
         invalid_sort_params = {'search': search_term}
         response = self.client.get(self.url, invalid_sort_params)
         self.assertFalse(response.context['formSearch'].is_valid())
-
     
     def test_exclude_user(self):
         self.client.login(username=self.user.username, password='Password123')

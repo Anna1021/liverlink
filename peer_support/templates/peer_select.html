@@ -1,6 +1,6 @@
-{% extends 'base_content.html' %}
-{% block content %}
-{% load user_tags %} 
+{% extends 'dashboard.html' %}
+{% block page %}
+{% load static %}
 <div class="container">
     <h2>Add friend</h2>
     <hr>
@@ -15,21 +15,8 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     {% csrf_token %}
-                    {% for field in formFilter %}
-                        {% if field.name in "age_of_diagnosis_min,age_of_diagnosis_max,condition,child_age_of_diagnosis_min,child_age_of_diagnosis_max,child_condition" %}
-                            <div class="id_{{ field.name }}_wrapper">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                                {{ field }}
-                            </div>
-                        {% else %}
-                            <div class="{{ field.name }}_wrapper">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                                {{ field }}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                    {{formFilter.as_p}}
                 </div>
-            
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
                     Sort Options
                 </button>
@@ -38,13 +25,6 @@
                     {% include 'partials/bootstrap_form.html' with form=formSort %}
                 </div>
             </div>
-            {% if formSort.non_field_errors %}
-                <div class="error">
-                    {% for error in formSort.non_field_errors %}
-                        <p style="color: red;">{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
             <div>
                 <button type="submit" class="btn btn-secondary btn-sm my-3" style="margin-bottom: 0;" >Apply</button>   
             </div>
@@ -60,62 +40,13 @@
         {% for user in users %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
             {{ user.username }}
-            {% if user|is_patient %}
-                This user is a patient.
-            {% else %}
-                This user is not a patient.
-            {% endif %}
-            {{user.gender}}
             <a href="" class="btn btn-secondary btn-sm ms-auto">Add friend</a>
         </li>                
         {% endfor %}
     {% endif %}
     </div>
 
-
-{% endblock %}
-
-{% block javascript %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const userTypeCheckboxes = document.querySelectorAll('input[name="user_type"]');
-    const patientFields = ['id_age_of_diagnosis_min', 'id_age_of_diagnosis_max', 'id_condition'];
-    const parentFields = ['id_child_age_of_diagnosis_min', 'id_child_age_of_diagnosis_max', 'id_child_condition'];
-
-    function toggleFields() {
-        let userTypes = [];
-        userTypeCheckboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                userTypes.push(checkbox.value);
-            }
-        });
-
-        function displayFields(fieldIds, display) {
-            fieldIds.forEach(function(fieldId) {
-                const fieldWrapper = document.querySelector('.' + fieldId + '_wrapper');
-                if (fieldWrapper) {
-                    fieldWrapper.style.display = display ? '' : 'none';
-                }
-            });
-        }
-        if (userTypes.includes('patient')) {
-            displayFields(patientFields, true);
-        } else {
-            displayFields(patientFields, false);
-        }
-        if (userTypes.includes('parent')) {
-            displayFields(parentFields, true);
-        } else {
-            displayFields(parentFields, false);
-        }
-        if (userTypes.length === 0) {
-            displayFields(patientFields.concat(parentFields), false);
-        }
-    }
-    userTypeCheckboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', toggleFields);
-    });
-    toggleFields();
-});
-</script>
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'js/peer_select.js' %}"></script>
 {% endblock %}

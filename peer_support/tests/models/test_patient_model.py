@@ -8,7 +8,7 @@ class PatientModelTestCase(TestCase):
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
-        'peer_support/tests/fixtures/other_users_patients.json',
+        'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/default_patient.json',
         'peer_support/tests/fixtures/other_patients.json'
     ]
@@ -28,12 +28,12 @@ class PatientModelTestCase(TestCase):
         self.patient.condition = second_patient.condition
         self._assert_patient_is_valid()
 
-    def test_condition_can_be_50_characters_long(self):
-        self.patient.condition = 'x' * 50
+    def test_condition_can_be_100_characters_long(self):
+        self.patient.condition = 'x' * 100
         self._assert_patient_is_valid()
 
-    def test_condition_cannot_be_over_50_characters_long(self):
-        self.patient.condition = 'x' * 51
+    def test_condition_cannot_be_over_100_characters_long(self):
+        self.patient.condition = 'x' * 101
         self._assert_patient_is_invalid()
 
     

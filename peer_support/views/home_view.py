@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from peer_support.helpers import login_prohibited
+from peer_support.views.helpers import login_prohibited
 
 @login_prohibited
 def home(request):
