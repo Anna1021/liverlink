@@ -52,15 +52,18 @@
     $(document).ready(function() {
         $('.add-friend-btn').click(function() {
             var userId = $(this).data('user-id');
-            sendFriendRequest(userId);
+            var addButton = $(this);
+            sendFriendRequest(userId, addButton);
         });
     
-        function sendFriendRequest(userId) {
+        function sendFriendRequest(userId, addButton) {
             $.ajax({
                 url : "{% url 'send_friend_request' 0 %}".replace('0', userId),
                 type: 'GET', 
                 success: function(response) {
-                    alert('Friend request sent');
+                    addButton.prop('disabled', true);
+                    addButton.removeClass('btn-secondary').addClass('btn-success');
+                    addButton.text('✓ Friend added'); 
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
