@@ -15,12 +15,12 @@ class JavascriptTest(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        #chrome_options = Options()
-        #chrome_options.add_argument("--headless") 
-        #service = Service(ChromeDriverManager().install())
-        #service.log_path = 'NUL'
-        cls.selenium = WebDriver()
-        #cls.selenium = WebDriver(service=Service(), options=chrome_options)
+        chrome_options = Options()
+        chrome_options.add_argument("--headless") 
+        service = Service(ChromeDriverManager().install())
+        service.log_path = 'NUL'
+        #cls.selenium = WebDriver()
+        cls.selenium = WebDriver(service=Service(), options=chrome_options)
         cls.selenium.implicitly_wait(10)
         
     @classmethod
