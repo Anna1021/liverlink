@@ -35,8 +35,21 @@ $(document).ready(function() {
         $('#id_age_of_diagnosis').parent().hide();
         $('#id_child_condition').parent().hide();
         $('#id_child_age_of_diagnosis').parent().hide();
-        $('#id_mentor_condition').parent().hide();
-        $('#id_mentor_age_of_diagnosis').parent().hide();
       }
     });
   });
+
+  $('#id_country').change(function() {
+    var selectedCountry = $(this).val();
+    if(selectedCountry) {
+        $.ajax({
+            url: '/get_cities/',
+            data: {
+                'country': selectedCountry
+            },
+            success: function (data) {
+                $('#id_city').html(data);
+            }
+        });
+    }
+});

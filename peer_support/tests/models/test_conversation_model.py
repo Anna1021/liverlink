@@ -1,10 +1,9 @@
 """Unit tests for the Conversation model."""
-from django.core.exceptions import ValidationError
 from django.test import TestCase
-from peer_support.models import User,Message,Conversation,GroupConversation
+from peer_support.models import User,Message,Conversation
 
 class ConversationModelTestCase(TestCase):
-    """Unit tests for the Message model."""
+    """Unit tests for the Conversation model."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
@@ -37,7 +36,7 @@ class ConversationModelTestCase(TestCase):
     
 
     def test_correct_group_name_displayed(self):
-        display = self.group_conversation.display_name()
+        display = str(self.group_conversation)
         self.assertEqual(display,"@johndoe, @peterpickles, @petrapickles")
 
     # def test_cannot_add_user_to_individual_chat(self):
@@ -60,6 +59,19 @@ class ConversationModelTestCase(TestCase):
         new_message = Message.objects.get(pk=2)
         self.conversation.send(new_message)
         self.assertEqual(self.conversation.messages.count(),2)
+
+    def test_user_not_in_group_when_user_deleted(self):
+        self.assertIn(self.user,self.group_conversation.users.all())
+        User.objects.filter(username='@johndoe').delete()
+        self.assertNotIn(self.user,self.group_conversation.users.all())
+
+    def test_conversation_deleted_when_user_list_empty(self):
+        before_count = Conversation.objects.count()
+        for user in self.group_conversation.users.all():
+            self.group_conversation.remove_user(user)
+        after_count = Conversation.objects.count()
+        self.assertEqual(after_count,before_count-1)
+    
 
     # def test_sending_updates_non_sender_notifications(self):
     #     new_message = Message.objects.get(pk=2)

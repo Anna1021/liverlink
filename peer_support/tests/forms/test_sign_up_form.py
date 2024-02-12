@@ -17,14 +17,15 @@ class SignUpFormTestCase(TestCase):
             'email': 'janedoe@example.org',
             'date_of_birth': '2004-03-02',
             'gender': 'F',
-            'location': 'US',
+            'location': 'GB',
+            'hospital': 'Croydon Health Services NHS Trust',
             'ethnicity': 'RO',
             'language': 'en',
             'bio': 'I am a test user.',
             'new_password': 'Password123',
             'password_confirmation': 'Password123',
             'user_type': 'PT',
-            'condition': 'Diabetes',
+            'condition': 'Cancer',
             'age_of_diagnosis': 5,
         }
 
@@ -45,6 +46,7 @@ class SignUpFormTestCase(TestCase):
         self.assertTrue(isinstance(date_of_birth_field, forms.DateField))
         self.assertIn('gender', form.fields)
         self.assertIn('location', form.fields)
+        self.assertIn('hospital', form.fields)
         self.assertIn('ethnicity', form.fields)
         self.assertIn('language', form.fields)
         self.assertIn('bio', form.fields)
@@ -101,18 +103,19 @@ class SignUpFormTestCase(TestCase):
             self.assertEqual(user.email, 'janedoe@example.org')
             self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
             self.assertEqual(user.gender, 'F')
-            self.assertEqual(user.location, 'US')
+            self.assertEqual(user.location, 'GB')
+            self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
             self.assertEqual(user.ethnicity, 'RO')
             self.assertEqual(user.language, 'en')
             self.assertEqual(user.bio, 'I am a test user.')
-            self.assertEqual(user.condition, 'Diabetes')
+            self.assertEqual(user.condition, 'Cancer')
             self.assertEqual(user.age_of_diagnosis, 5)
             is_password_correct = check_password('Password123', user.password)
             self.assertTrue(is_password_correct)
 
     def test_form_must_save_correctly_with_parent(self):
         self.form_input['user_type'] = 'PR'
-        self.form_input['child_condition'] = 'Diabetes'
+        self.form_input['child_condition'] = 'Cancer'
         self.form_input['child_age_of_diagnosis'] = 5
         form = SignUpForm(data=self.form_input)
         if form.is_valid():
@@ -126,11 +129,12 @@ class SignUpFormTestCase(TestCase):
             self.assertEqual(user.email, 'janedoe@example.org')
             self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
             self.assertEqual(user.gender, 'F')
-            self.assertEqual(user.location, 'US')
+            self.assertEqual(user.location, 'GB')
+            self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
             self.assertEqual(user.ethnicity, 'RO')
             self.assertEqual(user.language, 'en')
             self.assertEqual(user.bio, 'I am a test user.')
-            self.assertEqual(user.child_condition, 'Diabetes')
+            self.assertEqual(user.child_condition, 'Cancer')
             self.assertEqual(user.child_age_of_diagnosis, 5)
             is_password_correct = check_password('Password123', user.password)
             self.assertTrue(is_password_correct)
@@ -151,11 +155,12 @@ class SignUpFormTestCase(TestCase):
             self.assertEqual(user.email, 'janedoe@example.org')
             self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
             self.assertEqual(user.gender, 'F')
-            self.assertEqual(user.location, 'US')
+            self.assertEqual(user.location, 'GB')
+            self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
             self.assertEqual(user.ethnicity, 'RO')
             self.assertEqual(user.language, 'en')
             self.assertEqual(user.bio, 'I am a test user.')
-            self.assertEqual(user.mentor_condition, 'Diabetes')
-            self.assertEqual(user.mentor_age_of_diagnosis, 5)
+            self.assertEqual(user.child_condition, 'Diabetes')
+            self.assertEqual(user.child_age_of_diagnosis, 5)
             is_password_correct = check_password('Password123', user.password)
             self.assertTrue(is_password_correct)

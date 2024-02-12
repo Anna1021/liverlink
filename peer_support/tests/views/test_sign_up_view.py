@@ -21,7 +21,8 @@ class SignUpViewTestCase(TestCase, LogInTester):
             'email': 'janedoe@example.org',
             'date_of_birth': '2004-03-02',
             'gender': 'F',
-            'location': 'US',
+            'location': 'GB',
+            'hospital': 'Croydon Health Services NHS Trust',
             'ethnicity': 'RO',
             'language': 'en',
             'bio': 'I am a test user.',
@@ -76,7 +77,8 @@ class SignUpViewTestCase(TestCase, LogInTester):
         self.assertEqual(user.email, 'janedoe@example.org')
         self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
         self.assertEqual(user.gender, 'F')
-        self.assertEqual(user.location, 'US')
+        self.assertEqual(user.location, 'GB')
+        self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
         self.assertEqual(user.ethnicity, 'RO')
         self.assertEqual(user.language, 'en')
         self.assertEqual(user.bio, 'I am a test user.')
