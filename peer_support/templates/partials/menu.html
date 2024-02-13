@@ -3,7 +3,9 @@
     <li class="nav-item">
       <a class="nav-link" href="{% url 'inbox' %}" id="inbox" role="button" data-bs-toggle="tooltip" title="Inbox">
         <span class="bi bi-inbox-fill"></span>
+        {% if has_unviewed_notifications %}
           <span class="bi bi-circle-fill" style="color:rgb(77, 129, 241); font-size: 7px; position: relative; top: -9px; left: -9px;"></span>
+        {% endif %}
       </a>  
     </li>
     <li class="nav-item dropdown">
