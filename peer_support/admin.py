@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, UserProfile, Patient, Parent
+from .models import User, Patient, Parent, Conversation, UserProfile
 
 # Register your models here.
 
@@ -34,4 +34,13 @@ class ParentAdmin(admin.ModelAdmin):
     inlines = [UserProfileInline]
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'child_condition', 'child_age_of_diagnosis'
+    ]
+
+@admin.register(Conversation)
+class ConversationAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for conversations."""
+
+    filter_vertical = ('users','messages')
+    list_display = [
+        'id'
     ]

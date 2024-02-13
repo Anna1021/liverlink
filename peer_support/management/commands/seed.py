@@ -16,7 +16,7 @@ patient_fixtures = [
 parent_fixtures = [
     {'username': '@jackjones', 'email': 'jack.jones@example.org', 'first_name': 'Jack', 'last_name': 'Jones', 'date_of_birth': '1980-01-01', 'gender': 'M', 'location': 'GB', 'hospital': 'Croydon Health Services NHS Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am Jack.', 'child_condition': 'Diabetes', 'child_age_of_diagnosis': 5},
     {'username': '@jilljones', 'email': 'jill.jones@example.org', 'first_name': 'Jill', 'last_name': 'Jones', 'date_of_birth': '1985-04-20', 'gender': 'F', 'location': 'FR', 'ethnicity': 'RO', 'language': 'fr', 'bio': 'Hi, I am Jill.', 'child_condition': 'Hepatitis A', 'child_age_of_diagnosis': 10},
-    {'username': '@jamescaesar', 'email': 'james.caesar@example.org', 'first_name': 'James', 'last_name': 'Caesar', 'date_of_birth': '1992-03-02', 'gender': 'O', 'location': 'BD', 'ethnicity': 'BD', 'language': 'bn', 'bio': 'Hi, I am James.', 'child_condition': 'Liver cancer', 'child_age_of_diagnosis': 15},
+    {'username': '@danielcaesar', 'email': 'daniel.caesar@example.org', 'first_name': 'Daniel', 'last_name': 'Caesar', 'date_of_birth': '1992-03-02', 'gender': 'O', 'location': 'BD', 'ethnicity': 'BD', 'language': 'bn', 'bio': 'Hi, I am Daniel.', 'child_condition': 'Liver cancer', 'child_age_of_diagnosis': 15},
 ]
 
 class Command(BaseCommand):
@@ -109,11 +109,17 @@ class Command(BaseCommand):
         except:
             pass
 
+    def create_user(self, model, data):
+        user = model.objects.create(**data)
+        user.set_password(Command.DEFAULT_PASSWORD)
+        user.save()
+        return user
+
     def create_patient(self, data):
-        Patient.objects.create(**data)
+        self.create_user(Patient, data)
 
     def create_parent(self, data):
-        Parent.objects.create(**data)
+        self.create_user(Parent, data)
 
 def create_username(first_name, last_name):
     return '@' + first_name.lower() + last_name.lower()
