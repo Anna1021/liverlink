@@ -1,0 +1,23 @@
+<nav class="col-md-4 d-md-block sidebar collapse">
+<ul class="conversation-list">
+    {% for conversation in user_conversations %}
+    <li>
+    <a href="{% url 'conversation' conversation.id %}" class="conversation-card">
+        {% if conversation.as_group != None %}
+        {{conversation.as_group}}
+        {% else %}
+            {% if user == conversation.get_first_member %}
+                {{conversation.get_second_member}}
+            {% else %}
+                {{conversation.get_first_member}}
+            {% endif %}
+        {% endif %}
+    </a>
+    {% empty %}
+    No conversations!
+    </li>
+    {% endfor %}
+    
+</ul>
+<a href="{% url 'create_conversation' %}" class="text-center fs-3"><i class="bi-pencil-square"></i></a>
+</nav>

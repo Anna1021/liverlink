@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, UserProfile, Patient, Parent
+from .models import User, Patient, Parent, UserProfile, Conversation
 
 # Register your models here.
 
