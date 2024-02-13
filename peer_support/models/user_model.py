@@ -50,3 +50,6 @@ class User(AbstractUser):
         """Return a URL to a miniature version of the user's gravatar."""
         
         return self.gravatar(size=60)
+
+    def sort_conversations(self):
+        return self.conversations.all().order_by("messages__send_time")
