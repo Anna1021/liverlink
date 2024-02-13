@@ -32,8 +32,8 @@ class ProfileViewTest(TestCase):
             'ethnicity': 'RO',
             'language': 'en',
             'bio': 'I am a test parent.',
-            'condition': 'Haemochromatosis',
-            'age_of_diagnosis': 21,
+            'child_condition': 'Haemochromatosis',
+            'child_age_of_diagnosis': 21,
         }
         self.patient_form_input = {
             'first_name': 'Jane',
@@ -46,8 +46,8 @@ class ProfileViewTest(TestCase):
             'ethnicity': 'RO',
             'language': 'en',
             'bio': 'I am a test patient.',
-            'child_condition': 'Haemochromatosis',
-            'child_age_of_diagnosis': 21,
+            'condition': 'Haemochromatosis',
+            'age_of_diagnosis': 21,
         }
 
     def test_profile_url(self):
@@ -198,8 +198,6 @@ class ProfileViewTest(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
         self.parent.refresh_from_db()
-        print(self.parent.username)
-        print(self.parent.child_condition)
         self.assertEqual(self.parent.username, '@johndoe')
         self.assertEqual(self.parent.first_name, 'John')
         self.assertEqual(self.parent.last_name, 'Doe')
