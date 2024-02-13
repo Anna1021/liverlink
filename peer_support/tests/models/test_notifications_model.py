@@ -46,16 +46,20 @@ class NotificationModelTestCase(TestCase):
     def test_created_defaults_to_now(self):
         self.notification.save()
         self.assertIsNotNone(self.notification.created)
-         
-
-    def test_user_cannot_be_blank(self):
-        self.notification.user = None
-        self._assert_notification_is_invalid()
 
 
     def test_viewed_defaults_to_false(self):
         self.assertFalse(self.notification.viewed)
+
+
+    def test_user_cannot_be_blank(self):
+        self.notification.user = None
+        self._assert_notification_is_invalid()
         
+
+    def test_friend_request_can_be_blank(self):
+        self.notification.friend_request = None
+        self._assert_notification_is_valid()
 
     def _assert_notification_is_valid(self):
         self.notification.full_clean()
