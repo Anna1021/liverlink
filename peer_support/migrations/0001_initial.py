@@ -93,6 +93,16 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='UserProfile',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('theme', models.CharField(choices=[('DF', 'Default theme'), ('LM', 'Light mode'), ('DM', 'Dark mode')], default='DF', max_length=50)),
+                ('font', models.CharField(choices=[('DF', 'Default font'), ('AR', 'Arial'), ('CA', 'Calibri')], default='DF', max_length=50)),
+                ('font_size', models.CharField(choices=[('DF', 'Default size'), ('LG', 'Large'), ('XL', 'Extra large')], default='DF', max_length=50)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Message',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
