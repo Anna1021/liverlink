@@ -31,6 +31,6 @@ urlpatterns = [
     path('peer_select/', views.PeerView.as_view(), name='peer_select'),
     path('create_conversation/', views.CreateConversationView.as_view(), name='create_conversation'),
     path('send_friend_request/<int:user_id>', views.send_friend_request, name='send_friend_request'),
-    path('accept_friend_request/', views.accept_friend_request, name='accept_friend_request'),
+    path('accept_friend_request/<int:friend_request_id>/', views.accept_friend_request, name='accept_friend_request'),
     path('inbox/', views.InboxView.as_view(), name='inbox'),
 ]

@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from peer_support.models import Notification, User, FriendRequest
 
 @login_required
@@ -9,13 +10,14 @@ def send_friend_request(request, user_id):
     Notification.objects.create(
         title='Friend Request',
         description=f'{request.user.username} sent you a friend request.',
-        user=receiver
+        user=receiver,
+        friend_request=FriendRequest.objects.last()
     )
     return JsonResponse({'status': 'success'})
 
 @login_required
-def accept_friend_request(request):
-    friend_request = FriendRequest.objects.get(id=request.POST['friend_request_id'])
+def accept_friend_request(request, friend_request_id):
+    friend_request = FriendRequest.objects.get(id=friend_request_id)
     friend_request.is_accepted = True
     friend_request.save()
     Notification.objects.create(
@@ -26,4 +28,4 @@ def accept_friend_request(request):
     user = request.user
     user.friends.add(friend_request.sender)
 
-    return JsonResponse({'status': 'success'})
+    return redirect('inbox')

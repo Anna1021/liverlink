@@ -9,3 +9,4 @@ class Notification(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     viewed = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    friend_request = models.ForeignKey('peer_support.FriendRequest', on_delete=models.CASCADE, null=True, blank=True)
