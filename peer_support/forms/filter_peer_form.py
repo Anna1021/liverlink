@@ -1,12 +1,12 @@
 from django import forms
-from peer_support.models import User
+from peer_support.models import User, Referral
 from django.utils import timezone
 from datetime import timedelta
 from peer_support.models.model_choices import GENDER_CHOICES, ETHNICITY_CHOICES, LANGUAGE_CHOICES, COUNTRY_CHOICES, HOSPITAL_CHOICES
 
 class FilterPeerForm(forms.Form):
     """Form enabling the filtering of users"""
-    USER_TYPE_CHOICES=[('patient','Patient'), ('parent', 'Parent')]
+    USER_TYPE_CHOICES=[('patient','Patient'), ('parent', 'Parent'), ('mentor', 'Mentor')]
     ALL_CHOICE = [('any', 'Any')]
 
     user_type=forms.MultipleChoiceField(choices=USER_TYPE_CHOICES,widget=forms.CheckboxSelectMultiple,required=False)
@@ -26,6 +26,9 @@ class FilterPeerForm(forms.Form):
     child_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
     child_condition=forms.CharField(max_length=255, required=False)
     
+    mentor_age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
+    mentor_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
+    mentor_condition=forms.CharField(max_length=255, required=False)
 
     def __init__(self, *args, **kwargs):
         """Initialise query set with users tasks"""

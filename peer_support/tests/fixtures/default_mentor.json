@@ -6,6 +6,7 @@
             "user_ptr": 1,
             "mentor_condition": "Hepatitis",
             "mentor_age_of_diagnosis": 20,
+            "referral_code": "9C274FF391",
             "is_active": true
         }
     }

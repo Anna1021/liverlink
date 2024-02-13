@@ -6,3 +6,5 @@ from .patient_model import Patient
 from .message_model import Message
 from .conversation_model import Conversation, GroupConversation
 from .notification_model import Notification
+from .mentor_model import Mentor
+from .referral_model import Referral

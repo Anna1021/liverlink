@@ -1,5 +1,5 @@
 from django import forms
-from peer_support.models import User, Parent, Patient
+from peer_support.models import User, Parent, Patient, Mentor
 from .helpers import NewPasswordMixin
 from .form_choices import USER_TYPE_CHOICES, CONDITION_CHOICES
 
@@ -20,6 +20,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     child_age_of_diagnosis = forms.IntegerField(required=False)
     mentor_condition = forms.CharField(required=False)
     mentor_age_of_diagnosis = forms.IntegerField(required=False)
+    referral_code = forms.CharField(required=True, max_length=10)
     
 
     class Meta:
@@ -67,6 +68,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             user_data.update({
                 'mentor_condition': self.cleaned_data.get('mentor_condition'),
                 'mentor_age_of_diagnosis': self.cleaned_data.get('mentor_age_of_diagnosis'),
+                'referral_code': self.cleaned_data.get('referral_code')
             })
             print(user_data)
             user = Mentor.objects.create_user(**user_data)

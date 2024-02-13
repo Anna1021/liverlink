@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Patient, Parent, Mentor, Conversation
+from .models import User, Patient, Parent, Conversation, Mentor, Referral
 
 # Register your models here.
 @admin.register(User)
@@ -32,4 +32,12 @@ class MentorAdmin(admin.ModelAdmin):
 
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio', 'mentor_condition', 'mentor_age_of_diagnosis'
+    ]
+
+@admin.register(Referral)
+class ReferralAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for referrals."""
+
+    list_display = [
+        'referrer','referred','code','claimed'
     ]
