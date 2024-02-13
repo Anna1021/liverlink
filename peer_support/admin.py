@@ -35,7 +35,7 @@ class ParentAdmin(admin.ModelAdmin):
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'child_condition', 'child_age_of_diagnosis'
     ]
-<<<<<<<<< Temporary merge branch 1
+
 
 @admin.register(Conversation)
 class ConversationAdmin(admin.ModelAdmin):
@@ -45,5 +45,3 @@ class ConversationAdmin(admin.ModelAdmin):
     list_display = [
         'id'
     ]
-=========
->>>>>>>>> Temporary merge branch 2
