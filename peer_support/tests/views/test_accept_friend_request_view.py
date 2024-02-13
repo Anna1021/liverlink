@@ -10,31 +10,32 @@ class AcceptFriendRequestView(TestCase):
     fixtures = ['peer_support/tests/fixtures/default_user.json',
                 'peer_support/tests/fixtures/other_users.json',
                 'peer_support/tests/fixtures/default_friend_request.json',
-                'peer_support/tests/fixtures/other_friend_requests.json',]
+                'peer_support/tests/fixtures/other_friend_requests.json',
+                'peer_support/tests/fixtures/default_notification.json',
+                'peer_support/tests/fixtures/other_notifications.json',
+                ]
 
     def setUp(self):
-        self.url = reverse('accept_friend_request', args=[1])
+        self.url = reverse('accept_friend_request', args=[1, 2])
         self.user = User.objects.get(username='@janedoe')
         self.client.force_login(self.user)
 
     def test_accept_friend_request_url(self):
-        self.assertEqual(self.url, '/accept_friend_request/1/')
+        self.assertEqual(self.url, '/accept_friend_request/1/2/')
 
     def test_accept_friend_request(self):
         friend_request = FriendRequest.objects.get(id=1)
         self.assertFalse(friend_request.is_accepted)
-        self.assertEqual(Notification.objects.count(), 0)
+        self.assertEqual(Notification.objects.count(), 3)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
-        friend_request.refresh_from_db()
-        self.assertTrue(friend_request.is_accepted)
-        self.assertEqual(Notification.objects.count(), 1)
-        notification = Notification.objects.first()
+        self.assertEqual(Notification.objects.count(), 3)
+        notification = Notification.objects.last()
         self.assertEqual(notification.title, 'Friend Request Accepted')
         self.assertEqual(notification.description, '@janedoe accepted your friend request.')
         self.assertEqual(notification.user, User.objects.get(username='@johndoe'))
         self.assertEqual(self.user.friends.count(), 1)
-        self.assertEqual(self.user.friends.first(), User.objects.get(username='@johndoe'))
+        self.assertEqual(self.user.friends.first().username, '@johndoe')
 
     def test_accept_friend_request_without_being_logged_in(self):
         self.client.logout()

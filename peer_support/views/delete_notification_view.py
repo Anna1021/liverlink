@@ -1,8 +1,7 @@
-from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from peer_support.models import Notification
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
+from peer_support.models import Notification
 
 @login_required
 def delete_notification(request, notification_id):

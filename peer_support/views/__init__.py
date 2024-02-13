@@ -16,3 +16,4 @@ from .send_friend_request_view import send_friend_request
 from .accept_friend_request_view import accept_friend_request
 from .inbox_view import InboxView
 from .delete_notification_view import delete_notification
+from .clear_notifications_view import clear_notifications
