@@ -13,6 +13,11 @@
     list-style-type: none;
 }
 
+#conversation{
+    height: 70vh;
+    overflow-y: scroll;
+}
+
 /* message bubbles */
 .message-bubble {
     border-radius: 25px;

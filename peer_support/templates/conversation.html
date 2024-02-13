@@ -1,4 +1,5 @@
 {% extends 'partials/conversation_menu.html' %}
+{% load static %}
 {% block convo %}
 {% if conversation %}
 <div class="row">
@@ -28,6 +29,7 @@
 
 </div>
 <div>
+    <div id="conversation">
     {% for message in conversation.messages.all %}
     {% if message.sender == user %}
     <p class="message-bubble self-message">{{message}}</p>
@@ -37,6 +39,7 @@
     {% empty %}
     Type out your first message in the box below!
     {% endfor %}
+    </div>
     <form method="post">
         {% csrf_token %}
         {{ form.content }}
@@ -46,4 +49,7 @@
     Pick a conversation or start a new conversation!
     {% endif %}
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'js/conversation.js' %}"></script>
 {% endblock %}

@@ -52,4 +52,4 @@ class User(AbstractUser):
         return self.gravatar(size=60)
 
     def sort_conversations(self):
-        return self.conversations.all().order_by("messages__send_time")
+        return self.conversations.order_by("-last_updated")
