@@ -1,8 +1,6 @@
 from django.contrib import admin
 from .models import User, Patient, Parent, UserProfile, Conversation
 
-# Register your models here.
-
 class UserProfileInline(admin.StackedInline):
     """Configuration of the admin interface for user profiles."""
     """Adds the user profile interface to the user interface."""
