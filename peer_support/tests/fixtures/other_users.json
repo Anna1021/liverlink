@@ -13,6 +13,7 @@
       "location": "GB",
       "hospital": "Guy’s and St Thomas’ NHS Foundation Trust",
       "ethnicity": "OM",
+      "language": "en",
       "bio": "Hi, I'm Jane Doe",
       "is_active": true
     }
@@ -31,6 +32,7 @@
       "location": "BD",
       "hospital": "Airedale NHS Foundation Trust",
       "ethnicity": "BD",
+      "language": "fr",
       "bio": "Hi, I'm Petra Pickles! I'm a student at King's College London.",
       "is_active": true
     }
@@ -48,6 +50,7 @@
       "gender": "N",
       "location": "FR",
       "ethnicity": "AF",
+      "language": "ru",
       "bio": "Peter here!",
       "is_active": true
     }

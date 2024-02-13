@@ -8,9 +8,9 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     
     user_type = forms.ChoiceField(initial='', choices=USER_TYPE_CHOICES, required=True)
     condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
-    age_of_diagnosis = forms.IntegerField(required=False)
+    age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
     child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
-    child_age_of_diagnosis = forms.IntegerField(required=False)
+    child_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
 
     class Meta:
         """Form options."""
@@ -47,7 +47,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
             })
             user = Patient.objects.create_user(**user_data)
-        elif user_type == 'PR':
+        else:
             user_data.update({
                 'child_condition': self.cleaned_data.get('child_condition'),
                 'child_age_of_diagnosis': self.cleaned_data.get('child_age_of_diagnosis'),

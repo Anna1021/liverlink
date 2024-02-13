@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
-class JavascriptTest(StaticLiveServerTestCase):
+class PeerSelectJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in peer_select view"""
     fixtures = ['peer_support/tests/fixtures/default_user.json']
 

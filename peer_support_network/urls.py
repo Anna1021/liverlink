@@ -24,8 +24,11 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('log_in/', views.LogInView.as_view(), name='log_in'),
     path('log_out/', views.log_out, name='log_out'),
-    path('password/', views.PasswordView.as_view(), name='password'),
+    path('profile/password/', views.PasswordView.as_view(), name='password'),
     path('profile/', views.ProfileUpdateView.as_view(), name='profile'),
+    path('deactivate_user/', views.deactivate_user, name='deactivate_user'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
-    path('peer_select/', views.PeerView.as_view(), name='peer_select')
+    path('conversation/<int:conversation_id>',views.ConversationView.as_view(),name='conversation'),
+    path('peer_select/', views.PeerView.as_view(), name='peer_select'),
+    path('create_conversation/',views.CreateConversationView.as_view(),name='create_conversation')
 ]
