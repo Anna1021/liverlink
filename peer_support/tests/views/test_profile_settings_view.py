@@ -12,16 +12,16 @@ class ProfileViewTest(TestCase):
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
-        'peer_support/tests/fixtures/default_patient.json',
+        'peer_support/tests/fixtures/default_parent.json',
         'peer_support/tests/fixtures/other_users.json',
-        'peer_support/tests/fixtures/other_parents.json',
+        'peer_support/tests/fixtures/other_patients.json',
     ]
 
     def setUp(self):
-        self.patient = Patient.objects.get(username='@johndoe')
-        self.parent = Parent.objects.get(username='@janedoe')
+        self.parent = Parent.objects.get(username='@johndoe')
+        self.patient = Patient.objects.get(username='@janedoe')
         self.url = reverse('profile')
-        self.patient_form_input = {
+        self.parent_form_input = {
             'first_name': 'John',
             'last_name': 'Doe',
             'username': '@johndoe',
@@ -31,11 +31,11 @@ class ProfileViewTest(TestCase):
             'location': 'US',
             'ethnicity': 'RO',
             'language': 'en',
-            'bio': 'I am a test patient.',
+            'bio': 'I am a test parent.',
             'condition': 'Haemochromatosis',
             'age_of_diagnosis': 21,
         }
-        self.parent_form_input = {
+        self.patient_form_input = {
             'first_name': 'Jane',
             'last_name': 'Doe',
             'username': '@janedoe',
@@ -94,18 +94,18 @@ class ProfileViewTest(TestCase):
         self.assertTrue(isinstance(form, PatientForm))
         self.assertTrue(form.is_bound)
         self.patient.refresh_from_db()
-        self.assertEqual(self.patient.username, '@johndoe')
-        self.assertEqual(self.patient.first_name, 'John')
+        self.assertEqual(self.patient.username, '@janedoe')
+        self.assertEqual(self.patient.first_name, 'Jane')
         self.assertEqual(self.patient.last_name, 'Doe')
-        self.assertEqual(self.patient.email, 'johndoe@example.org')
-        self.assertEqual(self.patient.date_of_birth, datetime.date(1990, 1, 1)),
-        self.assertEqual(self.patient.gender, 'M'),
+        self.assertEqual(self.patient.email, 'janedoe@example.org')
+        self.assertEqual(self.patient.date_of_birth, datetime.date(2004, 3, 2)),
+        self.assertEqual(self.patient.gender, 'F'),
         self.assertEqual(self.patient.location, 'GB'),
-        self.assertEqual(self.patient.ethnicity, 'BR'),
+        self.assertEqual(self.patient.ethnicity, 'OM'),
         self.assertEqual(self.patient.language, 'en'),
-        self.assertEqual(self.patient.bio, "I'm a test user"),
-        self.assertEqual(self.patient.condition, "Hepatitis"),
-        self.assertEqual(self.patient.age_of_diagnosis, 20)
+        self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe"),
+        self.assertEqual(self.patient.condition, "Biliary atresia"),
+        self.assertEqual(self.patient.age_of_diagnosis, 2)
 
     def test_unsuccesful_profile_update_for_parent(self):
         self.client.login(username=self.parent.username, password='Password123')
@@ -120,22 +120,22 @@ class ProfileViewTest(TestCase):
         self.assertTrue(isinstance(form, ParentForm))
         self.assertTrue(form.is_bound)
         self.parent.refresh_from_db()
-        self.assertEqual(self.parent.username, '@janedoe')
-        self.assertEqual(self.parent.first_name, 'Jane')
+        self.assertEqual(self.parent.username, '@johndoe')
+        self.assertEqual(self.parent.first_name, 'John')
         self.assertEqual(self.parent.last_name, 'Doe')
-        self.assertEqual(self.parent.email, 'janedoe@example.org')
-        self.assertEqual(self.parent.date_of_birth, datetime.date(2004, 3, 2)),
-        self.assertEqual(self.parent.gender, 'F'),
+        self.assertEqual(self.parent.email, 'johndoe@example.org')
+        self.assertEqual(self.parent.date_of_birth, datetime.date(1990, 1, 1)),
+        self.assertEqual(self.parent.gender, 'M'),
         self.assertEqual(self.parent.location, 'GB'),
-        self.assertEqual(self.parent.ethnicity, 'OM'),
+        self.assertEqual(self.parent.ethnicity, 'BR'),
         self.assertEqual(self.parent.language, 'en'),
-        self.assertEqual(self.parent.bio, "Hi, I'm Jane Doe"),
-        self.assertEqual(self.parent.child_condition, "Biliary atresia"),
-        self.assertEqual(self.parent.child_age_of_diagnosis, 2)
+        self.assertEqual(self.parent.bio, "I'm a test user"),
+        self.assertEqual(self.parent.child_condition, "Hepatitis"),
+        self.assertEqual(self.parent.child_age_of_diagnosis, 20)
 
     def test_unsuccessful_profile_update_due_to_duplicate_username(self):
         self.client.login(username=self.patient.username, password='Password123')
-        self.patient_form_input['username'] = '@janedoe'
+        self.patient_form_input['username'] = '@johndoe'
         before_count = Patient.objects.count()
         response = self.client.post(self.url, self.patient_form_input)
         after_count = Patient.objects.count()
@@ -146,18 +146,18 @@ class ProfileViewTest(TestCase):
         self.assertTrue(isinstance(form, PatientForm))
         self.assertTrue(form.is_bound)
         self.patient.refresh_from_db()
-        self.assertEqual(self.patient.username, '@johndoe')
-        self.assertEqual(self.patient.first_name, 'John')
+        self.assertEqual(self.patient.username, '@janedoe')
+        self.assertEqual(self.patient.first_name, 'Jane')
         self.assertEqual(self.patient.last_name, 'Doe')
-        self.assertEqual(self.patient.email, 'johndoe@example.org')
-        self.assertEqual(self.patient.date_of_birth, datetime.date(1990, 1, 1)),
-        self.assertEqual(self.patient.gender, 'M'),
+        self.assertEqual(self.patient.email, 'janedoe@example.org')
+        self.assertEqual(self.patient.date_of_birth, datetime.date(2004, 3, 2)),
+        self.assertEqual(self.patient.gender, 'F'),
         self.assertEqual(self.patient.location, 'GB'),
-        self.assertEqual(self.patient.ethnicity, 'BR'),
+        self.assertEqual(self.patient.ethnicity, 'OM'),
         self.assertEqual(self.patient.language, 'en'),
-        self.assertEqual(self.patient.bio, "I'm a test user"),
-        self.assertEqual(self.patient.condition, "Hepatitis"),
-        self.assertEqual(self.patient.age_of_diagnosis, 20)
+        self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe"),
+        self.assertEqual(self.patient.condition, "Biliary atresia"),
+        self.assertEqual(self.patient.age_of_diagnosis, 2)
 
     def test_succesful_profile_update_for_patient(self):
         self.client.login(username=self.patient.username, password='Password123')
@@ -172,12 +172,12 @@ class ProfileViewTest(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
         self.patient.refresh_from_db()
-        self.assertEqual(self.patient.username, '@johndoe')
-        self.assertEqual(self.patient.first_name, 'John')
+        self.assertEqual(self.patient.username, '@janedoe')
+        self.assertEqual(self.patient.first_name, 'Jane')
         self.assertEqual(self.patient.last_name, 'Doe')
-        self.assertEqual(self.patient.email, 'johndoe@example.org')
-        self.assertEqual(self.patient.date_of_birth, datetime.date(1990, 1, 1)),
-        self.assertEqual(self.patient.gender, 'M'),
+        self.assertEqual(self.patient.email, 'janedoe@example.org')
+        self.assertEqual(self.patient.date_of_birth, datetime.date(1991, 1, 1)),
+        self.assertEqual(self.patient.gender, 'F'),
         self.assertEqual(self.patient.location, 'US'),
         self.assertEqual(self.patient.ethnicity, 'RO'),
         self.assertEqual(self.patient.language, 'en'),
@@ -198,16 +198,18 @@ class ProfileViewTest(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
         self.parent.refresh_from_db()
-        self.assertEqual(self.parent.username, '@janedoe')
-        self.assertEqual(self.parent.first_name, 'Jane')
+        print(self.parent.username)
+        print(self.parent.child_condition)
+        self.assertEqual(self.parent.username, '@johndoe')
+        self.assertEqual(self.parent.first_name, 'John')
         self.assertEqual(self.parent.last_name, 'Doe')
-        self.assertEqual(self.parent.email, 'janedoe@example.org')
-        self.assertEqual(self.parent.date_of_birth, datetime.date(1991, 1, 1)),
-        self.assertEqual(self.parent.gender, 'F'),
+        self.assertEqual(self.parent.email, 'johndoe@example.org')
+        self.assertEqual(self.parent.date_of_birth, datetime.date(1990, 1, 1)),
+        self.assertEqual(self.parent.gender, 'M'),
         self.assertEqual(self.parent.location, 'US'),
         self.assertEqual(self.parent.ethnicity, 'RO'),
         self.assertEqual(self.parent.language, 'en'),
-        self.assertEqual(self.parent.bio, "I am a test patient."),
+        self.assertEqual(self.parent.bio, "I am a test parent."),
         self.assertEqual(self.parent.child_condition, "Haemochromatosis"),
         self.assertEqual(self.parent.child_age_of_diagnosis, 21)
 
