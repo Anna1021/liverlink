@@ -1,11 +1,11 @@
-"""Tests for the delete notification view."""
+"""Tests for inbox view"""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.tests.helpers import reverse_with_next
 from peer_support.models import User, Notification
 
-class DeleteNotificationViewTestCase(TestCase):
-    """Tests for the delete notification view."""
+class InboxViewTestCase(TestCase):
+    """Tests for inbox view."""
     
     fixtures = ['peer_support/tests/fixtures/default_user.json',
                 'peer_support/tests/fixtures/other_users.json',
@@ -14,26 +14,23 @@ class DeleteNotificationViewTestCase(TestCase):
                 'peer_support/tests/fixtures/other_notifications.json',]
 
     def setUp(self):
-        self.url = reverse('delete_notification', args=[1])
+        self.url = reverse('inbox')
         self.user = User.objects.get(username='@johndoe')
         self.client.force_login(self.user)
 
-    def test_delete_notification_url(self):
-        self.assertEqual(self.url, '/delete_notification/1/')
+    def test_inbox_url(self):
+        self.assertEqual(self.url, '/inbox/')
 
-    def test_delete_notification(self):
-        self.assertEqual(Notification.objects.count(), 3)
-        response = self.client.get(self.url, follow=True)
+    def test_inbox(self):
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(Notification.objects.count(), 2)
+        notifications = response.context['notifications']
+        self.assertEqual(notifications.count(), 3)
+        self.assertEqual(notifications[0], Notification.objects.get(id=1))
+        self.assertEqual(notifications[1], Notification.objects.get(id=2))
+        self.assertEqual(notifications[2], Notification.objects.get(id=3))
 
-    def test_delete_notification_with_friend_request(self):
-        self.assertEqual(Notification.objects.count(), 3)
-        response = self.client.get(reverse('delete_notification', args=[2]), follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Notification.objects.count(), 2)
-
-    def test_delete_notification_without_being_logged_in(self):
+    def test_inbox_without_being_logged_in(self):
         self.client.logout()
         redirect_url = reverse_with_next('log_in', self.url)
         response = self.client.get(self.url)
