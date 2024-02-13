@@ -39,8 +39,8 @@ class UserProfileModelTestCase(TestCase):
         self.assertEqual(before_count+1, after_count)
         new_user = User.objects.get(username="@tester")
         user_profile = UserProfile.objects.get(user=new_user)
-        self.assertEqual(new_user, user_profile.user) # New user is the same user assigned to new user profile
-        self.assertEqual(new_user.id, user_profile.id) # New user ID is the same as new user profile ID
+        self.assertEqual(new_user, user_profile.user)
+        self.assertEqual(new_user.id, user_profile.id)
 
     def test_user_profile_is_automatically_created_when_new_patient_is_created(self):
         before_count = UserProfile.objects.count()
@@ -62,8 +62,8 @@ class UserProfileModelTestCase(TestCase):
         new_patient = Patient.objects.get(username="@tester")
         new_patient_user = User.objects.get(username="@tester")
         user_profile = UserProfile.objects.get(user=new_patient)
-        self.assertEqual(new_patient_user, user_profile.user) # New patient's respective User object is assigned to new user profile
-        self.assertEqual(new_patient.id, user_profile.id) # New patient ID is the same as new user profile ID
+        self.assertEqual(new_patient_user, user_profile.user)
+        self.assertEqual(new_patient.id, user_profile.id)
 
     def test_user_profile_is_automatically_created_when_new_parent_is_created(self):
         before_count = UserProfile.objects.count()
@@ -85,8 +85,8 @@ class UserProfileModelTestCase(TestCase):
         new_parent = Parent.objects.get(username="@tester")
         new_parent_user = User.objects.get(username="@tester")
         user_profile = UserProfile.objects.get(user=new_parent)
-        self.assertEqual(new_parent_user, user_profile.user) # New parent's respective User object is assigned to new user profile
-        self.assertEqual(new_parent.id, user_profile.id) # New parent ID is the same as new user profile ID
+        self.assertEqual(new_parent_user, user_profile.user)
+        self.assertEqual(new_parent.id, user_profile.id)
 
 
     def test_user_cannot_be_none(self):
