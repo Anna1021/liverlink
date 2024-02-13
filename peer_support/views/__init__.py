@@ -12,3 +12,4 @@ from .conversation_view import ConversationView
 from .peer_select_view import PeerView
 from .create_conversation_view import CreateConversationView
 from .send_friend_request_view import send_friend_request, accept_friend_request
+from .inbox_view import InboxView

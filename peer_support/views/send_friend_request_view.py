@@ -15,8 +15,12 @@ def send_friend_request(request, user_id):
 
 def accept_friend_request(request):
     friend_request = FriendRequest.objects.get(id=request.POST['friend_request_id'])
-    friend_request.status = 'accepted'
+    friend_request.is_accepted = True
     friend_request.save()
-    # Update the user's friends list
-    friend_request.from_user.friends.add(friend_request.to_user)
-    friend_request.to_user.friends.add(friend_request.from_user)
+    Notification.objects.create(
+        title='Friend Request Accepted',
+        description=f'{request.user.username} accepted your friend request.',
+        user=friend_request.sender
+    )
+    user = request.user
+    user.friends.add(friend_request.sender)
