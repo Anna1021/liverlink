@@ -3,11 +3,11 @@
 {% load static %}
 <div class="container">
     <h3 class="m-b-50 heading-line pt-3">Notifications <i class="fa fa-bell text-muted"></i></h3>
-    {% for notification in notifications %}
+    {% for notification in notifications|dictsortreversed:"created" %}
         <div class="notification-list d-flex justify-content-between">
             <div class="notification-list_content">
                 <div class="notification-list_img">
-                    <img src="https://i.imgur.com/zYxDCQT.jpg" alt="user">
+                    <img src="https://www.icegif.com/wp-content/uploads/2022/01/icegif-788.gif" alt="user">
                 </div>
                 <div class="notification-list_detail">
                     <p><b>{{ notification.title }}</b></p>
@@ -17,10 +17,10 @@
             </div>
             <div class="d-flex align-items-center">
                 {% if notification.title == 'Friend Request' %}
-                    <button class="btn btn-success accept-request" onclick="window.location.href='/accept_friend_request/{{ notification.friend_request.id }}';"><i class="bi bi-check"></i></button>
+                <button class="btn btn-success accept-request" onclick="window.location.href='/accept_friend_request/{{ notification.friend_request.id }}';"><i class="bi bi-check"></i></button>
                     &nbsp;
                 {% endif %}
-                <button class="btn btn-danger decline-request"><i class="bi bi-x"></i></button>
+                <button class="btn btn-danger decline"><i class="bi bi-x" onclick="window.location.href='/delete_notification/{{ notification.id }}';"></i></button>
             </div>
         </div>
     {% endfor %}
