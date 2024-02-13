@@ -13,6 +13,7 @@ def send_friend_request(request, user_id):
     )
     return JsonResponse({'status': 'success'})
 
+@login_required
 def accept_friend_request(request):
     friend_request = FriendRequest.objects.get(id=request.POST['friend_request_id'])
     friend_request.is_accepted = True
@@ -24,3 +25,5 @@ def accept_friend_request(request):
     )
     user = request.user
     user.friends.add(friend_request.sender)
+
+    return JsonResponse({'status': 'success'})
