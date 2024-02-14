@@ -23,6 +23,8 @@
     border-radius: 25px;
     padding : 5px;
     margin: 5px;
+    height: fit-content;
+    align-items: center;
 }
 
 .self-message{

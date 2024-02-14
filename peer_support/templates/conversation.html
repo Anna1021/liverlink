@@ -31,13 +31,27 @@
 <div>
     <div id="conversation">
     {% for message in conversation.messages.all %}
-    {% if message.sender == user %}
-    <p class="message-bubble self-message">{{message}}</p>
-    {% else %}
-    <p class="message-bubble other-message">{{message}}</p>
-    {% endif %}
+        {% if user in message.visible_to.all %}
+        {% if message.sender == user %}
+        <div class="row message-bubble self-message">
+        {% else %}
+        <div class="row message-bubble other-message">
+        {% endif %}
+        
+        <div class="col-md-9">{{message}}</div>
+        <div class="col-md-3 nav-item dropdown">
+            <a class="nav-link" href="#" id="message-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi-three-dots-vertical"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-account-dropdown">
+                <li><a class="dropdown-item" href="{% url 'delete_message' conversation.id message.id %}">Delete for me</a></li>
+            </ul>
+        </div>
+        
+        </div>
+        {% endif %}
     {% empty %}
-    Type out your first message in the box below!
+        Type out your first message in the box below!
     {% endfor %}
     </div>
     <form method="post">

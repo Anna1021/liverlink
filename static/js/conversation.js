@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
     $('#conversation').animate(
-        {scrollTop:$('#conversation').prop('scrollHeight')})
-    
+        {scrollTop:$('#conversation').prop('scrollHeight')});
 });
+

@@ -11,3 +11,4 @@ from .view_mixins import LoginProhibitedMixin
 from .conversation_view import ConversationView
 from .peer_select_view import PeerView
 from .create_conversation_view import CreateConversationView
+from .delete_message_view import DeleteMessageView
