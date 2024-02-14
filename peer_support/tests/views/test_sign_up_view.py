@@ -1,4 +1,5 @@
 """Tests of the sign up view."""
+import datetime
 from django.contrib.auth.hashers import check_password
 from django.test import TestCase
 from django.urls import reverse
@@ -18,8 +19,16 @@ class SignUpViewTestCase(TestCase, LogInTester):
             'last_name': 'Doe',
             'username': '@janedoe',
             'email': 'janedoe@example.org',
+            'date_of_birth': '2004-03-02',
+            'gender': 'F',
+            'location': 'GB',
+            'hospital': 'Croydon Health Services NHS Trust',
+            'ethnicity': 'RO',
+            'language': 'en',
+            'bio': 'I am a test user.',
             'new_password': 'Password123',
-            'password_confirmation': 'Password123'
+            'password_confirmation': 'Password123',
+            'user_type': 'PT'
         }
         self.user = User.objects.get(username='@johndoe')
 
@@ -66,6 +75,13 @@ class SignUpViewTestCase(TestCase, LogInTester):
         self.assertEqual(user.first_name, 'Jane')
         self.assertEqual(user.last_name, 'Doe')
         self.assertEqual(user.email, 'janedoe@example.org')
+        self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
+        self.assertEqual(user.gender, 'F')
+        self.assertEqual(user.location, 'GB')
+        self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
+        self.assertEqual(user.ethnicity, 'RO')
+        self.assertEqual(user.language, 'en')
+        self.assertEqual(user.bio, 'I am a test user.')
         is_password_correct = check_password('Password123', user.password)
         self.assertTrue(is_password_correct)
         self.assertTrue(self._is_logged_in())

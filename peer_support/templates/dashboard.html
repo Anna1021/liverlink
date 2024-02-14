@@ -1,9 +1,21 @@
 {% extends 'base_content.html' %}
 {% block content %}
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <h1>Welcome to your dashboard {{ user.username }}</h1>
+{% load static %}
+<div id="cover-image">
+  <div class="container pl-0">
+    <div class="row">
+      <!-- left row -->
+      <div class="col-md-3 mt-2">
+        {%include "partials/left_navbar.html" %}
+      </div>
+      <!-- right row -->
+      <div class="col-md-9 mt-2">
+        <div class="card bg-dark shadow box-area">
+          <h1>Welcome to your feed {{ user.username }}</h1>
+          {% block page %}
+          {% endblock %}
+        </div>
+      </div>
     </div>
   </div>
 </div>

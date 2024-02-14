@@ -1,0 +1,16 @@
+from django import forms
+from peer_support.models import User
+#from peer_support.models.model_choices import HOSPITAL_CHOICES
+
+class UserForm(forms.ModelForm):
+    """Form to update user profiles."""
+
+    class Meta:
+        """Form options."""
+
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio']
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 3}),
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+        }
