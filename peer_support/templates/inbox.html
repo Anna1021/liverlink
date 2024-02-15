@@ -24,7 +24,7 @@
                     <button class="btn btn-success accept-request" onclick="window.location.href='/accept_friend_request/{{ notification.friend_request.id }}/{{ notification.id }}';"><i class="bi bi-check"></i></button>
                     &nbsp;
                 {% endif %}
-                <button class="btn btn-danger decline"><i class="bi bi-x" onclick="window.location.href='/delete_notification/{{ notification.id }}';"></i></button>
+                <button class="btn btn-danger decline" onclick="window.location.href='/delete_notification/{{ notification.id }}';"><i class="bi bi-x"></i></button>
             </div>
         </div>
     {% endfor %}
