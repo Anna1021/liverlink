@@ -1,7 +1,6 @@
 from django.contrib import admin
 from . import models
-#ßßfrom .models import User, Patient, Parent, Conversation, UserProfile, Question, Response
-from .models import *
+from .models import User, Patient, Parent, Conversation, UserProfile, Notification, FriendRequest,Question,Response
 
 # Register your models here.
 admin.site.register(models.Question)
@@ -48,4 +47,20 @@ class ConversationAdmin(admin.ModelAdmin):
     filter_vertical = ('users','messages')
     list_display = [
         'id'
+    ]
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for notifications."""
+
+    list_display = [
+        'id', 'title', 'description', 'created', 'viewed', 'user'
+    ]
+
+@admin.register(FriendRequest)
+class FriendRequestAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for friend requests."""
+
+    list_display = [
+        'id','sender', 'receiver', 'is_accepted'
     ]

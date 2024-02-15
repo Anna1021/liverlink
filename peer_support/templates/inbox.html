@@ -1,0 +1,31 @@
+{% extends 'base_content.html' %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <h3 class="m-b-50 heading-line pt-3">Notifications <i class="fa fa-bell text-muted"></i></h3>
+    <form action="{% url 'clear_notifications' %}" method="post" onsubmit="return confirm('Are you sure you want to clear all?')">
+        {% csrf_token %}
+        <button class="m-b-50 btn btn-danger btn-sm">Clear all</button>
+    </form> 
+    {% for notification in notifications|dictsortreversed:"created" %}
+        <div class="notification-list d-flex justify-content-between">
+            <div class="notification-list_content">
+                <div class="notification-list_img">
+                    <img src="https://www.icegif.com/wp-content/uploads/2022/01/icegif-788.gif" alt="user">
+                </div>
+                <div class="notification-list_detail">
+                    <p><b>{{ notification.title }}</b></p>
+                    <p class="subtext">{{ notification.description }}</p>
+                    <p class="subtext"><small>{{ notification.created }}</small></p>
+                </div>
+            </div>
+            <div class="d-flex align-items-center">
+                {% if notification.title == 'Friend Request' %}
+                    <button class="btn btn-success accept-request" onclick="window.location.href='/accept_friend_request/{{ notification.friend_request.id }}/{{ notification.id }}';"><i class="bi bi-check"></i></button>
+                    &nbsp;
+                {% endif %}
+                <button class="btn btn-danger decline" onclick="window.location.href='/delete_notification/{{ notification.id }}';"><i class="bi bi-x"></i></button>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
