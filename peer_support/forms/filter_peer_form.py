@@ -3,11 +3,11 @@ from peer_support.models import User
 from django.utils import timezone
 from datetime import timedelta
 from peer_support.models.model_choices import GENDER_CHOICES, ETHNICITY_CHOICES, LANGUAGE_CHOICES, COUNTRY_CHOICES, HOSPITAL_CHOICES
-from peer_support.forms.form_choices import CONDITION_CHOICES
+from peer_support.forms.form_choices import CONDITION_CHOICES, USER_TYPE_CHOICES
 
 class FilterPeerForm(forms.Form):
     """Form enabling the filtering of users"""
-    USER_TYPE_CHOICES=[('patient','Patient'), ('parent', 'Parent')]
+    USER_TYPE_CHOICES = USER_TYPE_CHOICES[1:]
     ALL_CHOICE = [('any', 'Any')]
 
     user_type=forms.MultipleChoiceField(choices=USER_TYPE_CHOICES,widget=forms.CheckboxSelectMultiple,required=False)
@@ -67,7 +67,7 @@ class FilterPeerForm(forms.Form):
         child_condition =self.cleaned_data.get('child_condition')
         combined_queryset = User.objects.none()
 
-        if "patient" in user_type:
+        if "PT" in user_type:
             patients = User.objects.filter(patient__isnull=False)
             if age_of_diagnosis_min is not None:
                 patients = patients.filter(patient__age_of_diagnosis__gte=age_of_diagnosis_min)
@@ -77,7 +77,7 @@ class FilterPeerForm(forms.Form):
                 patients = patients.filter(patient__condition__icontains=condition)
             combined_queryset = combined_queryset | patients
 
-        if "parent" in user_type:
+        if "PR" in user_type:
             parents = User.objects.filter(parent__isnull=False)
             if child_age_of_diagnosis_min is not None:
                 parents = parents.filter(parent__child_age_of_diagnosis__gte=child_age_of_diagnosis_min)

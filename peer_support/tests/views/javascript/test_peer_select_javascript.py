@@ -40,7 +40,7 @@ class PeerSelectJavascriptTest(StaticLiveServerTestCase):
         dropdown_button = self.selenium.find_element(By.XPATH, "//button[@id='dropdownMenuButton']")
         dropdown_button.click()
 
-        patient_checkbox = self.selenium.find_element(By.XPATH, '//input[@type="checkbox" and @value="patient"]')
+        patient_checkbox = self.selenium.find_element(By.XPATH, '//input[@type="checkbox" and @value="Patient"]')
         if not patient_checkbox.is_selected():
             patient_checkbox.click()
 
@@ -49,7 +49,7 @@ class PeerSelectJavascriptTest(StaticLiveServerTestCase):
         )
         self.assertTrue(age_of_diagnosis_min_field.is_displayed(), "age_of_diagnosis_min field is not visible")
 
-        parent_checkbox = self.selenium.find_element(By.XPATH, '//input[@type="checkbox" and @value="parent"]')
+        parent_checkbox = self.selenium.find_element(By.XPATH, '//input[@type="checkbox" and @value="Parent"]')
         if not parent_checkbox.is_selected():
             parent_checkbox.click()
 

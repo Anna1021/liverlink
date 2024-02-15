@@ -40,7 +40,7 @@ class FilterPeerFormTestCase(TestCase):
     
     def test_filter_by_user_type_patient(self):
         form_data = self.showAll
-        form_data['user_type'] = ['patient']
+        form_data['user_type'] = ['PT']
         form = FilterPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
@@ -54,7 +54,7 @@ class FilterPeerFormTestCase(TestCase):
     
     def test_filter_by_user_type_parent(self):
         form_data = self.showAll
-        form_data['user_type'] = ['parent']
+        form_data['user_type'] = ['PR']
         form = FilterPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
@@ -154,7 +154,7 @@ class FilterPeerFormTestCase(TestCase):
     def test_patient_age_of_dio_min(self):
         min_age = 3
         form_data = self.showAll
-        form_data['user_type'] = ['patient']       
+        form_data['user_type'] = ['PT']       
         form_data['age_of_diagnosis_min'] = min_age
         form = FilterPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -165,7 +165,7 @@ class FilterPeerFormTestCase(TestCase):
     def test_patient_age_of_dio_max(self):
         max_age = 15
         form_data = self.showAll
-        form_data['user_type'] = ['patient']       
+        form_data['user_type'] = ['PT']       
         form_data['age_of_diagnosis_max'] = max_age
         form = FilterPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -176,7 +176,7 @@ class FilterPeerFormTestCase(TestCase):
     def test_patient_condition(self):
         condition = "Haemochromatosis"
         form_data = self.showAll
-        form_data['user_type'] = ['patient']        
+        form_data['user_type'] = ['PT']        
         form_data['condition'] = condition
         form = FilterPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -187,7 +187,7 @@ class FilterPeerFormTestCase(TestCase):
     def test_parent_child_age_of_dio_min(self):
         min_age = 5
         form_data = self.showAll
-        form_data['user_type'] = ['parent']        
+        form_data['user_type'] = ['PR']        
         form_data['child_age_of_diagnosis_min'] = min_age
         form = FilterPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -198,7 +198,7 @@ class FilterPeerFormTestCase(TestCase):
     def test_parent_child_age_of_dio_max(self):
         max_age = 15
         form_data = self.showAll
-        form_data['user_type'] = ['parent']
+        form_data['user_type'] = ['PR']
         form_data['child_age_of_diagnosis_max'] = max_age
         form = FilterPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -209,7 +209,7 @@ class FilterPeerFormTestCase(TestCase):
     def test_parent_child_condition(self):
         child_condition = "Cirrhosis"
         form_data = self.showAll
-        form_data['user_type'] = ['parent']
+        form_data['user_type'] = ['PR']
         form_data['child_condition'] = child_condition
         form = FilterPeerForm(data=form_data)
         self.assertTrue(form.is_valid())

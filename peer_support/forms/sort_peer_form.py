@@ -1,17 +1,11 @@
 from django import forms
 from peer_support.models import Parent, Patient, User
+from .form_choices import SORT_USER_CHOICES
 
 class SortPeerForm(forms.Form):
     """Form enabling the sorting of users"""
-    SORT_CHOICES = [
-        ('', 'Best Match'), 
-        ('username_asc', 'Username Ascending'),
-        ('username_desc', 'Username Descending'),
-        ('age_asc', 'Age Ascending'),
-        ('age_desc', 'Age Descending'),
-    ]
 
-    sort_by = forms.ChoiceField(choices=SORT_CHOICES,required=False,label="Sort by")
+    sort_by = forms.ChoiceField(choices=SORT_USER_CHOICES,required=False,label="Sort by")
     
     def calculate_match_score(self, current_user, other_user):
         score = 0
