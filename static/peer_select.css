@@ -1,0 +1,6 @@
+.success_button {
+    background-color: #2cad6d;
+    color: #fff;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
