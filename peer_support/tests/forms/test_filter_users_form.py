@@ -38,6 +38,29 @@ class FilterPeerFormTestCase(TestCase):
         self.assertIn('gender', form.fields)
         self.assertIn('country', form.fields)
     
+    def test_form_validity(self):
+        form_data = {
+            'user_type': ['PT', 'PR'],
+            'gender': ['M', 'F'],
+            'language': 'fr',
+            'ethnicity': 'BD',
+            'location': 'BD',
+            'hospital': 'Guy’s and St Thomas’ NHS Foundation Trust',
+            'min_age': 18,
+            'max_age': 65
+        }
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_show_all(self):
+        form = FilterPeerForm(data=self.showAll)
+        self.assertTrue(form.is_valid(), "Form should be valid with 'show all' settings")
+
+        results = form.filter_users(self.users)
+        expected_user_count = self.users.count()
+        self.assertEqual(results.count(), expected_user_count, f"Expected {expected_user_count} users, but got {results.count()}")
+
+
     def test_filter_by_user_type_patient(self):
         form_data = self.showAll
         form_data['user_type'] = ['PT']
@@ -286,3 +309,5 @@ class FilterPeerFormTestCase(TestCase):
         form_data['child_age_of_diagnosis_max'] = -7 
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
+
+    
