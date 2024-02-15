@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import render,reverse,redirect
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from peer_support.models import Conversation
@@ -18,7 +18,8 @@ class ConversationView(LoginRequiredMixin, FormView):
         current_user = request.user
         if current_user not in conversation.users.all():
             messages.error(request,"You do not have access to this conversation.")
-            return reverse_lazy("conversation")
+            context = {'user_conversations':request.user.sort_conversations()}
+            return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
         form = MessageForm(conversation,user=current_user)
         context = {"form":form, 'conversation':conversation,'user_conversations':request.user.sort_conversations()}
         return render(request,self.template_name,context)

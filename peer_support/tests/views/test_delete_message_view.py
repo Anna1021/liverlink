@@ -35,7 +35,23 @@ class DeleteMessageViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'conversation.html')
 
-    def test_successful_delete_message_for_all(self):
+    def test_successful_delete_message_for_all_individually(self):
+        visible_to_before = self.message.visible_to.count()
+        messages_before = Message.objects.count()
+        response = self.client.get(self.url,follow=True)
+        self.client.logout()
+        other_user = self.user = User.objects.get(username='@janedoe')
+        self.client.login(username=other_user.username, password="Password123")
+        response = self.client.get(self.url,follow=True)
+        visible_to_after = self.message.visible_to.count()
+        messages_after = Message.objects.count()
+        self.assertEqual(visible_to_after,visible_to_before-2)
+        self.assertEqual(messages_after,messages_before-1)
+        redirect_url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')
+
+    def test_successful_delete_message_for_all_at_once(self):
         visible_to_before = self.message.visible_to.count()
         messages_before = Message.objects.count()
         response = self.client.get(self.url,follow=True)
