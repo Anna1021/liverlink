@@ -8,7 +8,6 @@ def questionPage(request, id):
     reply_form = NewReplyForm()
 
     if request.method == 'POST':
-        try:
             response_form = NewResponseForm(request.POST)
             if response_form.is_valid():
                 response = response_form.save(commit=False)
@@ -16,10 +15,6 @@ def questionPage(request, id):
                 response.question = Question(id=id)
                 response.save()
                 return redirect('/question/'+str(id)+'#'+str(response.id))
-        except Exception as e:
-            print(e)
-            raise
-
     question = Question.objects.get(id=id)
     context = {
         'question': question,

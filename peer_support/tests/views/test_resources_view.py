@@ -6,6 +6,7 @@ from peer_support.models import User
 
 
 class ResourcesViewTest(TestCase):
+    """Tests of the Resources view."""
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json'

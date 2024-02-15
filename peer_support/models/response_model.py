@@ -3,6 +3,7 @@ from django.db import models
 from.question_model import Question
 
 class Response(models.Model):
+    """model used for responses"""
     user = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, null=False, on_delete=models.CASCADE, related_name='responses')
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
@@ -14,4 +15,5 @@ class Response(models.Model):
         return self.body
 
     def get_responses(self):
+        """return the response"""
         return Response.objects.filter(parent=self)

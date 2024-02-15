@@ -2,6 +2,7 @@ from django.test import TestCase
 from peer_support.forms import NewQuestionForm
 
 class QuestionFormTest(TestCase):
+    """Unit tests of the Question form."""
     def setUp(self):
         self.form_input = {
             'title': 'Test Question',

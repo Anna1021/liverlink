@@ -3,23 +3,29 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from peer_support.forms import NewReplyForm
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from peer_support.models import Question, Response
+from peer_support.forms import NewReplyForm
 
 @login_required(login_url='log_in')
 def replyPage(request):
+    """reply to the question"""
     if request.method == 'POST':
-        try:
-            form = NewReplyForm(request.POST)
-            if form.is_valid():
-                question_id = request.POST.get('question')
-                parent_id = request.POST.get('parent')
-                reply = form.save(commit=False)
-                reply.user = request.user
-                reply.question = Question(id=question_id)
+        form = NewReplyForm(request.POST)
+        if form.is_valid():
+            question_id = request.POST.get('question')
+            parent_id = request.POST.get('parent')
+            reply = form.save(commit=False)
+            reply.user = request.user
+            reply.question = Question(id=question_id)
+            if parent_id:
                 reply.parent = Response(id=parent_id)
-                reply.save()
-                return redirect('/question/'+str(question_id)+'#'+str(reply.id))
-        except Exception as e:
-            print(e)
-            raise
-
-    return render(request, 'resources.html')
+            reply.save()
+            return redirect(f'/question/{question_id}#{reply.id}')
+        else:
+            return render(request, 'resources.html', {'form': form})
+    else:
+        form = NewReplyForm()
+        
+    return render(request, 'resources.html', {'form': form})

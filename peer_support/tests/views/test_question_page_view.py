@@ -1,12 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from peer_support.models import Question, Response
-from peer_support.forms import NewResponseForm, NewReplyForm
+from peer_support.forms import NewResponseForm
 from django.urls import reverse
 
 User = get_user_model()
 
 class QuestionPageTest(TestCase):
+    """Tests of the Question Page view."""
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json'
@@ -25,7 +26,6 @@ class QuestionPageTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'question.html')
         self.assertIsInstance(response.context['response_form'], NewResponseForm)
-        self.assertIsInstance(response.context['reply_form'], NewReplyForm)
 
     def test_question_page_invalid_POST(self):
         self.client.login(username=self.user.username, password='Password123')

@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 
 
 class ResponseModelTestCase(TestCase):
+    """Unit tests for the Response model."""
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json'
@@ -87,6 +88,10 @@ class ResponseModelTestCase(TestCase):
         self.assertIsNotNone(response.created_at)
         self.assertIsNotNone(response.updated_at)
         self.assertLessEqual(response.created_at, response.updated_at)
+
+    def test_question_string_representation(self):
+        response = Response.objects.get(id=1)
+        self.assertEqual(str(response), 'This is a test response.')
 
     def _assert_user_is_valid(self):
         try:

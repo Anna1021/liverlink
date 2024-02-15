@@ -2,19 +2,29 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.models import Question, Response
+from peer_support.forms import NewReplyForm
+from peer_support.tests.helpers import reverse_with_next
 
 User = get_user_model()
 class ReplyPageTest(TestCase):
+    """Tests of the Reply Page view."""
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json'
     ]
 
     def setUp(self):
-        self.url = reverse('resources')
+        self.url = reverse('reply')
         self.user = User.objects.get(username='@johndoe')
+       
         self.question = Question.objects.create(title='Test Question', body='Test Body', author=self.user)
         self.response = Response.objects.create(body='Test Response', user=self.user, question=self.question)
+        self.response_id = Response.objects.get(body='Test Response', user=self.user, question=self.question).id
+        self.reply_form_data = {
+            'body': 'Test Reply Body',
+            'question': self.question.id,
+            'parent': self.response_id  
+        }
 
     def test_access_page_logged_in(self):
         self.client.login(username=self.user.username, password='Password123')
@@ -22,38 +32,68 @@ class ReplyPageTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'resources.html')
 
-    def test_post_valid_reply(self):
+
+    def test_get_reply(self):
         self.client.login(username=self.user.username, password='Password123')
-        form_data = {
-            'body': 'This is a valid reply.',
-            'question': self.question.id,
-            'parent': self.response.id
-        }
-        response = self.client.post(self.url, form_data)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_valid_reply_creation(self):
+        self.client.login(username=self.user.username, password='Password123')
+        response_count_before = Response.objects.count()
+        response = self.client.post(self.url, self.reply_form_data)
+        response_count_after = Response.objects.count()
+        self.assertEqual(response_count_after, response_count_before + 1)
         new_reply = Response.objects.latest('id')
-        expected_url = f'/question/{self.question.id}#{new_reply.id}'
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(new_reply.parent, self.response)
+        question_detail_url = reverse('question', kwargs={'id': self.question.id})
+        expected_redirect_url = f'{question_detail_url}#{new_reply.id}'
+        self.assertRedirects(response, expected_redirect_url, status_code=302, target_status_code=200)
+        self.assertEqual(new_reply.body, self.reply_form_data['body'])
+        self.assertEqual(new_reply.user, self.user)
+        self.assertEqual(new_reply.question, self.question)
 
-
-    def test_post_invalid_reply(self):
+    def test_invalid_reply_creation(self):
         self.client.login(username=self.user.username, password='Password123')
-        form_data = {
-            'body': '',
+        response_count_before = Response.objects.count()
+        invalid_reply_form_data = {
+            'body': '', 
             'question': self.question.id,
-            'parent': self.response.id
+            'parent': self.response_id
         }
-        response = self.client.post(self.url, form_data)
+        response = self.client.post(self.url, invalid_reply_form_data)
+        response_count_after = Response.objects.count()
+        self.assertEqual(response_count_after, response_count_before)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'resources.html')
         self.assertIn('form', response.context)
         form = response.context['form']
         self.assertFalse(form.is_valid())
+        self.assertIn('body', form.errors)  
+        self.assertEqual(form.errors['body'], ['This field is required.'])
 
-    def test_post_invalid_reply(self):
+    def test_reply_creation_with_parent(self):
         self.client.login(username=self.user.username, password='Password123')
-        form_data = {
-            'body': '',
-            'question': self.question.id,
-            'parent': self.response.id
-        }
-        response = self.client.post(self.url, form_data)
-        self.assertEqual(response.status_code, 200)
+        reply_form_data_with_parent = self.reply_form_data.copy()
+        reply_form_data_with_parent['parent'] = self.response_id  
+        response = self.client.post(self.url, reply_form_data_with_parent)
+        new_reply = Response.objects.latest('id')
+        self.assertEqual(new_reply.parent.id, self.response_id)
+        self.assertTrue(new_reply.parent, "The reply should have a parent.")
+        expected_redirect_url = f'/question/{self.question.id}#{new_reply.id}'
+        self.assertRedirects(response, expected_redirect_url, status_code=302, target_status_code=200)
+
+    def test_reply_creation_without_parent(self):
+        self.client.login(username=self.user.username, password='Password123')
+        reply_form_data_without_parent = self.reply_form_data.copy()
+        reply_form_data_without_parent['parent'] = ''  
+        response = self.client.post(self.url, reply_form_data_without_parent)
+        new_reply = Response.objects.latest('id')
+        self.assertIsNone(new_reply.parent)
+        expected_redirect_url = f'/question/{self.question.id}#{new_reply.id}'
+        self.assertRedirects(response, expected_redirect_url, status_code=302, target_status_code=200)
+
+
+
+
