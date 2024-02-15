@@ -20,12 +20,12 @@ $(document).ready(function() {
         $("input[name='user_type']").each(function() {
             if ($(this).is(':checked')) {
                 var userType = $(this).val(); // 'patient' or 'parent'
-                if (userType === 'patient') {
+                if (userType === 'PT') {
                     // Show patient-related fields
                     $('#id_age_of_diagnosis_min').parent().show();
                     $('#id_age_of_diagnosis_max').parent().show();
                     $('#id_condition').parent().show();
-                } else if (userType === 'parent') {
+                } else if (userType === 'PR') {
                     // Show parent-related fields
                     $('#id_child_age_of_diagnosis_min').parent().show();
                     $('#id_child_age_of_diagnosis_max').parent().show();
