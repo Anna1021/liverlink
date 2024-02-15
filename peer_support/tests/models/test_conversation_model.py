@@ -33,11 +33,14 @@ class ConversationModelTestCase(TestCase):
     def test_correct_internal_group_name(self):
         self.assertIsNone(self.group_conversation.name)
 
-    
-
-    def test_correct_group_name_displayed(self):
+    def test_correct_unset_group_name_displayed(self):
         display = str(self.group_conversation)
         self.assertEqual(display,"@johndoe, @peterpickles, @petrapickles")
+
+    def test_correct_set_group_name_displayed(self):
+        self.group_conversation.name = 'test'
+        display = str(self.group_conversation)
+        self.assertEqual(display,"test")
 
     # def test_cannot_add_user_to_individual_chat(self):
     #     other_user=User.objects.get(pk=3)
@@ -60,6 +63,12 @@ class ConversationModelTestCase(TestCase):
         self.conversation.send(new_message)
         self.assertEqual(self.conversation.messages.count(),2)
 
+    def test_sending_messages_updates_last_updated(self):
+        time_before = self.conversation.last_updated
+        new_message = Message.objects.get(pk=2)
+        self.conversation.send(new_message)
+        self.assertNotEqual(time_before,self.conversation.last_updated)
+
     def test_user_not_in_group_when_user_deleted(self):
         self.assertIn(self.user,self.group_conversation.users.all())
         User.objects.filter(username='@johndoe').delete()
@@ -72,20 +81,7 @@ class ConversationModelTestCase(TestCase):
         after_count = Conversation.objects.count()
         self.assertEqual(after_count,before_count-1)
     
-
-    # def test_sending_updates_non_sender_notifications(self):
-    #     new_message = Message.objects.get(pk=2)
-    #     other_user = User.objects.get(pk=2)
-    #     self.assertNotIn(self.conversation,other_user.unread_conversations.all())
-    #     self.conversation.send(new_message)
-    #     self.assertIn(self.conversation,other_user.unread_conversations.all())
-        
-    # def test_sending_does_not_update_sender_notifications(self):
-    #     new_message = Message.objects.get(pk=2)
-    #     self.assertNotIn(self.conversation,self.user.unread_conversations.all())
-    #     self.conversation.send(new_message)
-    #     self.assertNotIn(self.conversation,self.user.unread_conversations.all())
-
+    
     
 
     
