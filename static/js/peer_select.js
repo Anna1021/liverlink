@@ -38,11 +38,11 @@ $(document).ready(function () {
         $("input[name='user_type']").each(function () {
             if ($(this).is(':checked')) {
                 var userType = $(this).val(); 
-                if (userType === 'patient') {
+                if (userType === 'PT') {
                     $('#id_age_of_diagnosis_min').parent().show();
                     $('#id_age_of_diagnosis_max').parent().show();
                     $('#id_condition').parent().show();
-                } else if (userType === 'parent') {
+                } else if (userType === 'PR') {
                     $('#id_child_age_of_diagnosis_min').parent().show();
                     $('#id_child_age_of_diagnosis_max').parent().show();
                     $('#id_child_condition').parent().show();
