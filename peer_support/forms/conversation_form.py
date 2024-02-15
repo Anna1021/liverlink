@@ -12,10 +12,14 @@ class ConversationForm(forms.ModelForm):
         """Construct new form instance with a user instance."""
         
         super().__init__(**kwargs)
-        self.fields['users'].queryset = User.objects.exclude(username=user.username)
+        self.fields['users'].queryset = user.friends.all()
 
     def save(self,current_user,group=False):
         """Create a new conversation or fetch an existing one"""
+        if not self.is_valid():
+            for field, errors in self.errors.items():
+                # Iterate through each field and its corresponding error messages
+                print(f"Field '{field}': {', '.join(errors)}")
         super().save(commit=False)
         new_users = self.cleaned_data.get('users')
         new_users |= User.objects.filter(username = current_user.username)

@@ -21,6 +21,7 @@ class MessageFormTestCase(TestCase):
         self.form_input = {
             'users' : self.other_users,
         }
+        self.user.friends.set(self.other_users)
 
     def test_form_has_necessary_fields(self):
         form = ConversationForm(self.user)
