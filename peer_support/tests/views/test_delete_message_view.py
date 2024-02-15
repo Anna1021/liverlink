@@ -54,11 +54,7 @@ class DeleteMessageViewTestCase(TestCase):
     def test_successful_delete_message_for_all_at_once(self):
         visible_to_before = self.message.visible_to.count()
         messages_before = Message.objects.count()
-        response = self.client.get(self.url,follow=True)
-        self.client.logout()
-        other_user = self.user = User.objects.get(username='@janedoe')
-        self.client.login(username=other_user.username, password="Password123")
-        response = self.client.get(self.url,follow=True)
+        response = self.client.get(self.url,follow=True,data={'delete_all':':3'})
         visible_to_after = self.message.visible_to.count()
         messages_after = Message.objects.count()
         self.assertEqual(visible_to_after,visible_to_before-2)
