@@ -41,7 +41,7 @@ class Conversation(models.Model):
     def delete(self):
         """Delete conversation and its messages"""
         for message in self.messages.all():
-            message.delete() 
+            message.delete(self.users.all()) 
         Conversation.objects.filter(pk=self.pk).delete()  
 
 class GroupConversation(Conversation):

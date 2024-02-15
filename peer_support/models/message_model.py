@@ -12,10 +12,9 @@ class Message(models.Model):
 
     def delete(self,users):
         """Delete message"""
-        self.visible_to.remove(users)
-        print(self.visible_to.all())
+        for user in users:
+            self.visible_to.remove(user)
         if self.visible_to.count() == 0:
-            print('wow')
             Message.objects.filter(pk=self.pk).delete()
 
     def __str__(self):

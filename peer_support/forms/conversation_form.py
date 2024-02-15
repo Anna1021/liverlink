@@ -6,7 +6,7 @@ class ConversationForm(forms.ModelForm):
     class Meta:
         model = Conversation
         fields = ['users']
-        users = forms.ModelMultipleChoiceField(queryset=User.objects.all(),widget=forms.CheckboxSelectMultiple())
+        users = forms.ModelMultipleChoiceField(queryset=User.objects.all(),widget=forms.CheckboxSelectMultiple(),required=True)
 
     def __init__(self, user, **kwargs):
         """Construct new form instance with a user instance."""
@@ -25,6 +25,13 @@ class ConversationForm(forms.ModelForm):
                 filtered = User.objects.filter(username=user.username)
                 existing = existing.intersection(set(Conversation.objects.filter(users__in=filtered)))
             print(existing)
+            ctr = 0
+            while ctr < len(existing):
+                convo = list(existing)[ctr]
+                if convo.as_group() is not None:
+                    existing.remove(convo)
+                else:
+                    ctr+=1
             if len(existing) > 0:
                 conversation = list(existing)[0]
             else:
