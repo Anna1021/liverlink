@@ -12,7 +12,7 @@ class DeleteMessageView(LoginRequiredMixin,View):
     def get(self,request,conversation_id,message_id):
         conversation = Conversation.objects.get(id=conversation_id)
         message = Message.objects.get(id=message_id)
-        if request.POST.get('delete_all'):
+        if request.GET.get('delete_all'):
             users = conversation.users.all()
         else:
             users = conversation.users.filter(username=request.user.username)

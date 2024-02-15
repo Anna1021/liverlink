@@ -38,18 +38,10 @@
         <div class="row message-bubble other-message">
         {% endif %}
         
-        <div class="col-md-9">{{message}}</div>
-        <div class="col-md-3 nav-item dropdown">
-            <a class="nav-link" href="#" id="message-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi-three-dots-vertical"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-account-dropdown">
-                <li><a class="dropdown-item" href="{% url 'delete_message' conversation.id message.id %}">Delete for me</a></li>
-                <li><a class="dropdown-item" name="delete_all" value=":3" href="{% url 'delete_message' conversation.id message.id %}">Delete for everyone</a></li>
-            </ul>
+            <div class="col-md-9">{{message}}</div>
+            {% include 'partials/message_menu.html' %}
         </div>
         
-        </div>
         {% endif %}
     {% empty %}
         Type out your first message in the box below!
