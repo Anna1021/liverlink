@@ -7,7 +7,7 @@ class InboxView(LoginRequiredMixin, View):
     """Display the current user's inbox."""
 
     def get(self, request):
-
+        """Display the current user's inbox."""
         notifications = Notification.objects.filter(user=request.user)
         unviewed_notifications = Notification.objects.filter(
             user=request.user, viewed=False)

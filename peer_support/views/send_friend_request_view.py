@@ -4,6 +4,7 @@ from peer_support.models import Notification, User, FriendRequest
 
 @login_required
 def send_friend_request(request, user_id):
+    """Send a friend request and create a notification."""
     receiver = User.objects.get(id=user_id)
     FriendRequest.objects.create(sender=request.user, receiver=receiver)
     Notification.objects.create(

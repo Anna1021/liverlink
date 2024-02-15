@@ -4,6 +4,7 @@ from peer_support.models import Notification
 
 @login_required
 def clear_notifications(request):
+    """Clear all notifications for the current user."""
     notifications = Notification.objects.filter(user=request.user)
     notifications.delete()
 

@@ -10,9 +10,8 @@ $(document).ready(function () {
             url : sendFriendRequestUrl.replace('0', userId),
             type: 'GET', 
             success: function() {
-                addButton.prop('disabled', true);
-                addButton.removeClass('btn-secondary').addClass('btn-success');
-                addButton.text('✓ Friend added'); 
+                addButton.removeClass('btn-secondary').addClass('success_button');
+                addButton.text('✓ Friend request sent'); 
             },
             error: function(xhr) {
                 console.error(xhr.responseText);
@@ -21,7 +20,6 @@ $(document).ready(function () {
         });
     }
     
-    // Initially hide all conditional fields
     function hideAllConditionalFields() {
         $('#id_age_of_diagnosis_min').parent().hide();
         $('#id_age_of_diagnosis_max').parent().hide();
@@ -33,22 +31,18 @@ $(document).ready(function () {
 
     hideAllConditionalFields();
 
-    // Function to show/hide fields based on the checkbox selection
     function updateFieldVisibility() {
-        // Hide all fields initially
         hideAllConditionalFields();
 
         // Check each user type checkbox to determine which fields to show
         $("input[name='user_type']").each(function () {
             if ($(this).is(':checked')) {
-                var userType = $(this).val(); // 'patient' or 'parent'
+                var userType = $(this).val(); 
                 if (userType === 'patient') {
-                    // Show patient-related fields
                     $('#id_age_of_diagnosis_min').parent().show();
                     $('#id_age_of_diagnosis_max').parent().show();
                     $('#id_condition').parent().show();
                 } else if (userType === 'parent') {
-                    // Show parent-related fields
                     $('#id_child_age_of_diagnosis_min').parent().show();
                     $('#id_child_age_of_diagnosis_max').parent().show();
                     $('#id_child_condition').parent().show();

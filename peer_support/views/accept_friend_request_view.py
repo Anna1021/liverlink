@@ -5,6 +5,7 @@ from peer_support.models import Notification, FriendRequest
 
 @login_required
 def accept_friend_request(request, friend_request_id, notification_id):
+    """Accept a friend request and create a notification."""
     friend_request = FriendRequest.objects.get(id=friend_request_id)
     friend_request.is_accepted = True
     friend_request.save()
