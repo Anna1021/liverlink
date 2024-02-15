@@ -25,6 +25,7 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
         super().setUpClass()
         firefox_options = Options()
         firefox_options.add_argument("--headless") 
+        firefox_options.add_argument("--window-size=1920,1080") 
         service = Service(GeckoDriverManager().install())
         service.log_path = 'NUL'
         cls.selenium = WebDriver(service=Service(), options=firefox_options)
