@@ -26,6 +26,7 @@ class User(AbstractUser):
     ethnicity = models.CharField(max_length=50,choices=ETHNICITY_CHOICES, blank=True)
     language = models.CharField(max_length=50,choices=LANGUAGE_CHOICES, blank=True)
     bio = models.CharField(max_length=500, blank=True)
+    friends = models.ManyToManyField('self', symmetrical=True, blank=True)
     conversations = models.ManyToManyField('Conversation',blank=True)
 
     class Meta:

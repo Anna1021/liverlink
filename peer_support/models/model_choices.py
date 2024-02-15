@@ -266,3 +266,21 @@ HOSPITAL_CHOICES = [
     ("Yorkshire Ambulance Service NHS Trust", "Yorkshire Ambulance Service NHS Trust"),
     ("Other", "Other"),
 ]
+
+THEME_CHOICES = [
+('DF', 'Default theme'),
+('LM', 'Light mode'),
+('DM', 'Dark mode'),
+]
+
+FONT_CHOICES = [
+('DF', 'Default font'),
+('AR', 'Arial'),
+('CA', 'Calibri'),
+]
+
+FONT_SIZE_CHOICES = [
+('DF', 'Default size'),
+('LG', 'Large'),
+('XL', 'Extra large'),
+]
