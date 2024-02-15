@@ -18,13 +18,10 @@ class ConversationViewTestCase(TestCase):
     def setUp(self):
         self.conversation = Conversation.objects.get(pk=1)
         self.url = reverse('create_conversation')
-        self.redirect_url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
-        self.user = User.objects.get(username='@janedoe')
+        #self.redirect_url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
+        self.user = User.objects.get(username='@johndoe')
         self.client.login(username=self.user.username, password="Password123")
-        self.other_users = User.objects.filter(pk=2)
-        self.form_input = {
-            'users': self.other_users
-        }
+        self.other_users = [2]
 
     def test_create_conversation_url(self):
         self.assertEqual(self.url,'/create_conversation/')
@@ -38,9 +35,11 @@ class ConversationViewTestCase(TestCase):
         self.assertFalse(form.is_bound)
 
     def test_unsuccessful_conversation_creation(self):
-        self.form_input['users'] = User.objects.none()
+        form_input = {
+            'users':[]
+        }
         before_count = Conversation.objects.count()
-        response = self.client.post(self.url,data=self.form_input)
+        response = self.client.post(self.url,data=form_input)
         after_count = Conversation.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
@@ -50,15 +49,49 @@ class ConversationViewTestCase(TestCase):
         self.assertTrue(form.is_bound)
 
     def test_successful_direct_conversation_creation(self):
-        self.form_input['users'] = User.objects.filter(pk=3)
+        form_input = {
+            'users':[3]
+        }
+        form = ConversationForm(self.user,data=form_input)
+        self.assertTrue(form.is_valid())
         before_count = Conversation.objects.count()
-        response = self.client.post(self.url, data=self.form_input,follow=True)
+        response = self.client.post(self.url, data=form_input,follow=True)
         after_count = Conversation.objects.count()
         self.assertEqual(after_count, before_count+1)
         self.assertTemplateUsed(response, 'conversation.html')
-        self.assertRedirects(response, self.redirect_url, status_code=302, target_status_code=200)
+        self.assertRedirects(response, reverse('conversation',kwargs={'conversation_id':3}), status_code=302, target_status_code=200)
         conversation = Conversation.objects.get(pk=3)
-        self.assertEqual(conversation.users.all(),self.form_input['users'])
+        form = response.context['form']
+        self.assertTrue(isinstance(form, MessageForm))
+        self.assertFalse(form.is_bound)
+
+    def test_successful_direct_conversation_retrieval(self):
+        form_input = {
+            'users':self.other_users
+        }
+        before_count = Conversation.objects.count()
+        response = self.client.post(self.url, data=form_input,follow=True)
+        after_count = Conversation.objects.count()
+        self.assertEqual(after_count, before_count)
+        self.assertTemplateUsed(response, 'conversation.html')
+        self.assertRedirects(response, reverse('conversation',kwargs={'conversation_id':1}), status_code=302, target_status_code=200)
+        conversation = Conversation.objects.get(pk=1)
+        form = response.context['form']
+        self.assertTrue(isinstance(form, MessageForm))
+        self.assertFalse(form.is_bound)
+
+    def test_successful_group_conversation_creation(self):
+        form_input = {
+            'users':self.other_users,
+            'group':':3'
+        }
+        before_count = Conversation.objects.count()
+        response = self.client.post(self.url, data=form_input,follow=True)
+        after_count = Conversation.objects.count()
+        self.assertEqual(after_count, before_count+1)
+        self.assertTemplateUsed(response, 'conversation.html')
+        self.assertRedirects(response, reverse('conversation',kwargs={'conversation_id':3}), status_code=302, target_status_code=200)
+        conversation = Conversation.objects.get(pk=3)
         form = response.context['form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)

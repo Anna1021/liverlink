@@ -24,7 +24,6 @@ class ConversationForm(forms.ModelForm):
             for user in new_users:
                 filtered = User.objects.filter(username=user.username)
                 existing = existing.intersection(set(Conversation.objects.filter(users__in=filtered)))
-            print(existing)
             ctr = 0
             while ctr < len(existing):
                 convo = list(existing)[ctr]

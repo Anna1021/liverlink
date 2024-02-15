@@ -53,7 +53,6 @@ class MessageFormTestCase(TestCase):
         form = ConversationForm(self.user,data=self.form_input)
         before_count = Conversation.objects.count()
         conversation = form.save(self.user)
-        print(conversation.id)
         after_count = Conversation.objects.count()
         self.assertEqual(after_count, before_count+1)
         self.assertEqual(conversation.id,3)
