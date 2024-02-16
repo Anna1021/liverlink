@@ -28,4 +28,8 @@ urlpatterns = [
     path('profile/', views.ProfileUpdateView.as_view(), name='profile'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('conversation/<int:conversation_id>',views.ConversationView.as_view(),name="conversation"),
+    #post
+    path('create_post/', views.create_post, name='create_post'),
+    path('add_comment/<int:post_id>/', views.add_comment, name='add_comment'),
+    path('post/<int:post_id>/', views.post_detail, name='post_detail'),
 ]

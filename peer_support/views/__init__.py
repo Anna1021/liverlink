@@ -9,3 +9,5 @@ from .profile_update_view import ProfileUpdateView
 from .sign_up_view import SignUpView
 from .view_mixins import LoginProhibitedMixin
 from .conversation_view import ConversationView
+#post
+from .post_view import create_post, add_comment, post_detail

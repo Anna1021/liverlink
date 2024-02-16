@@ -25,3 +25,5 @@ class ParentAdmin(admin.ModelAdmin):
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio', 'child_condition', 'child_age_of_diagnosis'
     ]
+
+

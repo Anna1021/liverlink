@@ -5,3 +5,6 @@ from .parent_model import Parent
 from .patient_model import Patient
 from .message_model import Message
 from .conversation_model import Conversation, GroupConversation
+
+#post
+from .post_model import Post, PostComment
