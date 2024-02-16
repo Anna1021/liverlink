@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 from django.urls import reverse
 from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm
-from peer_support.helpers import login_prohibited
+#from peer_support.views.helpers import login_prohibited
 #post
 from peer_support.models import Post, PostComment
 from peer_support.forms import PostForm, CommentForm
