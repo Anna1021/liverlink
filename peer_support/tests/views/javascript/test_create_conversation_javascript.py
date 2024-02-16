@@ -1,13 +1,11 @@
 """Unit test of javascript in create_conversation view"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait,Select
 from selenium.webdriver.support import expected_conditions as EC
-#from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
 from peer_support.models import User
 from selenium.webdriver.common.keys import Keys
 
@@ -23,12 +21,10 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        firefox_options = Options()
-        firefox_options.add_argument("--headless") 
-        firefox_options.add_argument("--window-size=1920,1080") 
-        service = Service(GeckoDriverManager().install())
-        service.log_path = 'NUL'
-        cls.selenium = WebDriver(service=Service(), options=firefox_options)
+        options = Options()
+        options.add_argument("--headless") 
+        options.add_argument("--window-size=1920,1080") 
+        cls.selenium = WebDriver(service=Service(), options=options)
         cls.selenium.implicitly_wait(10)
         
     @classmethod
