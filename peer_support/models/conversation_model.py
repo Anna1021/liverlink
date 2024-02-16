@@ -5,6 +5,7 @@ class Conversation(models.Model):
     """Model used for direct conversations between two users"""
     users = models.ManyToManyField(User)
     messages = models.ManyToManyField(Message,blank=True)
+    last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         """Return a string representing the display name of the conversation"""
@@ -18,8 +19,7 @@ class Conversation(models.Model):
     def send(self,message):
         """Send message to the conversation"""
         self.messages.add(message)
-        # for user in self.users.exclude(username=message.sender.username):
-        #     user.update_unread_messages(message)
+        self.save()
 
     def as_group(self):
         """Return object as an instance of GroupConversation"""
@@ -39,7 +39,7 @@ class Conversation(models.Model):
     def delete(self):
         """Delete conversation and its messages"""
         for message in self.messages.all():
-            message.delete() 
+            message.delete(self.users.all()) 
         Conversation.objects.filter(pk=self.pk).delete()  
 
 class GroupConversation(Conversation):
