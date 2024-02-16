@@ -49,6 +49,9 @@ class MentorModelTestCase(TestCase):
         self.mentor.mentor_age_of_diagnosis = -1
         self._assert_mentor_is_invalid()
 
+    def test_mentor_referral_code_cannot_be_blank(self):
+        self.mentor.mentor_age_of_diagnosis = None
+        self._assert_mentor_is_invalid()
     
     def _assert_mentor_is_valid(self):
         try:

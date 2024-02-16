@@ -39,5 +39,5 @@ class ReferralAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for referrals."""
 
     list_display = [
-        'referrer','referred','code','claimed'
+        'referrer', 'code'
     ]
