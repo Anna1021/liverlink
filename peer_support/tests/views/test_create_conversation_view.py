@@ -18,7 +18,6 @@ class ConversationViewTestCase(TestCase):
     def setUp(self):
         self.conversation = Conversation.objects.get(pk=1)
         self.url = reverse('create_conversation')
-        #self.redirect_url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
         self.user = User.objects.get(username='@johndoe')
         self.client.login(username=self.user.username, password="Password123")
         self.user.friends.set(User.objects.exclude(pk=1))

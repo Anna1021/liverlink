@@ -20,8 +20,6 @@ class Conversation(models.Model):
         """Send message to the conversation"""
         self.messages.add(message)
         self.save()
-        # for user in self.users.exclude(username=message.sender.username):
-        #     user.update_unread_messages(message)
 
     def as_group(self):
         """Return object as an instance of GroupConversation"""

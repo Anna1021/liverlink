@@ -1,8 +1,6 @@
-from peer_support.tests.helpers import LogInTester
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.models import Message,Conversation,User
-from django.contrib.auth import get_user_model
 
 class DeleteMessageViewTestCase(TestCase):
     """Tests of the message deletion view"""

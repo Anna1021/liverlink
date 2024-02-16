@@ -1,9 +1,7 @@
-from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render,redirect
 from django.views.generic.edit import FormView
-from django.urls import reverse_lazy,reverse
-from peer_support.models import Conversation,User
+from django.urls import reverse
 from peer_support.forms import ConversationForm, MessageForm
 
 class CreateConversationView(LoginRequiredMixin, FormView):

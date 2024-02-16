@@ -32,16 +32,14 @@
     <div id="conversation">
     {% for message in conversation.messages.all %}
         {% if user in message.visible_to.all %}
-        {% if message.sender == user %}
-        <div class="row message-bubble self-message">
-        {% else %}
-        <div class="row message-bubble other-message">
-        {% endif %}
-        
+            {% if message.sender == user %}
+                <div class="row message-bubble self-message">
+            {% else %}
+                <div class="row message-bubble other-message">
+            {% endif %}
             <div class="col-md-9">{{message}}</div>
             {% include 'partials/message_menu.html' %}
         </div>
-        
         {% endif %}
     {% empty %}
         Type out your first message in the box below!
@@ -53,7 +51,7 @@
         <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
     </form>
     {% else %}
-    Pick a conversation or start a new conversation!
+        Pick a conversation or start a new conversation!
     {% endif %}
 </div>
 

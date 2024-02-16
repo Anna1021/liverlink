@@ -42,11 +42,6 @@ class ConversationModelTestCase(TestCase):
         display = str(self.group_conversation)
         self.assertEqual(display,"test")
 
-    # def test_cannot_add_user_to_individual_chat(self):
-    #     other_user=User.objects.get(pk=3)
-    #     self.conversation.add_user(other_user)
-    #     self.assertEqual(self.conversation.users.count(),2)
-
     def test_add_user_to_group(self):
         user2 = User.objects.get(pk=2)
         self.group_conversation.add_user(user2)
