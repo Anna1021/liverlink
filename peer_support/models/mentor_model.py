@@ -7,8 +7,8 @@ class Mentor(User):
     
     mentor_condition = models.CharField(max_length=50, blank=True, null=True)
     mentor_age_of_diagnosis = models.PositiveIntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
-    referral_code = models.CharField(blank=False, max_length=10)
-
+    referral_code = models.CharField(blank=True, max_length=10) 
+    
     class Meta:
         verbose_name = 'Mentor'
         verbose_name_plural = 'Mentors'

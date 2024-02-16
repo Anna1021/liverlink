@@ -1,5 +1,5 @@
 from django import forms
-from peer_support.models import User, Parent, Patient, Mentor
+from peer_support.models import User, Parent, Patient, Mentor, Referral
 from .helpers import NewPasswordMixin
 from .form_choices import USER_TYPE_CHOICES, CONDITION_CHOICES
 
@@ -69,8 +69,27 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 'mentor_condition': self.cleaned_data.get('mentor_condition'),
                 'mentor_age_of_diagnosis': self.cleaned_data.get('mentor_age_of_diagnosis'),
                 'referral_code': self.cleaned_data.get('referral_code')
+                # check all of the users to see if the inputted code matches their code
+                # change referrer of new mentor to other mentor
+                # if it is valid create new mentor
+                # if not display error message
             })
-            print(user_data)
             user = Mentor.objects.create_user(**user_data)
-
         return user
+    def clean_recipients(self):
+        data = self.cleaned_data["recipients"]
+
+    def clean_referral_code(self):
+        """Validation of referral code"""
+        print("cleaning")
+        print(self)
+        if self is not None:
+            referral_code = self.cleaned_data['referral_code']
+            print(referral_code)
+            try:
+                referral = Referral.objects.get(code=referral_code)
+            except Referral.DoesNotExist:
+                print("referral doesn't exist")
+                self.add_error('referral_code', "Please enter a valid referral code.")
+
+        return referral_code

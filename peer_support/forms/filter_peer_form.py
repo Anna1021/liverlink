@@ -1,5 +1,5 @@
 from django import forms
-from peer_support.models import User, Referral
+from peer_support.models import User
 from django.utils import timezone
 from datetime import timedelta
 from peer_support.models.model_choices import GENDER_CHOICES, ETHNICITY_CHOICES, LANGUAGE_CHOICES, COUNTRY_CHOICES, HOSPITAL_CHOICES

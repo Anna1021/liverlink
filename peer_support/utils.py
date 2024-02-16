@@ -30,13 +30,3 @@ def get_referral_code(user):
     else:
         return None
     
-def check_referral(referral_code):
-        """Validation of referral code"""
-        try:
-            referral = Referral.objects.get(code=referral_code)
-            if referral.is_valid():
-                return True
-            else:
-                return False
-        except Referral.DoesNotExist:
-            return False
