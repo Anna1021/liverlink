@@ -26,3 +26,4 @@ class ReferralModelTestCase(TestCase):
     def test_invalid_referrer(self):
         with self.assertRaises(TypeError):
             Referral.objects.create(referrer=None, code='XYZ456')
+            
