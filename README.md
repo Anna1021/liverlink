@@ -14,7 +14,7 @@ The members of the team are:
 The project is called `peer_support_network`.  It currently consists of a single app `peer_support`.
 
 ## Deployed version of the application
-The deployed version of the application can be found at [*enter url here*](*enter_url_here*).
+The deployed version of the application can be found at [*Peer_support_network*](*https://peersupport.pythonanywhere.com/*).
 
 ## Installation instructions
 To install the software and use it in your local development environment, you must first set up and activate a local development environment.  From the root of the project:
@@ -53,5 +53,4 @@ $ python3 manage.py test
 The packages used by this application are specified in `requirements.txt`
 
 Initial scaffolding by Jeroen Keppens
-
-https://emckclac-my.sharepoint.com/:w:/r/personal/k22007695_kcl_ac_uk/Documents/Sources.docx?d=w4b5451478d90421b82411597291b0083&csf=1&web=1&e=GOoBhi
+https://emckclac-my.sharepoint.com/:w:/r/personal/k22007695_kcl_ac_uk/Documents/Sources.docx?d=w4b5451478d90421b82411597291b0083&csf=1&web=1&e=P43xZq

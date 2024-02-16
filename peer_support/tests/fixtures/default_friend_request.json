@@ -1,0 +1,11 @@
+[
+    {
+        "model": "peer_support.friendrequest",
+        "pk": 1,
+        "fields": {
+            "sender": 1,
+            "receiver": 2,
+            "is_accepted": false
+        }
+    }
+]

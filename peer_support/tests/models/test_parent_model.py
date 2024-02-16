@@ -14,7 +14,8 @@ class ParentModelTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.parent = Parent.objects.get(username='@johndoe')
+        self.parent = Parent.objects.get(username='@alexsmith')
+        self.second_parent = Parent.objects.get(username='@sambennet')
 
     def test_valid_parent(self):
         self._assert_parent_is_valid()
@@ -24,16 +25,15 @@ class ParentModelTestCase(TestCase):
         self._assert_parent_is_valid()
 
     def test_child_condition_need_not_be_unique(self):
-        second_parent = Parent.objects.get(username='@janedoe')
-        self.parent.child_condition = second_parent.child_condition
+        self.parent.child_condition = self.second_parent.child_condition
         self._assert_parent_is_valid()
 
-    def test_child_condition_can_be_50_characters_long(self):
-        self.parent.child_condition = 'x' * 50
+    def test_child_condition_can_be_100_characters_long(self):
+        self.parent.child_condition = 'x' * 100
         self._assert_parent_is_valid()
 
-    def test_child_condition_cannot_be_over_50_characters_long(self):
-        self.parent.child_condition = 'x' * 51
+    def test_child_condition_cannot_be_over_100_characters_long(self):
+        self.parent.child_condition = 'x' * 101
         self._assert_parent_is_invalid()
 
     
@@ -42,8 +42,7 @@ class ParentModelTestCase(TestCase):
         self._assert_parent_is_valid()
 
     def test_child_age_of_diagnosis_need_not_be_unique(self):
-        second_parent = Parent.objects.get(username='@janedoe')
-        self.parent.child_age_of_diagnosis = second_parent.child_age_of_diagnosis
+        self.parent.child_age_of_diagnosis = self.second_parent.child_age_of_diagnosis
         self._assert_parent_is_valid()
 
     def test_child_age_of_diagnosis_cannot_be_negative(self):

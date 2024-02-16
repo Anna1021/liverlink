@@ -8,3 +8,9 @@ from .conversation_model import Conversation, GroupConversation
 
 #post
 from .post_model import Post, PostComment
+
+from .user_profile_model import UserProfile
+from .notification_model import Notification
+from .question_model import Question
+from .response_model import Response
+from .friend_request_model import FriendRequest

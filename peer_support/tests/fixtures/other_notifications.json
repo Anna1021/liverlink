@@ -1,0 +1,25 @@
+[
+    {
+        "model": "peer_support.notification",
+        "pk": 2,
+        "fields": {
+            "title": "Another Test Notification",
+            "description": "This is a another test notification",
+            "created": "2023-01-02 11:16:09.184106+01:00",
+            "viewed": false,
+            "user": 2,
+            "friend_request": 1
+        }
+    },
+    {
+        "model": "peer_support.notification",
+        "pk": 3,
+        "fields": {
+            "title": "Newest Notification",
+            "description": "This is the newest notification",
+            "created": "2024-01-02 11:16:09.184106+01:00",
+            "viewed": false,
+            "user": 1
+        }
+    }
+]

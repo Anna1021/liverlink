@@ -6,7 +6,7 @@
     <div class="row">
       <!-- left row -->
       <div class="col-md-3 mt-2">
-        {%include "left_navbar.html" %}
+        {%include "partials/left_navbar.html" %}
       </div>
       <!-- right row -->
       <div class="col-md-9 mt-2">
@@ -17,6 +17,8 @@
           <br>
           <a href="{% url 'add_comment' 0 %}">Add a new comment</a>  
           <!--  -->
+          {% block page %}
+          {% endblock %}
         </div>
       </div>
     </div>

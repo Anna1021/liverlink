@@ -1,0 +1,45 @@
+
+.scrollable-container {
+    max-height: 550px;
+    overflow-y: auto;
+    width: 752px;
+    word-wrap: break-word;
+    padding-right: 15px;
+}
+
+.question-list-item {
+    margin-bottom: 10px; /* Add some space between question items */
+}
+
+.question-list-item-title {
+    word-break: break-word;
+}
+
+.section {
+  background-color: #fff;
+  margin-bottom: 20px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.types-of-liver-disease h2 {
+  font-size: 1.5em;
+}
+
+.types-of-liver-disease table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.types-of-liver-disease th,
+.types-of-liver-disease td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.types-of-liver-disease th {
+  background-color: #f2f2f2;
+}
+
+
+

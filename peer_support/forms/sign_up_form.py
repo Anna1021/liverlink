@@ -1,27 +1,22 @@
 from django import forms
 from peer_support.models import User, Parent, Patient
 from .helpers import NewPasswordMixin
+from .form_choices import USER_TYPE_CHOICES, CONDITION_CHOICES
 
 class SignUpForm(NewPasswordMixin, forms.ModelForm):
     """Form enabling unregistered users to sign up."""
-
-    USER_TYPE_CHOICES = [
-        ('', '---------'),
-        ('PT', 'Patient'),
-        ('PR', 'Parent'),
-    ]
     
     user_type = forms.ChoiceField(initial='', choices=USER_TYPE_CHOICES, required=True)
-    condition = forms.CharField(required=False)
-    age_of_diagnosis = forms.IntegerField(required=False)
-    child_condition = forms.CharField(required=False)
-    child_age_of_diagnosis = forms.IntegerField(required=False)
+    condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
+    age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
+    child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
+    child_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
 
     class Meta:
         """Form options."""
 
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio']
+        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio']
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 3}),
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
@@ -39,6 +34,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             'date_of_birth': self.cleaned_data.get('date_of_birth'),
             'gender': self.cleaned_data.get('gender'),
             'location': self.cleaned_data.get('location'),
+            'hospital': self.cleaned_data.get('hospital'),
             'ethnicity': self.cleaned_data.get('ethnicity'),
             'language': self.cleaned_data.get('language'),
             'bio': self.cleaned_data.get('bio'),
@@ -51,7 +47,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
             })
             user = Patient.objects.create_user(**user_data)
-        elif user_type == 'PR':
+        else:
             user_data.update({
                 'child_condition': self.cleaned_data.get('child_condition'),
                 'child_age_of_diagnosis': self.cleaned_data.get('child_age_of_diagnosis'),

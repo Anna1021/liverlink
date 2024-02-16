@@ -1,13 +1,60 @@
-{% extends 'base_content.html' %}
-{% block content %}
-{% include 'partials/conversation_list.html' %}
+{% extends 'partials/conversation_menu.html' %}
+{% load static %}
+{% block convo %}
 {% if conversation %}
-{% for message in conversation.messages.all %}
-    {{message.sender}} : {{message.content}}
-{% empty %}
-Type out your first message in the box below!
-{% endfor %}
-{% else %}
-Pick a conversation or start a new conversation!
-{% endif %}
+<div class="row">
+    <div class="col-md-9">
+        <h3>
+            {% if conversation.as_group != None %}
+                {{conversation.as_group}}
+            {% else %}
+                {% if user == conversation.get_first_member %}
+                    {{conversation.get_second_member}}
+                {% else %}
+                    {{conversation.get_first_member}}
+                {% endif %}
+            {% endif %}
+        </h3>
+    </div>
+    <div class="col-md-3">
+        <a class="nav-link" href="#" id="user-account-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="bi-info-circle"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-account-dropdown">
+            <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">View user details</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">Delete conversation</a></li>
+        </ul>
+    </div>
+
+</div>
+<div>
+    <div id="conversation">
+    {% for message in conversation.messages.all %}
+        {% if user in message.visible_to.all %}
+            {% if message.sender == user %}
+                <div class="row message-bubble self-message">
+            {% else %}
+                <div class="row message-bubble other-message">
+            {% endif %}
+            <div class="col-md-9">{{message}}</div>
+            {% include 'partials/message_menu.html' %}
+        </div>
+        {% endif %}
+    {% empty %}
+        Type out your first message in the box below!
+    {% endfor %}
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.content }}
+        <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
+    </form>
+    {% else %}
+        Pick a conversation or start a new conversation!
+    {% endif %}
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'js/conversation.js' %}"></script>
 {% endblock %}
