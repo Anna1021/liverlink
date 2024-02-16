@@ -63,3 +63,11 @@ USER_TYPE_CHOICES = [
     ('PT', 'Patient'),
     ('PR', 'Parent'),
 ]
+
+SORT_USER_CHOICES = [
+    ('', 'Best Match'), 
+    ('username_asc', 'Username Ascending'),
+    ('username_desc', 'Username Descending'),
+    ('age_asc', 'Age Ascending'),
+    ('age_desc', 'Age Descending'),
+]
