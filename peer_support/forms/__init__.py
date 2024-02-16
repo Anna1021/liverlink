@@ -13,3 +13,7 @@ from .filter_peer_form import FilterPeerForm
 from .sort_peer_form import SortPeerForm
 from .search_peer_form import SearchPeerForm
 from .conversation_form import ConversationForm
+from .new_question_form import NewQuestionForm
+from .new_response_form import NewResponseForm
+from .new_reply_form import NewReplyForm
+
