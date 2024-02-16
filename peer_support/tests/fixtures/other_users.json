@@ -81,7 +81,6 @@
       "username": "@sambennet",
       "email": "sambennet@example.com",
       "password": "pbkdf2_sha256$260000$4BNvFuAWoTT1XVU8D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
-      "date_of_birth": "1992-05-16",
       "gender": "F",
       "location": "CA",
       "ethnicity": "BR",
