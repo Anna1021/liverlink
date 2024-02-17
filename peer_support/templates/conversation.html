@@ -21,7 +21,11 @@
             <span class="bi-info-circle"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-account-dropdown">
-            <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">View user details</a></li>
+            {% if conversation.as_group != None %}
+                <li><a class="dropdown-item" href="{% url 'conversation_details' conversation.id %}">View group details</a></li>
+            {% else %}
+                <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">View user details</a></li>
+            {% endif %}
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">Delete conversation</a></li>
         </ul>
