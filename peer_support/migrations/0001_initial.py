@@ -16,7 +16,36 @@ class Migration(migrations.Migration):
         ('auth', '0012_alter_user_first_name_max_length'),
     ]
 
+
     operations = [
+        #post 
+        migrations.CreateModel(
+            name='Post',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('text', models.CharField(max_length=280)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-created_at'],
+            },
+        ),
+        migrations.CreateModel(
+            name='PostComment',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('content', models.TextField()),
+                ('created_on', models.DateTimeField(default=django.utils.timezone.now)),
+                ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='peer_support.post')),
+            ],
+            options={
+                'ordering': ['-created_on'],
+            },
+        ),
+        
+
         migrations.CreateModel(
             name='User',
             fields=[
