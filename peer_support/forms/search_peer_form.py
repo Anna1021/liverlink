@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.core.validators import RegexValidator
-from peer_support.models import User, Parent, Patient
 
 class SearchPeerForm(forms.Form):
     """Form enabling the searching of users"""

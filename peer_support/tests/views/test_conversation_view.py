@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from peer_support.forms import MessageForm
 from peer_support.models import User, Conversation,Message
+from django.contrib import messages
 
 class ConversationViewTestCase(TestCase):
     """Tests of the conversation view."""
@@ -18,6 +19,7 @@ class ConversationViewTestCase(TestCase):
     def setUp(self):
         self.conversation = Conversation.objects.get(pk=1)
         self.url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
+        self.no_conversation_url = reverse('conversation',kwargs={'conversation_id':0})
         self.form_input = {
             'content':'Ploof'
         }
@@ -34,6 +36,24 @@ class ConversationViewTestCase(TestCase):
         form = response.context['form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
+
+    def test_get_conversation_user_is_not_in(self):
+        invalid_url = reverse('conversation',kwargs={'conversation_id':2})
+        response = self.client.get(invalid_url,follow=True)
+        self.assertRedirects(response, self.no_conversation_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+
+    def test_get_conversation_that_does_not_exist(self):
+        invalid_url = reverse('conversation',kwargs={'conversation_id':3})
+        response = self.client.get(invalid_url,follow=True)
+        self.assertRedirects(response, self.no_conversation_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
 
     def test_get_when_no_conversation_selected(self):
         response = self.client.get('/conversation/0')

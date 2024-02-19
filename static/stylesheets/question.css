@@ -1,0 +1,4 @@
+.question-body,.question-title,.responses-container{
+        width: 752px;
+        word-wrap: break-word;
+    }

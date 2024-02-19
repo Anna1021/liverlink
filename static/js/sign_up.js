@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    // Hide the fields initially
     $('#id_condition').parent().hide();
     $('#id_age_of_diagnosis').parent().hide();
     $('#id_child_condition').parent().hide();

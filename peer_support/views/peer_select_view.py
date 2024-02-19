@@ -23,6 +23,6 @@ class PeerView(LoginRequiredMixin, View):
         else:
             messages.add_message(request, messages.ERROR, "Age invalid")
         if formSort.is_valid():
-            users = formSort.sort_users(users)
+            users = formSort.sort_users(users, request.user)
             
         return render(request, self.template_name, {'users': users, 'formSort': formSort, 'formFilter': formFilter, 'formSearch': formSearch})

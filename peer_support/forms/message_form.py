@@ -19,7 +19,9 @@ class MessageForm(forms.ModelForm):
         super().save(commit=False)
         message = Message.objects.create(
             sender=self.user,
-            content=self.cleaned_data.get('content')
+            content=self.cleaned_data.get('content'),
         )
+        for user in self.conversation.users.all():
+            message.visible_to.add(user)
         self.conversation.send(message)
         return message

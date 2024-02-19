@@ -52,7 +52,7 @@ class LogInViewTestCase(TestCase, LogInTester, MenuTesterMixin):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'dashboard.html')
 
-    def test_unsuccesful_log_in(self):
+    def test_unsuccessful_log_in(self):
         form_input = { 'username': '@johndoe', 'password': 'WrongPassword123' }
         response = self.client.post(self.url, form_input)
         self.assertEqual(response.status_code, 200)
@@ -91,7 +91,7 @@ class LogInViewTestCase(TestCase, LogInTester, MenuTesterMixin):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
-    def test_succesful_log_in(self):
+    def test_successful_log_in(self):
         form_input = { 'username': '@johndoe', 'password': 'Password123' }
         response = self.client.post(self.url, form_input, follow=True)
         self.assertTrue(self._is_logged_in())

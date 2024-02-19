@@ -1,0 +1,18 @@
+<nav class="navbar">
+  <div class="main-menu">
+    <ul>
+      <li><a href="{% url 'resources' %}">Questions</a></li>
+    </ul>
+  </div>
+  <div class="user-menu">
+    <ul>
+      {% if user.is_authenticated %}
+      <li><a href="{% url 'new-question' %}">Ask question</a></li>
+      <li><a href="{% url 'log_out' %}">Logout</a></li>
+      {% else %}
+      <li><a href="{% url 'log_in' %}">Login</a></li>
+      <li><a href="{% url 'sign_up' %}">Sign up</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
