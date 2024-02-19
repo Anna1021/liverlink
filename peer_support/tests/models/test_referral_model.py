@@ -2,6 +2,7 @@
 from django.test import TestCase
 from peer_support.models import Referral, Mentor
 from django.core.exceptions import ValidationError
+from django.db.utils import IntegrityError
 
 class ReferralModelTestCase(TestCase):
     def setUp(self):
@@ -12,16 +13,16 @@ class ReferralModelTestCase(TestCase):
         self._assert_referral_is_valid()
 
     def test_unique_code_constraint(self):
-        second_referral = Referral.objects.create(referrer=self.referrer, code='ABC123')
-        self._assert_referral_is_invalid()
+        with self.assertRaises(IntegrityError):
+            second_referral = Referral.objects.create(referrer=self.referrer, code='ABC123')
 
     def test_max_length_code(self):
         self.referral.code ='A' * 20
         self._assert_referral_is_invalid()
 
     def test_invalid_referrer(self):
-        referrer = Referral.objects.create(referrer=None, code='XYZ456')
-        self._assert_referral_is_invalid()
+        with self.assertRaises(IntegrityError):
+            referrer = Referral.objects.create(referrer=None, code='XYZ456')
 
     def _assert_referral_is_valid(self):
         try:
