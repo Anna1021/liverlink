@@ -22,7 +22,7 @@ class ReferralModelTestCase(TestCase):
 
     def test_invalid_referrer(self):
         with self.assertRaises(IntegrityError):
-            referrer = Referral.objects.create(referrer=None, code='XYZ456')
+            referrer = Referral.objects.create(referrer=None, code='XYZ456') 
 
     def _assert_referral_is_valid(self):
         try:
