@@ -39,6 +39,11 @@ class User(AbstractUser):
 
         return f'{self.first_name} {self.last_name}'
 
+    def country_name(self):
+        """Return the full name of the user's country."""
+
+        return dict(COUNTRY_CHOICES)[self.location]
+
     def gravatar(self, size=120):
         """Return a URL to the user's gravatar."""
 
