@@ -42,6 +42,9 @@ class User(AbstractUser):
     def country_name(self):
         """Return the full name of the user's country."""
 
+        if not self.location:
+            return ""
+
         return dict(COUNTRY_CHOICES)[self.location]
 
     def gravatar(self, size=120):
