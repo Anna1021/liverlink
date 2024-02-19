@@ -50,14 +50,14 @@ class MentorModelTestCase(TestCase):
         self._assert_mentor_is_invalid()
 
     def test_mentor_referral_code_cannot_be_blank(self):
-        self.mentor.mentor_age_of_diagnosis = None
+        self.mentor.referral_code = None
         self._assert_mentor_is_invalid()
     
     def _assert_mentor_is_valid(self):
         try:
             self.mentor.full_clean()
         except (ValidationError):
-            self.fail('Test patient should be valid')
+            self.fail('Test mentor should be valid')
 
     def _assert_mentor_is_invalid(self):
         with self.assertRaises(ValidationError):

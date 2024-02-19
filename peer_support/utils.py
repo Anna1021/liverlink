@@ -14,15 +14,6 @@ def create_referral(user):
     else:
         pass
 
-def claim_referral(user, code):
-    try:
-        referral = Referral.objects.get(code=code)
-        referral.referred = user
-        referral.claimed = True
-        referral.save()
-    except Referral.DoesNotExist:
-        pass 
-
 def get_referral_code(user):
     referral = Referral.objects.filter(referrer=user).first()
     if referral:

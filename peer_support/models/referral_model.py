@@ -4,4 +4,4 @@ from peer_support.models import User, Mentor
 
 class Referral(models.Model):
     referrer = models.ForeignKey(Mentor, related_name='referrals_made', on_delete=models.CASCADE)
-    code = models.CharField(max_length=20, unique=True)
+    code = models.CharField(max_length=10, unique=True)
