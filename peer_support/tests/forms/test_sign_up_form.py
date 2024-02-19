@@ -27,10 +27,12 @@ class SignUpFormTestCase(TestCase):
             'user_type': 'PT',
             'condition': 'Cancer',
             'age_of_diagnosis': 5,
+            'referral_code':'ABC123',
         }
 
     def test_valid_sign_up_form(self):
         form = SignUpForm(data=self.form_input)
+        print(form.errors)
         self.assertTrue(form.is_valid())
 
     def test_form_has_necessary_fields(self):

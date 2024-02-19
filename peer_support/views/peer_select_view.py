@@ -26,3 +26,4 @@ class PeerView(LoginRequiredMixin, View):
             users = formSort.sort_users(users, request.user)
             
         return render(request, self.template_name, {'users': users, 'formSort': formSort, 'formFilter': formFilter, 'formSearch': formSearch})
+    

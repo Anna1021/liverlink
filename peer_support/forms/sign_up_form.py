@@ -5,29 +5,21 @@ from .form_choices import USER_TYPE_CHOICES, CONDITION_CHOICES
 
 class SignUpForm(NewPasswordMixin, forms.ModelForm):
     """Form enabling unregistered users to sign up."""
-
-    USER_TYPE_CHOICES = [
-        ('', '---------'),
-        ('PT', 'Patient'),
-        ('PR', 'Parent'),
-        ('MT', 'Mentor'),
-    ]
     
     user_type = forms.ChoiceField(initial='', choices=USER_TYPE_CHOICES, required=True)
-    condition = forms.CharField(required=False)
-    age_of_diagnosis = forms.IntegerField(required=False)
-    child_condition = forms.CharField(required=False)
-    child_age_of_diagnosis = forms.IntegerField(required=False)
-    mentor_condition = forms.CharField(required=False)
-    mentor_age_of_diagnosis = forms.IntegerField(required=False)
-    referral_code = forms.CharField(required=True, max_length=10)
-    
+    condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
+    age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
+    child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
+    child_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
+    mentor_condition = forms.ChoiceField(choices=CONDITION_CHOICES,required=False)
+    mentor_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
+    referral_code = forms.CharField(required=True, max_length=10, initial='ABC123')
 
     class Meta:
         """Form options."""
 
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio']
+        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio']
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 3}),
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
@@ -45,6 +37,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             'date_of_birth': self.cleaned_data.get('date_of_birth'),
             'gender': self.cleaned_data.get('gender'),
             'location': self.cleaned_data.get('location'),
+            'hospital': self.cleaned_data.get('hospital'),
             'ethnicity': self.cleaned_data.get('ethnicity'),
             'language': self.cleaned_data.get('language'),
             'bio': self.cleaned_data.get('bio'),
@@ -56,7 +49,6 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 'condition': self.cleaned_data.get('condition'),
                 'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
             })
-            print(user_data)
             user = Patient.objects.create_user(**user_data)
         elif user_type == 'PR':
             user_data.update({
@@ -64,32 +56,21 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 'child_age_of_diagnosis': self.cleaned_data.get('child_age_of_diagnosis'),
             })
             user = Parent.objects.create_user(**user_data)
-        elif user_type == 'MT':
+        else:
             user_data.update({
                 'mentor_condition': self.cleaned_data.get('mentor_condition'),
                 'mentor_age_of_diagnosis': self.cleaned_data.get('mentor_age_of_diagnosis'),
                 'referral_code': self.cleaned_data.get('referral_code')
-                # check all of the users to see if the inputted code matches their code
-                # change referrer of new mentor to other mentor
-                # if it is valid create new mentor
-                # if not display error message
             })
             user = Mentor.objects.create_user(**user_data)
+
         return user
-    def clean_recipients(self):
-        data = self.cleaned_data["recipients"]
 
-    def clean_referral_code(self):
-        """Validation of referral code"""
-        print("cleaning")
-        print(self)
-        if self is not None:
-            referral_code = self.cleaned_data['referral_code']
-            print(referral_code)
-            try:
-                referral = Referral.objects.get(code=referral_code)
-            except Referral.DoesNotExist:
-                print("referral doesn't exist")
-                self.add_error('referral_code', "Please enter a valid referral code.")
-
-        return referral_code
+    # def clean_referral_code(self):
+    #     """Validation of referral code"""
+    #     if self is not None:
+    #         referral_code = self.cleaned_data.get('referral_code')
+    #         try:
+    #             Referral.objects.get(code=referral_code)
+    #         except Referral.DoesNotExist:
+    #             self.add_error('referral_code', "Please enter a valid referral code.")

@@ -1,20 +1,10 @@
 {% extends 'base_content.html' %}
 {% block content %}
-{% load static %}
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div id="loginBox" class="row p-3 text-white shadow box-area custom-rounded" style="background-color:#2E2D38">
 
     <!-- Left box image -->
-    <div class="col-md-5 d-flex justify-content-center align-items-center flex-column">
-      <!-- put logo in here -->
-      <img src="{% static 'images/pulseLogoColouredBackground.png' %}" alt="Peer Support Logo" class="img-fluid mt-2" style="width:300px;">
-    </div>
-<div id="cover-image">
-  <div class="container d-flex justify-content-center align-items-center min-vh-100">
-      <div id="loginBox" class="row p-3 text-white shadow box-area custom-rounded" style="background-color:#2E2D38">
-
-      <!-- Left box image -->
-      {% include 'partials/cover_image.html' %}
+    {% include 'partials/cover_image.html' %}
 
     <!-- Right box form -->
     <div class="col-md-7">

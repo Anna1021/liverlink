@@ -2,13 +2,8 @@ import uuid
 from .models import Referral, Mentor
 
 def create_referral(user):
-    print("create referral called")
-    # print(user.mentor_age_of_diagnosis)
-    print(type(user))
     if isinstance(user, Mentor): 
-        print("in the if statement")
         code = uuid.uuid4().hex[:10].upper()
-        print(code)
         referral = Referral.objects.create(referrer=user, code=code)
         return referral
     else:

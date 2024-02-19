@@ -102,7 +102,7 @@ class LogInViewTestCase(TestCase, LogInTester, MenuTesterMixin):
         self.assertEqual(len(messages_list), 0)
         self.assert_menu(response)
 
-    def test_succesful_log_in_with_redirect(self):
+    def test_successful_log_in_with_redirect(self):
         redirect_url = reverse('profile')
         form_input = { 'username': '@johndoe', 'password': 'Password123', 'next': redirect_url }
         response = self.client.post(self.url, form_input, follow=True)

@@ -44,7 +44,7 @@ class MentorAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for mentors."""
 
     list_display = [
-        'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio', 'mentor_condition', 'mentor_age_of_diagnosis'
+        'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'ethnicity', 'language', 'bio', 'mentor_condition', 'mentor_age_of_diagnosis', 'referral_code'
     ]
 
 @admin.register(Referral)
