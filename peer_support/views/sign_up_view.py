@@ -4,7 +4,7 @@ from django.views.generic.edit import FormView
 from django.urls import reverse
 from peer_support.forms import SignUpForm
 from .view_mixins import LoginProhibitedMixin
-from peer_support.utils import create_referral
+from .helpers import create_referral
 
 class SignUpView(LoginProhibitedMixin, FormView):
     """Display the sign up screen and handle sign ups."""
@@ -12,7 +12,6 @@ class SignUpView(LoginProhibitedMixin, FormView):
     form_class = SignUpForm
     template_name = "sign_up.html"
     redirect_when_logged_in_url = settings.REDIRECT_URL_WHEN_LOGGED_IN
-
     def form_valid(self, form):
         self.object = form.save()
         create_referral(self.object)

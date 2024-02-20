@@ -64,9 +64,13 @@ class SignUpViewTestCase(TestCase, LogInTester):
         self.assertFalse(self._is_logged_in())
 
     def test_successful_sign_up(self):
-        before_count = User.objects.count()
+        before_users = User.objects.all()
+        before_count = before_users.count()
         response = self.client.post(self.url, self.form_input, follow=True)
-        after_count = User.objects.count()
+        if response.context and 'form' in response.context:
+            form = response.context['form']
+        after_users = User.objects.all()
+        after_count = after_users.count()
         self.assertEqual(after_count, before_count+1)
         response_url = reverse('dashboard')
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)

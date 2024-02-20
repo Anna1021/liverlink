@@ -3,8 +3,8 @@ $(document).ready(function() {
     $('#id_age_of_diagnosis').parent().hide();
     $('#id_child_condition').parent().hide();
     $('#id_child_age_of_diagnosis').parent().hide();
-    $('#id_mentor_condition').parent().hide();
-    $('#id_mentor_age_of_diagnosis').parent().hide();
+    $('#id_condition').parent().hide();
+    $('#id_age_of_diagnosis').parent().hide();
     $('#id_referral_code').parent().hide();
   
     // Show or hide the fields when the user type changes
@@ -14,24 +14,18 @@ $(document).ready(function() {
         $('#id_age_of_diagnosis').parent().show();
         $('#id_child_condition').parent().hide();
         $('#id_child_age_of_diagnosis').parent().hide();
-        $('#id_mentor_condition').parent().hide();
-        $('#id_mentor_age_of_diagnosis').parent().hide();
         $('#id_referral_code').parent().hide();
       } else if ($(this).val() == 'PR') {
         $('#id_condition').parent().hide();
         $('#id_age_of_diagnosis').parent().hide();
         $('#id_child_condition').parent().show();
         $('#id_child_age_of_diagnosis').parent().show();
-        $('#id_mentor_condition').parent().hide();
-        $('#id_mentor_age_of_diagnosis').parent().hide();
         $('#id_referral_code').parent().hide();
       } else if ($(this).val() == 'MT') {
         $('#id_condition').parent().hide();
         $('#id_age_of_diagnosis').parent().hide();
         $('#id_child_condition').parent().hide();
         $('#id_child_age_of_diagnosis').parent().hide();
-        $('#id_mentor_condition').parent().show();
-        $('#id_mentor_age_of_diagnosis').parent().show();
         $('#id_referral_code').parent().show();
       } else {
         $('#id_condition').parent().hide();
@@ -42,17 +36,13 @@ $(document).ready(function() {
     });
   });
 
-  $('#id_country').change(function() {
-    var selectedCountry = $(this).val();
-    if(selectedCountry) {
-        $.ajax({
-            url: '/get_cities/',
-            data: {
-                'country': selectedCountry
-            },
-            success: function (data) {
-                $('#id_city').html(data);
-            }
-        });
-    }
-});
+    // Only show the hospital field if the user is from the United Kingdom
+    $('#id_hospital').parent().hide();
+
+    $('#id_location').change(function() {
+      if ($(this).val() == 'GB') {
+          $('#id_hospital').parent().show();
+      } else {
+          $('#id_hospital').parent().hide();
+      }
+    });

@@ -10,7 +10,6 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """Display user profile editing screen, and handle profile modifications."""
 
     template_name = "personal_information.html"
-    form_class = ""
 
     def get_form_class(self):
         """Return form class based on model of current user."""
