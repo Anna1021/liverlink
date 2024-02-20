@@ -5,6 +5,7 @@ from django import forms
 from django.test import TestCase
 from peer_support.forms import SignUpForm
 from peer_support.models import Patient, Parent, Mentor, Referral
+from django.core.exceptions import ValidationError
 
 class SignUpFormTestCase(TestCase):
     """Unit tests of the sign up form."""
@@ -181,3 +182,20 @@ class SignUpFormTestCase(TestCase):
         self.assertEqual(user.mentor_age_of_diagnosis, 5)
         is_password_correct = check_password('Password123', user.password)
         self.assertTrue(is_password_correct)
+
+    def test_invalid_referral_code(self):
+        self.form_input['referral_code']='INVALID_CODE'
+        form = SignUpForm(data=self.form_input)
+        self.assertFalse(form.is_valid())
+
+    def test_clean_method_invalid_referral_code(self):
+        self.form_input['referral_code']='INVALID_CODE'
+        form = SignUpForm(data=self.form_input)
+        form.full_clean()
+        self.assertFalse(form.is_valid())
+
+    def test_clean_method_invalid_user_type(self):
+        self.form_input['user_type']='PT '
+        form = SignUpForm(data=self.form_input)
+        form.full_clean()
+        self.assertFalse(form.is_valid())
