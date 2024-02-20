@@ -135,6 +135,22 @@ class SortPeerFormTestCase(TestCase):
         users = User.objects.all()
         sorted_users = form.sort_users(users, new_user)
         self.assertTrue(sorted_users, "Sorted users should not be empty.")
+
+    def test_empty_user_sort_without_errors_mentor(self):
+        new_user = Mentor.objects.create_user(
+            username="@newuser",
+            email="newuser@example.com",
+            first_name="New",
+            last_name="User",
+            password="testpassword123"
+            )
+        form_data = {'sort_by': ''}
+        form = SortPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        users = User.objects.all()
+        sorted_users = form.sort_users(users, new_user)
+        self.assertTrue(sorted_users, "Sorted users should not be empty.")
+  
     
     def test_mentor_sort_filter(self):
         current_mentor =  Mentor.objects.get(username='@johndoe')
@@ -142,7 +158,7 @@ class SortPeerFormTestCase(TestCase):
         form = SortPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, current_mentor)
-        expected_order = ['@johndoe', '@janedoe', '@petrapickles', '@peterpickles', '@alexsmith', '@mohamedalf', '@sambennet']
+        expected_order = ['@johndoe','@petrapickles', '@janedoe', '@peterpickles', '@alexsmith', '@mohamedalf', '@sambennet']
         sorted_usernames = [user.username for user in sorted_users]
         self.assertEqual(sorted_usernames, expected_order)   
     
