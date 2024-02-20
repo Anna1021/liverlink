@@ -13,14 +13,16 @@ class SortPeerForm(forms.Form):
             score+=1* weighting['user_type']
             if current_user.patient.condition == other_user.patient.condition:
                 score += 1*weighting['condition']
-            if abs(current_user.patient.age_of_diagnosis-other_user.patient.age_of_diagnosis)<5:
-                score += 1*weighting['age_of_diagnosis']           
+            if current_user.patient.age_of_diagnosis and other_user.patient.age_of_diagnosis:
+                if abs(current_user.patient.age_of_diagnosis-other_user.patient.age_of_diagnosis)<5:
+                    score += 1*weighting['age_of_diagnosis']           
         elif hasattr(current_user, 'parent') and hasattr(other_user, 'parent'):
             score+=1* weighting['user_type']
             if current_user.parent.child_condition == other_user.parent.child_condition:
                 score += 1*weighting['child_condition']
-            if abs(current_user.parent.child_age_of_diagnosis-other_user.parent.child_age_of_diagnosis)<5:
-                score += 1*weighting['child_age_of_diagnosis'] 
+            if current_user.parent.child_age_of_diagnosis and other_user.parent.child_age_of_diagnosis:
+                if abs(current_user.parent.child_age_of_diagnosis-other_user.parent.child_age_of_diagnosis)<5:
+                    score += 1*weighting['child_age_of_diagnosis'] 
         return score
 
     def calculate_age_score(self,current_user,other_user,weighting,score):
