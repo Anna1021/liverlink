@@ -15,7 +15,7 @@
                             <p class="card-text text-uppercase subtext mb-0">{{ friend.full_name }}</p>
                             <p class="card-text subtext">{{ friend.country_name }}</p>
                         </div>
-                    </div><a href="#" class="tile-link"></a>
+                    </div><a href="{% url 'other_user_profile' username=friend.username %}" class="tile-link"></a>
                 </div>
             </div>
         </div>

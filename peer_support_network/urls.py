@@ -40,6 +40,7 @@ urlpatterns = [
     path('create_conversation/', views.CreateConversationView.as_view(), name='create_conversation'),
     path('send_friend_request/<int:user_id>', views.send_friend_request, name='send_friend_request'),
     path('accept_friend_request/<int:friend_request_id>/<int:notification_id>/', views.accept_friend_request, name='accept_friend_request'),
+    path('other_user_profile/<str:username>/', views.OtherUserProfileView.as_view(), name='other_user_profile'),
     path('friends_list/', views.friends_list, name='friends_list'),
     path('delete_notification/<int:notification_id>/', views.delete_notification, name='delete_notification'),
     path('clear_notifications/', views.clear_notifications, name='clear_notifications'),
