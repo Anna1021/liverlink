@@ -4,7 +4,7 @@ from django.views.generic.edit import FormView
 from django.urls import reverse
 from peer_support.forms import SignUpForm
 from .view_mixins import LoginProhibitedMixin
-from peer_support.utils import create_referral
+from .helpers import create_referral
 
 class SignUpView(LoginProhibitedMixin, FormView):
     """Display the sign up screen and handle sign ups."""
