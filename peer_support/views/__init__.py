@@ -19,6 +19,7 @@ from .resources_view import resources
 from .question_page_view import questionPage
 from .send_friend_request_view import send_friend_request
 from .accept_friend_request_view import accept_friend_request
+from .friends_list_view import friends_list
 from .inbox_view import InboxView
 from .delete_notification_view import delete_notification
 from .clear_notifications_view import clear_notifications

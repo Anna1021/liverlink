@@ -14,7 +14,6 @@ class ConversationViewTestCase(TestCase):
                 'peer_support/tests/fixtures/default_message.json'
     ]
 
-
     def setUp(self):
         self.conversation = Conversation.objects.get(pk=1)
         self.url = reverse('create_conversation')
@@ -60,7 +59,6 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(after_count, before_count+1)
         self.assertTemplateUsed(response, 'conversation.html')
         self.assertRedirects(response, reverse('conversation',kwargs={'conversation_id':3}), status_code=302, target_status_code=200)
-        conversation = Conversation.objects.get(pk=3)
         form = response.context['form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
@@ -75,7 +73,6 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(after_count, before_count)
         self.assertTemplateUsed(response, 'conversation.html')
         self.assertRedirects(response, reverse('conversation',kwargs={'conversation_id':1}), status_code=302, target_status_code=200)
-        conversation = Conversation.objects.get(pk=1)
         form = response.context['form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
@@ -91,7 +88,6 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(after_count, before_count+1)
         self.assertTemplateUsed(response, 'conversation.html')
         self.assertRedirects(response, reverse('conversation',kwargs={'conversation_id':3}), status_code=302, target_status_code=200)
-        conversation = Conversation.objects.get(pk=3)
         form = response.context['form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)

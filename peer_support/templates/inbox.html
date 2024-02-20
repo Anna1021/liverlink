@@ -2,7 +2,7 @@
 {% block content %}
 {% load static %}
 <div class="container">
-    <h3 class="m-b-50 heading-line pt-3">Notifications <i class="fa fa-bell text-muted"></i></h3>
+    <h3 class="m-b-50 heading-line pt-3">Notifications</h3>
     <form action="{% url 'clear_notifications' %}" method="post" onsubmit="return confirm('Are you sure you want to clear all?')">
         {% csrf_token %}
         <button class="m-b-50 btn btn-danger btn-sm">Clear all</button>
