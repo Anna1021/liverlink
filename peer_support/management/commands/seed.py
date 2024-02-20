@@ -76,10 +76,10 @@ class Command(BaseCommand):
         username = create_username(first_name, last_name)
         date_of_birth = self.faker.date_of_birth(minimum_age=16, maximum_age=100)
         gender = self.faker.random_element(elements=(tuple(gender[0] for gender in GENDER_CHOICES)))
-        location = self.faker.country_code()
+        location = self.faker.random_element(elements=(tuple(country[0] for country in COUNTRY_CHOICES)))
         hospital = self.faker.random_element(elements=(tuple(hospital[0] for hospital in HOSPITAL_CHOICES)))
         ethnicity = self.faker.random_element(elements=[ethnicity[0] for group in ETHNICITY_CHOICES for ethnicity in group[1]])
-        language = self.faker.language_code()
+        language = self.faker.random_element(elements=(tuple(language[0] for language in LANGUAGE_CHOICES)))
         bio = self.faker.text(max_nb_chars=100)
         return {'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital, 'ethnicity': ethnicity, 'language': language, 'bio': bio}
 
