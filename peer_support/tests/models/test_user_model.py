@@ -123,11 +123,6 @@ class UserModelTestCase(TestCase):
         self._assert_user_is_invalid()
 
 
-    def test_full_name_must_be_correct(self):
-        full_name = self.user.full_name()
-        self.assertEqual(full_name, "John Doe")
-
-
     def test_date_of_birth_may_be_blank(self):
         self.user.date_of_birth = None
         self._assert_user_is_valid()
@@ -168,16 +163,6 @@ class UserModelTestCase(TestCase):
         second_user = User.objects.get(username='@janedoe')
         self.user.location = second_user.location
         self._assert_user_is_valid()
-
-    
-    def test_country_name_must_be_correct(self):
-        country_name = self.user.country_name()
-        self.assertEqual(country_name, "United Kingdom")
-
-    def test_country_name_can_be_blank(self):
-        self.user.location = None
-        country_name = self.user.country_name()
-        self.assertEqual(country_name, "")
 
 
     def test_hospital_may_be_blank(self):
@@ -260,6 +245,57 @@ class UserModelTestCase(TestCase):
     def test_conversations_may_be_blank(self):
         self.user.conversations.clear()
         self._assert_user_is_valid()
+
+    
+    def test_full_name_must_be_correct(self):
+        full_name = self.user.full_name()
+        self.assertEqual(full_name, "John Doe")
+
+
+    def test_country_name_must_be_correct(self):
+        country_name = self.user.country_name()
+        self.assertEqual(country_name, "United Kingdom")
+
+    def test_country_name_can_be_blank(self):
+        self.user.location = None
+        country_name = self.user.country_name()
+        self.assertEqual(country_name, "")
+
+
+    def test_gender_name_must_be_correct(self):
+        gender_name = self.user.gender_name()
+        self.assertEqual(gender_name, "Male")
+
+
+    def test_gender_name_can_be_blank(self):
+        self.user.gender = None
+        gender_name = self.user.gender_name()
+        self.assertEqual(gender_name, "")
+
+    
+    def test_ethnicity_name_must_be_correct(self):
+        ethnicity_name = self.user.ethnicity_name()
+        self.assertEqual(ethnicity_name, "English, Welsh, Scottish, Northern Irish or British")
+
+    def test_ethnicity_name_can_be_blank(self):
+        self.user.ethnicity = None
+        ethnicity_name = self.user.ethnicity_name()
+        self.assertEqual(ethnicity_name, "")
+
+    def test_unknown_ethnicity_name(self):
+        self.user.ethnicity = "Unknown"
+        ethnicity_name = self.user.ethnicity_name()
+        self.assertEqual(ethnicity_name, "")
+
+    
+    def test_language_name_must_be_correct(self):
+        language_name = self.user.language_name()
+        self.assertEqual(language_name, "English")
+
+    def test_language_name_can_be_blank(self):
+        self.user.language = None
+        language_name = self.user.language_name()
+        self.assertEqual(language_name, "")
 
 
     def test_default_gravatar(self):
