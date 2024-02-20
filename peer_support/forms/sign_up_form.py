@@ -11,8 +11,6 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
     child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
     child_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
-    mentor_condition = forms.ChoiceField(choices=CONDITION_CHOICES,required=False)
-    mentor_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
     referral_code = forms.CharField(required=False, max_length=10, initial='ABC123')
 
     class Meta:
@@ -56,8 +54,8 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             user = Parent.objects.create_user(**user_data)
         else:
             user_data.update({
-                'mentor_condition': self.cleaned_data.get('mentor_condition'),
-                'mentor_age_of_diagnosis': self.cleaned_data.get('mentor_age_of_diagnosis'),
+                'condition': self.cleaned_data.get('condition'),
+                'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
                 'referral_code': self.cleaned_data.get('referral_code')
             })
             user = Mentor.objects.create_user(**user_data)

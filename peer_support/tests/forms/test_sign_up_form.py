@@ -39,7 +39,6 @@ class SignUpFormTestCase(TestCase):
 
     def test_valid_sign_up_form(self):
         form = SignUpForm(data=self.form_input)
-        print(form.errors)
         self.assertTrue(form.is_valid())
 
     def test_form_has_necessary_fields(self):
@@ -150,16 +149,16 @@ class SignUpFormTestCase(TestCase):
 
     def test_mentor_referal_validation(self):
         self.form_input['user_type'] = 'MT'
-        self.form_input['mentor_condition'] = 'Cancer'
-        self.form_input['mentor_age_of_diagnosis'] = 5
+        self.form_input['condition'] = 'Cancer'
+        self.form_input['age_of_diagnosis'] = 5
         self.form_input['referral_code']='NONEXISTING'
         form = SignUpForm(data=self.form_input)
         self.assertFalse(form.is_valid())
 
     def test_form_must_save_correctly_with_mentor(self):
         self.form_input['user_type'] = 'MT'
-        self.form_input['mentor_condition'] = 'Cancer'
-        self.form_input['mentor_age_of_diagnosis'] = 5
+        self.form_input['condition'] = 'Cancer'
+        self.form_input['age_of_diagnosis'] = 5
         self.form_input['referral_code']='9C274FF391'
         form = SignUpForm(data=self.form_input)
         before_count = Mentor.objects.count()
@@ -178,8 +177,8 @@ class SignUpFormTestCase(TestCase):
         self.assertEqual(user.ethnicity, 'RO')
         self.assertEqual(user.language, 'en')
         self.assertEqual(user.bio, 'I am a test user.')
-        self.assertEqual(user.mentor_condition, 'Cancer')
-        self.assertEqual(user.mentor_age_of_diagnosis, 5)
+        self.assertEqual(user.condition, 'Cancer')
+        self.assertEqual(user.age_of_diagnosis, 5)
         is_password_correct = check_password('Password123', user.password)
         self.assertTrue(is_password_correct)
 

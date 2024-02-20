@@ -21,9 +21,9 @@ parent_fixtures = [
 ]
 
 mentor_fixtures = [
-    {'username': '@sarahsmith', 'email': 'sarah.smith@example.org', 'first_name': 'Sarah', 'last_name': 'Smith', 'date_of_birth': '1992-05-15', 'gender': 'F', 'location': 'US', 'hospital': 'Massachusetts General Hospital', 'ethnicity': 'US', 'language': 'en', 'bio': 'Hello, I am Sarah.', 'mentor_condition': 'Asthma', 'mentor_age_of_diagnosis': 7, 'referral_code':'ABC123'},
-    {'username': '@davidbrown', 'email': 'david.brown@example.org', 'first_name': 'David', 'last_name': 'Brown', 'date_of_birth': '1985-09-20', 'gender': 'M', 'location': 'CA', 'hospital': 'Toronto General Hospital', 'ethnicity': 'CA', 'language': 'en', 'bio': 'Hey there, I am David.', 'mentor_condition': 'ADHD', 'mentor_age_of_diagnosis': 8, 'referral_code':'DEF456'},
-    {'username': '@emilywilson', 'email': 'emily.wilson@example.org', 'first_name': 'Emily', 'last_name': 'Wilson', 'date_of_birth': '1978-12-03', 'gender': 'F', 'location': 'AU', 'hospital': 'Royal Childrens Hospital, Melbourne', 'ethnicity': 'AU', 'language': 'en', 'bio': 'Hi, I am Emily.', 'mentor_condition': 'Cerebral Palsy', 'mentor_age_of_diagnosis': 3, 'referral_code':'GHI789'},
+    {'username': '@sarahsmith', 'email': 'sarah.smith@example.org', 'first_name': 'Sarah', 'last_name': 'Smith', 'date_of_birth': '1992-05-15', 'gender': 'F', 'location': 'US', 'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 'ethnicity': 'US', 'language': 'en', 'bio': 'Hello, I am Sarah.', 'condition': 'Asthma', 'age_of_diagnosis': 7, 'referral_code':'ABC123'},
+    {'username': '@davidbrown', 'email': 'david.brown@example.org', 'first_name': 'David', 'last_name': 'Brown', 'date_of_birth': '1985-09-20', 'gender': 'M', 'location': 'CA', 'hospital': 'Countess of Chester Hospital NHS Foundation Trust', 'ethnicity': 'CA', 'language': 'en', 'bio': 'Hey there, I am David.', 'condition': 'ADHD', 'age_of_diagnosis': 8, 'referral_code':'DEF456'},
+    {'username': '@emilywilson', 'email': 'emily.wilson@example.org', 'first_name': 'Emily', 'last_name': 'Wilson', 'date_of_birth': '1978-12-03', 'gender': 'F', 'location': 'AU', 'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 'ethnicity': 'AU', 'language': 'en', 'bio': 'Hi, I am Emily.', 'condition': 'Cerebral Palsy', 'age_of_diagnosis': 3, 'referral_code':'GHI789'},
 ]
 
 class Command(BaseCommand):
@@ -126,12 +126,12 @@ class Command(BaseCommand):
     
     def generate_mentor(self):
         user_data = self.generate_user_data()
-        mentor_condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
-        mentor_age_of_diagnosis = randint(0, 30)
-        user_data.update({'mentor_condition': mentor_condition, 'mentor_age_of_diagnosis': mentor_age_of_diagnosis})
+        condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
+        age_of_diagnosis = randint(0, 30)
+        user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis})
         referral_code = uuid.uuid4().hex[:10].upper()
         user_data.update({'referral_code': referral_code})
-        mentor = self.try_create_mentor(user_data)
+        self.try_create_mentor(user_data)
         
     def try_create_patient(self, data):
         try:

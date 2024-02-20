@@ -19,34 +19,34 @@ class MentorModelTestCase(TestCase):
     def test_valid_mentor(self):
         self._assert_mentor_is_valid()
 
-    def test_mentor_condition_can_be_blank(self):
-        self.mentor.mentor_condition = ''
+    def test_condition_can_be_blank(self):
+        self.mentor.condition = ''
         self._assert_mentor_is_valid()
 
-    def test_mentor_condition_need_not_be_unique(self):
+    def test_condition_need_not_be_unique(self):
         second_mentor = Mentor.objects.get(username='@janedoe')
-        self.mentor.mentor_condition = second_mentor.mentor_condition
+        self.mentor.condition = second_mentor.condition
         self._assert_mentor_is_valid()
 
-    def test_mentor_condition_can_be_50_characters_long(self):
-        self.mentor.mentor_condition = 'x' * 50
+    def test_condition_can_be_50_characters_long(self):
+        self.mentor.condition = 'x' * 50
         self._assert_mentor_is_valid()
 
-    def test_mentor_condition_cannot_be_over_50_characters_long(self):
-        self.mentor.mentor_condition = 'x' * 51
+    def test_condition_cannot_be_over_50_characters_long(self):
+        self.mentor.condition = 'x' * 51
         self._assert_mentor_is_invalid()
     
-    def test_mentor_age_of_diagnosis_can_be_blank(self):
-        self.mentor.mentor_age_of_diagnosis = None
+    def test_age_of_diagnosis_can_be_blank(self):
+        self.mentor.age_of_diagnosis = None
         self._assert_mentor_is_valid()
 
-    def test_mentor_age_of_diagnosis_need_not_be_unique(self):
+    def test_age_of_diagnosis_need_not_be_unique(self):
         second_mentor = Mentor.objects.get(username='@janedoe')
-        self.mentor.mentor_age_of_diagnosis = second_mentor.mentor_age_of_diagnosis
+        self.mentor.age_of_diagnosis = second_mentor.age_of_diagnosis
         self._assert_mentor_is_valid()
 
-    def test_mentor_age_of_diagnosis_cannot_be_negative(self):
-        self.mentor.mentor_age_of_diagnosis = -1
+    def test_age_of_diagnosis_cannot_be_negative(self):
+        self.mentor.age_of_diagnosis = -1
         self._assert_mentor_is_invalid()
 
     def test_mentor_referral_code_cannot_be_blank(self):

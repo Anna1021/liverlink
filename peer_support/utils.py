@@ -1,7 +1,9 @@
 import uuid
 from .models import Referral, Mentor
 
+
 def create_referral(user):
+    """ Only creates referrals if the user is a mentor. """
     if isinstance(user, Mentor): 
         code = uuid.uuid4().hex[:10].upper()
         referral = Referral.objects.create(referrer=user, code=code)
