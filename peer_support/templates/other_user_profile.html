@@ -14,7 +14,7 @@
     .profile-img img {
         width: 60%;
         height: 120%;
-        border-radius: 50%; /* Add this line to make the image circular */
+        border-radius: 50%;
     }
 
     .profile-head h5 {
@@ -29,7 +29,7 @@
 
     .profile-head .nav-tabs {
         margin-top: 5%;
-        margin-bottom: 5%;
+        margin-bottom: 7%;
     }
 
     .profile-head .nav-tabs .nav-link {
@@ -42,25 +42,9 @@
         border-bottom: 2px solid #91BBD3;
     }
 
-    .bio {
-        padding: 10%;
-        margin-top: 5%;
-    }
-
-    .bio p {
-        font-size: 15px;
-        color: #ffffff;
-        font-weight: 600;
-        margin-top: 5%;
-    }
-
     .profile-subheading {
         color: #ffffff;
         font-weight: 600;
-    }
-
-    .profile-work ul {
-        list-style: none;
     }
 
     .profile-tab label {
@@ -72,14 +56,12 @@
         color: #91BBD3;
     }
 </style>
-
 {% extends 'base_content.html' %}
 {% block content %}
 {% load static %}
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
 <div class="container emp-profile">
     <form method="post">
         <div class="row">
@@ -94,12 +76,11 @@
                     <h6>{{ user.username }}</h6>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#" role="tab"
-                                aria-controls="home" aria-selected="true">About</a>
+                            <a class="nav-link active" id="about-tab" data-toggle="tab" href="#" role="tab">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#timeline" role="tab"
-                                aria-controls="timeline" aria-selected="false">Timeline</a>
+                            <a class="nav-link" id="timeline-tab" data-toggle="tab" href="#timeline"
+                                role="tab">Timeline</a>
                         </li>
                     </ul>
                 </div>
@@ -107,14 +88,14 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <div class="bio overflow-auto">
-                    <p>Bio</p>
+                <div class="profile-subheading pt-5 pl-3">
+                    <label>Bio</label>
                     <p>{{ user.bio }}</p>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <div class="tab-content profile-tab" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
                         <div class="row">
                             <div class="profile-subheading col-md-6">
                                 <label>Email</label>
@@ -172,7 +153,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
+                        <p>Timeline</p>
                         <!-- Add posts to this section -->
                     </div>
                 </div>

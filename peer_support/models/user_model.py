@@ -45,7 +45,10 @@ class User(AbstractUser):
         if not self.location:
             return ""
 
-        return dict(COUNTRY_CHOICES)[self.location]
+        try:
+            return dict(COUNTRY_CHOICES)[self.location]
+        except KeyError:
+            return ""
 
     def gender_name(self):
         """Return the full name of the user's gender."""
@@ -53,7 +56,10 @@ class User(AbstractUser):
         if not self.gender:
             return ""
 
-        return dict(GENDER_CHOICES)[self.gender] 
+        try:
+            return dict(GENDER_CHOICES)[self.gender] 
+        except KeyError:
+            return ""
     
     def ethnicity_name(self):
         """Return the full name of the user's ethnicity."""
@@ -72,7 +78,10 @@ class User(AbstractUser):
         if not self.language:
             return ""
 
-        return dict(LANGUAGE_CHOICES)[self.language]
+        try:
+            return dict(LANGUAGE_CHOICES)[self.language]
+        except KeyError:
+            return ""
 
     def gravatar(self, size=120):
         """Return a URL to the user's gravatar."""
