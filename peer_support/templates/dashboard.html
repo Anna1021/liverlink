@@ -1,20 +1,33 @@
 {% extends 'base_content.html' %}
-{% block content %}
 {% load static %}
-<div class="container pl-0">
-  <div class="row">
-    <!-- left row -->
-    <div class="col-md-3 mt-2">
-      {%include "partials/left_navbar.html" %}
-    </div>
-    <!-- right row -->
-    <div class="col-md-9 mt-2">
-      <div class="card bg-dark shadow box-area">
-        <h1>Welcome to your feed {{ user.username }}</h1>
-        {% block page %}
-        {% endblock %}
+{% block content %}
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script></head>
+<body>
+  <div class="container pl-0">
+    <div class="row">
+      <!-- left row -->
+      <div class="col-md-3 mt-2">
+        {%include "partials/left_navbar.html" %}
+      </div>
+      <!-- right row -->
+      <div class="col-md-9 mt-2">
+        <div class="card bg-dark shadow box-area">
+          <h1>Welcome to your feed {{ user.username }}</h1>
+          {% block page %}
+          {% endblock %}
+        </div>
       </div>
     </div>
   </div>
-</div>
+	<!-- Modal -->
+	{% include "tutorial.html" %}
+  {% if first %}
+    <p>uwbnrh</p>
+    <script>
+      var myModal = new bootstrap.Modal(document.getElementById('myModal'), {})
+      myModal.show()
+      </script>
+  {% endif %}
+</body>
 {% endblock %}

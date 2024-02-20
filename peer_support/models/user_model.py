@@ -28,6 +28,7 @@ class User(AbstractUser):
     bio = models.CharField(max_length=500, blank=True)
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
     conversations = models.ManyToManyField('Conversation',blank=True)
+    first_login = models.BooleanField(default=True)
 
     class Meta:
         """Model options."""
