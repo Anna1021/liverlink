@@ -10,7 +10,6 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """Display user profile editing screen, and handle profile modifications."""
 
     template_name = "personal_information.html"
-    form_class = ""
 
     def get_form_class(self):
         """Return form class based on model of current user."""
@@ -31,7 +30,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         else:
             user = self.request.user
         return user
-
+    
     def get_success_url(self):
         """Return redirect URL after successful update."""
         messages.add_message(self.request, messages.SUCCESS, "Profile updated!")
