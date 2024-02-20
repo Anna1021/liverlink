@@ -13,7 +13,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     child_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
     mentor_condition = forms.ChoiceField(choices=CONDITION_CHOICES,required=False)
     mentor_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
-    referral_code = forms.CharField(required=True, max_length=10, initial='ABC123')
+    referral_code = forms.CharField(required=False, max_length=10, initial='ABC123')
 
     class Meta:
         """Form options."""
@@ -27,7 +27,6 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
 
     def save(self):
         """Create a new user."""
-
         user_data = {
             'username': self.cleaned_data.get('username'),
             'first_name': self.cleaned_data.get('first_name'),
@@ -42,7 +41,6 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             'language': self.cleaned_data.get('language'),
             'bio': self.cleaned_data.get('bio'),
         }
-
         user_type = self.cleaned_data.get('user_type')
         if user_type == 'PT':
             user_data.update({
@@ -66,11 +64,14 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
 
         return user
 
-    # def clean_referral_code(self):
-    #     """Validation of referral code"""
-    #     if self is not None:
-    #         referral_code = self.cleaned_data.get('referral_code')
-    #         try:
-    #             Referral.objects.get(code=referral_code)
-    #         except Referral.DoesNotExist:
-    #             self.add_error('referral_code', "Please enter a valid referral code.")
+    def clean(self):
+        """Validation of referral code"""
+        cleaned_data = super().clean()
+        user_type = cleaned_data.get('user_type')
+        referral_code = cleaned_data.get('referral_code')
+        if user_type == 'MT':
+            try:
+                Referral.objects.get(code=referral_code)
+            except Referral.DoesNotExist:
+                self.add_error('referral_code', "Please enter a valid referral code.")
+        return cleaned_data
