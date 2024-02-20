@@ -31,6 +31,9 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
             user = Parent.objects.get(id=user_id)
         elif Mentor.objects.filter(id=user_id).exists():
             user = Mentor.objects.get(id=user_id)
+        else:
+            user = self.request.user
+        return user
 
     def get_success_url(self):
         """Return redirect URL after successful update."""
