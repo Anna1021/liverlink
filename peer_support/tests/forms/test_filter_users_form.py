@@ -10,7 +10,7 @@ class FilterPeerFormTestCase(TestCase):
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
-        'peer_support/tests/fixtures/default_parent.json',
+        'peer_support/tests/fixtures/default_mentor.json',
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/other_parents.json',
@@ -24,7 +24,6 @@ class FilterPeerFormTestCase(TestCase):
             'ethnicity': 'any',
             'country': 'any',
             'hospital': 'any',
-            
         }
 
     def test_form_initialization(self):
@@ -96,7 +95,6 @@ class FilterPeerFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(results.exists())
-        self.assertIn(User.objects.get(username='@johndoe'), results)
         self.assertIn(User.objects.get(username='@peterpickles'), results)
         self.assertNotIn(User.objects.get(username='@petrapickles'), results)
         self.assertNotIn(User.objects.get(username='@janedoe'), results)
@@ -111,7 +109,6 @@ class FilterPeerFormTestCase(TestCase):
         self.assertIn(User.objects.get(username='@janedoe'), results)
         self.assertIn(User.objects.get(username='@petrapickles'), results)
         self.assertNotIn(User.objects.get(username='@peterpickles'), results)
-        self.assertNotIn(User.objects.get(username='@johndoe'), results)
 
     def test_language(self):
         form_data = self.showAll
@@ -120,7 +117,6 @@ class FilterPeerFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(results.exists())
-        self.assertIn(User.objects.get(username='@johndoe'), results)
         self.assertIn(User.objects.get(username='@janedoe'), results)
         self.assertNotIn(User.objects.get(username='@petrapickles'), results)
         self.assertNotIn(User.objects.get(username='@peterpickles'), results)
@@ -132,8 +128,7 @@ class FilterPeerFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(results.exists())
-        self.assertIn(User.objects.get(username='@johndoe'), results)
-        self.assertNotIn(User.objects.get(username='@janedoe'), results)
+        self.assertIn(User.objects.get(username='@janedoe'), results)
         self.assertNotIn(User.objects.get(username='@petrapickles'), results)
         self.assertNotIn(User.objects.get(username='@peterpickles'), results)
 
@@ -144,7 +139,6 @@ class FilterPeerFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(results.exists())
-        self.assertIn(User.objects.get(username='@johndoe'), results)
         self.assertNotIn(User.objects.get(username='@janedoe'), results)
         self.assertNotIn(User.objects.get(username='@petrapickles'), results)
         self.assertNotIn(User.objects.get(username='@peterpickles'), results)
@@ -156,7 +150,6 @@ class FilterPeerFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(results.exists())
-        self.assertIn(User.objects.get(username='@johndoe'), results)
         self.assertIn(User.objects.get(username='@janedoe'), results)
         self.assertNotIn(User.objects.get(username='@petrapickles'), results)
         self.assertNotIn(User.objects.get(username='@peterpickles'), results)
@@ -168,11 +161,9 @@ class FilterPeerFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(results.exists())
-        self.assertIn(User.objects.get(username='@johndoe'), results)
         self.assertIn(User.objects.get(username='@petrapickles'), results)
         self.assertNotIn(User.objects.get(username='@janedoe'), results)
         self.assertNotIn(User.objects.get(username='@peterpickles'), results)
-
 
     def test_patient_age_of_dio_min(self):
         min_age = 3
@@ -239,7 +230,40 @@ class FilterPeerFormTestCase(TestCase):
         results = form.filter_users(self.users)
         for user in results:
             self.assertEqual(user.parent.child_condition, child_condition)
-            
+    
+    def test_mentor_age_of_dio_min(self):
+        min_age = 5
+        form_data = self.showAll
+        form_data['user_type'] = ['MT']        
+        form_data['mentor_age_of_diagnosis_min'] = min_age
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertTrue(user.mentor.age_of_diagnosis >= min_age)
+
+    def test_mentor_age_of_dio_max(self):
+        max_age = 50
+        form_data = self.showAll
+        form_data['user_type'] = ['MT']
+        form_data['mentor_age_of_diagnosis_max'] = max_age
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertTrue(user.mentor.age_of_diagnosis <= max_age)
+
+    def test_mentor_condition(self):
+        mentor_condition = "Hepatitis A"
+        form_data = self.showAll
+        form_data['user_type'] = ['MT']
+        form_data['mentor_condition'] = mentor_condition
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertEqual(user.mentor.condition, mentor_condition)
+ 
     def test_min_age_greater_than_max_age(self):
         form_data = self.showAll
         form_data.update({
@@ -307,6 +331,16 @@ class FilterPeerFormTestCase(TestCase):
     def test_negative_child_age_of_diagnosis_max(self):
         form_data = self.showAll
         form_data['child_age_of_diagnosis_max'] = -7 
+        form = FilterPeerForm(data=form_data)
+        self.assertFalse(form.is_valid())
+    def test_negative_child_age_of_diagnosis_min(self):
+        form_data = self.showAll
+        form_data['mentor_age_of_diagnosis_min'] = -3 
+        form = FilterPeerForm(data=form_data)
+        self.assertFalse(form.is_valid())
+    def test_negative_child_age_of_diagnosis_max(self):
+        form_data = self.showAll
+        form_data['mentor_age_of_diagnosis_max'] = -7 
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
 

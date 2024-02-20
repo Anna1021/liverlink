@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "user_ptr": 1,
-            "condition": "Hepatitis",
+            "condition": "Hepatitis A",
             "age_of_diagnosis": 20,
             "referral_code": "9C274FF391",
             "is_active": true
