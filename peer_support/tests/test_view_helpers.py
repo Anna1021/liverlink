@@ -3,8 +3,8 @@ from django.test import TestCase
 from peer_support.models import Mentor, Referral
 from peer_support.views.helpers import create_referral, get_referral_code
 
-class UtilsTestCase(TestCase):
-    """Unit tests for the util."""
+class HelpersViewTestCase(TestCase):
+    """Unit tests for the helpers view."""
 
     def setUp(self):
         self.mentor = Mentor.objects.create(username='test_mentor')
