@@ -1,6 +1,6 @@
 from django.contrib import admin
 from . import models
-from .models import User, Patient, Parent, Conversation, UserProfile, Notification, FriendRequest,Question,Response
+from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest,Question,Response
 
 # Register your models here.
 admin.site.register(models.Question)
@@ -39,6 +39,21 @@ class ParentAdmin(admin.ModelAdmin):
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'child_condition', 'child_age_of_diagnosis'
     ]
 
+@admin.register(Mentor)
+class MentorAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for mentors."""
+
+    list_display = [
+        'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'referral_code'
+    ]
+
+@admin.register(Referral)
+class ReferralAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for referrals."""
+
+    list_display = [
+        'referrer', 'code'
+    ]
 
 @admin.register(Conversation)
 class ConversationAdmin(admin.ModelAdmin):

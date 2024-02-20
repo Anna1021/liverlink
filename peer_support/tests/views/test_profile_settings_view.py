@@ -81,7 +81,7 @@ class ProfileViewTest(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-    def test_unsuccesful_profile_update_for_patient(self):
+    def test_unsuccessful_profile_update_for_patient(self):
         self.client.login(username=self.patient.username, password='Password123')
         self.patient_form_input['username'] = 'BAD_USERNAME'
         before_count = Patient.objects.count()
@@ -107,7 +107,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.patient.condition, "Biliary atresia"),
         self.assertEqual(self.patient.age_of_diagnosis, 2)
 
-    def test_unsuccesful_profile_update_for_parent(self):
+    def test_unsuccessful_profile_update_for_parent(self):
         self.client.login(username=self.parent.username, password='Password123')
         self.parent_form_input['username'] = 'BAD_USERNAME'
         before_count = Parent.objects.count()
@@ -159,7 +159,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.patient.condition, "Biliary atresia"),
         self.assertEqual(self.patient.age_of_diagnosis, 2)
 
-    def test_succesful_profile_update_for_patient(self):
+    def test_successful_profile_update_for_patient(self):
         self.client.login(username=self.patient.username, password='Password123')
         before_count = Patient.objects.count()
         response = self.client.post(self.url, self.patient_form_input, follow=True)
@@ -185,7 +185,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.patient.condition, "Haemochromatosis"),
         self.assertEqual(self.patient.age_of_diagnosis, 21)
 
-    def test_succesful_profile_update_for_parent(self):
+    def test_successful_profile_update_for_parent(self):
         self.client.login(username=self.parent.username, password='Password123')
         before_count = Parent.objects.count()
         response = self.client.post(self.url, self.parent_form_input, follow=True)

@@ -4,12 +4,20 @@ from django.contrib.auth.hashers import check_password
 from django import forms
 from django.test import TestCase
 from peer_support.forms import SignUpForm
-from peer_support.models import Patient, Parent
+from peer_support.models import Patient, Parent, Mentor, Referral
+from django.core.exceptions import ValidationError
 
 class SignUpFormTestCase(TestCase):
     """Unit tests of the sign up form."""
+    
+    fixtures = [
+        'peer_support/tests/fixtures/default_user.json',
+        'peer_support/tests/fixtures/default_mentor.json',
+    ]
 
     def setUp(self):
+        Referral.objects.create(referrer=Mentor.objects.get(username='@johndoe'), code='9C274FF391')
+
         self.form_input = {
             'first_name': 'Jane',
             'last_name': 'Doe',
@@ -92,50 +100,101 @@ class SignUpFormTestCase(TestCase):
 
     def test_form_must_save_correctly_with_patient(self):
         form = SignUpForm(data=self.form_input)
-        if form.is_valid():
-            before_count = Patient.objects.count()
-            form.save()
-            after_count = Patient.objects.count()
-            self.assertEqual(after_count, before_count+1)
-            user = Patient.objects.get(username='@janedoe')
-            self.assertEqual(user.first_name, 'Jane')
-            self.assertEqual(user.last_name, 'Doe')
-            self.assertEqual(user.email, 'janedoe@example.org')
-            self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
-            self.assertEqual(user.gender, 'F')
-            self.assertEqual(user.location, 'GB')
-            self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
-            self.assertEqual(user.ethnicity, 'RO')
-            self.assertEqual(user.language, 'en')
-            self.assertEqual(user.bio, 'I am a test user.')
-            self.assertEqual(user.condition, 'Cancer')
-            self.assertEqual(user.age_of_diagnosis, 5)
-            is_password_correct = check_password('Password123', user.password)
-            self.assertTrue(is_password_correct)
+        self.assertTrue(form.is_valid())
+        before_count = Patient.objects.count()
+        form.save()
+        after_count = Patient.objects.count()
+        self.assertEqual(after_count, before_count+1)
+        user = Patient.objects.get(username='@janedoe')
+        self.assertEqual(user.first_name, 'Jane')
+        self.assertEqual(user.last_name, 'Doe')
+        self.assertEqual(user.email, 'janedoe@example.org')
+        self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
+        self.assertEqual(user.gender, 'F')
+        self.assertEqual(user.location, 'GB')
+        self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
+        self.assertEqual(user.ethnicity, 'RO')
+        self.assertEqual(user.language, 'en')
+        self.assertEqual(user.bio, 'I am a test user.')
+        self.assertEqual(user.condition, 'Cancer')
+        self.assertEqual(user.age_of_diagnosis, 5)
+        is_password_correct = check_password('Password123', user.password)
+        self.assertTrue(is_password_correct)
 
     def test_form_must_save_correctly_with_parent(self):
         self.form_input['user_type'] = 'PR'
         self.form_input['child_condition'] = 'Cancer'
         self.form_input['child_age_of_diagnosis'] = 5
         form = SignUpForm(data=self.form_input)
-        if form.is_valid():
-            before_count = Parent.objects.count()
-            form.save()
-            after_count = Parent.objects.count()
-            self.assertEqual(after_count, before_count+1)
-            user = Parent.objects.get(username='@janedoe')
-            self.assertEqual(user.first_name, 'Jane')
-            self.assertEqual(user.last_name, 'Doe')
-            self.assertEqual(user.email, 'janedoe@example.org')
-            self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
-            self.assertEqual(user.gender, 'F')
-            self.assertEqual(user.location, 'GB')
-            self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
-            self.assertEqual(user.ethnicity, 'RO')
-            self.assertEqual(user.language, 'en')
-            self.assertEqual(user.bio, 'I am a test user.')
-            self.assertEqual(user.child_condition, 'Cancer')
-            self.assertEqual(user.child_age_of_diagnosis, 5)
-            is_password_correct = check_password('Password123', user.password)
-            self.assertTrue(is_password_correct)
-        
+        self.assertTrue(form.is_valid())
+        before_count = Parent.objects.count()
+        form.save()
+        after_count = Parent.objects.count()
+        self.assertEqual(after_count, before_count+1)
+        user = Parent.objects.get(username='@janedoe')
+        self.assertEqual(user.first_name, 'Jane')
+        self.assertEqual(user.last_name, 'Doe')
+        self.assertEqual(user.email, 'janedoe@example.org')
+        self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
+        self.assertEqual(user.gender, 'F')
+        self.assertEqual(user.location, 'GB')
+        self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
+        self.assertEqual(user.ethnicity, 'RO')
+        self.assertEqual(user.language, 'en')
+        self.assertEqual(user.bio, 'I am a test user.')
+        self.assertEqual(user.child_condition, 'Cancer')
+        self.assertEqual(user.child_age_of_diagnosis, 5)
+        is_password_correct = check_password('Password123', user.password)
+        self.assertTrue(is_password_correct)
+
+    def test_mentor_referal_validation(self):
+        self.form_input['user_type'] = 'MT'
+        self.form_input['condition'] = 'Cancer'
+        self.form_input['age_of_diagnosis'] = 5
+        self.form_input['referral_code']='NONEXISTING'
+        form = SignUpForm(data=self.form_input)
+        self.assertFalse(form.is_valid())
+
+    def test_form_must_save_correctly_with_mentor(self):
+        self.form_input['user_type'] = 'MT'
+        self.form_input['condition'] = 'Cancer'
+        self.form_input['age_of_diagnosis'] = 5
+        self.form_input['referral_code']='9C274FF391'
+        form = SignUpForm(data=self.form_input)
+        before_count = Mentor.objects.count()
+        self.assertTrue(form.is_valid())
+        form.save()
+        after_count = Mentor.objects.count()
+        self.assertEqual(after_count, before_count+1)
+        user = Mentor.objects.get(username='@janedoe')
+        self.assertEqual(user.first_name, 'Jane')
+        self.assertEqual(user.last_name, 'Doe')
+        self.assertEqual(user.email, 'janedoe@example.org')
+        self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
+        self.assertEqual(user.gender, 'F')
+        self.assertEqual(user.location, 'GB')
+        self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
+        self.assertEqual(user.ethnicity, 'RO')
+        self.assertEqual(user.language, 'en')
+        self.assertEqual(user.bio, 'I am a test user.')
+        self.assertEqual(user.condition, 'Cancer')
+        self.assertEqual(user.age_of_diagnosis, 5)
+        is_password_correct = check_password('Password123', user.password)
+        self.assertTrue(is_password_correct)
+
+    def test_invalid_referral_code(self):
+        self.form_input['referral_code']='INVALID_CODE'
+        form = SignUpForm(data=self.form_input)
+        self.assertFalse(form.is_valid())
+
+    def test_clean_method_invalid_referral_code(self):
+        self.form_input['referral_code']='INVALID_CODE'
+        form = SignUpForm(data=self.form_input)
+        form.full_clean()
+        self.assertFalse(form.is_valid())
+
+    def test_clean_method_invalid_user_type(self):
+        self.form_input['user_type']='PT '
+        form = SignUpForm(data=self.form_input)
+        form.full_clean()
+        self.assertFalse(form.is_valid())

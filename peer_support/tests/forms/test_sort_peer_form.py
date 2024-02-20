@@ -3,7 +3,6 @@ from django.test import TestCase
 from peer_support.forms import SortPeerForm 
 from django.test import TestCase
 from peer_support.models import User,Patient,Parent
-from datetime import date
 
 class SortPeerFormTestCase(TestCase):
     """Unit test of SortPeerForm"""
@@ -90,3 +89,49 @@ class SortPeerFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, None)
         self.assertGreater(len(sorted_users), 0, "The sorted users list should not be empty.")
+   
+    def test_create_new_user_and_sort_without_errors(self):
+        new_user = User.objects.create_user(
+            username="@newuser",
+            email="newuser@example.com",
+            first_name="New",
+            last_name="User",
+            password="testpassword123")
+        form_data = {'sort_by': ''}
+        form = SortPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        users = User.objects.all()
+        sorted_users = form.sort_users(users, new_user)
+        self.assertTrue(sorted_users, "Sorted users should not be empty.")
+    
+       
+    def test_create_new_user_and_sort_without_errors_patient(self):
+        new_user = Patient.objects.create_user(
+            username="@newuser",
+            email="newuser@example.com",
+            first_name="New",
+            last_name="User",
+            password="testpassword123"
+            )
+        form_data = {'sort_by': ''}
+        form = SortPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        users = User.objects.all()
+        sorted_users = form.sort_users(users, new_user)
+        self.assertTrue(sorted_users, "Sorted users should not be empty.")
+
+    def test_create_new_user_and_sort_without_errors_parent(self):
+        new_user = Parent.objects.create_user(
+            username="@newuser",
+            email="newuser@example.com",
+            first_name="New",
+            last_name="User",
+            password="testpassword123"
+            )
+        form_data = {'sort_by': ''}
+        form = SortPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        users = User.objects.all()
+        sorted_users = form.sort_users(users, new_user)
+        self.assertTrue(sorted_users, "Sorted users should not be empty.")
+    
