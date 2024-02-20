@@ -169,6 +169,16 @@ class UserModelTestCase(TestCase):
         self.user.location = second_user.location
         self._assert_user_is_valid()
 
+    
+    def test_country_name_must_be_correct(self):
+        country_name = self.user.country_name()
+        self.assertEqual(country_name, "United Kingdom")
+
+    def test_country_name_can_be_blank(self):
+        self.user.location = None
+        country_name = self.user.country_name()
+        self.assertEqual(country_name, "")
+
 
     def test_hospital_may_be_blank(self):
         self.user.hospital = None
@@ -239,6 +249,16 @@ class UserModelTestCase(TestCase):
     def test_bio_need_not_be_unique(self):
         second_user = User.objects.get(username='@janedoe')
         self.user.bio = second_user.bio
+        self._assert_user_is_valid()
+
+    
+    def test_friends_may_be_blank(self):
+        self.user.friends.clear()
+        self._assert_user_is_valid()
+
+    
+    def test_conversations_may_be_blank(self):
+        self.user.conversations.clear()
         self._assert_user_is_valid()
 
 
