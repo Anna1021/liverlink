@@ -1,5 +1,9 @@
 {% extends 'layouts/page.html' %}
 {% block content %}
+    <div class="col-md-3 mt-2">
+    {%include "partials/left_navbar.html" %}
+  </div>
+
     <div class="page question-page">
 
         <h2 class="question-title">{{ question.title }}</h2>

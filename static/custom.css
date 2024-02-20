@@ -51,13 +51,17 @@ p.cover-text {
 
 #cover-image {
   background: url('images/background2.jpg') no-repeat center center fixed;
-  -webkit-background-size: cover;
+  -webkit-background-size: 100%;
   -moz-background-size: cover;
   background-size: cover;
   -o-background-size: cover;
 }
 
-
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
 /*
  * forms
@@ -135,7 +139,9 @@ h3.profile-title {
   color: white;
   padding-right: 30px;
   padding-top: 20px;
-  padding-left: 30px;
+  padding-left: 20px;
+  margin-left: 30px;
+  margin-right: 30px;
 }
 
 /*
