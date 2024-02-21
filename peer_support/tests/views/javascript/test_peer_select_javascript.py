@@ -50,7 +50,16 @@
 #         if not parent_checkbox.is_selected():
 #             parent_checkbox.click()
 
-#         child_age_of_diagnosis_min_field = WebDriverWait(self.selenium, 10).until(
-#             EC.visibility_of_element_located((By.XPATH, "//input[@name='child_age_of_diagnosis_min']"))
-#         )
-#         self.assertTrue(child_age_of_diagnosis_min_field.is_displayed(), "age_of_diagnosis_min field is not visible")
+        child_age_of_diagnosis_min_field = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.XPATH, "//input[@name='child_age_of_diagnosis_min']"))
+        )
+        self.assertTrue(child_age_of_diagnosis_min_field.is_displayed(), "child_age_of_diagnosis_min field is not visible")
+
+        mentor_checkbox = self.selenium.find_element(By.XPATH, '//input[@type="checkbox" and @value="MT"]')
+        if not mentor_checkbox.is_selected():
+            mentor_checkbox.click()
+
+        Mentor_age_of_diagnosis_min_field = WebDriverWait(self.selenium, 10).until(
+        EC.visibility_of_element_located((By.XPATH, "//input[@name='mentor_age_of_diagnosis_min']"))
+        )
+        self.assertTrue(Mentor_age_of_diagnosis_min_field.is_displayed(), "mentor_age_of_diagnosis_min field is not visible")
