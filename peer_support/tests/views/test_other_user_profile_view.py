@@ -8,8 +8,11 @@ class OtherUserProfileViewTestCase(TestCase):
     """Tests of the other user profile view."""
 
     fixtures = ['peer_support/tests/fixtures/default_user.json',
-                'peer_support/tests/fixtures/other_users.json'
-    ]
+                'peer_support/tests/fixtures/other_users.json',
+                'peer_support/tests/fixtures/default_parent.json',
+                'peer_support/tests/fixtures/other_patients.json',
+                'peer_support/tests/fixtures/other_mentors.json',
+            ]
 
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
@@ -25,6 +28,32 @@ class OtherUserProfileViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'other_user_profile.html')
         user = response.context['user']
         self.assertEqual(user, self.user)
+
+    def test_get_other_user_profile_parent(self):
+        url = reverse('other_user_profile', kwargs={'username': self.user.username})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'other_user_profile.html')
+        parent = response.context['parent']
+        self.assertEqual(parent, self.user.parent)
+
+    def test_get_other_user_profile_patient(self):
+        user = User.objects.get(username='@janedoe')
+        url = reverse('other_user_profile', kwargs={'username': user.username})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'other_user_profile.html')
+        patient = response.context['patient']
+        self.assertEqual(patient, user.patient)
+
+    def test_get_other_user_profile_mentor(self):
+        user = User.objects.get(username='@alexsmith')
+        url = reverse('other_user_profile', kwargs={'username': user.username})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'other_user_profile.html')
+        mentor = response.context['mentor']
+        self.assertEqual(mentor, user.mentor)
 
     def test_get_other_user_profile_not_logged_in(self):
         self.client.logout()
