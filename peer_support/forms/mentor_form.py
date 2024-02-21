@@ -5,8 +5,7 @@ from peer_support.models import Mentor
 class MentorForm(forms.ModelForm):
     """Form to update mentor profiles."""
 
-    referral_code = forms.CharField(disabled=True)
-    
+    referral_code = forms.CharField(disabled=True, required=False)
 
     class Meta:
         """Form options."""
