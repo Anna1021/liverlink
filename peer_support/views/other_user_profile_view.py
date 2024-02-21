@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from peer_support.models import User, Parent, Patient, Mentor
+from peer_support.models import User
 
 class OtherUserProfileView(LoginRequiredMixin, View):
     """Displays other user's profile"""
