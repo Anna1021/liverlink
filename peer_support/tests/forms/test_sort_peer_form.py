@@ -106,7 +106,7 @@ class SortPeerFormTestCase(TestCase):
         self.assertTrue(sorted_users, "Sorted users should not be empty.")
     
        
-    def test_emoty_userr_sort_without_errors_patient(self):
+    def test_empty_user_sort_without_errors_patient(self):
         new_user = Patient.objects.create_user(
             username="@newuser",
             email="newuser@example.com",
