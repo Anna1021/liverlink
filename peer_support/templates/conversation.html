@@ -3,7 +3,7 @@
 {% block convo %}
 {% if conversation %}
 <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-9 notranslate">
         <h3>
             {% if conversation.as_group != None %}
                 {{conversation.as_group}}
@@ -36,12 +36,17 @@
     <div id="conversation">
     {% for message in conversation.messages.all %}
         {% if user in message.visible_to.all %}
+            {% if not message.same_sender %}
+                <div class="notranslate">{{ message.sender }}</div>
+            {% endif %}
             {% if message.sender == user %}
                 <div class="row message-bubble self-message">
             {% else %}
                 <div class="row message-bubble other-message">
             {% endif %}
-            <div class="col-md-9">{{message}}</div>
+            <div class="col-md-9">
+                <div>{{ message.content }}</div>
+            </div>
             {% include 'partials/message_menu.html' %}
         </div>
         {% endif %}
