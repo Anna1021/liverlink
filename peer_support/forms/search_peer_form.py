@@ -1,6 +1,4 @@
 from django import forms
-from django.contrib.auth import authenticate
-from django.core.validators import RegexValidator
 
 class SearchPeerForm(forms.Form):
     """Form enabling the searching of users"""
