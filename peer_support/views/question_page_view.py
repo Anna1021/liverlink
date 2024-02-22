@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from peer_support.forms import NewReplyForm, NewResponseForm
 
+@login_required
 def questionPage(request, id):
     response_form = NewResponseForm()
     reply_form = NewReplyForm()
