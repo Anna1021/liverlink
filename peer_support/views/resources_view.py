@@ -1,8 +1,6 @@
-from django.contrib.auth.decorators import login_required
 from peer_support.models import Question
 from django.shortcuts import render
 
-@login_required
 def resources(request):
     """display the first 10 questions from newest to oldest"""
     questions = Question.objects.order_by('-created_at')
