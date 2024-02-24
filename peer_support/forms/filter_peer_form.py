@@ -23,7 +23,10 @@ class FilterPeerForm(forms.Form):
     child_age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     child_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
     child_condition=forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
-    
+    mentor_age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
+    mentor_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
+    mentor_condition=forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
+
     def __init__(self, *args, **kwargs):
         """Initialise query set with users tasks"""
         super(FilterPeerForm, self).__init__(*args, **kwargs)
@@ -46,35 +49,64 @@ class FilterPeerForm(forms.Form):
         if child_age_of_diagnosis_min is not None and child_age_of_diagnosis_max is not None and child_age_of_diagnosis_min > child_age_of_diagnosis_max:
             self.add_error('child_age_of_diagnosis_min', "Minimum child's age of diagnosis cannot be greater than maximum child's age of diagnosis.")
             self.add_error('child_age_of_diagnosis_max', "Maximum child's age of diagnosis cannot be less than minimum child's age of diagnosis.")
+        mentor_age_of_diagnosis_min = cleaned_data.get('mentor_age_of_diagnosis_min')
+        mentor_age_of_diagnosis_max = cleaned_data.get('mentor_age_of_diagnosis_max')
+        if mentor_age_of_diagnosis_min is not None and mentor_age_of_diagnosis_max is not None and mentor_age_of_diagnosis_min > mentor_age_of_diagnosis_max:
+            self.add_error('mentor_age_of_diagnosis_min', "Minimum mentor's age of diagnosis cannot be greater than maximum mentor's age of diagnosis.")
+            self.add_error('mentor_age_of_diagnosis_max', "Maximum mentor's age of diagnosis cannot be less than minimum mentor's age of diagnosis.")
         return cleaned_data
     
-    def filter_by_user_type(self,user_type):
-        """Generates a list of users based on user type and user type specific fields"""
+    def filter_by_patient(self):
         age_of_diagnosis_min = self.cleaned_data.get('age_of_diagnosis_min')
         age_of_diagnosis_max = self.cleaned_data.get('age_of_diagnosis_max')
         condition =self.cleaned_data.get('condition')
+        patients = User.objects.filter(patient__isnull=False)
+        if age_of_diagnosis_min is not None:
+            patients = patients.filter(patient__age_of_diagnosis__gte=age_of_diagnosis_min)
+        if age_of_diagnosis_max is not None:
+            patients = patients.filter(patient__age_of_diagnosis__lte=age_of_diagnosis_max)
+        if condition and "any" != condition:
+            patients = patients.filter(patient__condition__icontains=condition)
+        return patients
+    
+    def filter_by_parent(self):
         child_age_of_diagnosis_min = self.cleaned_data.get('child_age_of_diagnosis_min')
         child_age_of_diagnosis_max = self.cleaned_data.get('child_age_of_diagnosis_max')
         child_condition =self.cleaned_data.get('child_condition')
+        parents = User.objects.filter(parent__isnull=False)
+        if child_age_of_diagnosis_min is not None:
+            parents = parents.filter(parent__child_age_of_diagnosis__gte=child_age_of_diagnosis_min)
+        if child_age_of_diagnosis_max is not None:
+            parents = parents.filter(parent__child_age_of_diagnosis__lte=child_age_of_diagnosis_max)
+        if child_condition and "any" != child_condition:
+            parents = parents.filter(parent__child_condition__icontains=child_condition)
+        return parents
+        
+    def filter_by_mentor(self):
+        mentor_age_of_diagnosis_min = self.cleaned_data.get('mentor_age_of_diagnosis_min')
+        mentor_age_of_diagnosis_max = self.cleaned_data.get('mentor_age_of_diagnosis_max')
+        mentor_condition =self.cleaned_data.get('mentor_condition')
+        mentors = User.objects.filter(mentor__isnull=False)
+        if mentor_age_of_diagnosis_min is not None:
+            mentors = mentors.filter(mentor__age_of_diagnosis__gte=mentor_age_of_diagnosis_min)
+        if mentor_age_of_diagnosis_max is not None:
+            mentors = mentors.filter(mentor__age_of_diagnosis__lte=mentor_age_of_diagnosis_max)
+        if mentor_condition and "any" != mentor_condition :
+            mentors = mentors.filter(mentor__condition__icontains=mentor_condition)
+        return mentors
+        
+    def filter_by_user_type(self,user_type):
+        """Generates a list of users based on user type and user type specific fields"""
         combined_queryset = User.objects.none()
         if "PT" in user_type:
-            patients = User.objects.filter(patient__isnull=False)
-            if age_of_diagnosis_min is not None:
-                patients = patients.filter(patient__age_of_diagnosis__gte=age_of_diagnosis_min)
-            if age_of_diagnosis_max is not None:
-                patients = patients.filter(patient__age_of_diagnosis__lte=age_of_diagnosis_max)
-            if condition:
-                patients = patients.filter(patient__condition__icontains=condition)
+            patients=self.filter_by_patient()
             combined_queryset = combined_queryset | patients
         if "PR" in user_type:
-            parents = User.objects.filter(parent__isnull=False)
-            if child_age_of_diagnosis_min is not None:
-                parents = parents.filter(parent__child_age_of_diagnosis__gte=child_age_of_diagnosis_min)
-            if child_age_of_diagnosis_max is not None:
-                parents = parents.filter(parent__child_age_of_diagnosis__lte=child_age_of_diagnosis_max)
-            if child_condition:
-                parents = parents.filter(parent__child_condition__icontains=child_condition)
+            parents=self.filter_by_parent()
             combined_queryset = combined_queryset | parents
+        if "MT" in user_type:
+            mentors=self.filter_by_mentor()
+            combined_queryset = combined_queryset | mentors
         return combined_queryset
     
     def filter_by_age_range(self,users):

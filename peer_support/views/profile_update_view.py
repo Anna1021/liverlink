@@ -3,14 +3,13 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
 from django.urls import reverse
-from peer_support.models import Patient, Parent
-from peer_support.forms import UserForm, PatientForm, ParentForm
+from peer_support.models import Patient, Parent, Mentor
+from peer_support.forms import UserForm, PatientForm, ParentForm, MentorForm
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """Display user profile editing screen, and handle profile modifications."""
 
     template_name = "personal_information.html"
-    form_class = ""
 
     def get_form_class(self):
         """Return form class based on model of current user."""
@@ -18,6 +17,8 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
             return PatientForm
         elif Parent.objects.filter(id=self.request.user.id).exists():
             return ParentForm
+        elif Mentor.objects.filter(id=self.request.user.id).exists():
+            return MentorForm
         else:
             return UserForm
 
@@ -26,8 +27,10 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         user_id = self.request.user.id
         if Patient.objects.filter(id=user_id).exists():
             user = Patient.objects.get(id=user_id)
-        elif Parent.objects.filter(id=self.request.user.id).exists():
+        elif Parent.objects.filter(id=user_id).exists():
             user = Parent.objects.get(id=user_id)
+        elif Mentor.objects.filter(id=user_id).exists():
+            user = Mentor.objects.get(id=user_id)
         else:
             user = self.request.user
         return user

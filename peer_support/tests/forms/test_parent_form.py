@@ -2,7 +2,7 @@
 import datetime
 from django import forms
 from django.test import TestCase
-from peer_support.forms import UserForm, ParentForm
+from peer_support.forms import ParentForm
 from peer_support.models import Parent
 
 class ParentFormTestCase(TestCase):

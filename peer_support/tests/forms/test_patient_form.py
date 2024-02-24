@@ -2,7 +2,7 @@
 import datetime
 from django import forms
 from django.test import TestCase
-from peer_support.forms import UserForm, PatientForm
+from peer_support.forms import PatientForm
 from peer_support.models import Patient
 
 class PatientFormTestCase(TestCase):

@@ -27,6 +27,9 @@ $(document).ready(function () {
         $('#id_child_age_of_diagnosis_min').parent().hide();
         $('#id_child_age_of_diagnosis_max').parent().hide();
         $('#id_child_condition').parent().hide();
+        $('#id_mentor_age_of_diagnosis_min').parent().hide();
+        $('#id_mentor_age_of_diagnosis_max').parent().hide();
+        $('#id_mentor_condition').parent().hide();
     }
 
     hideAllConditionalFields();
@@ -46,6 +49,10 @@ $(document).ready(function () {
                     $('#id_child_age_of_diagnosis_min').parent().show();
                     $('#id_child_age_of_diagnosis_max').parent().show();
                     $('#id_child_condition').parent().show();
+                } else if (userType === 'MT') {
+                    $('#id_mentor_age_of_diagnosis_min').parent().show();
+                    $('#id_mentor_age_of_diagnosis_max').parent().show();
+                    $('#id_mentor_condition').parent().show();
                 }
             }
         });

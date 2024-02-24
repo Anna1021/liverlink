@@ -14,3 +14,5 @@ from .notification_model import Notification
 from .question_model import Question
 from .response_model import Response
 from .friend_request_model import FriendRequest
+from .mentor_model import Mentor
+from .referral_model import Referral

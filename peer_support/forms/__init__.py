@@ -13,6 +13,7 @@ from peer_support.forms.post_comment_form import CommentForm
 
 from .patient_form import PatientForm
 from .parent_form import ParentForm 
+from .mentor_form import MentorForm
 from .message_form import MessageForm
 from .filter_peer_form import FilterPeerForm
 from .sort_peer_form import SortPeerForm

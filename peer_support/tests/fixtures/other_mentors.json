@@ -1,0 +1,46 @@
+[
+    {
+      "model": "peer_support.mentor",
+      "pk": 2,
+      "fields": {
+        "user_ptr": 2,
+        "condition": "Biliary atresia",
+        "age_of_diagnosis": 2,
+        "referral_code": "9C274FF391",
+        "is_active": true
+      }
+    },
+    {
+      "model": "peer_support.mentor",
+      "pk": 3,
+      "fields": {
+        "user_ptr": 3,
+        "condition": "Cirrhosis",
+        "age_of_diagnosis": 13,
+        "referral_code": "9C274FF391",
+        "is_active": true
+      }
+    },
+    {
+      "model": "peer_support.mentor",
+      "pk": 4,
+      "fields": {
+        "user_ptr": 4,
+        "condition": "Haemochromatosis",
+        "age_of_diagnosis": 45,
+        "referral_code": "9C274FF391",
+        "is_active": true
+      }
+    },
+    {
+      "model": "peer_support.mentor",
+      "pk": 5,
+      "fields": {
+        "user_ptr": 5,
+        "condition": "Cancer",
+        "age_of_diagnosis": 13,
+        "referral_code": "9C274FF391",
+        "is_active": true
+      }
+    }
+  ]
