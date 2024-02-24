@@ -32,7 +32,7 @@ class ConversationViewTestCase(TestCase):
         convo = response.context['conversation']
         self.assertEqual(convo,self.conversation.as_group())
 
-    def test_get_direct_conversation(self):
+    def test_cannot_get_direct_conversation(self):
         direct_conversation = Conversation.objects.get(id=1)
         invalid_url = reverse('conversation_details',kwargs={'conversation_id':direct_conversation.id})
         response = self.client.get(invalid_url,follow=True)
@@ -43,7 +43,7 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
-    def test_get_conversation_user_is_not_in(self):
+    def test_cannot_get_conversation_user_is_not_in(self):
         self.client.logout()
         self.client.login(username='@janedoe',password='Password123')
         invalid_url = reverse('conversation_details',kwargs={'conversation_id':2})
@@ -54,7 +54,7 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
-    def test_get_conversation_that_does_not_exist(self):
+    def test_cannot_get_conversation_that_does_not_exist(self):
         invalid_url = reverse('conversation_details',kwargs={'conversation_id':3})
         response = self.client.get(invalid_url,follow=True)
         self.assertRedirects(response, self.no_conversation_url, status_code=302, target_status_code=200)
