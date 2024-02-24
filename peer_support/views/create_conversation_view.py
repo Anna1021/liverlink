@@ -29,7 +29,7 @@ class CreateConversationView(LoginRequiredMixin, FormView):
         
     def send_notification(self, request_user, conversation):
         """Sends notification to users in conversation"""
-        for user in conversation.users.all():
+        for user in conversation.users.all().exclude(id=request_user.id):
             Notification.objects.create(
                 title = "New conversation",
                 description = f"You have been added to a new conversation by {request_user.username}.",
