@@ -1,0 +1,15 @@
+[
+    {
+        "model": "peer_support.question",
+        "pk":1,
+        "fields":{
+            "author": "1",
+            "title": "Sample Question Title",
+            "body": "This is a sample question body.",
+            "created_at": "2024-02-22 22:55:12",
+            "updated_at": "2024-02-22 22:55:12"
+        }
+        
+    }
+    
+]

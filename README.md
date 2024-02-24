@@ -14,7 +14,8 @@ The members of the team are:
 The project is called `peer_support_network`.  It currently consists of a single app `peer_support`.
 
 ## Deployed version of the application
-The deployed version of the application can be found at [*Peer_support_network*](*https://peersupport.pythonanywhere.com/*).
+The deployed version of the application can be found at [*peersupport.pythonanywhere.com*](https://peersupport.pythonanywhere.com).
+The administrative interface can be found at [*peersupport.pythonanywhere.com/admin*](https://peersupport.pythonanywhere.com/admin).
 
 ## Installation instructions
 To install the software and use it in your local development environment, you must first set up and activate a local development environment.  From the root of the project:

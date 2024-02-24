@@ -1,5 +1,5 @@
 import uuid
-from peer_support.models import Referral, Mentor
+from peer_support.models import Referral, Mentor, User
 from django.conf import settings
 from django.shortcuts import redirect
 from peer_support.models import Notification
@@ -33,3 +33,9 @@ def get_referral_code(user):
     if referral:
         return referral.code
     return None
+
+def get_addable_peers(current_user):
+    """Gets users who are not admin, friends or user"""
+    friends_ids = current_user.friends.values_list('id', flat=True)
+    eligible_users = User.objects.exclude(is_staff=True).exclude(id=current_user.id).exclude(id__in=friends_ids).distinct()
+    return eligible_users
