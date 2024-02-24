@@ -1,15 +1,14 @@
 [
     {
         "model": "peer_support.response",
-        "pk":1,
-        "fields":{
-            "user": "1",
-            "question": "1",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "question": 1,
             "body": "This is a sample response body.",
-            "created_at": "2024-02-22 23:55:12",
-            "updated_at": "2024-02-22 23:55:12"
+            "created_at": "2024-02-22T23:55:12+00:00",
+            "updated_at": "2024-02-22T23:55:12+00:00"
         }
-        
     }
-    
 ]
+
