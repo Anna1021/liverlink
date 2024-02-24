@@ -1,9 +1,11 @@
+"""Tests for the message deletion view"""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.models import Message,Conversation,User
 
 class DeleteMessageViewTestCase(TestCase):
     """Tests of the message deletion view"""
+    
     fixtures = ['peer_support/tests/fixtures/default_user.json',
                 'peer_support/tests/fixtures/other_users.json',
                 'peer_support/tests/fixtures/default_conversation.json',

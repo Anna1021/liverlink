@@ -31,5 +31,16 @@
         "referral_code": "9C274FF391",
         "is_active": true
       }
+    },
+    {
+      "model": "peer_support.mentor",
+      "pk": 5,
+      "fields": {
+        "user_ptr": 5,
+        "condition": "Cancer",
+        "age_of_diagnosis": 13,
+        "referral_code": "9C274FF391",
+        "is_active": true
+      }
     }
   ]
