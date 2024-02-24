@@ -12,11 +12,6 @@
       <div class="col-md-9 mt-2">
         <div class="card bg-dark shadow box-area">
           <h1>Welcome to your feed {{ user.username }}</h1>
-          <!-- temporarily put create post and add comment here -->
-          <a href="{% url 'create_post' %}">Create a new post</a>
-          <br>
-          <a href="{% url 'add_comment' 0 %}">Add a new comment</a>  
-          <!--  -->
           {% block page %}
           {% endblock %}
         </div>

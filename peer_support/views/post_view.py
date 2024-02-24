@@ -15,7 +15,7 @@ from peer_support.models import Post, PostComment
 from peer_support.forms import PostForm, CommentForm
 
 
-#post
+
 def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -28,21 +28,29 @@ def create_post(request):
         form = PostForm()
     return render(request, 'create_post.html', {'form': form})
 
-def add_comment(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.author = request.user
-            comment.save()
-            # Redirect to the dashboard after adding the comment
-            return redirect('dashboard')
-    else:
-        form = CommentForm()
-    return render(request, 'add_comment.html', {'form': form})
+
+
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    return render(request, 'post_detail.html', {'post': post})
+    
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect('post_detail', post_id=post_id)
+    else:
+        comment_form = CommentForm()
+    
+    return render(request, 'post_detail.html', {'post': post, 'comment_form': comment_form})
+
+
+def show_posts(request):
+    """Retrive all posts created by the current user"""
+
+    user_posts = Post.objects.filter(author=request.user)
+    return render(request, 'show_posts.html', {'user_posts': user_posts})
+

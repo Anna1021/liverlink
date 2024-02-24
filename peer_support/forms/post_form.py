@@ -1,5 +1,5 @@
 from django import forms
-from peer_support.models import Post, PostComment
+from peer_support.models import Post
 
 class PostForm(forms.ModelForm):
     """Form to ask user for post text.
@@ -8,12 +8,7 @@ class PostForm(forms.ModelForm):
     class Meta:
 
         model = Post
-        fields = ['text']
+        fields = ['title', 'text']
         widgets = {
             'text': forms.Textarea()
         }
-
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = PostComment
-        fields = ['content']

@@ -8,7 +8,8 @@ from .user_form import UserForm
 from peer_support.forms.message_form import MessageForm
 
 #post
-from peer_support.forms.post_form import PostForm, CommentForm
+from peer_support.forms.post_form import PostForm
+from peer_support.forms.post_comment_form import CommentForm
 
 from .patient_form import PatientForm
 from .parent_form import ParentForm 
