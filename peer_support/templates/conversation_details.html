@@ -3,8 +3,8 @@
 {% block convo %}
 
 <div class="conversation-details">
-    <h3>{{conversation}}</h3>
-    <div>
+            <h3>{{conversation}}</h3>
+        <div>
         <div class="row user-list-header">
             <div class="col-md-7">
                 <h4>Members:</h4>
@@ -16,7 +16,7 @@
         </div>
         <ul class="user-list">
             {% for user in conversation.users.all %}
-                <li><a class="btn user-card" href="#">{{ user }}</a></li>
+                <li><a class="btn user-card" href="{% url 'other_user_profile' user.username %}">{{ user }}</a></li>
             {% endfor %}
         </ul>
     </div>

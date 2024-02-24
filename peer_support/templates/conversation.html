@@ -24,7 +24,13 @@
             {% if conversation.as_group != None %}
                 <li><a class="dropdown-item" href="{% url 'conversation_details' conversation.id %}">View group details</a></li>
             {% else %}
-                <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">View user details</a></li>
+                <li>
+                {% if user == conversation.get_first_member %}
+                    <a class="dropdown-item" href="{% url 'other_user_profile' conversation.get_second_member.username %}">
+                {% else %}
+                    <a class="dropdown-item" href="{% url 'other_user_profile' conversation.get_first_member.username %}">
+                {% endif %}
+                View user details</a></li>
             {% endif %}
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">Delete conversation</a></li>
