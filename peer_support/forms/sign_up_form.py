@@ -11,7 +11,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
     child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
     child_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
-    referral_code = forms.CharField(required=False, max_length=10, initial='ABC123')
+    referral_code = forms.CharField(required=False, max_length=10, initial='')
 
     class Meta:
         """Form options."""

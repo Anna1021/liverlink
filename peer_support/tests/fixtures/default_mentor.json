@@ -4,8 +4,8 @@
         "pk": 1,
         "fields": {
             "user_ptr": 1,
-            "condition": "Hepatitis",
-            "age_of_diagnosis": 20,
+            "condition": "Cirrhosis",
+            "age_of_diagnosis": 13,
             "referral_code": "9C274FF391",
             "is_active": true
         }
