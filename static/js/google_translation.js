@@ -7,5 +7,5 @@ window.addEventListener('pageshow', function(event) {
 
 
 function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+  new google.translate.TranslateElement({pageLanguage: 'auto'}, 'google_translate_element');
 }
