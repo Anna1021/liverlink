@@ -2,7 +2,7 @@
 import datetime
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from peer_support.models import User, Patient, Parent, UserProfile
+from peer_support.models import User, Patient, Parent, Mentor, UserProfile
 from peer_support.models.model_choices import THEME_CHOICES, FONT_CHOICES, FONT_SIZE_CHOICES
 
 class UserProfileModelTestCase(TestCase):
@@ -87,6 +87,30 @@ class UserProfileModelTestCase(TestCase):
         user_profile = UserProfile.objects.get(user=new_parent)
         self.assertEqual(new_parent_user, user_profile.user)
         self.assertEqual(new_parent.id, user_profile.id)
+
+    def test_user_profile_is_automatically_created_when_new_mentor_is_created(self):
+        before_count = UserProfile.objects.count()
+        Mentor.objects.create(username="@tester", 
+                                    first_name="test", 
+                                    last_name="account", 
+                                    email="test@test.org",
+                                    password="Password123",
+                                    date_of_birth=datetime.date(1990,1,1),
+                                    gender="M",
+                                    location="GB",
+                                    ethnicity="BR",
+                                    language="en",
+                                    bio="abc",
+                                    condition="Hepatitis",
+                                    age_of_diagnosis=20,
+                                    referral_code='TEST123')
+        after_count = UserProfile.objects.count()
+        self.assertEqual(before_count+1, after_count)
+        new_mentor = Mentor.objects.get(username="@tester")
+        new_mentor_user = User.objects.get(username="@tester")
+        user_profile = UserProfile.objects.get(user=new_mentor)
+        self.assertEqual(new_mentor_user, user_profile.user)
+        self.assertEqual(new_mentor.id, user_profile.id)
 
 
     def test_user_cannot_be_none(self):
