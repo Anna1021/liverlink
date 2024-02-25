@@ -22,7 +22,3 @@ class Message(models.Model):
         if self.previous_message is not None:
             return self.sender == self.previous_message.sender
         return False
-
-    def __str__(self):
-        """Return a string representing the message"""
-        return str(self.sender)+": "+self.content
