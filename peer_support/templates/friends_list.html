@@ -11,8 +11,8 @@
                             style="background-image: url(https://i.pinimg.com/originals/57/61/5b/57615b8c0092a66c1d4058b1692955cc.gif)"
                             class="avatar mr-3"></span>
                         <div class="media-body overflow-hidden">
-                            <h5 class="card-text mb-0">{{ friend.username }}</h5>
-                            <p class="card-text text-uppercase subtext mb-0">{{ friend.full_name }}</p>
+                            <h5 class="card-text mb-0"> <span class="notranslate">{{friend.username}}</span></h5>
+                            <p class="card-text text-uppercase subtext mb-0"> <span class="notranslate">{{friend.fullname}}</span></p>
                             <p class="card-text subtext">{{ friend.country_name }}</p>
                         </div>
                     </div><a href="{% url 'profile' username=friend.username %}" class="tile-link"></a>
