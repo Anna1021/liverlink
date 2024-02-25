@@ -16,5 +16,16 @@
           "content":"Yo",
           "send_time":"2024-01-20T10:00:00Z"
         }
+      },
+      {
+        "model": "peer_support.message",
+        "pk": 4,
+        "fields": {
+          "sender": 3,
+          "content":"i need you",
+          "send_time":"2024-01-20T10:00:00Z",
+          "previous_message":1
+        }
       }
+
   ]
