@@ -20,7 +20,7 @@ class OtherUserProfileViewTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
 
     def test_other_user_profile_url(self):
-        self.assertEqual(self.url,'/other_user_profile/@johndoe/')
+        self.assertEqual(self.url,'/user_profile/@johndoe/')
 
     def test_get_other_user_profile(self):
         response = self.client.get(self.url)
