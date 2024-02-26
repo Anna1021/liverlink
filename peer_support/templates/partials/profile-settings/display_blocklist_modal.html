@@ -1,0 +1,44 @@
+<div class="modal fade" id="display_blocklist" tabindex="-1" aria-labelledby="display_blocklist" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="ps-subheading-text" style="text-align: center; padding-top: 10px;">Users you've blocked</div>
+
+            <table class="table table-hover" style="table-layout: fixed;">
+
+                <thead>
+                    <tr>
+                        <th scope="col" width="10%"></th> <!-- User's gravatar -->
+                        <th scope="col" width="70%"></th> <!-- Username -->
+                        <th scope="col" width="20%"></th> <!-- Block/unblock button-->
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for user in block_list %}
+
+                    <tr>
+                        <td><img src="{{ user.mini_gravatar }}" class="ps-mini-gravatar" alt="User's gravatar">   </img></td>
+                        <td>{{ user.username }}</td>
+                        <td><button type="button" class="btn btn-primary unblock-user-btn" data-bs-toggle="modal" data-bs-target="#unblock_user">Unblock</button></td>
+                    </tr>
+
+                    {% empty %}
+
+                    No users to display
+
+                    {% endfor %}
+
+                </tbody>
+        
+            </table>
+            
+        </div>
+    </div>
+
+  </div>
+
+  <script>
+
+  </script>

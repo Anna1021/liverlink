@@ -22,7 +22,6 @@ from .accept_friend_request_view import AcceptFriendRequestView
 from .friends_list_view import friends_list
 from .other_user_settings_view import OtherUserSettingsView
 from .profile_view import ProfileView
-from .other_user_settings_view import OtherUserSettingsView
 from .inbox_view import InboxView
 from .delete_notification_view import delete_notification
 from .clear_notifications_view import clear_notifications

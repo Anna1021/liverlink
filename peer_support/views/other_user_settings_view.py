@@ -8,7 +8,7 @@ from .helpers import get_referral_code
 class OtherUserSettingsView(LoginRequiredMixin, TemplateView):
     """Display the 'other users' section of profile settings."""
 
-    template_name = 'other_users.html'
+    template_name = 'other_user_settings.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
