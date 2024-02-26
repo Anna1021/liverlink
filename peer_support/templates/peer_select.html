@@ -52,7 +52,7 @@
                                     <p class="card-text text-uppercase subtext mb-0">{{ user.full_name }}</p>
                                     <p class="card-text subtext">{{ user.country_name }}</p>
                                 </div>
-                            </div><a href="{% url 'other_user_profile' username=user.username %}" class="tile-link"></a>
+                            </div><a href="{% url 'profile' username=user.username %}" class="tile-link"></a>
                             <div class="text-center mt-4">
                                 <a class="btn btn-secondary btn-sm add-friend-btn" data-user-id="{{ user.id }}">Add friend</a>
                             </div>
