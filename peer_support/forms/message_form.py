@@ -17,9 +17,13 @@ class MessageForm(forms.ModelForm):
     def save(self):
         """Send message"""
         super().save(commit=False)
+        previous_message = None
+        if self.conversation.messages.count()>0:
+            previous_message = self.conversation.messages.last()
         message = Message.objects.create(
             sender=self.user,
             content=self.cleaned_data.get('content'),
+            previous_message=previous_message,
         )
         for user in self.conversation.users.all():
             message.visible_to.add(user)

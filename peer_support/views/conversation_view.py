@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render,reverse,redirect
 from django.views.generic.edit import FormView
-from django.urls import reverse_lazy
 from peer_support.models import Conversation
 from peer_support.forms import MessageForm
 
