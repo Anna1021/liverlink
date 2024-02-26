@@ -242,6 +242,28 @@ class UserModelTestCase(TestCase):
         self._assert_user_is_valid()
 
     
+    def test_blocked_users_may_be_blank(self):
+        self.user.friends.clear()
+        self._assert_user_is_valid()
+
+    def test_blocked_users_is_asymmetric(self):
+        second_user = User.objects.get(username='@janedoe')
+        second_user.blocked_users.add(self.user)
+        self.assertIn(self.user, second_user.blocked_users.all())
+        self.assertNotIn(second_user, self.user.blocked_users.all())
+
+    def test_get_blocked_and_blocked_by_users(self):
+        second_user = User.objects.get(username='@janedoe')
+        third_user = User.objects.get(username='@petrapickles')
+        second_user.blocked_users.add(self.user)
+        self.user.blocked_users.add(third_user)
+        blocked_and_blocked_by_users = self.user.get_blocked_and_blocked_by_users()
+        self.assertQuerySetEqual(self.user.blocked_users.all(), blocked_and_blocked_by_users[0])
+        self.assertNotIn(third_user, blocked_and_blocked_by_users[1])
+        self.assertIn(second_user, blocked_and_blocked_by_users[1])
+        self.assertEqual(1, len(blocked_and_blocked_by_users[1]))
+
+    
     def test_conversations_may_be_blank(self):
         self.user.conversations.clear()
         self._assert_user_is_valid()
