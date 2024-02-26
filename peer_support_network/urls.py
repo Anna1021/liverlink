@@ -33,7 +33,6 @@ urlpatterns = [
     path('new-question/', views.newQuestionPage, name='new-question'),
     path('reply', views.replyPage, name='reply'),
     path('conversation/<int:conversation_id>', views.ConversationView.as_view(), name='conversation'),
-    path('conversation/<int:conversation_id>', views.ConversationView.as_view(),name='conversation'),
     path('peer_select/', views.PeerView.as_view(), name='peer_select'),
     path('create_conversation/',views.CreateConversationView.as_view(),name='create_conversation'),
     path('delete_message/<int:conversation_id>/<int:message_id>/',views.DeleteMessageView.as_view(),name='delete_message'),
