@@ -10,14 +10,16 @@
             {% csrf_token %}
             {% include 'partials/bootstrap_form.html' with form=formSearch %}
             <div class="SortFilter">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown">
                     Filter Options
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     {% csrf_token %}
                     {{formFilter.as_p}}
                 </div>
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown">
                     Sort Options
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -26,25 +28,43 @@
                 </div>
             </div>
             <div>
-                <button type="submit" class="btn btn-secondary btn-sm my-3" style="margin-bottom: 0;" >Apply</button>   
+                <button type="submit" class="btn btn-secondary btn-sm my-3" style="margin-bottom: 0;">Apply</button>
             </div>
         </form>
     </div>
 
     <div style="overflow-y:auto;">
-    <hr style="margin-top: 0;">
-    {% if users|length == 0 %}
+        <hr style="margin-top: 0;">
+        {% if users|length == 0 %}
         <p>No users</p>
-    {% else %}
-        {% for user in users %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            {{ user.username }}
-            <a href="#" class="btn btn-secondary btn-sm ms-auto add-friend-btn" data-user-id="{{ user.id }}">Add friend</a>
-        </li>                
-        {% endfor %}
-    {% endif %}
+        {% else %}
+        <div class="container my-2">
+            <div class="row">
+                {% for user in users %}
+                <div class="col-md-6 col-xl-4 my-2">
+                    <div class="card">
+                        <div class="friend-card-body">
+                            <div class="media align-items-center"><span
+                                    style="background-image: url(https://media1.tenor.com/m/jntELgCIwQYAAAAC/kermit-lipton.gif)"
+                                    class="avatar mr-3"></span>
+                                <div class="media-body overflow-hidden">
+                                    <h5 class="card-text mb-0">{{ user.username }}</h5>
+                                    <p class="card-text text-uppercase subtext mb-0">{{ user.full_name }}</p>
+                                    <p class="card-text subtext">{{ user.country_name }}</p>
+                                </div>
+                            </div><a href="{% url 'other_user_profile' username=user.username %}" class="tile-link"></a>
+                            <div class="text-center mt-4">
+                                <a class="btn btn-secondary btn-sm add-friend-btn" data-user-id="{{ user.id }}">Add friend</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
     </div>
-    
+
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
