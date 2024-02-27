@@ -16,7 +16,7 @@
         </div>
         <ul class="user-list">
             {% for user in conversation.users.all %}
-                <li><a class="btn user-card" href="{% url 'other_user_profile' user.username %}">{{ user }}</a></li>
+                <li><a class="btn user-card" href="{% url 'profile' user.username %}">{{ user }}</a></li>
             {% endfor %}
         </ul>
     </div>
