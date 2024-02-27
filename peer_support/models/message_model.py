@@ -9,6 +9,7 @@ class Message(models.Model):
     send_time = models.DateTimeField(default=timezone.now)
     visible_to = models.ManyToManyField(User, blank=True,related_name='visible_to')
     read_by = models.ManyToManyField(User, blank=True,related_name = 'read_by')
+    previous_message = models.ForeignKey('self',null=True,on_delete=models.SET_NULL)
 
     def delete(self,users):
         """Delete message"""
@@ -17,6 +18,8 @@ class Message(models.Model):
         if self.visible_to.count() == 0:
             Message.objects.filter(pk=self.pk).delete()
 
-    def __str__(self):
-        """Return a string representing the message"""
-        return str(self.sender)+": "+self.content
+    def same_sender(self):
+        """Return whether sender of previous message as same as sender of this message"""
+        if self.previous_message is not None:
+            return self.sender == self.previous_message.sender
+        return False
