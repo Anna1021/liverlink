@@ -4,8 +4,6 @@
     {{ field.label_tag }}
     {% if field.label == "Users" %}
       <div class="notranslate">
-    {% else %}
-      <div>
     {% endif %}
     {% if form.is_bound %}
       {% if field.errors %}
@@ -16,7 +14,6 @@
     {% else %}
       {% render_field field class="form-control" %}
     {% endif %}
-    </div>
     <div class="valid-feedback">
       Looks good!
     </div>
