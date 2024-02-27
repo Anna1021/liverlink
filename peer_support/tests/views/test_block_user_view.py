@@ -8,7 +8,7 @@ class BlockUserViewTestCase(TestCase):
     """Tests of the block user view."""
     
     fixtures = ['peer_support/tests/fixtures/default_user.json',
-                'peer_support/tests/fixtures/other_users.json',]
+                'peer_support/tests/fixtures/other_users.json']
 
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
