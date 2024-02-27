@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification
+from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Conversation
 import uuid
 
 from faker import Faker
@@ -27,9 +27,9 @@ mentor_fixtures = [
 ]
 
 notification_fixtures = [
-    {'title': 'Welcome to Peer Support', 'description': 'Welcome to Peer Support. We are glad to have you here.', 'user': User.objects.get(username='@johndoe')},
-    {'title': 'New like to your post', 'description': 'Your post has received a new like.', 'user': User.objects.get(username='@johndoe')},
-    {'title': 'New message', 'description': 'You have received a new message.', 'user': User.objects.get(username='@johndoe')},
+    {'title': 'Welcome to Peer Support', 'description': 'Welcome to Peer Support. We are glad to have you here.', 'user':  patient_fixtures[0]},
+    {'title': 'New like to your post', 'description': 'Your post has received a new like.', 'user':  patient_fixtures[0]},
+    {'title': 'New message', 'description': 'You have received a new message.', 'user': patient_fixtures[0]},
 ]
 
 class Command(BaseCommand):
@@ -185,7 +185,7 @@ class Command(BaseCommand):
 
     def try_create_notification(self, data):
         try:
-            self.create_notification(data)
+          self.create_notification(data)
         except:
             pass
 
