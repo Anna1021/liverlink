@@ -9,7 +9,7 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request, username):
         """Get request for user to view profile"""
         user = User.objects.get(username=username)
-        context = {'user': user}
+        context = {'user': user, 'current_user': request.user}
 
         if hasattr(user, 'parent'):
             context['parent'] = user.parent
@@ -17,5 +17,7 @@ class ProfileView(LoginRequiredMixin, View):
             context['patient'] = user.patient
         else:
             context['mentor'] = user.mentor
+
+        context['blocklist'] = request.user.blocked_users.all() | request.user.blocked_by.all()
 
         return render(request, 'profile.html', context)
