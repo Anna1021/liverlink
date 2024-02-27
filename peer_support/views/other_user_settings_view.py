@@ -1,9 +1,6 @@
-from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-from django.urls import reverse
-from .helpers import get_referral_code
 
 class OtherUserSettingsView(LoginRequiredMixin, TemplateView):
     """Display the 'other users' section of profile settings."""

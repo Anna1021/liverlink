@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="modal fade" id="display_blocklist" tabindex="-1" aria-labelledby="display_blocklist" aria-hidden="true">
 
     <div class="modal-dialog modal-dialog-centered">
@@ -21,7 +23,7 @@
                     <tr>
                         <td><img src="{{ user.mini_gravatar }}" class="ps-mini-gravatar" alt="User's gravatar">   </img></td>
                         <td>{{ user.username }}</td>
-                        <td><button type="button" class="btn btn-primary unblock-user-btn" data-bs-toggle="modal" data-bs-target="#unblock_user">Unblock</button></td>
+                        <td><button type="button" class="btn btn-primary block-user-toggle-btn" data-user-id="{{user.id}}" data-action="unblock">Unblock</button></td>
                     </tr>
 
                     {% empty %}
@@ -37,8 +39,11 @@
         </div>
     </div>
 
-  </div>
+</div>
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
-
+      var unblockUserUrl = "{% url 'unblock_user' 0 %}";
+      var blockUserUrl = "{% url 'block_user' 0 %}";
   </script>
+  <script src="{% static 'js/blocklist.js' %}"></script>
