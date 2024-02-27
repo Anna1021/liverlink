@@ -109,6 +109,24 @@ class PeerSelectViewTestCase(TestCase):
         for user in users:
             self.assertNotIn(user, self.user.friends.all())
 
+    def test_exclude_blocked_users(self):
+        second_user = User.objects.get(username='@janedoe')
+        self.user.blocked_users.add(second_user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        users = response.context['users']
+        for user in users:
+            self.assertNotIn(user, self.user.blocked_users.all())
+
+    def test_exclude_other_users_blocking_user(self):
+        second_user = User.objects.get(username='@janedoe')
+        second_user.blocked_users.add(self.user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        users = response.context['users']
+        for user in users:
+            self.assertNotIn(user, self.user.blocked_by.all())
+
     def test_send_friend_request(self):
         pass
 

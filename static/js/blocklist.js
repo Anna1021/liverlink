@@ -10,6 +10,9 @@ $(document).ready(function () {
             blockUser(userId, button)
         }
     });
+    // $('#display_blocklist').on("hidden.bs.modal", function(){
+    //     removeBlockedUsers
+    // });
 
     function unblockUser(userId, button) {
         $.ajax({
@@ -42,7 +45,6 @@ $(document).ready(function () {
             }
         });
     }
-    
     
 });
 
