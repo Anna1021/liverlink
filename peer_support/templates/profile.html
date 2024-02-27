@@ -1,36 +1,159 @@
 {% extends 'base_content.html' %}
 {% block content %}
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <h2>Profile settings</h2>
-      <div class="col-2 ps-col">
-        <div style="padding: 10px"></div>
-        <img src="{{ user.gravatar }}" class="ps-gravatar" alt="Your gravatar">   </img>
-        <div style="padding: 10px"></div>
-        <div class="divider"></div>
-        <div style="padding: 5px"></div>
-        <ul class="ps-list">
-          <li class="ps-list-item"><a class="ps-link" href="{% url 'profile' %}"><i class="bi bi-gear ps-icons"> </i>Personal information</a></li>
-          <li class="ps-list-item"><a class="ps-link" href="{% url 'password' %}"><i class="bi bi-lock ps-icons"> </i>Password & security</a></li>
-          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-person ps-icons"> </i>Other users</a></li>
-          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-bell ps-icons"> </i>Notifications</a></li>
-          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-brightness-low ps-icons"> </i>Accessibility</a></li>
-        </ul>
-      </div>
-      <div class="col-8 ps-col">
-        {% block title %}{% endblock %}
-        <div style="padding: 5px"></div>
-        <div class="divider"></div>
-        <div style="padding: 5px"></div>
-        {% block page %}
-        {% endblock %}
-      </div>
-      <div class="col-2 ps-col"></div>
-    </div>
-  </div>
-  <row> <!-- footer -->
-    <div style="padding: 40px;"></div>
-  </row>
+{% load static %}
+<div class="container emp-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    {% if mentor %}
+                        <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" style="border: 7px solid rgb(101, 209, 101);"/>
+                    {% else %}
+                        <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" />
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <h5 class="notranslate">{{ user.full_name }}</h5>
+                    <h6 class="notranslate">{{ user.username }}</h6>
+                    {% if patient %}
+                        <h7>PATIENT</h7>
+                    {% elif mentor %}
+                        <h7>MENTOR</h7>
+                    {% elif parent %}
+                        <h7>PARENT</h7>
+                    {% endif %}
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="about-tab" data-toggle="tab" href="#" role="tab">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="timeline-tab" data-toggle="tab" href="#timeline"
+                                role="tab">Timeline</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-subheading pt-5 pl-3">
+                    <label>Bio</label>
+                    <p>{{ user.bio }}</p>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                        <div class="row">
+                            <div class="profile-subheading col-md-6">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ user.email }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="profile-subheading col-md-6">
+                                <label>Date of Birth</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ user.date_of_birth }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="profile-subheading col-md-6">
+                                <label>Gender</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ user.gender_name }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="profile-subheading col-md-6">
+                                <label>Location</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ user.country_name }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="profile-subheading col-md-6">
+                                <label>Hospital</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ user.hospital }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="profile-subheading col-md-6">
+                                <label>Ethnicity</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ user.ethnicity_name }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="profile-subheading col-md-6">
+                                <label>Language</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ user.language_name }}</p>
+                            </div>
+                        </div>
+                        {% if patient or mentor %}
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Age of diagnosis</label>
+                                </div>
+                                <div class="col-md-6">
+                                    {% if patient %}
+                                        <p>{{ patient.age_of_diagnosis }}</p>
+                                    {% elif mentor %}
+                                        <p>{{ mentor.age_of_diagnosis }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Condition</label>
+                                </div>
+                                <div class="col-md-6">
+                                    {% if patient %}
+                                        <p>{{ patient.condition }}</p>
+                                    {% elif mentor %}
+                                        <p>{{ mentor.condition }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if parent %}
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Child's age of diagnosis</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ parent.child_age_of_diagnosis }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Child's condition</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ parent.child_condition }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
+                        <p>Timeline</p>
+                        <!-- Add posts to this section -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 {% endblock %}
