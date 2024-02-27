@@ -16,4 +16,5 @@ function loadGoogleTranslateScript() {
   document.body.appendChild(script);
 }
 
+//Always loads widget
 window.onload = loadGoogleTranslateScript;
