@@ -12,19 +12,24 @@ class ConversationDetailsView(LoginRequiredMixin,FormView):
     template_name = 'conversation_details.html' 
 
     def get(self,request, conversation_id):
-        conversations = request.user.conversations.filter(id=conversation_id)
+        conversations = Conversation.objects.filter(id=conversation_id)
         if conversations.count() == 0:
             messages.error(request,"This conversation does not exist.")
             context = {'user_conversations':request.user.sort_conversations()}
             return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
-        conversation = conversations[0]
+        conversation = conversations.all()[0]
+        current_user = request.user
+        if current_user not in conversation.users.all():
+            messages.error(request,"You do not have access to this conversation.")
+            context = {'user_conversations':request.user.sort_conversations()}
+            return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
         if conversation.as_group() is None:
             messages.error(request,"You can only do this for a group conversation")
             return redirect(reverse('conversation',kwargs={'conversation_id':conversation.id}),{'user_conversations':request.user.sort_conversations()})
         context  = {
             'conversation':conversation.as_group(),
             'user_conversations':request.user.sort_conversations(),
-            'form': AddUsersForm(request.user,conversation.as_group())
+            'form': AddUsersForm(current_user,conversation.as_group())
         }
         return render(request,self.template_name,context)
 
