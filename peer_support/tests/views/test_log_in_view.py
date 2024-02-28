@@ -32,7 +32,7 @@ class LogInViewTestCase(TestCase, LogInTester, MenuTesterMixin):
         self.assert_no_menu(response)
 
     def test_get_log_in_with_redirect(self):
-        destination_url = reverse('profile')
+        destination_url = reverse('settings')
         self.url = reverse_with_next('log_in', destination_url)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
@@ -103,12 +103,12 @@ class LogInViewTestCase(TestCase, LogInTester, MenuTesterMixin):
         self.assert_menu(response)
 
     def test_successful_log_in_with_redirect(self):
-        redirect_url = reverse('profile')
+        redirect_url = reverse('settings')
         form_input = { 'username': '@johndoe', 'password': 'Password123', 'next': redirect_url }
         response = self.client.post(self.url, form_input, follow=True)
         self.assertTrue(self._is_logged_in())
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         messages_list = list(response.context['messages'])
         self.assertEqual(len(messages_list), 0)
 
@@ -121,7 +121,7 @@ class LogInViewTestCase(TestCase, LogInTester, MenuTesterMixin):
         self.assertTemplateUsed(response, 'dashboard.html')
 
     def test_post_log_in_with_incorrect_credentials_and_redirect(self):
-        redirect_url = reverse('profile')
+        redirect_url = reverse('settings')
         form_input = { 'username': '@johndoe', 'password': 'WrongPassword123', 'next': redirect_url }
         response = self.client.post(self.url, form_input)
         next = response.context['next']

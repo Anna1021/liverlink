@@ -26,9 +26,9 @@
             {% else %}
                 <li>
                 {% if user == conversation.get_first_member %}
-                    <a class="dropdown-item" href="{% url 'other_user_profile' conversation.get_second_member.username %}">
+                    <a class="dropdown-item" href="{% url 'profile' conversation.get_second_member.username %}">
                 {% else %}
-                    <a class="dropdown-item" href="{% url 'other_user_profile' conversation.get_first_member.username %}">
+                    <a class="dropdown-item" href="{% url 'profile' conversation.get_first_member.username %}">
                 {% endif %}
                 View user details</a></li>
             {% endif %}
