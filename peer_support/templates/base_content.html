@@ -2,11 +2,15 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-  <div id="cover-image">
-    {% include 'partials/navbar.html' %}
-    {% include 'partials/messages.html' %}
-    {% block content %}
-    {% endblock %}
-       </div>
-     {% endblock %}
+  <div id="main" class>
+      <div id="cover-image">
+        {% include 'partials/navbar.html' %}
+        {% include 'partials/messages.html' %}
+        {% block content %}
+        {% endblock %}
+      </div>
+    </div>
+{% endblock %}
+
+
      

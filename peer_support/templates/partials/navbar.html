@@ -1,22 +1,8 @@
 {% load static %}
 
-<style>
-  .light-theme {
-    background-color: white;
-    color: black;
-  }
-
-  .dark-theme {
-    background-color: black;
-    color: white;
-  }
-  .img-fluid{
-    width: 35px !important;
-  }
-</style>
 
 <div class="select-theme">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav id="top-nav" class="navbar navbar-expand-lg navbar-dark ">
     <div class="container">
       <a class="navbar-brand" href="{% url 'dashboard' %}">
         <img
@@ -37,7 +23,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <select
-        id="theme-switcher"
+        id="theme"
         class="form-select"
         style="width: auto; margin-left: auto"
       >

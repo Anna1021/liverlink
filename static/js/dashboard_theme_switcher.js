@@ -1,39 +1,51 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var lightThemeLogo = '/static/images/Pulse-logo_black.png';
-    var darkThemeLogo = '/static/images/pulseLogoCropped.png';
-  
-    document.getElementById("theme-switcher").onchange = function(event) {
-      var theme = event.target.value;
-      var bodyElement = document.body;
-      var mainNavbar = document.querySelector('.navbar');
-      var leftNavbar = document.querySelector('.card');
-      var feedCard = document.querySelector('.col-md-9 .card'); 
-      var welcomeText = document.querySelector('.col-md-9 .card h1'); 
-      var welcomeUserText = document.querySelector('.card-header .card-title');
-      var buttons = document.querySelectorAll('.btn');
+$(document).ready(function () {
+  var lightThemeLogo = '/static/images/Pulse-logo_black.png';
+  var darkThemeLogo ='/static/images/pulseLogoCropped.png';
 
-      bodyElement.classList.toggle("light-theme", theme === 'light-theme');
-      bodyElement.classList.toggle("dark-theme", theme === 'dark-theme');
-      mainNavbar.classList.toggle('navbar-light', theme === 'light-theme');
-      mainNavbar.classList.toggle('bg-light', theme === 'light-theme');
-      mainNavbar.classList.toggle('navbar-dark', theme === 'dark-theme');
-      mainNavbar.classList.toggle('bg-dark', theme === 'dark-theme');
-      leftNavbar.classList.toggle('bg-light', theme === 'light-theme');
-      leftNavbar.classList.toggle('bg-dark', theme === 'dark-theme');
-      feedCard.classList.toggle('bg-light', theme === 'light-theme');
-      feedCard.classList.toggle('bg-dark', theme === 'dark-theme');
-      welcomeText.classList.toggle('text-dark', theme === 'light-theme');
-      welcomeText.classList.toggle('text-light', theme === 'dark-theme');
-      welcomeUserText.classList.toggle('text-dark', theme === 'light-theme');
-      welcomeUserText.classList.toggle('text-light', theme === 'dark-theme');
+  // Set image source based on theme and save to local storage
+  function setImageSource(theme) {
+    var logoImageSrc = theme === 'light-theme' ? lightThemeLogo : darkThemeLogo;
+    $('.img-fluid').attr('src', logoImageSrc);
+    localStorage.setItem("currentLogo", logoImageSrc);
+  }
 
-      var logoImage = document.querySelector('.img-fluid');
-      logoImage.src = (theme === 'light-theme' ? lightThemeLogo : darkThemeLogo);
-
-      buttons.forEach(function(button) {
-        button.classList.toggle('btn-outline-dark', theme === 'light-theme');
-        button.classList.toggle('btn-outline-light', theme === 'dark-theme');
-      });
-    };
+  $('#theme').change(function() {
+    var theme = $(this).val();
+    setTheme(theme);
+    setImageSource(theme);
   });
-  
+
+  function setTheme(themeName) {
+    let mainDiv = $("#main");
+    mainDiv.removeClass();
+    mainDiv.addClass(themeName);
+    saveTheme(themeName);
+  }
+
+  function getCurrentTheme() {
+    var themeSelected = $("#theme").val();
+    console.log("themeSelected:", themeSelected);
+    return themeSelected;
+  }
+
+  function saveTheme(themeName) {
+    localStorage.setItem("currentTheme", themeName);
+  }
+
+  function selectTheme(themeName) {
+    $("#theme").val(themeName);
+  }
+
+  let storedTheme = localStorage.getItem("currentTheme");
+  let storedLogo = localStorage.getItem("currentLogo");
+
+  if (storedTheme) {
+    setTheme(storedTheme);
+    selectTheme(storedTheme);
+    setImageSource(storedTheme); // Use stored theme to determine image source
+  } else {
+    var currentTheme = getCurrentTheme();
+    setTheme(currentTheme);
+    setImageSource(currentTheme); // Use current theme to determine image source
+  }
+});
