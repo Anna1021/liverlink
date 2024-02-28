@@ -19,6 +19,6 @@ class DeleteMessageView(LoginRequiredMixin,View):
         context = {
             'form':MessageForm(conversation,user=request.user),
             'conversation':conversation,
-            'user_conversations':request.user.conversations.all()
+            'user_conversations':request.user.sort_conversations()
             }
         return redirect(reverse("conversation",kwargs={'conversation_id':conversation.id}),context)
