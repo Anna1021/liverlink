@@ -1,9 +1,8 @@
-{% extends 'base_content.html' %}
-{% block content %}
+{% extends 'dashboard.html' %}
 {% load static %}
-  <body>
-    <div class="main">
-    {% include 'resources-navbar.html' %}
+{% block page %}
+  <div class="main">
+  {% include 'partials/resources-navbar.html' %}
     <div class="page">
       <!-- Questions Section -->
       <div class="section">
@@ -21,7 +20,7 @@
           {% endfor %}
         </div>
       </div>
-    
+      <hr>
       <!-- Types of Liver Disease Section -->
       <div class="section">
         <div class="types-of-liver-disease">
@@ -67,7 +66,6 @@
         </div>
       </div>
     </div>
-    </div>
   </div>
-  </body>
-  {% endblock %}
+</div>
+{% endblock %}
