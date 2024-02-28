@@ -15,7 +15,6 @@
       "ethnicity": "BR",
       "language": "en",
       "bio": "I'm a test user",
-      "conversations":[1,2],
       "is_active": true
     }
   }
