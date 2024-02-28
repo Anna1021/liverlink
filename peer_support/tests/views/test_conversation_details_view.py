@@ -2,6 +2,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.models import User, Conversation
+from peer_support.forms import AddUsersForm
 from django.contrib import messages
 
 class ConversationViewTestCase(TestCase):
@@ -21,6 +22,11 @@ class ConversationViewTestCase(TestCase):
         self.no_conversation_url = reverse('conversation',kwargs={'conversation_id':0})
         self.user = User.objects.get(username='@johndoe')
         self.client.login(username=self.user.username, password="Password123")
+        self.user_to_add = User.objects.filter(pk=2)
+        self.form_input = {
+            'users' : self.user_to_add,
+        }
+        self.user.friends.set(self.user_to_add)
 
     def test_conversation_url(self):
         self.assertEqual(self.url,'/conversation_details/2')
@@ -62,3 +68,29 @@ class ConversationViewTestCase(TestCase):
         messages_list = list(response.context['messages'])
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
+
+    def test_unsuccessful_add_user(self):
+        self.form_input['users'] = []
+        before_count = self.conversation.users.count()
+        response = self.client.post(self.url,data=self.form_input)
+        after_count = self.conversation.users.count()
+        self.assertEqual(after_count, before_count)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation_details.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, AddUsersForm))
+        self.assertTrue(form.is_bound)
+
+    def test_successful_add_user(self):
+        before_count = self.conversation.users.count()
+        self.assertNotIn(self.user_to_add[0],self.conversation.users.all())
+        
+        self.client.post(self.url,data=self.form_input)
+        after_count = self.conversation.users.count()
+        self.assertEqual(after_count, before_count+1)
+        self.assertIn(self.user_to_add[0],self.conversation.users.all())
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation_details.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, AddUsersForm))
+        self.assertFalse(form.is_bound)
