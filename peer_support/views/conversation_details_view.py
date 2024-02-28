@@ -45,8 +45,5 @@ class ConversationDetailsView(LoginRequiredMixin,FormView):
             form.save(conversation)
             return render(request,self.template_name,context)
         else:
-            for field, errors in form.errors.items():
-                # Iterate through each field and its corresponding error messages
-                print(f"Field '{field}': {', '.join(errors)}")
             messages.error(request,"You have to add at least 1 person")
             return render(request,self.template_name,{'form':form,'conversation':conversation.as_group(),'user_conversations':request.user.sort_conversations()})#
