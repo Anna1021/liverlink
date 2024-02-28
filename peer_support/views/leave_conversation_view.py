@@ -9,7 +9,7 @@ class LeaveConversationView(LoginRequiredMixin,View):
     """User is removed from the group conversation"""
     def get(self,request,conversation_id):
         conversations = request.user.conversations.filter(id=conversation_id)
-        if conversations.count() == 0:
+        if conversations.count() == 0 or request.user not in conversations[0].users.all():
             messages.error(request,"This conversation does not exist.")
             context = {'user_conversations':request.user.sort_conversations()}
             return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
@@ -24,6 +24,6 @@ class LeaveConversationView(LoginRequiredMixin,View):
             return redirect(reverse("conversation",kwargs={'conversation_id':conversation_id}),context)
         conversation.remove_user(request.user)
         context = {
-            'user_conversations':request.user.conversations.all()
+            'user_conversations':request.user.sort_conversations()
             }
         return redirect(reverse("conversation",kwargs={'conversation_id':0}),context)
