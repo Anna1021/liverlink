@@ -17,16 +17,17 @@ class ConversationViewTestCase(TestCase):
 
 
     def setUp(self):
+        self.other_user_id = 2
         self.conversation = Conversation.objects.get(pk=2)
         self.url = reverse('conversation_details',kwargs={'conversation_id':self.conversation.id})
         self.no_conversation_url = reverse('conversation',kwargs={'conversation_id':0})
         self.user = User.objects.get(username='@johndoe')
         self.client.login(username=self.user.username, password="Password123")
-        self.user_to_add = User.objects.filter(pk=2)
-        self.form_input = {
-            'users' : self.user_to_add,
-        }
+        self.user_to_add = User.objects.filter(pk=self.other_user_id)
         self.user.friends.set(self.user_to_add)
+        self.form_input = {
+            'users' : [self.other_user_id]
+        }
 
     def test_conversation_url(self):
         self.assertEqual(self.url,'/conversation_details/2')
@@ -84,11 +85,10 @@ class ConversationViewTestCase(TestCase):
     def test_successful_add_user(self):
         before_count = self.conversation.users.count()
         self.assertNotIn(self.user_to_add[0],self.conversation.users.all())
-        
-        self.client.post(self.url,data=self.form_input)
+        response = self.client.post(self.url,data=self.form_input)
         after_count = self.conversation.users.count()
-        self.assertEqual(after_count, before_count+1)
         self.assertIn(self.user_to_add[0],self.conversation.users.all())
+        self.assertEqual(after_count, before_count+1)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'conversation_details.html')
         form = response.context['form']
