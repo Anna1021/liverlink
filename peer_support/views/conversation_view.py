@@ -14,7 +14,7 @@ class ConversationView(LoginRequiredMixin, FormView):
     def get(self,request,conversation_id):
         if conversation_id==0:
             return render(request,self.template_name,{'user_conversations':request.user.sort_conversations()})
-        conversations = Conversation.objects.filter(id=conversation_id)
+        conversations = request.user.conversations.filter(id=conversation_id)
         if conversations.count() == 0:
             messages.error(request,"This conversation does not exist.")
             context = {'user_conversations':request.user.sort_conversations()}

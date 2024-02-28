@@ -16,6 +16,7 @@
       "language": "en",
       "bio": "Hi, I'm Jane Doe",
       "blocked_users": [4],
+      "conversations":[1],
       "is_active": true
     }
   },
@@ -36,6 +37,7 @@
       "language": "fr",
       "bio": "Hi, I'm Petra Pickles! I'm a student at King's College London.",
       "friends": [4],
+      "conversations":[2],
       "is_active": true
     }
   },
@@ -55,6 +57,7 @@
       "language": "ru",
       "bio": "Peter here!",
       "friends": [3],
+      "conversations":[2],
       "is_active": true
     }
   },
