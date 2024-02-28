@@ -6,13 +6,8 @@
   </div>
   <div class="user-menu">
     <ul>
-      {% if user.is_authenticated %}
       <li><a href="{% url 'new-question' %}">Ask question</a></li>
-      <li><a href="{% url 'dashboard' %}">Go Back</a></li>
-      {% else %}
-      <li><a href="{% url 'log_in' %}">Login</a></li>
-      <li><a href="{% url 'sign_up' %}">Sign up</a></li>
-      {% endif %}
+      <li><a href="{% url 'resources' %}">Go Back</a></li>
     </ul>
   </div>
 </nav>
