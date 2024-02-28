@@ -3,7 +3,7 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import User
 
-class OtherUserProfileView(LoginRequiredMixin, View):
+class ProfileView(LoginRequiredMixin, View):
     """Displays other user's profile"""
     
     def get(self, request, username):
@@ -18,4 +18,4 @@ class OtherUserProfileView(LoginRequiredMixin, View):
         else:
             context['mentor'] = user.mentor
 
-        return render(request, 'other_user_profile.html', context)
+        return render(request, 'profile.html', context)

@@ -41,18 +41,18 @@
         <div class="container my-2">
             <div class="row">
                 {% for user in users %}
-                <div class="col-md-6 col-xl-4 my-2">
+                <div class="col-md-6 my-2">
                     <div class="card">
                         <div class="friend-card-body">
                             <div class="media align-items-center"><span
                                     style="background-image: url(https://media1.tenor.com/m/jntELgCIwQYAAAAC/kermit-lipton.gif)"
                                     class="avatar mr-3"></span>
                                 <div class="media-body overflow-hidden">
-                                    <h5 class="card-text mb-0">{{ user.username }}</h5>
+                                    <h5 class="card-text mb-0 notranslate">{{ user.username }}</h5>
                                     <p class="card-text text-uppercase subtext mb-0">{{ user.full_name }}</p>
                                     <p class="card-text subtext">{{ user.country_name }}</p>
                                 </div>
-                            </div><a href="{% url 'other_user_profile' username=user.username %}" class="tile-link"></a>
+                            </div><a href="{% url 'profile' username=user.username %}" class="tile-link"></a>
                             <div class="text-center mt-4">
                                 <a class="btn btn-secondary btn-sm add-friend-btn" data-user-id="{{ user.id }}">Add friend</a>
                             </div>
