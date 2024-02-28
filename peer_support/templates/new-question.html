@@ -1,4 +1,4 @@
-{% extends 'layouts/page.html' %}
+{% extends 'base_content.html' %}
 {% block content %}
     <style>
         .submit-button {
@@ -7,7 +7,8 @@
             padding: 10px;
         }
     </style>
-
+    <div class="main">
+        {% include 'resources-navbar.html' %}
     <div class="page new-question-page">
         <h1 class="title">New question</h1>
 
@@ -27,6 +28,6 @@
             <input type="submit" value="Submit" class="submit-button"/>
 
         </form>
-
+    </div>
     </div>
 {% endblock %}
