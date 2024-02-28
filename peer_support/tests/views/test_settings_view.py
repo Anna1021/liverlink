@@ -1,4 +1,4 @@
-"""Tests for the profile view."""
+"""Tests for the profile settings view."""
 import datetime
 from django.contrib import messages
 from django.test import TestCase
@@ -8,7 +8,7 @@ from peer_support.models import Patient, Parent, Mentor
 from peer_support.tests.helpers import reverse_with_next
 
 class ProfileViewTest(TestCase):
-    """Test suite for the profile view."""
+    """Test suite for the profile settings view."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
@@ -35,7 +35,7 @@ class ProfileViewTest(TestCase):
                             age_of_diagnosis = 15,
                             referral_code = 'TEST123')
         self.mentor = Mentor.objects.get(username='@testmentor')
-        self.url = reverse('profile')
+        self.url = reverse('settings')
         self.parent_form_input = {
             'first_name': 'John',
             'last_name': 'Doe',
@@ -81,26 +81,26 @@ class ProfileViewTest(TestCase):
         }
 
     def test_profile_url(self):
-        self.assertEqual(self.url, '/profile/')
+        self.assertEqual(self.url, '/settings/')
 
     def test_get_patient_form_when_current_user_is_patient(self):
         self.client.login(username=self.patient.username, password='Password123')
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PatientForm))
 
     def test_get_parent_form_when_current_user_is_parent(self):
         self.client.login(username=self.parent.username, password='Password123')
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, ParentForm))  
 
     def test_get_mentor_form_when_current_user_is_mentor(self):
         self.client.login(username=self.mentor.username, password='Password123')
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, MentorForm))    
 
@@ -108,7 +108,7 @@ class ProfileViewTest(TestCase):
         self.client.login(username=self.patient.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PatientForm))
         self.assertEqual(form.instance, self.patient)
@@ -126,7 +126,7 @@ class ProfileViewTest(TestCase):
         after_count = Patient.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PatientForm))
         self.assertTrue(form.is_bound)
@@ -152,7 +152,7 @@ class ProfileViewTest(TestCase):
         after_count = Parent.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, ParentForm))
         self.assertTrue(form.is_bound)
@@ -178,7 +178,7 @@ class ProfileViewTest(TestCase):
         after_count = Mentor.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, MentorForm))
         self.assertTrue(form.is_bound)
@@ -205,7 +205,7 @@ class ProfileViewTest(TestCase):
         after_count = Patient.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PatientForm))
         self.assertTrue(form.is_bound)
