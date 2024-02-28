@@ -13,18 +13,13 @@ class ConversationView(LoginRequiredMixin, FormView):
     def get(self,request,conversation_id):
         if conversation_id==0:
             return render(request,self.template_name,{'user_conversations':request.user.sort_conversations()})
-        conversations = Conversation.objects.filter(id=conversation_id)
+        conversations = request.user.conversations.filter(id=conversation_id)
         if conversations.count() == 0:
             messages.error(request,"This conversation does not exist.")
             context = {'user_conversations':request.user.sort_conversations()}
             return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
-        conversation = conversations.all()[0]
-        current_user = request.user
-        if current_user not in conversation.users.all():
-            messages.error(request,"You do not have access to this conversation.")
-            context = {'user_conversations':request.user.sort_conversations()}
-            return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
-        form = MessageForm(conversation,user=current_user)
+        conversation = conversations[0]
+        form = MessageForm(conversation,user=request.user)
         context = {"form":form, 'conversation':conversation,'user_conversations':request.user.sort_conversations()}
         return render(request,self.template_name,context)
 

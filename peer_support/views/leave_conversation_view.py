@@ -8,7 +8,12 @@ from django.contrib import messages
 class LeaveConversationView(LoginRequiredMixin,View):
     """User is removed from the group conversation"""
     def get(self,request,conversation_id):
-        conversation = Conversation.objects.get(id=conversation_id).as_group()
+        conversations = request.user.conversations.filter(id=conversation_id)
+        if conversations.count() == 0:
+            messages.error(request,"This conversation does not exist.")
+            context = {'user_conversations':request.user.sort_conversations()}
+            return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
+        conversation = conversations[0].as_group()
         if conversation is None:
             messages.error(request,"You cannot leave a direct conversation!")
             context = {
@@ -16,7 +21,7 @@ class LeaveConversationView(LoginRequiredMixin,View):
                 'conversation':conversation,
                 'user_conversations':request.user.sort_conversations()
                 }
-            return redirect(reverse("conversation",kwargs={'conversation_id':conversation.id}),context)
+            return redirect(reverse("conversation",kwargs={'conversation_id':conversation_id}),context)
         conversation.remove_user(request.user)
         context = {
             'user_conversations':request.user.conversations.all()
