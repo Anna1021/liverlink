@@ -236,3 +236,8 @@ a.username {
   border-radius: 4px;
   cursor: pointer;
 }
+
+.question-body,.question-title,.responses-container{
+  width: 752px;
+  word-wrap: break-word;
+}
