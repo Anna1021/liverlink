@@ -49,6 +49,7 @@ class GroupConversation(Conversation):
     def remove_user(self,user):
         """Remove user from group and delete self if no users in group"""
         self.users.remove(user)
+        user.conversations.remove(self)
         if self.users.count()==0:
             self.delete() 
 
