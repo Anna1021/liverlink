@@ -24,11 +24,11 @@
       </button>
       <select
         id="theme"
-        class="form-select"
+        class="theme_toggle"
         style="width: auto; margin-left: auto"
       >
         <option value="light-theme">Light</option>
-        <option value="dark-theme">Dark</option>
+        <option value="dark-theme" selected>Dark</option>
       </select>
       <div id="google_translate_element"></div>
       {% if user.is_authenticated %} {% include 'partials/menu.html' %} 
