@@ -37,14 +37,18 @@
             </div>
             <div class="col-md-2">
                 <div id="user-actions-dropdown" style="float: right;">
-                    <a class="actions-icon" href="#" id="actionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="user-actions-dropdown">
+                    <a class="actions-icon" href="#" id="actionsDropdown" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-haspopup="true" aria-label="user-actions-dropdown">
                         <span class="bi bi-three-dots-vertical"></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="actionsDropdown" data-popper-placement="bottom-end">
                       <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}" data-action="add-friend">Add friend</a> <!-- To be updated -->
-                      <a class="dropdown-item" href="#" id="message-link" data-action="message">Send message</a> <!-- To be updated ! no js--> 
+                      <a class="dropdown-item" href="#" id="message-link" data-action="message">Send message</a> <!-- To be updated --> 
+                      {% if user in blocklist %}
+                      <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="unblock-user">Unblock this user</a>
+                      {% else %}
                       <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="block-user">Block this user</a>
-                      <a class="dropdown-item" href="#" id="report-link" data-action="report-user">Report this user</a> <!-- To be updated ! no js-->
+                      {% endif %}
+                      <a class="dropdown-item" href="#" id="report-link" data-action="report-user">Report this user</a> <!-- To be updated -->
                     </div>
                   </div>
             </div>
@@ -57,115 +61,119 @@
                 </div>
             </div>
             <div class="col-md-7">
-                {% if user in blocklist %}
-                <div class="profile-subheading">You cannot view this user's profile.</div>
+                {% if current_user in blocklist%}
+                <div class="profile-subheading" id="current-user-is-blocked">You cannot view this user's profile.</div>
+                {% elif user in blocklist %}
+                <div class="profile-subheading" id="user-is-blocked">You have blocked this user.</div>
                 {% else %}
-                <div class="tab-content profile-tab" id="myTabContent">
-                    <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
-                        <div class="row">
-                            <div class="profile-subheading col-md-6">
-                                <label>Email</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>{{ user.email }}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="profile-subheading col-md-6">
-                                <label>Date of Birth</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>{{ user.date_of_birth }}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="profile-subheading col-md-6">
-                                <label>Gender</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>{{ user.gender_name }}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="profile-subheading col-md-6">
-                                <label>Location</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>{{ user.country_name }}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="profile-subheading col-md-6">
-                                <label>Hospital</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>{{ user.hospital }}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="profile-subheading col-md-6">
-                                <label>Ethnicity</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>{{ user.ethnicity_name }}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="profile-subheading col-md-6">
-                                <label>Language</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>{{ user.language_name }}</p>
-                            </div>
-                        </div>
-                        {% if patient or mentor %}
+                <div id="profile-content">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
                             <div class="row">
                                 <div class="profile-subheading col-md-6">
-                                    <label>Age of diagnosis</label>
+                                    <label>Email</label>
                                 </div>
                                 <div class="col-md-6">
-                                    {% if patient %}
-                                        <p>{{ patient.age_of_diagnosis }}</p>
-                                    {% elif mentor %}
-                                        <p>{{ mentor.age_of_diagnosis }}</p>
-                                    {% endif %}
+                                    <p>{{ user.email }}</p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="profile-subheading col-md-6">
-                                    <label>Condition</label>
+                                    <label>Date of Birth</label>
                                 </div>
                                 <div class="col-md-6">
-                                    {% if patient %}
-                                        <p>{{ patient.condition }}</p>
-                                    {% elif mentor %}
-                                        <p>{{ mentor.condition }}</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if parent %}
-                            <div class="row">
-                                <div class="profile-subheading col-md-6">
-                                    <label>Child's age of diagnosis</label>
-                                </div>
-                                <div class="col-md-6">
-                                    <p>{{ parent.child_age_of_diagnosis }}</p>
+                                    <p>{{ user.date_of_birth }}</p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="profile-subheading col-md-6">
-                                    <label>Child's condition</label>
+                                    <label>Gender</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>{{ parent.child_condition }}</p>
+                                    <p>{{ user.gender_name }}</p>
                                 </div>
                             </div>
-                        {% endif %}
-                    </div>
-                    <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
-                        <p>Timeline</p>
-                        <!-- Add posts to this section -->
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Location</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.country_name }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Hospital</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.hospital }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Ethnicity</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.ethnicity_name }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Language</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.language_name }}</p>
+                                </div>
+                            </div>
+                            {% if patient or mentor %}
+                                <div class="row">
+                                    <div class="profile-subheading col-md-6">
+                                        <label>Age of diagnosis</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% if patient %}
+                                            <p>{{ patient.age_of_diagnosis }}</p>
+                                        {% elif mentor %}
+                                            <p>{{ mentor.age_of_diagnosis }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="profile-subheading col-md-6">
+                                        <label>Condition</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% if patient %}
+                                            <p>{{ patient.condition }}</p>
+                                        {% elif mentor %}
+                                            <p>{{ mentor.condition }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if parent %}
+                                <div class="row">
+                                    <div class="profile-subheading col-md-6">
+                                        <label>Child's age of diagnosis</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{ parent.child_age_of_diagnosis }}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="profile-subheading col-md-6">
+                                        <label>Child's condition</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{ parent.child_condition }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
+                            <p>Timeline</p>
+                            <!-- Add posts to this section -->
+                        </div>
                     </div>
                 </div>
                 {% endif %}

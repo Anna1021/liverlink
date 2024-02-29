@@ -7,7 +7,7 @@ $(document).ready(function () {
             unblockUser(userId, button);
         }
         else {
-            blockUser(userId, button)
+            blockUser(userId, button);
         }
     });
 

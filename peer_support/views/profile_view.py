@@ -18,6 +18,6 @@ class ProfileView(LoginRequiredMixin, View):
         else:
             context['mentor'] = user.mentor
 
-        context['blocklist'] = request.user.blocked_users.all() | request.user.blocked_by.all()
+        context['blocklist'] = request.user.blocked_users.all() | user.blocked_users.all()
 
         return render(request, 'profile.html', context)
