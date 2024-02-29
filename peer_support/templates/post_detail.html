@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Post Detail</title>
-</head>
-<body>
+
+{% extends 'dashboard.html' %}
+{% block page %}
     <h1>Post Detail</h1>
     <p><strong>Author:</strong> {{ post.author }}</p>
     <p><strong>Title:</strong>{{ post.title }}</p>
@@ -31,8 +28,4 @@
         {{ comment_form.as_p }}
         <button type="submit">Submit comment</button>
     </form>
-
-    <!-- Button to go back to home page -->
-    <a href="{% url 'home' %}" class="btn btn-primary">Go Back to Home Page</a>
-</body>
-</html>
+{% endblock %}

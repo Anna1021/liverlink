@@ -28,13 +28,9 @@ def create_post(request):
             post.author = request.user
             post.save()
             return redirect('feed') 
-            # was return redirect('post_detail', post_id=post.id) 
-
     else:
         form = PostForm()
     return render(request, 'create_post.html', {'form': form})
-
-
 
 
 def post_detail(request, post_id):
@@ -50,18 +46,13 @@ def post_detail(request, post_id):
             return redirect('post_detail', post_id=post_id)
     else:
         comment_form = CommentForm()
-    
     return render(request, 'post_detail.html', {'post': post, 'comment_form': comment_form})
 
-
-"""
-def show_posts(request):
-    Retrive all posts created by the current user
-
-    user_posts = Post.objects.filter(author=request.user)
-    return render(request, 'show_posts.html', {'user_posts': user_posts})
-"""
+#@login_required
+#def my_posts(request):
+#    return render(request, 'my_posts.html')
 
 def feed(request):
-    user_posts = Post.objects.order_by("-created_at")
-    return render(request, 'partials/feed.html', {'posts': user_posts})
+    #user_posts = Post.objects.filter(author_id__in=request.user.friends.all())
+    user_posts = Post.objects.order_by("-created_at") # filter friends out, if statement
+    return render(request, 'feed.html', {'posts': user_posts})

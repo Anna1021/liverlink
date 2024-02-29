@@ -9,9 +9,12 @@
         </div>
         <div class="card-body">
             <div class="container text-center">
-                <a href="{% url 'dashboard' %}">
+                <a href="{% url 'feed' %}">
                     <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100" >Home</button>
                 </a>
+                <!-- <a href="{% url 'dashboard' %}">
+                    <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100" >Home</button>
+                </a> -->
                 <a href="{% url 'resources' %}">
                     <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100" >Resources</button>
                 </a>
@@ -22,6 +25,7 @@
                     <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100" >Find Friends</button>
                 </a>
                 <!-- Show all the posts created by the user  -->
+                <!-- new -->
                 <a href="{% url 'create_post' %}">
                     <button type="button" class ="btn btn-lg btn-outline-light mb-3 w-100">Posts</button> 
                 </a>

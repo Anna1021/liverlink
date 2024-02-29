@@ -49,6 +49,8 @@ urlpatterns = [
     path('delete_notification/<int:notification_id>/', views.delete_notification, name='delete_notification'),
     path('clear_notifications/', views.clear_notifications, name='clear_notifications'),
     path('inbox/', views.InboxView.as_view(), name='inbox'),
+    path('conversation_details/<int:conversation_id>',views.ConversationDetailsView.as_view(),name="conversation_details"),
+
 <<<<<<< HEAD
     #post
     path('create_post/', views.create_post, name='create_post'),
@@ -57,8 +59,8 @@ urlpatterns = [
     #path('show_posts/', views.show_posts, name='show_posts'),
     
     #feed
-    path('partials/feed/', views.feed, name='feed'),
-=======
-    path('conversation_details/<int:conversation_id>',views.ConversationDetailsView.as_view(),name="conversation_details"),
->>>>>>> main
+    #path('partials/feed/', views.feed, name='feed'),
+
+    path('feed/', views.feed, name='feed'),
+    #new
 ]
