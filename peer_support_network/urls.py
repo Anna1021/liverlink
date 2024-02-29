@@ -48,5 +48,8 @@ urlpatterns = [
     path('create_post/', views.create_post, name='create_post'),
     #path('add_comment/<int:post_id>/', views.add_comment, name='add_comment'), 
     path('post/<int:post_id>/', views.post_detail, name='post_detail'),
-    path('show_posts/', views.show_posts, name='show_posts'),
+    #path('show_posts/', views.show_posts, name='show_posts'),
+    
+    #feed
+    path('partials/feed/', views.feed, name='feed'),
 ]

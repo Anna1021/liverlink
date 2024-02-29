@@ -26,5 +26,6 @@ from .delete_notification_view import delete_notification
 from .clear_notifications_view import clear_notifications
 
 #post
-from .post_view import create_post, post_detail,show_posts
+# WAS from .post_view import create_post, post_detail,show_posts
 #from .post_comment_view import add_comment
+from .post_view import create_post, post_detail,feed

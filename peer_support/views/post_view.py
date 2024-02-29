@@ -14,16 +14,22 @@ from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm
 from peer_support.models import Post, PostComment
 from peer_support.forms import PostForm, CommentForm
 
+#new
+from django.contrib.auth.decorators import login_required
 
-
+# @login_required
 def create_post(request):
+    form = PostForm()
+
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect('post_detail', post_id=post.id)
+            return redirect('feed') 
+            # was return redirect('post_detail', post_id=post.id) 
+
     else:
         form = PostForm()
     return render(request, 'create_post.html', {'form': form})
@@ -48,9 +54,14 @@ def post_detail(request, post_id):
     return render(request, 'post_detail.html', {'post': post, 'comment_form': comment_form})
 
 
+"""
 def show_posts(request):
-    """Retrive all posts created by the current user"""
+    Retrive all posts created by the current user
 
     user_posts = Post.objects.filter(author=request.user)
     return render(request, 'show_posts.html', {'user_posts': user_posts})
+"""
 
+def feed(request):
+    user_posts = Post.objects.order_by("-created_at")
+    return render(request, 'partials/feed.html', {'posts': user_posts})
