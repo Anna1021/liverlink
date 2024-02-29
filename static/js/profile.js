@@ -1,24 +1,23 @@
 $(document).ready(function () {
-    $('.block-user-toggle-btn').click(function() {
+    $('#block-link').click(function() {
         var userId = $(this).data('user-id');
         var action = $(this).attr('data-action');
-        var button = $(this);
+        var a_element = $(this);
         if (action == 'unblock'){
-            unblockUser(userId, button);
+            unblockUser(userId, a_element);
         }
         else {
-            blockUser(userId, button)
+            blockUser(userId, a_element)
         }
     });
 
-    function unblockUser(userId, button) {
+    function unblockUser(userId, a_element) {
         $.ajax({
             url : unblockUserUrl.replace('0', userId),
             type: 'GET', 
             success: function() {
-                button.removeClass('btn-unblock').addClass('btn-block');
-                button.attr('data-action', 'block');
-                button.text('Block'); 
+                a_element.attr('data-action', 'block');
+                a_element.text('Block this user'); 
             },
             error: function(xhr) {
                 console.error(xhr.responseText);
@@ -27,14 +26,13 @@ $(document).ready(function () {
         });
     }
 
-    function blockUser(userId, button) {
+    function blockUser(userId, a_element) {
         $.ajax({
             url : blockUserUrl.replace('0', userId),
             type: 'GET', 
             success: function() {
-                button.removeClass('btn-block').addClass('btn-unblock');
-                button.attr('data-action', 'unblock');
-                button.text('Unblock'); 
+                a_element.attr('data-action', 'unblock');
+                a_element.text('Unblock this user'); 
             },
             error: function(xhr) {
                 console.error(xhr.responseText);
