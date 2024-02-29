@@ -24,26 +24,32 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('log_in/', views.LogInView.as_view(), name='log_in'),
     path('log_out/', views.log_out, name='log_out'),
+<<<<<<< HEAD
     path('profile/password/', views.PasswordView.as_view(), name='password'),
     path('profile/', views.ProfileUpdateView.as_view(), name='profile'),
+=======
+    path('settings/password/', views.PasswordView.as_view(), name='password'),
+    path('settings/', views.ProfileUpdateView.as_view(), name='settings'),
+    path('deactivate_user/', views.deactivate_user, name='deactivate_user'),
+>>>>>>> main
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('resources/', views.resources, name='resources'),
     path('question/<int:id>', views.questionPage, name='question'),
     path('new-question/', views.newQuestionPage, name='new-question'),
     path('reply', views.replyPage, name='reply'),
     path('conversation/<int:conversation_id>', views.ConversationView.as_view(), name='conversation'),
-    path('conversation/<int:conversation_id>', views.ConversationView.as_view(),name='conversation'),
     path('peer_select/', views.PeerView.as_view(), name='peer_select'),
     path('create_conversation/',views.CreateConversationView.as_view(),name='create_conversation'),
     path('delete_message/<int:conversation_id>/<int:message_id>/',views.DeleteMessageView.as_view(),name='delete_message'),
     path('create_conversation/', views.CreateConversationView.as_view(), name='create_conversation'),
     path('send_friend_request/<int:user_id>', views.SendFriendRequestView.as_view(), name='send_friend_request'),
     path('accept_friend_request/<int:friend_request_id>/<int:notification_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
-    path('other_user_profile/<str:username>/', views.OtherUserProfileView.as_view(), name='other_user_profile'),
+    path('profile/<str:username>/', views.ProfileView.as_view(), name='profile'),
     path('friends_list/', views.friends_list, name='friends_list'),
     path('delete_notification/<int:notification_id>/', views.delete_notification, name='delete_notification'),
     path('clear_notifications/', views.clear_notifications, name='clear_notifications'),
     path('inbox/', views.InboxView.as_view(), name='inbox'),
+<<<<<<< HEAD
     #post
     path('create_post/', views.create_post, name='create_post'),
     #path('add_comment/<int:post_id>/', views.add_comment, name='add_comment'), 
@@ -52,4 +58,7 @@ urlpatterns = [
     
     #feed
     path('partials/feed/', views.feed, name='feed'),
+=======
+    path('conversation_details/<int:conversation_id>',views.ConversationDetailsView.as_view(),name="conversation_details"),
+>>>>>>> main
 ]

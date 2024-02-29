@@ -20,7 +20,7 @@ from .question_page_view import questionPage
 from .send_friend_request_view import SendFriendRequestView
 from .accept_friend_request_view import AcceptFriendRequestView
 from .friends_list_view import friends_list
-from .other_user_profile_view import OtherUserProfileView
+from .profile_view import ProfileView
 from .inbox_view import InboxView
 from .delete_notification_view import delete_notification
 from .clear_notifications_view import clear_notifications
@@ -29,3 +29,4 @@ from .clear_notifications_view import clear_notifications
 # WAS from .post_view import create_post, post_detail,show_posts
 #from .post_comment_view import add_comment
 from .post_view import create_post, post_detail,feed
+from .conversation_details_view import ConversationDetailsView
