@@ -12,7 +12,7 @@
                             class="avatar mr-3"></span>
                         <div class="media-body overflow-hidden">
                             <h5 class="card-text mb-0"> <span class="notranslate">{{friend.username}}</span></h5>
-                            <p class="card-text text-uppercase subtext mb-0"> <span class="notranslate">{{friend.fullname}}</span></p>
+                            <p class="card-text text-uppercase subtext mb-0"> <span class="notranslate">{{friend.full_name}}</span></p>
                             <p class="card-text subtext">{{ friend.country_name }}</p>
                         </div>
                     </div><a href="{% url 'profile' username=friend.username %}" class="tile-link"></a>
