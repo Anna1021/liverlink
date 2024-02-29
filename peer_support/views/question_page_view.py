@@ -2,6 +2,7 @@ from peer_support.models import Question
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from peer_support.forms import NewReplyForm, NewResponseForm
+from django.contrib import messages
 
 @login_required
 def questionPage(request, id):
@@ -16,7 +17,13 @@ def questionPage(request, id):
                 response.question = Question(id=id)
                 response.save()
                 return redirect('/question/'+str(id)+'#'+str(response.id))
+
     question = Question.objects.get(id=id)
+
+    if request.method == 'GET':
+         if question.author in request.user.blocked_users.all() or question.author in request.user.blocked_by.all():
+                return redirect('resources')
+
     context = {
         'question': question,
         'response_form': response_form,
