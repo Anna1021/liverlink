@@ -21,9 +21,9 @@
                     {% for user in block_list %}
 
                     <tr>
-                        <td><img src="{{ user.mini_gravatar }}" class="ps-mini-gravatar" alt="User's gravatar">   </img></td>
-                        <td>{{ user.username }}</td>
-                        <td><button type="button" class="btn btn-primary block-user-toggle-btn" data-user-id="{{user.id}}" data-action="unblock">Unblock</button></td>
+                        <td><a href="{% url 'profile' user.username %}" aria-label="user-profile-hyperlink"><img src="{{ user.mini_gravatar }}" class="bl-gravatar" alt="User's gravatar">   </img></a></td>
+                        <td><a href="{% url 'profile' user.username %}" aria-label="user-profile-hyperlink" class="bl-username">{{ user.username }}</a></td>
+                        <td><button type="button" class="btn btn-unblock block-user-toggle-btn" data-user-id="{{user.id}}" data-action="unblock">Unblock</button></td>
                     </tr>
 
                     {% empty %}
