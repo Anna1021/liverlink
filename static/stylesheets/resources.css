@@ -41,5 +41,10 @@
   background-color: #f2f2f2;
 }
 
+a.username {
+  color: inherit;
+  text-decoration: none;
+}
+
 
 
