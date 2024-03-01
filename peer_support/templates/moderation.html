@@ -1,0 +1,15 @@
+{% extends 'dashboard.html' %}
+{% block page %}
+{% load static %}
+    <h1>Reports</h1>
+    {% for report in reports %}
+        <div>
+            <p>Reason: {{ report.reason }}</p>
+            <p>Reported At: {{ report.reported_at }}</p>
+            <p>Content Type: {{ report.content_type }}</p>
+            <p>Reported Content: {{ report.content_object.content }}</p>
+        </div>
+    {% empty %}
+        <p>No reports found.</p>
+    {% endfor %}
+{% endblock %}

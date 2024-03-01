@@ -12,7 +12,11 @@
     {% if user.is_authenticated %}
       {% include 'partials/menu.html' %}
     {% endif %}
+    <a href="{% url 'moderation' %}">
+      <button type="button" >Moderation</button>
+  </a>
   </div>
+
 </nav>
 
 <script src="{% static 'js/google_translation.js' %}" type="text/javascript"></script>

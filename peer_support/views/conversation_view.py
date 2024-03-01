@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from peer_support.models import Report, Message 
 from peer_support.forms import ReportForm 
-
+from django.contrib.contenttypes.models import ContentType
 
 class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
@@ -32,14 +32,14 @@ class ConversationView(LoginRequiredMixin, FormView):
             return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
         message_form = MessageForm(conversation,user=current_user)
         report_form = ReportForm()
-        context = {"message_form":message_form, 'conversation':conversation,'user_conversations':request.user.sort_conversations()}
+        non_reported_messages = conversation.messages.filter(is_reported=False)
+        context = {"message_form":message_form,"report_form":report_form , 'conversation':conversation,'user_conversations':request.user.sort_conversations(),'messages': non_reported_messages}
         return render(request,self.template_name,context)
 
     def post(self, request, conversation_id):
         action=request.POST.get('action')
-        print(action)
-        if action=='report_message':
-            return self.handle_report_message(request,conversation_id)
+        if action:
+            return self.handle_report_message(request,conversation_id,action)
         else:
             return self.handle_post_message(request,conversation_id)
 
@@ -53,19 +53,14 @@ class ConversationView(LoginRequiredMixin, FormView):
             messages.error(request,"This message is not valid")
             return self.form_invalid(form) 
 
-    def handle_report_message(self,request,conversation_id):
-        message_id =request.POST.get('message_id')
+    def handle_report_message(self,request,conversation_id,message_id):
         message =get_object_or_404(Message, id=message_id)
         report_form =ReportForm(request.POST)
-
         if report_form.is_valid():
-            report =report_form.save(commit=False)
-            report.message=message
-            report.save()
+            report_form.save_report_for_object(message)
             message.is_reported=True
             message.save()
             messages.success(request,"Message reported successfully.")
         else:
             messages.error(request,"There was an issue with the report.")
-        
-        return HttpResponseRedirect(reverse('conversation/0'))
+        return HttpResponseRedirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))

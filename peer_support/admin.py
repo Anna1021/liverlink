@@ -2,7 +2,7 @@ from django.contrib import admin
 from . import models
 from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest,Question,Response
 
-from .models import Report
+from .models import Report, Message
 # Register your models here.
 admin.site.register(models.Question)
 admin.site.register(models.Response)
@@ -88,4 +88,12 @@ class ReportAdmin(admin.ModelAdmin):
 
     list_display = [
         'reason','reported_at', 'content_type', 'object_id', 'content_object'
+    ]
+
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for friend requests."""
+
+    list_display = [
+        'id','sender','content', 'send_time', 'previous_message', 'is_reported'
     ]

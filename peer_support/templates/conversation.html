@@ -40,7 +40,7 @@
 </div>
 <div>
     <div id="conversation">
-    {% for message in conversation.messages.all %}
+    {% for message in messages %}
         {% if user in message.visible_to.all %}
             {% if not message.same_sender %}
                 <div class="notranslate">{{ message.sender }}</div>
@@ -55,7 +55,7 @@
                 <form method="post">
                     {% csrf_token %}
                     {{ report_form.as_p }}
-                    <input type="hidden" name="action" value="report_message">
+                    <input type="hidden" name="action" value="{{ message.id }}">
                     <button type="submit">Report</button>
                 </form>
             </div>
