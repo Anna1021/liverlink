@@ -28,7 +28,7 @@ class ConversationView(LoginRequiredMixin, FormView):
         
         # Check if the conversation is a DM and, if so, whether there is a block between the 2 users
         blocked_dm = False
-        if conversation.users.all().count() == 2:
+        if conversation.as_group() is None:
             for user in conversation.users.all(): 
                 if current_user in user.blocked_users.all() or user in current_user.blocked_users.all():
                     blocked_dm = True
