@@ -25,7 +25,15 @@ class ConversationView(LoginRequiredMixin, FormView):
             context = {'user_conversations':request.user.sort_conversations()}
             return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
         form = MessageForm(conversation,user=current_user)
-        context = {"form":form, 'conversation':conversation,'user_conversations':request.user.sort_conversations()}
+        
+        # Check if the conversation is a DM and, if so, whether there is a block between the 2 users
+        blocked_dm = False
+        if conversation.users.all().count() == 2:
+            for user in conversation.users.all(): 
+                if current_user in user.blocked_users.all() or user in current_user.blocked_users.all():
+                    blocked_dm = True
+
+        context = {"form":form, 'conversation':conversation,'user_conversations':request.user.sort_conversations(),'blocked_dm':blocked_dm}
         return render(request,self.template_name,context)
 
     def post(self,request,conversation_id):
