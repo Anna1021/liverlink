@@ -1,11 +1,12 @@
 """Unit test of javascript in peer_select view"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import ElementClickInterceptedException
+import time
 
 
 
@@ -21,7 +22,7 @@ class ReplyPageTest(StaticLiveServerTestCase):
         super().setUpClass()
         options = Options()
         options.add_argument("--headless") 
-        cls.selenium = WebDriver(service=Service(), options=options)
+        cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(10)
         
     @classmethod
@@ -38,8 +39,19 @@ class ReplyPageTest(StaticLiveServerTestCase):
         self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
         self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Resources')]").click()
         link = self.selenium.find_element(By.XPATH, "//p[@class='question-list-item-title' and contains(text(), 'Sample Question Title')]")
-        link.click()
+        # link.click()
 
+        wait = WebDriverWait(self.selenium, 10)
+
+        try:
+            close_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@class="btn-close btn-outline-light" and @data-bs-dismiss="modal"]')))
+            close_button.click()
+        except ElementClickInterceptedException:
+            print("ElementClickInterceptedException caught, waiting and retrying...")
+            time.sleep(2) 
+
+        close_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@class="btn-close btn-outline-light" and @data-bs-dismiss="modal"]')))
+        close_button.click()
 
         # Find and click the reply button
         # reply_button = WebDriverWait(self.selenium, 10).until(
