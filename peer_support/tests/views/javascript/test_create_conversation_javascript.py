@@ -7,8 +7,6 @@ from selenium.webdriver.support.ui import WebDriverWait,Select
 from selenium.webdriver.support import expected_conditions as EC
 from peer_support.models import User
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import ElementClickInterceptedException
-import time
 
 class CreateConversationJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in peer_select view"""
@@ -42,18 +40,6 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
         password_input = self.selenium.find_element(By.NAME, "password")
         password_input.send_keys('Password123')
         self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
-
-        wait = WebDriverWait(self.selenium, 10)
-
-        try:
-            close_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@class="btn-close btn-outline-light" and @data-bs-dismiss="modal"]')))
-            close_button.click()
-        except ElementClickInterceptedException:
-            print("ElementClickInterceptedException caught, waiting and retrying...")
-            time.sleep(2)
-            
-        close_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@class="btn-close btn-outline-light" and @data-bs-dismiss="modal"]')))
-        close_button.click()
 
         self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Messages')]").click()
         #find options

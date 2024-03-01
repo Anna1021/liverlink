@@ -11,6 +11,8 @@ class HomeViewTestCase(TestCase):
     def setUp(self):
         self.url = reverse('home')
         self.user = User.objects.get(username='@johndoe')
+        self.user.first_login = True  # Assuming 'first_login' is the correct field name
+        self.user.save()
 
     def test_home_url(self):
         self.assertEqual(self.url,'/')
