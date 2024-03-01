@@ -4,6 +4,7 @@ from django.shortcuts import render,reverse,redirect
 from django.views.generic.edit import FormView
 from peer_support.models import Conversation
 from peer_support.forms import MessageForm
+from .helpers import check_blocked_dm
 
 class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
@@ -26,12 +27,7 @@ class ConversationView(LoginRequiredMixin, FormView):
             return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
         form = MessageForm(conversation,user=current_user)
         
-        # Check if the conversation is a DM and, if so, whether there is a block between the 2 users
-        blocked_dm = False
-        if conversation.as_group() is None:
-            for user in conversation.users.all(): 
-                if current_user in user.blocked_users.all() or user in current_user.blocked_users.all():
-                    blocked_dm = True
+        blocked_dm = check_blocked_dm(current_user, conversation)
 
         context = {"form":form, 'conversation':conversation,'user_conversations':request.user.sort_conversations(),'blocked_dm':blocked_dm}
         return render(request,self.template_name,context)
@@ -40,9 +36,13 @@ class ConversationView(LoginRequiredMixin, FormView):
         """Post request for user to send message to conversation"""
         conversation = Conversation.objects.get(id=conversation_id)
         form = MessageForm(conversation,data=request.POST,user=request.user)
-        if form.is_valid() and request.user in conversation.users.all():
+        blocked_dm = check_blocked_dm(request.user, conversation)
+        if form.is_valid() and request.user in conversation.users.all() and not blocked_dm:
             form.save()
             return render(request,self.template_name,{'form':MessageForm(conversation,user=request.user),'conversation':conversation,'user_conversations':request.user.sort_conversations()})
+        elif blocked_dm:
+            messages.error(request,"You cannot message this user.")
+            return render(request,self.template_name,{'form':form,'conversation':conversation,'user_conversations':request.user.sort_conversations()}) 
         else:
             messages.error(request,"This message is not valid")
             return render(request,self.template_name,{'form':form,'conversation':conversation,'user_conversations':request.user.sort_conversations()})
