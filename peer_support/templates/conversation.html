@@ -52,6 +52,12 @@
             {% endif %}
             <div class="col-md-9">
                 <div>{{ message.content }}</div>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ report_form.as_p }}
+                    <input type="hidden" name="action" value="report_message">
+                    <button type="submit">Report</button>
+                </form>
             </div>
             {% include 'partials/message_menu.html' %}
         </div>
@@ -62,7 +68,7 @@
     </div>
     <form method="post">
         {% csrf_token %}
-        {{ form.content }}
+        {{ message_form.content }}
         <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
     </form>
     {% else %}
