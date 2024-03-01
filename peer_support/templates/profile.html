@@ -50,7 +50,7 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="actionsDropdown" data-popper-placement="bottom-end">
                       {% if not current_user in blocklist and not user in blocklist %}
                         {% if is_friend %}
-                        <a class="dropdown-item" href="{% url 'remove_friend' user.id %}">Remove friend</a>
+                        <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}" data-action="remove-friend">Remove friend</a>
                         {% elif request_sent %}
                         <a class="dropdown-item" style="font-style: italic;" id="friend-link" data-user-id="{{user.id}}" data-action="inactive">Request sent</a>
                         {% else %}
@@ -203,6 +203,7 @@
     var unblockUserUrl = "{% url 'unblock_user' 0 %}";
     var blockUserUrl = "{% url 'block_user' 0 %}";
     var friendRequestUserUrl = "{% url 'send_friend_request' 0 %}"
+    var removeFriendUrl = "{% url 'remove_friend' 0 %}"
 </script>
 <script src="{% static 'js/profile.js' %}"></script>
 

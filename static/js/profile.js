@@ -17,6 +17,9 @@ $(document).ready(function () {
         if (action == 'add-friend'){
             addFriend(userId);
         }
+        else if (action == 'remove-friend'){
+            removeFriend(userId);
+        }
     });
 
     function unblockUser(userId) {
@@ -60,6 +63,21 @@ $(document).ready(function () {
             error: function(xhr) {
                 console.error(xhr.responseText);
                 alert('Error: Unable to send friend request');
+            }
+        });
+    }
+
+    function removeFriend(userId) {
+        $.ajax({
+            url : removeFriendUrl.replace('0', userId),
+            type: 'GET', 
+            success: function() {
+                $('#friend-link').attr('data-action', 'add-friend');
+                $('#friend-link').text('Add friend');
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+                alert('Error: Unable to remove friend');
             }
         });
     }
