@@ -3,22 +3,20 @@ $(document).ready(function () {
     $('#block-link').click(function() {
         var userId = $(this).data('user-id');
         var action = $(this).attr('data-action');
-        var a_element = $(this);
         if (action == 'unblock-user'){
-            unblockUser(userId, a_element);
+            unblockUser(userId);
         }
         else {
-            blockUser(userId, a_element);
+            blockUser(userId);
         }
     });
 
-    function unblockUser(userId, a_element) {
+    function unblockUser(userId) {
         $.ajax({
             url : unblockUserUrl.replace('0', userId),
             type: 'GET', 
             success: function() {
-                a_element.attr('data-action', 'block-user');
-                a_element.text('Block this user');
+                location.reload()
             },
             error: function(xhr) {
                 console.error(xhr.responseText);
@@ -27,13 +25,12 @@ $(document).ready(function () {
         });
     }
 
-    function blockUser(userId, a_element) {
+    function blockUser(userId) {
         $.ajax({
             url : blockUserUrl.replace('0', userId),
             type: 'GET', 
             success: function() {
-                a_element.attr('data-action', 'unblock-user');
-                a_element.text('Unblock this user'); 
+                location.reload()
             },
             error: function(xhr) {
                 console.error(xhr.responseText);
