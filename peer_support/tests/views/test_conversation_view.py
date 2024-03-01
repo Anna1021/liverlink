@@ -37,7 +37,7 @@ class ConversationViewTestCase(TestCase):
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
 
-    def test_get_conversation_user_is_not_in(self):
+    def test_cannot_get_conversation_user_is_not_in(self):
         invalid_url = reverse('conversation',kwargs={'conversation_id':2})
         response = self.client.get(invalid_url,follow=True)
         self.assertRedirects(response, self.no_conversation_url, status_code=302, target_status_code=200)
@@ -46,7 +46,7 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
-    def test_get_conversation_that_does_not_exist(self):
+    def test_cannot_get_conversation_that_does_not_exist(self):
         invalid_url = reverse('conversation',kwargs={'conversation_id':3})
         response = self.client.get(invalid_url,follow=True)
         self.assertRedirects(response, self.no_conversation_url, status_code=302, target_status_code=200)
@@ -82,6 +82,7 @@ class ConversationViewTestCase(TestCase):
         message = Message.objects.get(pk=2)
         self.assertEqual(message.sender, self.user)
         self.assertEqual(message.content, 'Ploof')
+        self.assertIn(message,self.conversation.messages.all())
         form = response.context['form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)

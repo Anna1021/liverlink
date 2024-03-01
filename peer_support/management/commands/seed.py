@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from peer_support.models import Parent, Patient, Mentor, Referral
+from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Conversation
 import uuid
 
 from faker import Faker
@@ -11,7 +11,7 @@ from peer_support.forms.form_choices import CONDITION_CHOICES
 patient_fixtures = [
     {'username': '@johndoe', 'email': 'john.doe@example.org', 'first_name': 'John', 'last_name': 'Doe', 'date_of_birth': '2000-01-01', 'gender': 'M', 'location': 'GB', 'hospital': 'Croydon Health Services NHS Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am John.', 'condition': 'Diabetes', 'age_of_diagnosis': 5},
     {'username': '@janedoe', 'email': 'jane.doe@example.org', 'first_name': 'Jane', 'last_name': 'Doe', 'date_of_birth': '2008-01-01', 'gender': 'F', 'location': 'FR', 'ethnicity': 'RO', 'language': 'fr', 'bio': 'Hi, I am Jane.', 'condition': 'Hepatitis A', 'age_of_diagnosis': 10},
-    {'username': '@charlie', 'email': 'charlie.johnson@example.org', 'first_name': 'Charlie', 'last_name': 'Johnson', 'date_of_birth': '2006-01-01', 'gender': 'O', 'location': 'BD', 'ethnicity': 'IN', 'language': 'bn', 'bio': 'Hi, I am Charlie.', 'condition': 'Liver cancer', 'age_of_diagnosis': 15},
+    {'username': '@charliejohnson', 'email': 'charlie.johnson@example.org', 'first_name': 'Charlie', 'last_name': 'Johnson', 'date_of_birth': '2006-01-01', 'gender': 'O', 'location': 'BD', 'ethnicity': 'IN', 'language': 'bn', 'bio': 'Hi, I am Charlie.', 'condition': 'Liver cancer', 'age_of_diagnosis': 15},
 ]
 
 parent_fixtures = [
@@ -26,12 +26,19 @@ mentor_fixtures = [
     {'username': '@emilywilson', 'email': 'emily.wilson@example.org', 'first_name': 'Emily', 'last_name': 'Wilson', 'date_of_birth': '1978-12-03', 'gender': 'F', 'location': 'AU', 'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am Emily.', 'age_of_diagnosis': 3, 'referral_code':'GHI789'},
 ]
 
+notification_fixtures = [
+    {'title': 'Welcome to Peer Support', 'description': 'Welcome to Peer Support. We are glad to have you here.', 'user':  patient_fixtures[0]},
+    {'title': 'New like to your post', 'description': 'Your post has received a new like.', 'user':  patient_fixtures[0]},
+    {'title': 'New message', 'description': 'You have received a new message.', 'user': patient_fixtures[0]},
+]
+
 class Command(BaseCommand):
     """Build automation command to seed the database."""
 
     PATIENT_COUNT = 100
     PARENT_COUNT = 100
     MENTOR_COUNT = 100
+    NOTIFICATION_COUNT = 10
     DEFAULT_PASSWORD = 'Password123'
     help = 'Seeds the database with sample data'
 
@@ -48,6 +55,9 @@ class Command(BaseCommand):
         self.create_mentors()
         self.mentors = Mentor.objects.all()
 
+        self.create_notifications()
+        self.notifications = Notification.objects.all()
+
     def create_patients(self):
         self.generate_patient_fixtures()
         self.generate_random_patients()
@@ -60,6 +70,10 @@ class Command(BaseCommand):
         self.generate_mentor_fixtures()
         self.generate_random_mentors()
 
+    def create_notifications(self):
+        self.generate_notification_fixtures()
+        self.generate_random_notifications()
+
     def generate_patient_fixtures(self):
         for data in patient_fixtures:
             self.try_create_patient(data)
@@ -71,6 +85,10 @@ class Command(BaseCommand):
     def generate_mentor_fixtures(self):
         for data in mentor_fixtures:
             self.try_create_mentor(data)
+
+    def generate_notification_fixtures(self):
+        for data in notification_fixtures:
+            self.try_create_notification(data)
 
     def generate_random_patients(self):
         patient_count = Patient.objects.count()
@@ -96,6 +114,14 @@ class Command(BaseCommand):
             mentor_count = Mentor.objects.count()
         print("Mentor seeding complete.      ")
 
+    def generate_random_notifications(self):
+        notification_count = Notification.objects.count()
+        while notification_count < self.NOTIFICATION_COUNT:
+            print(f"Seeding notification {notification_count}/{self.NOTIFICATION_COUNT}", end='\r')
+            self.generate_notification()
+            notification_count = Notification.objects.count()
+        print("Notification seeding complete.      ")
+
     def generate_user_data(self):
         first_name = self.faker.first_name()
         last_name = self.faker.last_name()
@@ -103,10 +129,10 @@ class Command(BaseCommand):
         username = create_username(first_name, last_name)
         date_of_birth = self.faker.date_of_birth(minimum_age=16, maximum_age=100)
         gender = self.faker.random_element(elements=(tuple(gender[0] for gender in GENDER_CHOICES)))
-        location = self.faker.country_code()
+        location = self.faker.random_element(elements=(tuple(country[0] for country in COUNTRY_CHOICES)))
         hospital = self.faker.random_element(elements=(tuple(hospital[0] for hospital in HOSPITAL_CHOICES)))
         ethnicity = self.faker.random_element(elements=[ethnicity[0] for group in ETHNICITY_CHOICES for ethnicity in group[1]])
-        language = self.faker.language_code()
+        language = self.faker.random_element(elements=(tuple(language[0] for language in LANGUAGE_CHOICES)))
         bio = self.faker.text(max_nb_chars=100)
         return {'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital, 'ethnicity': ethnicity, 'language': language, 'bio': bio}
 
@@ -132,6 +158,12 @@ class Command(BaseCommand):
         referral_code = uuid.uuid4().hex[:10].upper()
         user_data.update({'referral_code': referral_code})
         self.try_create_mentor(user_data)
+
+    def generate_notification(self):
+        title = self.faker.sentence()
+        description = self.faker.text(max_nb_chars=100)
+        user = User.objects.get(username='@johndoe')
+        self.try_create_notification({'title': title, 'description': description, 'user': user})
         
     def try_create_patient(self, data):
         try:
@@ -151,6 +183,12 @@ class Command(BaseCommand):
         except:
             pass
 
+    def try_create_notification(self, data):
+        try:
+          self.create_notification(data)
+        except:
+            pass
+
     def create_user(self, model, data):
         user = model.objects.create(**data)
         user.set_password(Command.DEFAULT_PASSWORD)
@@ -167,6 +205,10 @@ class Command(BaseCommand):
 
     def create_mentor(self, data):
         self.create_user(Mentor, data)
+
+    def create_notification(self, data):
+        notification = Notification.objects.create(**data)
+        notification.save()
 
 def create_username(first_name, last_name):
     return '@' + first_name.lower() + last_name.lower()

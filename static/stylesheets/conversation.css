@@ -1,0 +1,84 @@
+/* conversation name cards */
+.conversation-card {
+    width :max-content;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin:0;
+    width:calc(100%);
+}
+
+.conversation-card:hover {
+    background-color: gainsboro;
+}
+
+.conversation-list {
+    border-radius: 8px;
+    background-color: rgb(220, 234, 245);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height:90%;
+    list-style-type: none;
+    padding-left: 0px;
+}
+
+.conversation-menu{
+    height:89vh;
+}
+
+.user-list-header{
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding:0;
+}
+
+.user-list{
+    list-style-type: none;
+    background-color: aliceblue;
+    padding-left: 0;
+    width: 100%;
+    border-radius: 5px;
+}
+.add-btn{
+    background-color: aliceblue;
+    margin:0;
+}
+
+.user-card{
+    width:100%;
+    padding-left: 0;
+    margin-left:0;
+    list-style: none;
+}
+
+.user-card:hover{
+    background-color: azure;
+}
+
+#conversation{
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+/* message bubbles */
+.message-bubble {
+    border-radius: 25px;
+    padding : 5px;
+    margin: 5px;
+    height: fit-content;
+    align-items: center;
+}
+
+.self-message{
+    background-color: azure;
+}
+
+.other-message{
+    background-color: bisque;
+}
+
+.leave-confirmation{
+    padding:0;
+    margin: 0;
+}

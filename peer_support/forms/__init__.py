@@ -8,6 +8,7 @@ from .user_form import UserForm
 from peer_support.forms.message_form import MessageForm
 from .patient_form import PatientForm
 from .parent_form import ParentForm 
+from .mentor_form import MentorForm
 from .message_form import MessageForm
 from .filter_peer_form import FilterPeerForm
 from .sort_peer_form import SortPeerForm
@@ -16,4 +17,4 @@ from .conversation_form import ConversationForm
 from .new_question_form import NewQuestionForm
 from .new_response_form import NewResponseForm
 from .new_reply_form import NewReplyForm
-
+from .add_users_form import AddUsersForm

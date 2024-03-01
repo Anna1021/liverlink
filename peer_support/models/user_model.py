@@ -48,6 +48,33 @@ class User(AbstractUser):
 
         return dict(COUNTRY_CHOICES)[self.location]
 
+    def gender_name(self):
+        """Return the full name of the user's gender."""
+            
+        if not self.gender:
+            return ""
+        
+        return dict(GENDER_CHOICES)[self.gender] 
+    
+    def ethnicity_name(self):
+        """Return the full name of the user's ethnicity."""
+
+        if not self.ethnicity:
+            return ""
+
+        name = next((name for _, subcategories in ETHNICITY_CHOICES 
+                     for code, name in subcategories if code == self.ethnicity), "")
+
+        return name
+    
+    def language_name(self):
+        """Return the full name of the user's language."""
+
+        if not self.language:
+            return ""
+
+        return dict(LANGUAGE_CHOICES)[self.language]
+
     def gravatar(self, size=120):
         """Return a URL to the user's gravatar."""
 

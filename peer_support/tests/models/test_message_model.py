@@ -10,6 +10,7 @@ class MessageModelTestCase(TestCase):
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/default_message.json',
+        'peer_support/tests/fixtures/other_messages.json',
         'peer_support/tests/fixtures/default_conversation.json',
     ]
 
@@ -64,7 +65,14 @@ class MessageModelTestCase(TestCase):
         messages_after = Message.objects.count()
         self.assertEqual(messages_after,messages_before-1)
 
-
+    def test_previous_message_none_when_previous_message_deleted(self):
+        conversation = Conversation.objects.get(pk=1)
+        users_to_delete_message = conversation.users.all()
+        message_before = Message.objects.get(pk=4)
+        self.assertEqual(message_before.previous_message,self.message)
+        self.message.delete(users_to_delete_message)
+        message_after = Message.objects.get(pk=4)
+        self.assertIsNone(message_after.previous_message)
         
     def _assert_message_is_valid(self):
         try:

@@ -1,21 +1,21 @@
-{% extends 'base_content.html' %}
-{% block content %}
+{% extends 'dashboard.html' %}
+{% block page %}
 {% load static %}
-<div class="container">
+<div class="container my-2">
     <div class="row">
         {% for friend in friends %}
-        <div class="col-md-6 col-xl-4 my-4">
+        <div class="col-md-6 my-2">
             <div class="card">
                 <div class="friend-card-body">
                     <div class="media align-items-center"><span
                             style="background-image: url(https://i.pinimg.com/originals/57/61/5b/57615b8c0092a66c1d4058b1692955cc.gif)"
                             class="avatar mr-3"></span>
                         <div class="media-body overflow-hidden">
-                            <h5 class="card-text mb-0">{{ friend.username }}</h5>
-                            <p class="card-text text-uppercase subtext mb-0">{{ friend.full_name }}</p>
+                            <h5 class="card-text mb-0"> <span class="notranslate">{{friend.username}}</span></h5>
+                            <p class="card-text text-uppercase subtext mb-0"> <span class="notranslate">{{friend.full_name}}</span></p>
                             <p class="card-text subtext">{{ friend.country_name }}</p>
                         </div>
-                    </div><a href="#" class="tile-link"></a>
+                    </div><a href="{% url 'profile' username=friend.username %}" class="tile-link"></a>
                 </div>
             </div>
         </div>

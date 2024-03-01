@@ -1,26 +1,41 @@
-"""Tests for the profile view."""
+"""Tests for the profile settings view."""
 import datetime
 from django.contrib import messages
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.forms import PatientForm, ParentForm
-from peer_support.models import Patient, Parent
+from peer_support.forms import PatientForm, ParentForm, MentorForm
+from peer_support.models import Patient, Parent, Mentor
 from peer_support.tests.helpers import reverse_with_next
 
 class ProfileViewTest(TestCase):
-    """Test suite for the profile view."""
+    """Test suite for the profile settings view."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/default_parent.json',
         'peer_support/tests/fixtures/other_users.json',
-        'peer_support/tests/fixtures/other_patients.json',
+        'peer_support/tests/fixtures/other_patients.json'
     ]
 
     def setUp(self):
         self.parent = Parent.objects.get(username='@johndoe')
         self.patient = Patient.objects.get(username='@janedoe')
-        self.url = reverse('profile')
+        Mentor.objects.create_user(first_name = 'Test',
+                            last_name = 'Mentor',
+                            username = '@testmentor',
+                            email = 'testmentor@example.org',
+                            password = 'Password123',
+                            date_of_birth = '1980-01-01',
+                            gender = 'F',
+                            location = 'FR',
+                            ethnicity = 'RO',
+                            language = 'en',
+                            bio = 'I am a test mentor.',
+                            condition = 'Cirrhosis',
+                            age_of_diagnosis = 15,
+                            referral_code = 'TEST123')
+        self.mentor = Mentor.objects.get(username='@testmentor')
+        self.url = reverse('settings')
         self.parent_form_input = {
             'first_name': 'John',
             'last_name': 'Doe',
@@ -49,29 +64,51 @@ class ProfileViewTest(TestCase):
             'condition': 'Haemochromatosis',
             'age_of_diagnosis': 21,
         }
+        self.mentor_form_input = {
+            'first_name': 'Test',
+            'last_name': 'Mentor',
+            'username': '@testmentor1',
+            'email': 'testmentor@example.org',
+            'date_of_birth': '1991-01-01',
+            'gender': 'M',
+            'location': 'US',
+            'ethnicity': 'RO',
+            'language': 'en',
+            'bio': 'I am a test mentor.',
+            'condition': 'Haemochromatosis',
+            'age_of_diagnosis': 21,
+            'referral_code': 'TEST123'
+        }
 
     def test_profile_url(self):
-        self.assertEqual(self.url, '/profile/')
+        self.assertEqual(self.url, '/settings/')
 
     def test_get_patient_form_when_current_user_is_patient(self):
         self.client.login(username=self.patient.username, password='Password123')
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PatientForm))
 
     def test_get_parent_form_when_current_user_is_parent(self):
         self.client.login(username=self.parent.username, password='Password123')
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
-        self.assertTrue(isinstance(form, ParentForm))   
+        self.assertTrue(isinstance(form, ParentForm))  
+
+    def test_get_mentor_form_when_current_user_is_mentor(self):
+        self.client.login(username=self.mentor.username, password='Password123')
+        response = self.client.get(self.url)
+        self.assertTemplateUsed(response, 'settings.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, MentorForm))    
 
     def test_get_profile(self):
         self.client.login(username=self.patient.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PatientForm))
         self.assertEqual(form.instance, self.patient)
@@ -89,7 +126,7 @@ class ProfileViewTest(TestCase):
         after_count = Patient.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PatientForm))
         self.assertTrue(form.is_bound)
@@ -101,7 +138,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.patient.date_of_birth, datetime.date(2004, 3, 2)),
         self.assertEqual(self.patient.gender, 'F'),
         self.assertEqual(self.patient.location, 'GB'),
-        self.assertEqual(self.patient.ethnicity, 'OM'),
+        self.assertEqual(self.patient.ethnicity, 'BR'),
         self.assertEqual(self.patient.language, 'en'),
         self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe"),
         self.assertEqual(self.patient.condition, "Biliary atresia"),
@@ -115,7 +152,7 @@ class ProfileViewTest(TestCase):
         after_count = Parent.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, ParentForm))
         self.assertTrue(form.is_bound)
@@ -133,6 +170,33 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.parent.child_condition, "Hepatitis"),
         self.assertEqual(self.parent.child_age_of_diagnosis, 20)
 
+    def test_unsuccessful_profile_update_for_mentor(self):
+        self.client.login(username=self.mentor.username, password='Password123')
+        self.mentor_form_input['username'] = 'BAD_USERNAME'
+        before_count = Mentor.objects.count()
+        response = self.client.post(self.url, self.mentor_form_input)
+        after_count = Mentor.objects.count()
+        self.assertEqual(after_count, before_count)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'settings.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, MentorForm))
+        self.assertTrue(form.is_bound)
+        self.mentor.refresh_from_db()
+        self.assertEqual(self.mentor.username, '@testmentor')
+        self.assertEqual(self.mentor.first_name, 'Test')
+        self.assertEqual(self.mentor.last_name, 'Mentor')
+        self.assertEqual(self.mentor.email, 'testmentor@example.org')
+        self.assertEqual(self.mentor.date_of_birth, datetime.date(1980, 1, 1)),
+        self.assertEqual(self.mentor.gender, 'F'),
+        self.assertEqual(self.mentor.location, 'FR')
+        self.assertEqual(self.mentor.ethnicity, 'RO'),
+        self.assertEqual(self.mentor.language, 'en'),
+        self.assertEqual(self.mentor.bio, "I am a test mentor."),
+        self.assertEqual(self.mentor.condition, 'Cirrhosis'),
+        self.assertEqual(self.mentor.age_of_diagnosis, 15),
+        self.assertEqual(self.mentor.referral_code, 'TEST123')
+
     def test_unsuccessful_profile_update_due_to_duplicate_username(self):
         self.client.login(username=self.patient.username, password='Password123')
         self.patient_form_input['username'] = '@johndoe'
@@ -141,7 +205,7 @@ class ProfileViewTest(TestCase):
         after_count = Patient.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PatientForm))
         self.assertTrue(form.is_bound)
@@ -153,7 +217,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.patient.date_of_birth, datetime.date(2004, 3, 2)),
         self.assertEqual(self.patient.gender, 'F'),
         self.assertEqual(self.patient.location, 'GB'),
-        self.assertEqual(self.patient.ethnicity, 'OM'),
+        self.assertEqual(self.patient.ethnicity, 'BR'),
         self.assertEqual(self.patient.language, 'en'),
         self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe"),
         self.assertEqual(self.patient.condition, "Biliary atresia"),
@@ -210,6 +274,33 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.parent.bio, "I am a test parent."),
         self.assertEqual(self.parent.child_condition, "Haemochromatosis"),
         self.assertEqual(self.parent.child_age_of_diagnosis, 21)
+
+    def test_successful_profile_update_for_mentor(self):
+        self.client.login(username=self.mentor.username, password='Password123')
+        before_count = Mentor.objects.count()
+        response = self.client.post(self.url, self.mentor_form_input, follow=True)
+        after_count = Mentor.objects.count()
+        self.assertEqual(after_count, before_count)
+        response_url = reverse('dashboard')
+        self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'dashboard.html')
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.SUCCESS)
+        self.mentor.refresh_from_db()
+        self.assertEqual(self.mentor.username, '@testmentor1')
+        self.assertEqual(self.mentor.first_name, 'Test')
+        self.assertEqual(self.mentor.last_name, 'Mentor')
+        self.assertEqual(self.mentor.email, 'testmentor@example.org')
+        self.assertEqual(self.mentor.date_of_birth, datetime.date(1991, 1, 1)),
+        self.assertEqual(self.mentor.gender, 'M'),
+        self.assertEqual(self.mentor.location, 'US'),
+        self.assertEqual(self.mentor.ethnicity, 'RO'),
+        self.assertEqual(self.mentor.language, 'en'),
+        self.assertEqual(self.mentor.bio, 'I am a test mentor.'),
+        self.assertEqual(self.mentor.condition, 'Haemochromatosis'),
+        self.assertEqual(self.mentor.age_of_diagnosis, 21),
+        self.assertEqual(self.mentor.referral_code, 'TEST123')
 
     def test_post_profile_redirects_when_not_logged_in(self):
         redirect_url = reverse_with_next('log_in', self.url)

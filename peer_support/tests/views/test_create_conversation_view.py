@@ -51,8 +51,6 @@ class ConversationViewTestCase(TestCase):
         form_input = {
             'users':[3]
         }
-        form = ConversationForm(self.user,data=form_input)
-        self.assertTrue(form.is_valid())
         before_count = Conversation.objects.count()
         response = self.client.post(self.url, data=form_input,follow=True)
         after_count = Conversation.objects.count()

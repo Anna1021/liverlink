@@ -53,3 +53,15 @@ class MessageFormTestCase(TestCase):
         self.assertEqual(messages_after,messages_before+1)
         message = Message.objects.get(pk=2)
         self.assertIn(message,self.conversation.messages.all())
+
+    def test_previous_message_set_to_last_message(self):
+        target_message = self.conversation.messages.last()
+        form = MessageForm(self.conversation,user = self.sender, data=self.form_input)
+        message = form.save()
+        self.assertEqual(message.previous_message,target_message)
+
+    def test_previous_message_none_if_no_messages_before(self):
+        self.conversation.messages.set(Message.objects.none())
+        form = MessageForm(self.conversation,user = self.sender, data=self.form_input)
+        message = form.save()
+        self.assertIsNone(message.previous_message)
