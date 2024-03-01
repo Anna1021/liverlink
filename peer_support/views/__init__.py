@@ -28,3 +28,4 @@ from .inbox_view import InboxView
 from .delete_notification_view import delete_notification
 from .clear_notifications_view import clear_notifications
 from .conversation_details_view import ConversationDetailsView
+from .remove_friend_view import remove_friend

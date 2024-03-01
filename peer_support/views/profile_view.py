@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from peer_support.models import User
+from peer_support.models import User, FriendRequest
 
 class ProfileView(LoginRequiredMixin, View):
     """Displays other user's profile"""
@@ -19,5 +19,7 @@ class ProfileView(LoginRequiredMixin, View):
             context['mentor'] = user.mentor
 
         context['blocklist'] = request.user.blocked_users.all() | user.blocked_users.all()
+        context['is_friend'] = request.user in user.friends.all()
+        context['request_sent'] = FriendRequest.objects.filter(sender=request.user, receiver=user).exists()
 
         return render(request, 'profile.html', context)

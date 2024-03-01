@@ -11,6 +11,14 @@ $(document).ready(function () {
         }
     });
 
+    $('#friend-link').click(function() {
+        var userId = $(this).data('user-id');
+        var action = $(this).attr('data-action');
+        if (action == 'add-friend'){
+            addFriend(userId);
+        }
+    });
+
     function unblockUser(userId) {
         $.ajax({
             url : unblockUserUrl.replace('0', userId),
@@ -35,6 +43,23 @@ $(document).ready(function () {
             error: function(xhr) {
                 console.error(xhr.responseText);
                 alert('Error: Unable to block user');
+            }
+        });
+    }
+
+    function addFriend(userId) {
+        $.ajax({
+            url : friendRequestUserUrl.replace('0', userId),
+            type: 'GET', 
+            success: function() {
+                $('#friend-link').attr('data-action', 'inactive');
+                $('#friend-link').text('Request sent');
+                $('#friend-link').css('font-style', 'italic');
+                $('#friend-link').removeAttr('href');
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+                alert('Error: Unable to send friend request');
             }
         });
     }
