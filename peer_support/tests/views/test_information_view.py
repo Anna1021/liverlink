@@ -1,0 +1,29 @@
+"""Tests for the information view."""
+from django.test import TestCase
+from django.urls import reverse
+from peer_support.models import User
+from peer_support.tests.helpers import reverse_with_next
+
+class InformationViewTest(TestCase):
+    """Test suite for the information view."""
+
+    fixtures = ['peer_support/tests/fixtures/default_user.json']
+
+    def setUp(self):
+        self.user = User.objects.get(username='@johndoe')
+        self.url = reverse('information')
+
+    def test_information_url(self):
+        self.assertEqual(self.url, '/information/')
+
+    def test_information_redirects_when_not_logged_in(self):
+        redirect_url = reverse_with_next('log_in', self.url)
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    # def test_get_information_redirects_when_logged_in(self):
+    #     self.client.login(username=self.user.username, password="Password123")
+    #     response = self.client.get(self.url)
+    #     redirect_url = reverse('/settings/information/')
+    #     self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+    #     self.assertTemplateUsed(response, 'information.html')
