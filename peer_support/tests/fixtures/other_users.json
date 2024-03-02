@@ -16,7 +16,6 @@
       "language": "en",
       "bio": "Hi, I'm Jane Doe",
       "blocked_users": [4],
-      "conversations":[1],
       "is_active": true
     }
   },

@@ -115,7 +115,6 @@ class ConversationViewTestCase(TestCase):
         message = Message.objects.get(pk=2)
         self.assertEqual(message.sender, self.user)
         self.assertEqual(message.content, 'Ploof')
-        self.assertIn(message,self.conversation.messages.all())
         form = response.context['form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)

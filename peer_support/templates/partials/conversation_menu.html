@@ -1,11 +1,26 @@
-{% extends 'dashboard.html' %}
-{% block page %}
+{% extends 'base_content.html' %}
+{% block content %}
 {% load static %}
-<div class="row conversation-menu">
-    {% include 'partials/conversation_list.html' %}
-    <div class="col-md-9">
-        {% block convo %}
-        {% endblock %}
+<div id="cover-image">
+    <div class="container pl-0">
+        <div class="row">
+            <!-- left row -->
+            <div class="col-md-3 mt-2">
+              {%include "partials/left_navbar.html" %}
+            </div>
+            <!-- right row -->
+            <div class="col-md-12 col-lg-6 mt-2">
+                <div class="row conversation-menu">
+
+                    {% include 'partials/conversation_list.html' %}
+                    <div class="col-md-8">
+                        {% block convo %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+          </div>
+    
     </div>
 </div>
 {% endblock %}
