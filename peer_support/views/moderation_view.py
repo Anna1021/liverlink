@@ -4,9 +4,9 @@ from django.views import View
 from peer_support.models import Report
 
 class ModerationView(LoginRequiredMixin, View):
-    """Display the current user's inbox."""
+    """Display the moderation view."""
 
     def get(self, request):
-        """Display the current user's inbox."""
+        """Display all reports."""
         reports=Report.objects.all()
         return render(request,'moderation.html',{'reports':reports})

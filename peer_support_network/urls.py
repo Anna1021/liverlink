@@ -46,7 +46,7 @@ urlpatterns = [
     path('inbox/', views.InboxView.as_view(), name='inbox'),
     path('conversation_details/<int:conversation_id>',views.ConversationDetailsView.as_view(),name="conversation_details"),
     path('moderation/',views.ModerationView.as_view(),name="moderation"),
-    path('report/accept/',views.ModerationView.as_view(),name="accept_report"),
-    path('report/decline/',views.ModerationView.as_view(),name="decline_report"),
+    path('accept_report/<int:report_id>',views.accept_report,name="accept_report"),
+    path('decline_report/<int:report_id>',views.decline_report,name="decline_report"),
 
 ]

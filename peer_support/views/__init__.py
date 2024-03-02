@@ -26,3 +26,5 @@ from .delete_notification_view import delete_notification
 from .clear_notifications_view import clear_notifications
 from .conversation_details_view import ConversationDetailsView
 from .moderation_view import ModerationView
+from .accept_report_view import accept_report
+from .decline_report_view import decline_report
