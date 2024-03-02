@@ -29,6 +29,54 @@ class ProfileViewTestCase(TestCase):
         user = response.context['user']
         self.assertEqual(user, self.user)
 
+    def test_profile_of_blocked_user(self):
+        user_p = User.objects.get(username='@janedoe')
+        self.user.blocked_users.add(user_p)
+        self.assertIn(user_p, self.user.blocked_users.all())
+        url = reverse('profile', kwargs={'username': user_p.username})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profile.html')
+        self.assertContains(response, "You have blocked this user.")
+        self.assertNotContains(response, '<div id="profile-content">')
+        user = response.context['user']
+        self.assertEqual(user, user_p)
+        blocklist = response.context['blocklist']
+        self.assertIn(user_p, blocklist)
+
+    def test_profile_of_blocked_by_user(self):
+        user_p = User.objects.get(username='@janedoe')
+        user_p.blocked_users.add(self.user)
+        self.assertIn(self.user, user_p.blocked_users.all())
+        url = reverse('profile', kwargs={'username': user_p.username})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profile.html')
+        self.assertContains(response, "You cannot view this user's profile.")
+        self.assertNotContains(response, '<div id="profile-content">')
+        user = response.context['user']
+        self.assertEqual(user, user_p)
+        blocklist = response.context['blocklist']
+        self.assertIn(self.user, blocklist)
+
+    def test_other_user_profile_contains_user_actions_dropdown(self):
+        user_p = User.objects.get(username='@janedoe')
+        url = reverse('profile', kwargs={'username': user_p.username})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profile.html')
+        self.assertContains(response, 'div id="user-actions-dropdown"')
+        user = response.context['user']
+        self.assertEqual(user, user_p)
+
+    def test_users_own_profile_contains_settings_button(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profile.html')
+        self.assertContains(response, 'div id="profile-settings"')
+        user = response.context['user']
+        self.assertEqual(user, self.user)
+
     def test_get_profile_parent(self):
         url = reverse('profile', kwargs={'username': self.user.username})
         response = self.client.get(url)
