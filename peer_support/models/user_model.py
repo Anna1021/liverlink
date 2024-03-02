@@ -74,11 +74,6 @@ class User(AbstractUser):
             return ""
 
         return dict(LANGUAGE_CHOICES)[self.language]
-    
-    def get_blocked_and_blocked_by_users(self):
-        """Return a tuple of all users the current user has blocked, and all users the current user is blocked by."""
-
-        return (self.blocked_users.all(), self.blocked_by.all())
 
     def gravatar(self, size=120):
         """Return a URL to the user's gravatar."""
