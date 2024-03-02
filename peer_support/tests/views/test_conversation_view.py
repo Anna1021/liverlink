@@ -36,6 +36,22 @@ class ConversationViewTestCase(TestCase):
         form = response.context['form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
+        blocked_dm = response.context['blocked_dm']
+        self.assertFalse(blocked_dm)
+
+    def test_get_direct_conversation_containing_blocked_user(self):
+        blocked_user = User.objects.get(username='@johndoe')
+        self.user.blocked_users.add(blocked_user)
+        response = self.client.get(self.url)
+        self.assertIsInstance(self.conversation, Conversation)
+        self.assertIsNone(self.conversation.as_group())
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, MessageForm))
+        self.assertFalse(form.is_bound)
+        blocked_dm = response.context['blocked_dm']
+        self.assertTrue(blocked_dm)
 
     def test_cannot_get_conversation_user_is_not_in(self):
         invalid_url = reverse('conversation',kwargs={'conversation_id':2})
@@ -71,6 +87,23 @@ class ConversationViewTestCase(TestCase):
         form = response.context['form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertTrue(form.is_bound)
+
+    def test_unsuccessful_direct_message_send_if_user_is_blocked(self):
+        self.form_input['content'] = '123'
+        blocked_user = User.objects.get(username='@johndoe')
+        self.user.blocked_users.add(blocked_user)
+        before_count = Message.objects.count()
+        response = self.client.post(self.url,data=self.form_input)
+        after_count = Message.objects.count()
+        self.assertEqual(after_count, before_count)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, MessageForm))
+        self.assertTrue(form.is_bound)
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
 
     def test_successful_message_send(self):
         before_count = Message.objects.count()
