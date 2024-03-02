@@ -72,8 +72,7 @@ $(document).ready(function () {
             url : removeFriendUrl.replace('0', userId),
             type: 'GET', 
             success: function() {
-                $('#friend-link').attr('data-action', 'add-friend');
-                $('#friend-link').text('Add friend');
+                location.reload();
             },
             error: function(xhr) {
                 console.error(xhr.responseText);
