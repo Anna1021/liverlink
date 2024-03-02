@@ -4,8 +4,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from peer_support.models import User
 
 class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
     """Unit tests of javascript in display_blocklist template of other_user_settings view."""
@@ -16,7 +15,8 @@ class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-       # options.add_argument("--headless") 
+        options.add_argument("--headless") 
+        options.add_argument("--window-size=1920,1080")
         cls.selenium = WebDriver(service=Service(), options=options)
         cls.selenium.maximize_window()
         cls.selenium.implicitly_wait(40)
@@ -27,6 +27,10 @@ class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_dynamic_block_button_change(self):
+
+        user = User.objects.get(username='@janedoe')
+        blocked_user = User.objects.get(username='@peterpickles')
+
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         username_input = self.selenium.find_element(By.NAME, "username")
         username_input.send_keys('@janedoe')
@@ -44,18 +48,28 @@ class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
 
         block_toggle_button = self.selenium.find_element(By.CLASS_NAME, "block-user-toggle-btn")
 
-        # test unblock_user GET request: selenium-wire
+        self.assertIn(blocked_user, user.blocked_users.all())
+        self.assertEqual(1, user.blocked_users.all().count())
         self.assertEqual("Unblock", block_toggle_button.get_attribute("innerHTML"))
         self.assertEqual("unblock", block_toggle_button.get_attribute("data-action"))
-
-        block_toggle_button.click()
-
-        self.assertEqual("Block", block_toggle_button.get_attribute("innerHTML"))
-        self.assertEqual("block", block_toggle_button.get_attribute("data-action"))
+        self.assertIn("btn-unblock", block_toggle_button.get_attribute("class"))
 
         block_toggle_button.click()
 
         block_toggle_button = self.selenium.find_element(By.CLASS_NAME, "block-user-toggle-btn") #refresh button
 
+        self.assertNotIn(blocked_user, user.blocked_users.all())
+        self.assertEqual(0, user.blocked_users.all().count())
+        self.assertEqual("Block", block_toggle_button.get_attribute("innerHTML"))
+        self.assertEqual("block", block_toggle_button.get_attribute("data-action"))
+        self.assertIn("btn-block", block_toggle_button.get_attribute("class"))
+
+        block_toggle_button.click()
+
+        block_toggle_button = self.selenium.find_element(By.CLASS_NAME, "block-user-toggle-btn")
+
+        self.assertIn(blocked_user, user.blocked_users.all())
+        self.assertEqual(1, user.blocked_users.all().count())
         self.assertEqual("Unblock", block_toggle_button.get_attribute("innerHTML"))
         self.assertEqual("unblock", block_toggle_button.get_attribute("data-action"))
+        self.assertIn("btn-unblock", block_toggle_button.get_attribute("class"))
