@@ -50,7 +50,7 @@ class HelpersViewTestCase(TestCase):
         self.assertNotIn(blocked_user, addable_peers)
         self.assertNotIn(blocked_by_user, addable_peers)
 
-    def test_blocked_dm_on_direct_conversation_users_not_blocked(self):
+    def test_check_blocked_dm_on_direct_conversation_users_not_blocked(self):
         user = User.objects.get(username='@janedoe')
         second_user = User.objects.get(username='@petrapickles')
         direct_conversation = Conversation.objects.create()
@@ -60,7 +60,7 @@ class HelpersViewTestCase(TestCase):
         self.assertFalse(check_blocked_dm(user, direct_conversation))
         self.assertFalse(check_blocked_dm(second_user, direct_conversation))
 
-    def test_blocked_dm_on_direct_conversation_users_blocked(self):
+    def test_check_blocked_dm_on_direct_conversation_users_blocked(self):
         user = User.objects.get(username='@janedoe')
         second_user = User.objects.get(username='@petrapickles')
         user.blocked_users.add(second_user)
@@ -71,7 +71,7 @@ class HelpersViewTestCase(TestCase):
         self.assertTrue(check_blocked_dm(user, direct_conversation))
         self.assertTrue(check_blocked_dm(second_user, direct_conversation))
 
-    def test_blocked_dm_on_group_conversation(self):
+    def test_check_blocked_dm_on_group_conversation(self):
         user = User.objects.get(username='@janedoe')
         second_user = User.objects.get(username='@petrapickles')
         third_user = User.objects.get(username='@peterpickles')
