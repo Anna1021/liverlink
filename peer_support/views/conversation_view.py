@@ -33,7 +33,7 @@ class ConversationView(LoginRequiredMixin, FormView):
         message_form = MessageForm(conversation,user=current_user)
         report_form = ReportForm()
         non_reported_messages = conversation.messages.filter(is_reported=False)
-        context = {"message_form":message_form,"report_form":report_form , 'conversation':conversation,'user_conversations':request.user.sort_conversations(),'messages': non_reported_messages}
+        context = {"message_form":message_form,"report_form":report_form , 'conversation':conversation,'user_conversations':request.user.sort_conversations(),'non_reported_messages': non_reported_messages}
         return render(request,self.template_name,context)
 
     def post(self, request, conversation_id):
