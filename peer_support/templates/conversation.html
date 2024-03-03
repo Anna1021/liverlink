@@ -43,7 +43,7 @@
     {% for message in conversation.messages.all %}
         {% if user in message.visible_to.all %}
             {% if not message.same_sender %}
-                <div class="notranslate">{{ message.sender }}</div>
+                <a href="{% url 'profile' message.sender.username %}"class="notranslate">{{ message.sender }}</a>
             {% endif %}
             {% if message.sender == user %}
                 <div class="row message-bubble self-message">
