@@ -33,7 +33,7 @@ class ConversationViewTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'conversation.html')
-        form = response.context['form']
+        form = response.context['message_form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
 
@@ -77,11 +77,8 @@ class ConversationViewTestCase(TestCase):
         response = self.client.post(self.url, data=self.form_input)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count+1)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'conversation.html')
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('conversation', kwargs={'conversation_id': self.conversation.id}))
         message = Message.objects.get(pk=2)
         self.assertEqual(message.sender, self.user)
         self.assertEqual(message.content, 'Ploof')
-        form = response.context['form']
-        self.assertTrue(isinstance(form, MessageForm))
-        self.assertFalse(form.is_bound)

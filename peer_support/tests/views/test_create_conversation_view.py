@@ -59,7 +59,7 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(after_count, before_count+1)
         self.assertTemplateUsed(response, 'conversation.html')
         self.assertRedirects(response, reverse('conversation',kwargs={'conversation_id':3}), status_code=302, target_status_code=200)
-        form = response.context['form']
+        form = response.context['message_form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
 
@@ -73,7 +73,7 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(after_count, before_count)
         self.assertTemplateUsed(response, 'conversation.html')
         self.assertRedirects(response, reverse('conversation',kwargs={'conversation_id':1}), status_code=302, target_status_code=200)
-        form = response.context['form']
+        form = response.context['message_form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
 
@@ -88,6 +88,6 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(after_count, before_count+1)
         self.assertTemplateUsed(response, 'conversation.html')
         self.assertRedirects(response, reverse('conversation',kwargs={'conversation_id':3}), status_code=302, target_status_code=200)
-        form = response.context['form']
+        form = response.context['message_form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
