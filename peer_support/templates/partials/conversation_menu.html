@@ -2,10 +2,12 @@
 {% block page %}
 {% load static %}
 <div class="row conversation-menu">
-    {% include 'partials/conversation_list.html' %}
-    <div class="col-md-9">
-        {% block convo %}
-        {% endblock %}
+    <div class="card bg-dark shadow box-area my-2">
+        {% include 'partials/conversation_list.html' %}
+        <div class="col-md-9">
+            {% block convo %}
+            {% endblock %}
+        </div>
     </div>
 </div>
 {% endblock %}
