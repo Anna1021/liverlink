@@ -13,11 +13,7 @@
   padding-top: 20px;
   padding-left: 30px;
 }
-.light-theme #top-nav {
-    background-color: #ffffff; 
-    color: rgb(0, 0, 0); 
-  }
-  .light-theme #middle-nav{
+.light-theme #resources-card, .light-theme #friend-card {
   box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2);
   transition: 0.3s;
   border-radius: 20px; 
@@ -27,6 +23,11 @@
   padding-top: 20px;
   padding-left: 30px;
 }
+.light-theme #top-nav {
+    background-color: #ffffff; 
+    color: rgb(0, 0, 0); 
+  }
+
 .light-theme .btn {
     color: #000000;
     border-color: #000000;
@@ -34,4 +35,22 @@
 }
 .light-theme .navbar-dark .navbar-nav .nav-link {
     color: black !important;
+}
+
+/*
+Question link
+*/
+.light-theme.main-menu ul li a {
+  color: black ;
+  font-weight: 700;
+}
+.light-theme #friend-inner-card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 20px;
+  background-color: #ffffff;
+  color: black;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-left: 30px;
 }

@@ -1,21 +1,19 @@
-{% extends 'base_content.html' %}
-{% block content %}
-{% load static %}
-<div class="container pl-0">
-  <div class="row">
-    <!-- left row -->
-    <div class="col-md-3 mt-2">
-      {%include "partials/left_navbar.html" %}
-    </div>
-    <!-- right row -->
-    <div class="col-md-9 mt-2">
-      <div id="middle-nav" class="card shadow box-area">
-        <h1 class="card-welcome">Welcome to your feed {{ user.username }}</h1>
-        {% block page %}
-        {% endblock %}
+ {% extends 'base_content.html' %}
+  {% block content %}
+  {% load static %}
+  <div class="container pl-0">
+    <div class="row">
+      <!-- left row -->
+      <div class="col-md-3 mt-2">
+        {%include "partials/left_navbar.html" %}
+      </div>
+      <!-- right row -->
+      <div class="col-md-9 mt-2">
+        <div>
+          {% block page %}
+          {% endblock %}
+        </div>
       </div>
     </div>
   </div>
-  </div>
-  <script src="{% static 'js/dashboard_theme_switcher.js' %}"></script>
   {% endblock %}

@@ -1,0 +1,51 @@
+
+
+.img-fluid{
+    width: 35px !important;
+  }
+
+.dark-theme #left-nav{
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 20px; 
+  background-color: #212529;
+  color: white;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-left: 30px;
+}
+.dark-theme #top-nav {
+    background-color: #212529;
+    color: white; 
+  }
+
+  .dark-theme #resources-card, .dark-theme #friend-card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 20px; 
+  background-color: #212529;
+  color: white;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-left: 30px;
+}
+.dark-theme.resources-ul a {
+  text-decoration: none;
+  color: #ffffff ;
+}
+
+.dark-theme.user-menu ul li a,
+.main-menu ul li a {
+  color: white;
+  font-weight: 700;
+}
+.dark-theme #friend-inner-card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 20px;
+  background-color: #212529;
+  color: white;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-left: 30px;
+}

@@ -1,10 +1,10 @@
-{% extends 'profile.html' %}
+{% extends 'settings.html' %}
 {% block title %}
     <div class="ps-title-text">Personal information</div>
 {% endblock %}
 
 {% block page %}
-    <form action="{% url 'profile' %}" method="post">
+    <form action="{% url 'settings' %}" method="post">
     {% csrf_token %}
     {% include 'partials/bootstrap_form.html' with form=form %}
     <span><input type="submit" value="Update" class="btn btn-primary"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate_user">Deactivate account</button></span>
