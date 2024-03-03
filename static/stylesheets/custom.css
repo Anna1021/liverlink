@@ -47,6 +47,7 @@ p.cover-text {
   padding-bottom: 30px;
   border-radius: 15%;
 }
+
 .cover-card-block {
   opacity: 1
 }
@@ -58,7 +59,6 @@ p.cover-text {
   -o-background-size: cover;
   z-index: -1;
 }
-
 
 /*
  * forms
