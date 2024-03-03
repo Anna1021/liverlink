@@ -40,8 +40,9 @@
 /*
 Question link
 */
-.light-theme.main-menu ul li a {
-  color: black ;
+.light-theme .user-menu ul li a, .light-theme
+.main-menu ul li a {
+  color: rgb(0, 0, 0);
   font-weight: 700;
 }
 .light-theme #friend-inner-card {
@@ -53,4 +54,48 @@ Question link
   padding-right: 30px;
   padding-top: 20px;
   padding-left: 30px;
+}
+
+.light-theme .question-list-item-title {
+  color: rgb(0, 0, 0);
+  font-size: 18px;
+  font-weight: 900;
+  margin: 0
+}
+.light-theme .emp-profile {
+  padding: 3%;
+  margin-top: 3%;
+  margin-bottom: 5%;
+  border-radius: 0.8rem;
+  background: #ffffff;
+}
+.light-theme .profile-subheading {
+  color: #000000;
+  font-weight: 600;
+}
+
+.light-theme .profile-head h5 {
+  font-size: 30px;
+  color: #000000;
+}
+
+.light-theme .nav-tabs,
+.light-theme .nav-link.active {
+  color: #ffffff;
+  background-color: #000000;
+  border-color: #dee2e6 #dee2e6 #fff;
+}
+
+.light-theme .nav-tabs,
+.light-theme .nav-link {
+    margin-bottom: -1px;
+    background: 0 0;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+.light-theme .nav-tabs,
+.light-theme .nav-link.active{
+  border: none;
+  border-bottom: 2px solid #56555e;
 }

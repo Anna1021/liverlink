@@ -47,12 +47,6 @@ blockquote {
   border-bottom: 1px solid lightgray;
 }
 
-/* .user-menu ul li a,
-.main-menu ul li a {
-  color: white;
-  font-weight: 700;
-} */
-
 .user-menu ul li a:hover,
 .main-menu ul li a:hover {
   text-decoration: underline;
@@ -62,7 +56,7 @@ blockquote {
   color: white;
   display: inline;
   margin-left: 12px;
-}
+} 
 
 .page {
   display: flex;
@@ -91,12 +85,12 @@ blockquote {
   color: black;
 }
 
-.question-list-item-title {
+/* .question-list-item-title {
   color: white;
   font-size: 18px;
   font-weight: 900;
   margin: 0
-}
+} */
 
 .question-list-item-author {
   color: #91BBD3;
