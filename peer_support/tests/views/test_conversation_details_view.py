@@ -28,6 +28,10 @@ class ConversationViewTestCase(TestCase):
         self.form_input = {
             'users' : [self.other_user_id]
         }
+        self.rename_input ={
+            'rename_conversation':':3',
+            'new_name': 'test'
+        }
 
     def test_conversation_url(self):
         self.assertEqual(self.url,'/conversation_details/2')
@@ -89,6 +93,17 @@ class ConversationViewTestCase(TestCase):
         after_count = self.conversation.users.count()
         self.assertIn(self.user_to_add[0],self.conversation.users.all())
         self.assertEqual(after_count, before_count+1)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation_details.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, AddUsersForm))
+        self.assertFalse(form.is_bound)
+
+    def test_successful_rename_conversation(self):
+        self.assertEqual(self.conversation.as_group().name,None)
+        response = self.client.post(self.url,data=self.rename_input)
+        renamed = Conversation.objects.get(pk=2)
+        self.assertEqual(renamed.as_group().name,'test')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'conversation_details.html')
         form = response.context['form']

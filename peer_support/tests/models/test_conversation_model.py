@@ -33,14 +33,18 @@ class ConversationModelTestCase(TestCase):
     def test_correct_internal_group_name(self):
         self.assertIsNone(self.group_conversation.name)
 
-    def test_correct_unset_group_name_displayed(self):
+    def test_correct_unset_group_names_displayed(self):
         display = str(self.group_conversation)
         self.assertEqual(display,"@johndoe, @peterpickles, @petrapickles")
+        display_name = self.group_conversation.display_name()
+        self.assertEqual(display_name,"")
 
-    def test_correct_set_group_name_displayed(self):
+    def test_correct_set_group_names_displayed(self):
         self.group_conversation.name = 'test'
         display = str(self.group_conversation)
         self.assertEqual(display,"test")
+        display_name = self.group_conversation.display_name()
+        self.assertEqual(display_name,"test")
 
     def test_add_user_to_group(self):
         user2 = User.objects.get(pk=2)
@@ -75,6 +79,16 @@ class ConversationModelTestCase(TestCase):
             self.group_conversation.remove_user(user)
         after_count = Conversation.objects.count()
         self.assertEqual(after_count,before_count-1)
+
+    def test_renaming_group_to_specific_name(self):
+        new_name = 'Test'
+        self.group_conversation.rename(new_name)
+        self.assertEqual(self.group_conversation.name,'Test')
+
+    def test_renaming_to_blank(self):
+        new_name = ''
+        self.group_conversation.rename(new_name)
+        self.assertEqual(self.group_conversation.name,None)
     
     
     

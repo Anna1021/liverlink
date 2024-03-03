@@ -7,10 +7,10 @@ function toggle(b){
     let label = document.getElementById('conversation-name');
     let input = document.getElementById('conversation-name-input');
     if (b.innerHTML == 'Rename') {
-        label.style.display = 'inline';
+        label.style.display = 'block';
         input.style.display = 'none';
       } else {
         label.style.display = 'none';
-        input.style.display = 'inline';
+        input.style.display = 'block';
       }
 }

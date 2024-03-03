@@ -61,6 +61,7 @@ class GroupConversation(Conversation):
         self.save()
 
     def display_name(self):
+        """Name displayed in the form for renaming conversations"""
         if self.name is None:
             return ""
         return self.name

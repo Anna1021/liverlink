@@ -84,7 +84,7 @@
 }
 
 #conversation-name{
-    display: inline;
+    display: block;
 }
 
 #conversation-name-input{
