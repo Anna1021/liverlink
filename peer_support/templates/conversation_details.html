@@ -3,7 +3,17 @@
 {% block convo %}
 
 <div class="conversation-details">
-            <h3 class="notranslate">{{conversation}}</h3>
+    <div id="name-form">
+        <h3 id="conversation-name">{{conversation}}</h3>
+        <div id="conversation-name-input">
+            <form method="post" action="{% url 'conversation_details' conversation.id %}">
+                {% csrf_token %}
+                <input type="text" name="new_name" value="{{ conversation }}">
+                <input type="submit" name="rename_conversation" value="Save">
+            </form>
+        </div>
+        <button onclick="toggle(this)" id="rename-button">Rename</button>
+    </div>
         <div>
         <div class="row user-list-header">
             <div class="col-md-7">
@@ -28,5 +38,5 @@
         </div>
     </div>
 </div>
-
+<script src="{% static 'js/rename_conversation.js' %}"></script>
 {% endblock %}

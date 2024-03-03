@@ -11,6 +11,13 @@ class ConversationDetailsView(LoginRequiredMixin,FormView):
     model = Conversation
     template_name = 'conversation_details.html' 
 
+    def get_context_data(self,current_user,conversation):
+        return {
+            'conversation':conversation.as_group(),
+            'user_conversations':current_user.sort_conversations(),
+            'form': AddUsersForm(current_user,conversation.as_group())
+        }
+
     def get(self,request, conversation_id):
         conversations = Conversation.objects.filter(id=conversation_id)
         if conversations.count() == 0:
@@ -26,24 +33,19 @@ class ConversationDetailsView(LoginRequiredMixin,FormView):
         if conversation.as_group() is None:
             messages.error(request,"You can only do this for a group conversation")
             return redirect(reverse('conversation',kwargs={'conversation_id':conversation.id}),{'user_conversations':request.user.sort_conversations()})
-        context  = {
-            'conversation':conversation.as_group(),
-            'user_conversations':request.user.sort_conversations(),
-            'form': AddUsersForm(current_user,conversation.as_group())
-        }
-        return render(request,self.template_name,context)
+        return render(request,self.template_name,self.get_context_data(request.user,conversation))
 
     def post(self,request, conversation_id):
-        conversation = Conversation.objects.get(id=conversation_id)
-        form = AddUsersForm(request.user,conversation.as_group(),data=request.POST)
-        context  = {
-            'conversation':conversation.as_group(),
-            'user_conversations':request.user.sort_conversations(),
-            'form': AddUsersForm(request.user,conversation.as_group())
-        }
-        if form.is_valid():
-            form.save(conversation)
-            return render(request,self.template_name,context)
+        conversation = Conversation.objects.get(id=conversation_id).as_group()
+        if 'rename_conversation' in  request.POST:
+            new_name = request.POST.get('new_name')
+            conversation.rename(new_name)
+            return render(request,self.template_name,self.get_context_data(request.user,conversation))
         else:
-            messages.error(request,"You have to add at least 1 person")
-            return render(request,self.template_name,{'form':form,'conversation':conversation.as_group(),'user_conversations':request.user.sort_conversations()})#
+            form = AddUsersForm(request.user,conversation,data=request.POST)
+            if form.is_valid():
+                form.save(conversation)
+                return render(request,self.template_name,self.get_context_data(request.user,conversation))
+            else:
+                messages.error(request,"You have to add at least 1 person")
+                return render(request,self.template_name,{'form':form,'conversation':conversation.as_group(),'user_conversations':request.user.sort_conversations()})#

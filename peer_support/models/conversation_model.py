@@ -53,6 +53,18 @@ class GroupConversation(Conversation):
         if self.users.count()==0:
             self.delete() 
 
+    def rename(self, new_name):
+        """Rename conversation"""
+        self.name = new_name
+        if new_name == '':
+            self.name = None
+        self.save()
+
+    def display_name(self):
+        if self.name is None:
+            return ""
+        return self.name
+
     def __str__(self):
         """Return a string representing the display name of the conversation"""
         if self.name is None:
