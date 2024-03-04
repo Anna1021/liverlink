@@ -1,7 +1,7 @@
 from django import forms
 from peer_support.models import User, Parent, Patient, Mentor, Referral
 from .helpers import NewPasswordMixin
-from .form_choices import USER_TYPE_CHOICES, CONDITION_CHOICES
+from .form_choices import USER_TYPE_CHOICES, CONDITION_CHOICES, TRANSPLANT_CHOICES
 
 class SignUpForm(NewPasswordMixin, forms.ModelForm):
     """Form enabling unregistered users to sign up."""
@@ -12,6 +12,8 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
     child_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
     referral_code = forms.CharField(required=False, max_length=10, initial='')
+    transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
+    child_transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
 
     class Meta:
         """Form options."""
@@ -44,18 +46,21 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             user_data.update({
                 'condition': self.cleaned_data.get('condition'),
                 'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
+                'transplant': self.cleaned_data.get('transplant'),
             })
             user = Patient.objects.create_user(**user_data)
         elif user_type == 'PR':
             user_data.update({
                 'child_condition': self.cleaned_data.get('child_condition'),
                 'child_age_of_diagnosis': self.cleaned_data.get('child_age_of_diagnosis'),
+                'child_transplant': self.cleaned_data.get('child_transplant'),
             })
             user = Parent.objects.create_user(**user_data)
         else:
             user_data.update({
                 'condition': self.cleaned_data.get('condition'),
                 'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
+                'transplant': self.cleaned_data.get('transplant'),
                 'referral_code': self.cleaned_data.get('referral_code')
             })
             user = Mentor.objects.create_user(**user_data)

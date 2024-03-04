@@ -7,6 +7,7 @@ class Parent(User):
     
     child_condition = models.CharField(max_length=100, blank=True, null=True)
     child_age_of_diagnosis = models.PositiveSmallIntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
+    transplant = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Parent'
