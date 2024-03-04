@@ -21,6 +21,8 @@ class Post(models.Model):
 class PostComment(models.Model):
     """Model for Post Comments"""
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    #new
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
