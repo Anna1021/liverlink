@@ -1,31 +1,28 @@
+{% extends 'dashboard.html' %} {% block page %}
+<h1>Post Detail</h1>
+<p><strong>Author:</strong> {{ post.author }}</p>
+<p><strong>Title:</strong>{{ post.title }}</p>
+<p><strong>Text:</strong> {{ post.text }}</p>
+<p><strong>Created At:</strong> {{ post.created_at }}</p>
 
-{% extends 'dashboard.html' %}
-{% block page %}
-    <h1>Post Detail</h1>
-    <p><strong>Author:</strong> {{ post.author }}</p>
-    <p><strong>Title:</strong>{{ post.title }}</p>
-    <p><strong>Text:</strong> {{ post.text }}</p>
-    <p><strong>Created At:</strong> {{ post.created_at }}</p>
+<hr />
+<!-- Display existing comments -->
+<h2>Comments</h2>
+<ul>
+  {% for comment in post.postcomment_set.all %}
+  <li>
+    <p><strong>Comment by:</strong> {{ comment.author }}</p>
+    <p>{{ comment.content }}</p>
+  </li>
+  {% empty %}
+  <li>No comments yet.</li>
+  {% endfor %}
+</ul>
 
-    <hr>
-    <!-- Display existing comments -->
-    <h2>Comments</h2>
-    <ul>
-        {% for comment in post.postcomment_set.all %}
-            <li>
-                <p><strong>Comment by:</strong> {{ comment.author }}</p>
-                <p>{{ comment.content }}</p>
-            </li>
-        {% empty %}
-            <li>No comments yet.</li>
-        {% endfor %}
-    </ul>
-
-    <!-- Add Comment -->
-    <h1>Add Comment</h1>
-    <form method="post" action="{% url 'post_detail' post_id=post.id %}">
-        {% csrf_token %}
-        {{ comment_form.as_p }}
-        <button type="submit">Submit comment</button>
-    </form>
+<!-- Add Comment -->
+<h1>Add Comment</h1>
+<form method="post" action="{% url 'post_detail' post_id=post.id %}">
+  {% csrf_token %} {{ comment_form.as_p }}
+  <button type="submit">Submit comment</button>
+</form>
 {% endblock %}

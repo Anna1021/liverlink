@@ -9,13 +9,12 @@ from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 from django.urls import reverse
 from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm
-#from peer_support.views.helpers import login_prohibited
+from peer_support.views.helpers import login_prohibited
 #post
 from peer_support.models import Post, PostComment
 from peer_support.forms import PostForm, CommentForm
+from django.db.models import Q
 
-#new
-from django.contrib.auth.decorators import login_required
 
 # @login_required
 def create_post(request):
@@ -48,11 +47,15 @@ def post_detail(request, post_id):
         comment_form = CommentForm()
     return render(request, 'post_detail.html', {'post': post, 'comment_form': comment_form})
 
-#@login_required
-#def my_posts(request):
-#    return render(request, 'my_posts.html')
-
 def feed(request):
-    #user_posts = Post.objects.filter(author_id__in=request.user.friends.all())
-    user_posts = Post.objects.order_by("-created_at") # filter friends out, if statement
-    return render(request, 'feed.html', {'posts': user_posts})
+    feed_type = request.GET.get('feed_type', 'global')  
+    user_posts = None
+
+    if feed_type == 'global':
+        user_posts = Post.objects.all().order_by("-created_at")
+    elif feed_type == 'friends':
+        user_friends = request.user.friends.all()
+        # Retrieve both your own posts and posts from your friends
+        user_posts = Post.objects.filter(Q(author__in=user_friends) | Q(author=request.user)).order_by("-created_at")
+    return render(request, 'dashboard.html', {'posts': user_posts, 'feed_type': feed_type})
+    

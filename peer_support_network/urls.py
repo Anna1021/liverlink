@@ -24,14 +24,9 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('log_in/', views.LogInView.as_view(), name='log_in'),
     path('log_out/', views.log_out, name='log_out'),
-<<<<<<< HEAD
-    path('profile/password/', views.PasswordView.as_view(), name='password'),
-    path('profile/', views.ProfileUpdateView.as_view(), name='profile'),
-=======
     path('settings/password/', views.PasswordView.as_view(), name='password'),
     path('settings/', views.ProfileUpdateView.as_view(), name='settings'),
     path('deactivate_user/', views.deactivate_user, name='deactivate_user'),
->>>>>>> main
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('resources/', views.resources, name='resources'),
     path('question/<int:id>', views.questionPage, name='question'),
@@ -51,7 +46,6 @@ urlpatterns = [
     path('inbox/', views.InboxView.as_view(), name='inbox'),
     path('conversation_details/<int:conversation_id>',views.ConversationDetailsView.as_view(),name="conversation_details"),
 
-<<<<<<< HEAD
     #post
     path('create_post/', views.create_post, name='create_post'),
     #path('add_comment/<int:post_id>/', views.add_comment, name='add_comment'), 
