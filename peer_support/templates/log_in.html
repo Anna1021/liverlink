@@ -1,7 +1,7 @@
 {% extends 'base_content.html' %}
 {% block content %}
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div id="loginBox" class="row p-3 text-white shadow box-area custom-rounded">
+    <div id="loginBox" class="row p-3 shadow box-area custom-rounded">
 
     <!-- Left box image -->
     {% include 'partials/cover_image.html' %}
@@ -9,7 +9,7 @@
     <!-- Right box form -->
     <div class="col-md-7">
       <div class="row align-items-center">
-        <h1>Welcome Back!</h1>
+        <h1 id="login-message">Welcome Back!</h1>
         <form action="{% url 'log_in' %}" method="post">
           {% csrf_token %}
           <input type="hidden" name="next" value="{{ next }}">

@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from peer_support.forms import NewReplyForm, NewResponseForm
 
 @login_required
-def questionPage(request, id):
+def question_page(request, id):
     response_form = NewResponseForm()
     reply_form = NewReplyForm()
 

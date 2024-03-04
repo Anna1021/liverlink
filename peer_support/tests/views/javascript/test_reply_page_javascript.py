@@ -20,7 +20,7 @@ class ReplyPageTest(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.add_argument("--headless") 
+        #options.add_argument("--headless") 
         cls.selenium = WebDriver(service=Service(), options=options)
         cls.selenium.implicitly_wait(10)
         

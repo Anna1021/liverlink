@@ -1,7 +1,8 @@
 
 
-.img-fluid{
-    width: 35px !important;
+.dark-theme .img-fluid{
+    max-width: 100%;
+    height: auto
   }
 
 .dark-theme #left-nav{
@@ -77,4 +78,40 @@
 .dark-theme .nav-link.active {
   border: none;
   border-bottom: 2px solid #91BBD3;
+}
+.dark-theme #loginBox {
+  border-radius: 20px;
+  background-color:#2E2D38;
+  color: #ffffff;
+}
+
+.dark-theme #login-message {
+  font-size: calc(1.375rem + 1.5vw);
+}
+.dark-theme .notification-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 20px;
+  margin-bottom: 7px;
+  background: #2E2D38;
+  color: white;
+  -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+}
+
+.dark-theme .card{
+  
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 20px;
+    background-color: #2e2d38;
+    color: white;
+    padding-right: 30px;
+    padding-top: 20px;
+    padding-left: 30px;
 }
