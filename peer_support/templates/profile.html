@@ -1,37 +1,201 @@
 {% extends 'base_content.html' %}
 {% block content %}
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <h2>Profile settings</h2>
-      <div class="col-2 ps-col">
-        <div style="padding: 10px"></div>
-        <img src="{{ user.gravatar }}" class="ps-gravatar" alt="Your gravatar">   </img>
-        <div style="padding: 10px"></div>
-        <div class="divider"></div>
-        <div style="padding: 5px"></div>
-        <ul class="ps-list">
-          <li class="ps-list-item"><a class="ps-link" href="{% url 'profile' %}"><i class="bi bi-gear ps-icons"> </i>Personal information</a></li>
-          <li class="ps-list-item"><a class="ps-link" href="{% url 'password' %}"><i class="bi bi-lock ps-icons"> </i>Password & security</a></li>
-          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-person ps-icons"> </i>Other users</a></li>
-          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-bell ps-icons"> </i>Notifications</a></li>
-          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-brightness-low ps-icons"> </i>Accessibility</a></li>
-        </ul>
-      </div>
-      <div class="col-8 ps-col">
-        {% block title %}{% endblock %}
-        <div style="padding: 5px"></div>
-        <div class="divider"></div>
-        <div style="padding: 5px"></div>
-        {% block page %}
-        {% endblock %}
-      </div>
-      <div class="col-2 ps-col"></div>
-    </div>
-  </div>
-  <row> <!-- footer -->
-    <div style="padding: 40px;"></div>
-  </row>
+{% load static %}
+<div class="container emp-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    {% if mentor %}
+                        <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" style="border: 7px solid rgb(101, 209, 101);"/>
+                    {% else %}
+                        <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" />
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <h5>{{ user.full_name }}</h5>
+                    <h6>{{ user.username }}</h6>
+                    {% if patient %}
+                        <h7>PATIENT</h7>
+                    {% elif mentor %}
+                        <h7>MENTOR</h7>
+                    {% elif parent %}
+                        <h7>PARENT</h7>
+                    {% endif %}
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="about-tab" data-toggle="tab" href="#" role="tab">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="timeline-tab" data-toggle="tab" href="#timeline"
+                                role="tab">Timeline</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-2">
+                {% if current_user == user %}
+                <div id="profile-settings" style="float: right;">
+                    <a class="actions-icon" href="{% url 'settings' %}" role="button" aria-label="profile-settings">
+                        <span class="bi bi-gear-fill"></span>
+                    </a>
+                </div>
+                {% else %}
+                <div id="user-actions-dropdown" style="float: right;">
+                    <a class="actions-icon" href="#" id="actionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="user-actions-dropdown">
+                        <span class="bi bi-three-dots-vertical"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="actionsDropdown" data-popper-placement="bottom-end">
+                      {% if not current_user in blocklist and not user in blocklist %}
+                        {% if is_friend %}
+                        <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}" data-action="remove-friend">Remove friend</a>
+                        {% elif request_sent %}
+                        <a class="dropdown-item" style="font-style: italic;" id="friend-link" data-user-id="{{user.id}}" data-action="inactive">Request sent</a>
+                        {% else %}
+                        <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}" data-action="add-friend">Add friend</a>
+                        {% endif%}
+                      <a class="dropdown-item" href="#" id="message-link" data-action="message">Send message</a> <!-- To be updated: functionality --> 
+                      {% endif %}
+                      {% if user in blocklist %}
+                      <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="unblock-user">Unblock this user</a>
+                      {% else %}
+                      <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="block-user">Block this user</a>
+                      {% endif %}
+                      <a class="dropdown-item" href="#" id="report-link" data-action="report-user">Report this user</a> <!-- To be updated: functionality -->
+                    </div>
+                  </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-subheading pt-5 pl-3">
+                    <label>Bio</label>
+                    <p>{{ user.bio }}</p>
+                </div>
+            </div>
+            <div class="col-md-7">
+                {% if current_user in blocklist %}
+                <div class="profile-subheading" id="current-user-is-blocked">You cannot view this user's profile.</div>
+                {% elif user in blocklist %}
+                <div class="profile-subheading" id="user-is-blocked">You have blocked this user.</div>
+                {% else %}
+                <div id="profile-content">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.email }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Date of Birth</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.date_of_birth }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Gender</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.gender_name }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Location</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.country_name }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Hospital</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.hospital }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Ethnicity</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.ethnicity_name }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Language</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ user.language_name }}</p>
+                                </div>
+                            </div>
+                            {% if patient or mentor %}
+                                <div class="row">
+                                    <div class="profile-subheading col-md-6">
+                                        <label>Age of diagnosis</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% if patient %}
+                                            <p>{{ patient.age_of_diagnosis }}</p>
+                                        {% elif mentor %}
+                                            <p>{{ mentor.age_of_diagnosis }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="profile-subheading col-md-6">
+                                        <label>Condition</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% if patient %}
+                                            <p>{{ patient.condition }}</p>
+                                        {% elif mentor %}
+                                            <p>{{ mentor.condition }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if parent %}
+                                <div class="row">
+                                    <div class="profile-subheading col-md-6">
+                                        <label>Child's age of diagnosis</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{ parent.child_age_of_diagnosis }}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="profile-subheading col-md-6">
+                                        <label>Child's condition</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{ parent.child_condition }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
+                            <p>Timeline</p>
+                            <!-- Add posts to this section -->
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -44,4 +208,3 @@
 <script src="{% static 'js/profile.js' %}"></script>
 
 {% endblock %}
-
