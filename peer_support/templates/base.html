@@ -6,15 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet" >
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
-    <link href="{% static 'profile_settings.css' %}" rel="stylesheet">
-    <link href="{% static 'custom.css' %}" rel="stylesheet">
-    <link href="{% static 'conversation.css' %}" rel="stylesheet">
-    <link href="{% static 'inbox.css' %}" rel="stylesheet">
-    <link href="{% static 'peer_select.css' %}" rel="stylesheet">
-    <link href="{% static 'friends_list.css' %}" rel="stylesheet">
-    <link href="{% static 'profile.css' %}" rel="stylesheet">
+    <link href="{% static 'stylesheets/profile_settings.css' %}" rel="stylesheet">
+    <link href="{% static 'stylesheets/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'stylesheets/conversation.css' %}" rel="stylesheet">
+    <link href="{% static 'stylesheets/inbox.css' %}" rel="stylesheet">
+    <link href="{% static 'stylesheets/peer_select.css' %}" rel="stylesheet">
+    <link href="{% static 'stylesheets/friends_list.css' %}" rel="stylesheet">
+    <link href="{% static 'stylesheets/profile.css' %}" rel="stylesheet">
+    <link href="{% static 'stylesheets/resources.css' %}?{% now "U" %}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <title>Pulse.</title>
+  <script src="{% static 'js/main.js' %}?{% now "U" %}"></script>
+    <title class="notranslate">Pulse.</title>
   </head>
   <body>
     {% block body %}

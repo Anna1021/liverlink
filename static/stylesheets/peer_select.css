@@ -8,4 +8,5 @@
     color: #fff;
     cursor: not-allowed !important;
     pointer-events: none !important;
+    z-index: 51;
 }

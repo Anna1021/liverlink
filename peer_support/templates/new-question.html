@@ -1,13 +1,7 @@
-{% extends 'layouts/page.html' %}
-{% block content %}
-    <style>
-        .submit-button {
-            text-align: center;
-            vertical-align: middle;
-            padding: 10px;
-        }
-    </style>
-
+{% extends 'dashboard.html' %}
+{% block page %}
+    <div class="main">
+        {% include 'partials/resources-navbar.html' %}
     <div class="page new-question-page">
         <h1 class="title">New question</h1>
 
@@ -27,6 +21,6 @@
             <input type="submit" value="Submit" class="submit-button"/>
 
         </form>
-
+    </div>
     </div>
 {% endblock %}

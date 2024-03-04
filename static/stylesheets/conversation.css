@@ -77,3 +77,8 @@
 .other-message{
     background-color: bisque;
 }
+
+.leave-confirmation{
+    padding:0;
+    margin: 0;
+}

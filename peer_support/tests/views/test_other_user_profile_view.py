@@ -116,6 +116,11 @@ class ProfileViewTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profile.html')
+    def test_get_profile_parent(self):
+        url = reverse('profile', kwargs={'username': self.user.username})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profile.html')
         parent = response.context['parent']
         self.assertEqual(parent, self.user.parent)
 

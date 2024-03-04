@@ -15,7 +15,7 @@ class ConversationView(LoginRequiredMixin, FormView):
         if conversation_id==0:
             return render(request,self.template_name,{'user_conversations':request.user.sort_conversations()})
         conversations = Conversation.objects.filter(id=conversation_id)
-        if conversations.count() == 0:
+        if conversations.count() == 0 or request.user not in conversations[0].users.all():
             messages.error(request,"This conversation does not exist.")
             context = {'user_conversations':request.user.sort_conversations()}
             return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
