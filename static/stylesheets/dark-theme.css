@@ -166,3 +166,9 @@ border: 1px solid #720fe3;
   color: rgb(255, 255, 255) !important;
   border: 1px solid transparent!important;
 }
+.dark-theme #theme{
+  cursor:pointer;
+  margin-top: auto;
+  margin-bottom: auto;
+  height: 30px;
+}
