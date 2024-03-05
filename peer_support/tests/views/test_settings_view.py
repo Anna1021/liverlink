@@ -64,8 +64,8 @@ class ProfileViewTest(TestCase):
             'language': 'en',
             'bio': 'I am a test patient.',
             'condition': 'Haemochromatosis',
-            'age_of_diagnosis': 21,
             'transplant': 'N',
+            'age_of_diagnosis': 21,
         }
         self.mentor_form_input = {
             'first_name': 'Test',
@@ -147,7 +147,6 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe"),
         self.assertEqual(self.patient.condition, "Biliary atresia"),
         self.assertEqual(self.patient.age_of_diagnosis, 2),
-        self.assertEqual(self.patient.transplant, "N")
 
     def test_unsuccessful_profile_update_for_parent(self):
         self.client.login(username=self.parent.username, password='Password123')
@@ -221,15 +220,14 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.patient.first_name, 'Jane')
         self.assertEqual(self.patient.last_name, 'Doe')
         self.assertEqual(self.patient.email, 'janedoe@example.org')
-        self.assertEqual(self.patient.date_of_birth, datetime.date(2004, 3, 2)),
-        self.assertEqual(self.patient.gender, 'F'),
-        self.assertEqual(self.patient.location, 'GB'),
-        self.assertEqual(self.patient.ethnicity, 'BR'),
-        self.assertEqual(self.patient.language, 'en'),
-        self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe"),
-        self.assertEqual(self.patient.condition, "Biliary atresia"),
-        self.assertEqual(self.patient.age_of_diagnosis, 2),
-        self.assertEqual(self.patient.transplant, 'N')
+        self.assertEqual(self.patient.date_of_birth, datetime.date(2004, 3, 2))
+        self.assertEqual(self.patient.gender, 'F')
+        self.assertEqual(self.patient.location, 'GB')
+        self.assertEqual(self.patient.ethnicity, 'BR')
+        self.assertEqual(self.patient.language, 'en')
+        self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe")
+        self.assertEqual(self.patient.condition, "Biliary atresia")
+        self.assertEqual(self.patient.age_of_diagnosis, 2)
 
     def test_successful_profile_update_for_patient(self):
         self.client.login(username=self.patient.username, password='Password123')

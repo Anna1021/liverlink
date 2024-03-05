@@ -80,7 +80,7 @@ class UserProfileModelTestCase(TestCase):
                                     language="en",
                                     bio="abc",
                                     child_condition="Hepatitis",
-                                    transplant="N",
+                                    child_transplant="N",
                                     child_age_of_diagnosis=20)
         after_count = UserProfile.objects.count()
         self.assertEqual(before_count+1, after_count)
