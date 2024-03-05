@@ -7,7 +7,7 @@ $(document).ready(function() {
     $('#id_condition').parent().hide();
     $('#id_age_of_diagnosis').parent().hide();
     $('#id_referral_code').parent().hide();
-      $('#id_transplant').parent().hide();
+    $('#id_transplant').parent().hide();
     $('#id_child_transplant').parent().hide();
   
   function showHideFields(userType) {
@@ -17,32 +17,32 @@ $(document).ready(function() {
           $('#id_child_condition').parent().hide();
           $('#id_child_age_of_diagnosis').parent().hide();
           $('#id_referral_code').parent().hide();
-        $('#id_transplant').parent().show();
-        $('#id_child_transplant').parent().hide();
+          $('#id_transplant').parent().show();
+          $('#id_child_transplant').parent().hide();
       } else if (userType == 'PR') {
           $('#id_condition').parent().hide();
           $('#id_age_of_diagnosis').parent().hide();
           $('#id_child_condition').parent().show();
           $('#id_child_age_of_diagnosis').parent().show();
           $('#id_referral_code').parent().hide();
-        $('#id_transplant').parent().hide();
-        $('#id_child_transplant').parent().show();
+          $('#id_transplant').parent().hide();
+          $('#id_child_transplant').parent().show();
       } else if (userType == 'MT') {
           $('#id_condition').parent().show();
           $('#id_age_of_diagnosis').parent().show();
           $('#id_child_condition').parent().hide();
           $('#id_child_age_of_diagnosis').parent().hide();
           $('#id_referral_code').parent().show();
-        $('#id_transplant').parent().show();
-        $('#id_child_transplant').parent().hide();
+          $('#id_transplant').parent().show();
+          $('#id_child_transplant').parent().hide();
       } else {
           $('#id_condition').parent().hide();
           $('#id_age_of_diagnosis').parent().hide();
           $('#id_child_condition').parent().hide();
           $('#id_child_age_of_diagnosis').parent().hide();
-        $('#id_referral_code').parent().hide();
-        $('#id_transplant').parent().hide();
-        $('#id_child_transplant').parent().hide();
+          $('#id_referral_code').parent().hide();
+          $('#id_transplant').parent().hide();
+          $('#id_child_transplant').parent().hide();
       }
   }
 

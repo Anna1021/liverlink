@@ -19,15 +19,15 @@ class FilterPeerForm(forms.Form):
     hospital = forms.ChoiceField(choices=ALL_CHOICE+HOSPITAL_CHOICES,required=False)
     age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
-    condition=forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
+    condition=forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
     child_age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     child_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
-    child_condition=forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
+    child_condition=forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
     mentor_age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     mentor_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
     mentor_condition=forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
-    transplant=forms.ChoiceField(choices=ALL_CHOICE+TRANSPLANT_CHOICES, required=False)
-    child_transplant=forms.ChoiceField(choices=ALL_CHOICE+TRANSPLANT_CHOICES, required=False)
+    transplant=forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
+    child_transplant=forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
 
     def __init__(self, *args, **kwargs):
         """Initialise query set with users tasks"""
