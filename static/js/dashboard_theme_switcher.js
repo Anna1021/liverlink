@@ -3,17 +3,20 @@ $(document).ready(function () {
   var darkThemeLogo = '/static/images/pulseLogoCropped.png';
   var moonLogo = '/static/images/moon.png';
   var sunLogo = '/static/images/sun.png';
-  var darkBackground = '/static/images/background2.png';
-  var lightBackground = '/static/images/background_light.png';
+  var darkBackground = '/static/images/background2.jpg';
+  var lightBackground = '/static/images/background_light.jpg';
 
   // Set image source based on theme and save to local storage
   function setImageSource(theme) {
     var logoImageSrc = theme === 'light-theme' ? lightThemeLogo : darkThemeLogo;
     var themeImageSrc = theme === 'light-theme' ? sunLogo : moonLogo;
+    var backgroundImageSrc = theme === 'light-theme' ? lightBackground : darkBackground; // Determine the background image based on theme
     $('.img-fluid').attr('src', logoImageSrc);
     $('.theme-icon').attr('src', themeImageSrc);
+    $('body').css('background-image', 'url(' + backgroundImageSrc + ')'); // Set the background image
     localStorage.setItem("currentLogo", logoImageSrc);
     localStorage.setItem("currentThemeLogo", themeImageSrc);
+    localStorage.setItem("currentBackground", backgroundImageSrc); 
   }
 
   function setTheme(themeName) {
@@ -35,18 +38,18 @@ $(document).ready(function () {
 
   $('#theme').click(function() {
     var currentTheme = getCurrentTheme() === 'light-theme' ? 'dark-theme' : 'light-theme'; // Toggle theme
-    setTheme(currentTheme); // Apply the theme
-    setImageSource(currentTheme); // Update image sources accordingly
+    setTheme(currentTheme); 
+    setImageSource(currentTheme); 
   });
 
   let storedTheme = localStorage.getItem("currentTheme");
 
   if (storedTheme) {
     setTheme(storedTheme);
-    setImageSource(storedTheme); // Use stored theme to determine image source
+    setImageSource(storedTheme); // Use stored theme to determine image source and background
   } else {
-    var defaultTheme = 'light-theme'; // Default theme
+    var defaultTheme = 'dark-theme'; 
     setTheme(defaultTheme);
-    setImageSource(defaultTheme); // Use default theme to determine image source
+    setImageSource(defaultTheme); // Use default theme to determine image source and background
   }
 });
