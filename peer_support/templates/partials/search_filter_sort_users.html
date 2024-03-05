@@ -1,0 +1,27 @@
+<div class="row">
+    <form method="get" class="px-4 py-3" novalidate>
+        {% csrf_token %}
+        {% include 'partials/bootstrap_form.html' with form=formSearch %}
+        <div class="SortFilter">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown">
+                Filter Options
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% csrf_token %}
+                {{formFilter.as_p}}
+            </div>
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown">
+                Sort Options
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% csrf_token %}
+                {% include 'partials/bootstrap_form.html' with form=formSort %}
+            </div>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-secondary btn-sm my-3" style="margin-bottom: 0;">Apply</button>
+        </div>
+    </form>
+</div>

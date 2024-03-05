@@ -18,7 +18,5 @@ class AddUsersForm(forms.ModelForm):
         """Add users to the conversation"""
         super().save(commit=False)
         new_users = self.cleaned_data.get('users')
-        for user in new_users:
-            conversation.add_user(user)
-            user.conversations.add(conversation)
+        conversation.add_users(new_users)
         return conversation

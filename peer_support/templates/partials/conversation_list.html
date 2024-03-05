@@ -1,17 +1,10 @@
+{% load conversation_tags %}
 <nav class="col-md-3 d-md-block sidebar collapse pb-3">
 <ul class="conversation-list">
     {% for conversation in user_conversations %}
     <li>
     <a href="{% url 'conversation' conversation.id %}" class="btn conversation-card notranslate">
-        {% if conversation.as_group != None %}
-        {{conversation.as_group}}
-        {% else %}
-            {% if user == conversation.get_first_member %}
-                {{conversation.get_second_member}}
-            {% else %}
-                {{conversation.get_first_member}}
-            {% endif %}
-        {% endif %}
+        {% conversation_name user conversation %}
     </a>
     {% empty %}
     No conversations!
