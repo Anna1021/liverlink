@@ -1,11 +1,13 @@
 from django.db import models
 from peer_support.models import User, Message
+from django.apps import apps
 
 class Conversation(models.Model):
     """Model used for direct conversations between two users"""
     users = models.ManyToManyField(User)
     messages = models.ManyToManyField(Message,blank=True)
     last_updated = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         """Return a string representing the display name of the conversation"""
@@ -25,6 +27,7 @@ class Conversation(models.Model):
 
     def as_group(self):
         """Return object as an instance of GroupConversation"""
+        GroupConversation = apps.get_model('peer_support', 'GroupConversation')
         try:
             return self.groupconversation
         except GroupConversation.DoesNotExist:
@@ -44,32 +47,3 @@ class Conversation(models.Model):
             message.delete(self.users.all()) 
         Conversation.objects.filter(pk=self.pk).delete()  
 
-class GroupConversation(Conversation):
-    """Model used for group conversations between 2+ users"""
-    name = models.CharField(max_length=20,null=True)
-
-    def remove_user(self,user):
-        """Remove user from group and delete self if no users in group"""
-        self.users.remove(user)
-        user.conversations.remove(self)
-        if self.users.count()==0:
-            self.delete() 
-
-    def rename(self, new_name):
-        """Rename conversation"""
-        self.name = new_name
-        if new_name == '':
-            self.name = None
-        self.save()
-
-    def display_name(self):
-        """Name displayed in the form for renaming conversations"""
-        if self.name is None:
-            return ""
-        return self.name
-
-    def __str__(self):
-        """Return a string representing the display name of the conversation"""
-        if self.name is None:
-            return super().__str__()
-        return self.name
