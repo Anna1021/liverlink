@@ -1,4 +1,4 @@
-"""Unit tests of javascript in question page view."""
+"""Unit tests of javascript in profile view."""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.service import Service
@@ -6,8 +6,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from peer_support.models import User, FriendRequest, Notification
 
-class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
-    """Unit tests of javascript in question page view."""
+class ProfileJavascriptTest(StaticLiveServerTestCase):
+    """Unit tests of javascript in profile view."""
 
     fixtures = ['peer_support/tests/fixtures/other_users.json']
 

@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from peer_support.models import User, Question, Response
 
-class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
+class QuestionPageJavascriptTest(StaticLiveServerTestCase):
     """Unit tests of javascript in question page view."""
 
     fixtures = ['peer_support/tests/fixtures/other_users.json']
