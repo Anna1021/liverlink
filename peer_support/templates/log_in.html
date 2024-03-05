@@ -7,7 +7,7 @@
     {% include 'partials/cover_image.html' %}
 
     <!-- Right box form -->
-    <div class="col-md-7">
+    <div class="log-in col-md-7">
       <div class="row align-items-center">
         <h1 id="login-message">Welcome Back!</h1>
         <form action="{% url 'log_in' %}" method="post">
@@ -17,7 +17,7 @@
           <p>Don't have an account? <a href='{% url 'sign_up' %}'>
             Sign up here
           </a> </p>
-          <input type="submit" value="Log in" class="btn btn-primary">
+          <input type="submit" value="Log in" class="btn btn-sm">
         </form>
         
       </div>
