@@ -1,11 +1,12 @@
 """Unit test of javascript in create_conversation view"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait,Select
 from selenium.webdriver.support import expected_conditions as EC
-from peer_support.models import User
+from peer_support.models import User,GroupConversation
 from selenium.webdriver.common.keys import Keys
 
 class CreateConversationJavascriptTest(StaticLiveServerTestCase):
@@ -24,7 +25,7 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
         options = Options()
         options.add_argument("--headless") 
         options.add_argument("--window-size=1920,1080") 
-        cls.selenium = WebDriver(options=options)
+        cls.selenium = WebDriver(service=Service(), options=options)
         cls.selenium.implicitly_wait(10)
         
     @classmethod
@@ -32,9 +33,10 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_dynamic_button_disabling(self):
+    def test_dynamic_form_display(self):
         user = User.objects.get(username='@johndoe')
-        user.friends.set(User.objects.exclude(username='@johndoe'))
+        user.conversations.set([1,2])
+        group_conversation = GroupConversation.objects.get(pk=2)
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         username_input = self.selenium.find_element(By.NAME, "username")
         username_input.send_keys('@johndoe')
@@ -43,26 +45,26 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
         self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
 
         self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Messages')]").click()
-        #find options
-        create_conversation_link = self.selenium.find_element(By.XPATH, "//a[@href='/create_conversation/']")
-        create_conversation_link.click()
+        conversation_link = self.selenium.find_element(By.XPATH, "//a[@href='/conversation/2']")
+        conversation_link.click()
 
-        direct_button = self.selenium.find_element(By.XPATH, '//button[@id="direct"]')
-        group_button = self.selenium.find_element(By.XPATH, '//button[@id="group"]')
+        dropdown_link = self.selenium.find_element(By.ID, "conversation-dropdown")
+        dropdown_link.click()
 
-        self.assertFalse(direct_button.is_enabled())
-        self.assertFalse(group_button.is_enabled())
+        details_link = self.selenium.find_element(By.XPATH, "//a[@href='/conversation_details/2']")
+        details_link.click()
 
-        select_menu = self.selenium.find_element(By.XPATH, '//select[@id="id_users"]')
-        select = Select(select_menu)
-        select.select_by_index(0)
+        header = self.selenium.find_element(By.XPATH, '//h3[@id="conversation-name"]')
+        form = self.selenium.find_element(By.XPATH, '//div[@id="conversation-name-input"]')
 
-        self.assertTrue(direct_button.is_enabled())
-        self.assertTrue(group_button.is_enabled())
+        self.assertEqual(header.value_of_css_property('display'),'block')
+        self.assertEqual(form.value_of_css_property('display'),'none')
 
-        Keys.CONTROL
-        select.select_by_index(1)
+        toggle = self.selenium.find_element(By.XPATH, '//button[@id="rename-button"]')
+        self.assertEqual(toggle.get_attribute('innerHTML'),'Rename')
+        toggle.click()
+        self.assertEqual(toggle.get_attribute('innerHTML'),'Cancel')
 
-        self.assertFalse(direct_button.is_enabled())
-        self.assertTrue(group_button.is_enabled())
+        self.assertEqual(header.value_of_css_property('display'),'none')
+        self.assertEqual(form.value_of_css_property('display'),'block')
 

@@ -36,7 +36,7 @@ class MessageModelTestCase(TestCase):
         msg = Message.objects.get(pk=1)
         self.assertIsNone(msg.sender)
 
-    def test_message_deleted_after_conversation_deleted(self):
+    def test_messages_deleted_after_conversation_deleted(self):
         conversation = Conversation.objects.get(pk=1)
         number_messages_in_conversation = conversation.messages.count()
         before_count = Message.objects.count()

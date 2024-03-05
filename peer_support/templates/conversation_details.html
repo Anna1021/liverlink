@@ -3,7 +3,17 @@
 {% block convo %}
 
 <div class="conversation-details">
-            <h3 class="notranslate">{{conversation}}</h3>
+    <div id="name-form">
+        <h3 id="conversation-name">{{conversation}}</h3>
+        <div id="conversation-name-input">
+            <form method="post" action="{% url 'conversation_details' conversation.id %}">
+                {% csrf_token %}
+                <input type="text" name="new_name" value="{{ conversation.display_name }}">
+                <input type="submit" name="rename_conversation" value="Save">
+            </form>
+        </div>
+        <button onclick="toggle(this)" id="rename-button">Rename</button>
+    </div>
         <div>
         <div class="row user-list-header">
             <div class="col-md-7">
@@ -19,14 +29,14 @@
         </ul>
 
         <div class="cnav-item dropdown d-flex justify-content-center">
-            <a class="nav-link btn btn-danger" href="#" id="leave-group-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link btn btn-danger leave-btn" href="#" id="leave-group-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Leave group
             </a>
-            <ul class="dropdown-menu dropdown-menu-end leave-confirmation" aria-labelledby="leave-group-dropdown">
+            <ul class="dropdown-menu dropdown-menu-end leave-confirmation leave-btn" aria-labelledby="leave-group-dropdown">
                 <li><a href="{% url 'leave_conversation' conversation.id %}" class="btn btn-outline-danger d-flex justify-content-center">Confirm</a></li>
             </ul>
         </div>
     </div>
 </div>
-
+<script src="{% static 'js/rename_conversation.js' %}"></script>
 {% endblock %}

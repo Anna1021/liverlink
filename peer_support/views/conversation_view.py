@@ -4,6 +4,7 @@ from django.shortcuts import render,reverse,redirect
 from django.views.generic.edit import FormView
 from peer_support.models import Conversation
 from peer_support.forms import MessageForm
+from .helpers import conversation_does_not_exist,no_conversation_url
 
 class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
@@ -14,10 +15,8 @@ class ConversationView(LoginRequiredMixin, FormView):
         if conversation_id==0:
             return render(request,self.template_name,{'user_conversations':request.user.sort_conversations()})
         conversations = Conversation.objects.filter(id=conversation_id)
-        if conversations.count() == 0 or request.user not in conversations[0].users.all():
-            messages.error(request,"This conversation does not exist.")
-            context = {'user_conversations':request.user.sort_conversations()}
-            return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
+        if conversation_does_not_exist(request,conversations):
+            return no_conversation_url(request)
         conversation = conversations[0]
         form = MessageForm(conversation,user=request.user)
         context = {"form":form, 'conversation':conversation,'user_conversations':request.user.sort_conversations()}

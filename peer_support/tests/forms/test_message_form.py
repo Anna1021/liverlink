@@ -13,6 +13,7 @@ class MessageFormTestCase(TestCase):
         'peer_support/tests/fixtures/default_conversation.json',
         'peer_support/tests/fixtures/default_group_conversation.json',
         'peer_support/tests/fixtures/default_message.json',
+        'peer_support/tests/fixtures/other_messages.json',
     ]
 
     def setUp(self):
@@ -26,7 +27,7 @@ class MessageFormTestCase(TestCase):
         form = MessageForm(self.conversation)
         self.assertIn('content', form.fields)
 
-    def test_valid_user_form(self):
+    def test_valid_message_form(self):
         form = MessageForm(self.conversation, user=self.sender,data=self.form_input)
         self.assertTrue(form.is_valid())
 
@@ -41,7 +42,7 @@ class MessageFormTestCase(TestCase):
         form.save()
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count+1)
-        message = Message.objects.get(pk=2)
+        message = Message.objects.last()
         self.assertEqual(message.sender,self.sender)
         self.assertEqual(message.content,"Ploof")
 
@@ -51,7 +52,7 @@ class MessageFormTestCase(TestCase):
         form.save()
         messages_after = self.conversation.messages.count()
         self.assertEqual(messages_after,messages_before+1)
-        message = Message.objects.get(pk=2)
+        message = Message.objects.last()
         self.assertIn(message,self.conversation.messages.all())
 
     def test_previous_message_set_to_last_message(self):

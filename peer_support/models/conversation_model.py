@@ -12,9 +12,11 @@ class Conversation(models.Model):
         members = self.users.all()
         return ", ".join([i.username for i in members]) 
 
-    def add_user(self,user):
+    def add_users(self,users):
         """Add user to a group"""
-        self.users.add(user)
+        for user in users.all():
+            self.users.add(user)
+            user.conversations.add(self)
 
     def send(self,message):
         """Send message to the conversation"""
@@ -52,6 +54,19 @@ class GroupConversation(Conversation):
         user.conversations.remove(self)
         if self.users.count()==0:
             self.delete() 
+
+    def rename(self, new_name):
+        """Rename conversation"""
+        self.name = new_name
+        if new_name == '':
+            self.name = None
+        self.save()
+
+    def display_name(self):
+        """Name displayed in the form for renaming conversations"""
+        if self.name is None:
+            return ""
+        return self.name
 
     def __str__(self):
         """Return a string representing the display name of the conversation"""

@@ -26,6 +26,7 @@ urlpatterns = [
     path('log_out/', views.log_out, name='log_out'),
     path('settings/password/', views.PasswordView.as_view(), name='password'),
     path('settings/', views.ProfileUpdateView.as_view(), name='settings'),
+    path('information/', views.InformationView.as_view(), name='information'),
     path('deactivate_user/', views.deactivate_user, name='deactivate_user'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('resources/', views.resources, name='resources'),
