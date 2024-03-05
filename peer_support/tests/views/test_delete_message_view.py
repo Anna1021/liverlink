@@ -11,7 +11,8 @@ class DeleteMessageViewTestCase(TestCase):
                 'peer_support/tests/fixtures/other_users.json',
                 'peer_support/tests/fixtures/default_conversation.json',
                 'peer_support/tests/fixtures/default_group_conversation.json',
-                'peer_support/tests/fixtures/default_message.json'
+                'peer_support/tests/fixtures/default_message.json',
+                'peer_support/tests/fixtures/other_messages.json',
     ]
 
     def setUp(self):
