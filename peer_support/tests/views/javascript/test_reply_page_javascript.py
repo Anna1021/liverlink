@@ -1,13 +1,10 @@
 """Unit test of javascript in peer_select view"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
-
 
 class ReplyPageTest(StaticLiveServerTestCase):
     """Unit test of javascript in reply_page view"""
@@ -21,7 +18,8 @@ class ReplyPageTest(StaticLiveServerTestCase):
         super().setUpClass()
         options = Options()
         options.add_argument("--headless") 
-        cls.selenium = WebDriver(service=Service(), options=options)
+        options.add_argument("--window-size=1920,1080")
+        cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(10)
         
     @classmethod
@@ -40,20 +38,12 @@ class ReplyPageTest(StaticLiveServerTestCase):
         link = self.selenium.find_element(By.XPATH, "//p[@class='question-list-item-title' and contains(text(), 'Sample Question Title')]")
         link.click()
 
-
-        # Find and click the reply button
-        # reply_button = WebDriverWait(self.selenium, 10).until(
-        #     EC.visibility_of_element_located((By.XPATH, "//button[contains(text(), 'reply')]"))
-        # )
-        # reply_button.click()
-
         reply_button = WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".reply-button"))
         )
         reply_button.click()
         reply_form_container = self.selenium.find_element(By.CSS_SELECTOR, ".reply-form-container.enabled")
         self.assertTrue(reply_form_container.is_displayed())
-       #self.selenium.find_element(By.XPATH, "//button[contains(text(), 'cancel')]").click()
         cancel_button = self.selenium.find_element(By.CSS_SELECTOR, ".reply-form-cancel-button")
         cancel_button.click()
         reply_form_container = self.selenium.find_element(By.CSS_SELECTOR, ".reply-form-container")
