@@ -5,13 +5,12 @@
     <div id="friend-card" class="shadow box-area my-2">
         <h2>Add friend</h2>
         <hr>
-
         <div class="row">
             <form method="get" class="px-4 py-3" novalidate>
                 {% csrf_token %}
                 {% include 'partials/bootstrap_form.html' with form=formSearch %}
                 <div class="SortFilter">
-                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-bs-toggle="dropdown">
                         Filter Options
                     </button>
@@ -19,7 +18,7 @@
                         {% csrf_token %}
                         {{formFilter.as_p}}
                     </div>
-                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-bs-toggle="dropdown">
                         Sort Options
                     </button>
@@ -29,7 +28,7 @@
                     </div>
                 </div>
                 <div>
-                    <button type="submit" class="btn-submit btn-sm my-3" style="margin-bottom: 0;">Apply</button>
+                    <button type="submit" class="btn btn-secondary btn-sm my-3" style="margin-bottom: 0;">Apply</button>
                 </div>
             </form>
         </div>
@@ -62,12 +61,10 @@
                         </div>
                     </div>
                     {% endfor %}
-                    {% endif %}
-                </div>
+                {% endif %}
             </div>
         </div>
     </div>
-
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
