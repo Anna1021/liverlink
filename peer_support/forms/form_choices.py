@@ -75,6 +75,6 @@ SORT_USER_CHOICES = [
 
 TRANSPLANT_CHOICES = [
     ('', '---------'),
-    ('y', 'Yes'), 
-    ('n', 'No'),
+    ('Y', 'Yes'), 
+    ('N', 'No'),
 ]

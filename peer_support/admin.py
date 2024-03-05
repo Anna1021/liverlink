@@ -27,7 +27,7 @@ class PatientAdmin(admin.ModelAdmin):
 
     inlines = [UserProfileInline]
     list_display = [
-        'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'condition', 'age_of_diagnosis'
+        'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'condition', 'age_of_diagnosis', 'transplant'
     ] 
 
 @admin.register(Parent)
@@ -36,7 +36,7 @@ class ParentAdmin(admin.ModelAdmin):
 
     inlines = [UserProfileInline]
     list_display = [
-        'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'child_condition', 'child_age_of_diagnosis'
+        'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'child_condition', 'child_age_of_diagnosis', 'child_transplant'
     ]
 
 @admin.register(Mentor)
@@ -45,7 +45,7 @@ class MentorAdmin(admin.ModelAdmin):
 
     inlines = [UserProfileInline]
     list_display = [
-        'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'condition', 'age_of_diagnosis', 'referral_code'
+        'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'condition', 'age_of_diagnosis', 'referral_code', 'transplant'
     ]
 
 @admin.register(Referral)

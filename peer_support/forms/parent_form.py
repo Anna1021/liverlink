@@ -8,11 +8,11 @@ class ParentForm(forms.ModelForm):
 
     child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
     child_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
-    transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
+    child_transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
 
     class Meta:
         """Form options."""
 
         model = Parent
-        fields = UserForm.Meta.fields + ['child_condition', 'child_age_of_diagnosis']
+        fields = UserForm.Meta.fields + ['child_condition', 'child_age_of_diagnosis', 'child_transplant']
         widgets = UserForm.Meta.widgets

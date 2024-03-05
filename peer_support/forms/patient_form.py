@@ -14,5 +14,5 @@ class PatientForm(forms.ModelForm):
         """Form options."""
 
         model = Patient
-        fields = UserForm.Meta.fields + ['condition', 'age_of_diagnosis']
+        fields = UserForm.Meta.fields + ['condition', 'age_of_diagnosis', 'transplant']
         widgets = UserForm.Meta.widgets
