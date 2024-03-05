@@ -35,13 +35,7 @@ class ReplyPageTest(StaticLiveServerTestCase):
         self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
         self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Resources')]").click()
         link = self.selenium.find_element(By.XPATH, "//p[@class='question-list-item-title' and contains(text(), 'Sample Question Title')]")
-        # link.click()
-
-        # Find and click the reply button
-        # reply_button = WebDriverWait(self.selenium, 10).until(
-        #     EC.visibility_of_element_located((By.XPATH, "//button[contains(text(), 'reply')]"))
-        # )
-        # reply_button.click()
+        link.click()
 
         reply_button = WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".reply-button"))
@@ -49,7 +43,6 @@ class ReplyPageTest(StaticLiveServerTestCase):
         reply_button.click()
         reply_form_container = self.selenium.find_element(By.CSS_SELECTOR, ".reply-form-container.enabled")
         self.assertTrue(reply_form_container.is_displayed())
-       #self.selenium.find_element(By.XPATH, "//button[contains(text(), 'cancel')]").click()
         cancel_button = self.selenium.find_element(By.CSS_SELECTOR, ".reply-form-cancel-button")
         cancel_button.click()
         reply_form_container = self.selenium.find_element(By.CSS_SELECTOR, ".reply-form-container")
