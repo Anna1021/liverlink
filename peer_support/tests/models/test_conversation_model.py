@@ -51,16 +51,6 @@ class ConversationModelTestCase(TestCase):
         self.conversation.delete()
         after_count = Conversation.objects.count()
         self.assertEqual(after_count,before_count-1)
-
-    def test_renaming_group_to_specific_name(self):
-        new_name = 'Test'
-        self.group_conversation.rename(new_name)
-        self.assertEqual(self.group_conversation.name,'Test')
-
-    def test_renaming_to_blank(self):
-        new_name = ''
-        self.group_conversation.rename(new_name)
-        self.assertEqual(self.group_conversation.name,None)
     
     
     

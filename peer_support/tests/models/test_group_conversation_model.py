@@ -58,14 +58,14 @@ class GroupConversationModelTestCase(TestCase):
             content='test',
             send_time="2024-01-20T10:00:00Z"
         )
-        self.conversation.send(new_message)
+        self.group_conversation.send(new_message)
         after_count = self.group_conversation.messages.count()
         self.assertEqual(after_count,before_count+1)
 
     def test_sending_messages_updates_last_updated(self):
         time_before = self.group_conversation.last_updated
         new_message = Message.objects.get(pk=2)
-        self.conversation.send(new_message)
+        self.group_conversation.send(new_message)
         self.assertNotEqual(time_before,self.group_conversation.last_updated)
 
     def test_user_not_in_group_when_user_deleted(self):
