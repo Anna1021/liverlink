@@ -20,13 +20,10 @@ def questionPage(request, id):
 
     question = Question.objects.get(id=id)
 
-    if request.method == 'GET':
-         if question.author in request.user.blocked_users.all() or question.author in request.user.blocked_by.all():
-                return redirect('resources')
-
     context = {
         'question': question,
         'response_form': response_form,
         'reply_form': reply_form,
+        'current_user': request.user,
     }
     return render(request, 'question.html', context)
