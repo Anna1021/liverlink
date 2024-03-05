@@ -4,7 +4,7 @@ from django.test import TestCase
 from peer_support.forms import ConversationForm
 from peer_support.models import User, Conversation
 
-class MessageFormTestCase(TestCase):
+class ConversationFormTestCase(TestCase):
     """Unit tests of the message form."""
 
     fixtures = [
@@ -13,6 +13,7 @@ class MessageFormTestCase(TestCase):
         'peer_support/tests/fixtures/default_conversation.json',
         'peer_support/tests/fixtures/default_group_conversation.json',
         'peer_support/tests/fixtures/default_message.json',
+        'peer_support/tests/fixtures/other_messages.json',
     ]
 
     def setUp(self):
@@ -27,7 +28,7 @@ class MessageFormTestCase(TestCase):
         form = ConversationForm(self.user)
         self.assertIn('users', form.fields)
 
-    def test_valid_user_form(self):
+    def test_valid_conversation_form(self):
         form = ConversationForm(self.user,data=self.form_input)
         self.assertTrue(form.is_valid())
 

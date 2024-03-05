@@ -26,6 +26,10 @@
     height:89vh;
 }
 
+#id_content{
+    width : 94%;
+}
+
 .user-list-header{
     align-items: center;
     margin-top: 10px;
@@ -43,6 +47,7 @@
 .add-btn{
     background-color: aliceblue;
     margin:0;
+    width: 100%;
 }
 
 .user-card{
@@ -58,6 +63,7 @@
 
 #conversation{
     height: 70vh;
+    width:100%;
     overflow-y: scroll;
 }
 
@@ -67,15 +73,27 @@
     padding : 5px;
     margin: 5px;
     height: fit-content;
+    width:75%;
     align-items: center;
 }
 
-.self-message{
+.self-bubble{
+    float: right;
     background-color: azure;
 }
 
-.other-message{
+.other-sender{
+    text-align: left;
+
+}
+
+.other-bubble{
+    float: left;
     background-color: bisque;
+}
+
+.leave-btn{
+    width:50%;
 }
 
 .leave-confirmation{

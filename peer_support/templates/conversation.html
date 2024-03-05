@@ -1,19 +1,12 @@
 {% extends 'partials/conversation_menu.html' %}
 {% load static %}
+{% load conversation_tags %}
 {% block convo %}
 {% if conversation %}
 <div class="row">
     <div class="col-md-9 notranslate">
         <h3>
-            {% if conversation.as_group != None %}
-                {{conversation.as_group}}
-            {% else %}
-                {% if user == conversation.get_first_member %}
-                    {{conversation.get_second_member}}
-                {% else %}
-                    {{conversation.get_first_member}}
-                {% endif %}
-            {% endif %}
+            {% conversation_name user conversation %}
         </h3>
     </div>
     <div class="col-md-3">
@@ -42,19 +35,17 @@
     <div id="conversation">
     {% for message in conversation.messages.all %}
         {% if user in message.visible_to.all %}
-            {% if not message.same_sender %}
-                <a href="{% url 'profile' message.sender.username %}"class="notranslate">{{ message.sender }}</a>
-            {% endif %}
-            {% if message.sender == user %}
-                <div class="row message-bubble self-message">
+            {% if message.sender == user %} 
+                <div class="row message-bubble self-bubble"> 
             {% else %}
-                <div class="row message-bubble other-message">
+                <div class="row message-bubble other-bubble">
+                    <a href="{% url 'profile' message.sender.username %}" class="notranslate self-sender">{% sender_if_applicable message user conversation %}</a>
             {% endif %}
-            <div class="col-md-9">
-                <div>{{ message.content }}</div>
+                <div class="col-md-10">
+                    <div>{{ message.content }}</div>
+                </div>
+                {% include 'partials/message_menu.html' %}
             </div>
-            {% include 'partials/message_menu.html' %}
-        </div>
         {% endif %}
     {% empty %}
         Type out your first message in the box below!

@@ -12,7 +12,8 @@ class ConversationViewTestCase(TestCase):
                 'peer_support/tests/fixtures/other_users.json',
                 'peer_support/tests/fixtures/default_conversation.json',
                 'peer_support/tests/fixtures/default_group_conversation.json',
-                'peer_support/tests/fixtures/default_message.json'
+                'peer_support/tests/fixtures/default_message.json',
+                'peer_support/tests/fixtures/other_messages.json',
     ]
 
 
@@ -33,7 +34,7 @@ class ConversationViewTestCase(TestCase):
             'new_name': 'test'
         }
 
-    def test_conversation_url(self):
+    def test_conversation_details_url(self):
         self.assertEqual(self.url,'/conversation_details/2')
 
     def test_get_group_conversation_details(self):

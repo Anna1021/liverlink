@@ -12,9 +12,11 @@ class Conversation(models.Model):
         members = self.users.all()
         return ", ".join([i.username for i in members]) 
 
-    def add_user(self,user):
+    def add_users(self,users):
         """Add user to a group"""
-        self.users.add(user)
+        for user in users.all():
+            self.users.add(user)
+            user.conversations.add(self)
 
     def send(self,message):
         """Send message to the conversation"""
