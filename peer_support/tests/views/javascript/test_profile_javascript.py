@@ -9,7 +9,13 @@ from peer_support.models import User, FriendRequest, Notification
 class ProfileJavascriptTest(StaticLiveServerTestCase):
     """Unit tests of javascript in profile view."""
 
-    fixtures = ['peer_support/tests/fixtures/other_users.json']
+    fixtures = [
+        'peer_support/tests/fixtures/default_user.json',
+        'peer_support/tests/fixtures/default_patient.json',
+        'peer_support/tests/fixtures/other_users.json',
+        'peer_support/tests/fixtures/other_patients.json',
+        'peer_support/tests/fixtures/other_parents.json',
+    ]
 
     @classmethod
     def setUpClass(cls):
@@ -39,104 +45,102 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
 
         self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
+        self.selenium.get('%s%s' % (self.live_server_url, '/profile/@sambennet/'))
+       
+        self.selenium.find_element(By.ID, "user-actions-dropdown").click()
 
-        self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
+        friend_link = self.selenium.find_element(By.ID, "friend-link")
+        self.assertEqual("Add friend", friend_link.get_attribute("innerHTML"))
+        friend_link.click()
 
-        # self.selenium.find_element(By.ID, "user-actions-dropdown").click()
+        friend_link = self.selenium.find_element(By.ID, "friend-link")
+        self.assertEqual("Request sent", friend_link.get_attribute("innerHTML"))
+        self.assertTrue(FriendRequest.objects.filter(sender=user, receiver=second_user).exists())
+        friend_request = FriendRequest.objects.filter(sender=user, receiver=second_user)
+        self.assertTrue(Notification.objects.filter(friend_request=friend_request).exists())
 
-        # friend_link = self.selenium.find_element(By.ID, "friend-link")
-        # self.assertEqual("Add friend", friend_link.get_attribute("innerHTML"))
-        # friend_link.click()
+    def test_remove_friend(self):
 
-        # friend_link = self.selenium.find_element(By.ID, "friend-link")
-        # self.assertEqual("Request sent", friend_link.get_attribute("innerHTML"))
-        # self.assertTrue(FriendRequest.objects.filter(sender=user, receiver=second_user).exists())
-        # friend_request = FriendRequest.objects.filter(sender=user, receiver=second_user)
-        # self.assertTrue(Notification.objects.filter(friend_request=friend_request).exists())
+            user = User.objects.get(username='@janedoe')
+            second_user = User.objects.get(username='@petrapickles')
+            user.friends.add(second_user)
 
-def test_remove_friend(self):
+            self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
+            username_input = self.selenium.find_element(By.NAME, "username")
+            username_input.send_keys('@janedoe')
+            password_input = self.selenium.find_element(By.NAME, "password")
+            password_input.send_keys('Password123')
+            self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
 
-        user = User.objects.get(username='@janedoe')
-        second_user = User.objects.get(username='@petrapickles')
-        user.friends.add(second_user)
+            self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
 
-        self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        username_input = self.selenium.find_element(By.NAME, "username")
-        username_input.send_keys('@janedoe')
-        password_input = self.selenium.find_element(By.NAME, "password")
-        password_input.send_keys('Password123')
-        self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+            self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
 
-        self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
+            self.selenium.find_element(By.ID, "user-actions-dropdown").click()
 
-        self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
+            friend_link = self.selenium.find_element(By.ID, "friend-link")
+            self.assertEqual("Remove friend", friend_link.get_attribute("innerHTML"))
+            friend_link.click()
 
-        # self.selenium.find_element(By.ID, "user-actions-dropdown").click()
+            friend_link = self.selenium.find_element(By.ID, "friend-link")
+            self.assertEqual("Add friend", friend_link.get_attribute("innerHTML"))
+            self.assertNotIn(second_user, user.friends.all())
+            self.assertNotIn(user, second_user.friends.all())
 
-        # friend_link = self.selenium.find_element(By.ID, "friend-link")
-        # self.assertEqual("Remove friend", friend_link.get_attribute("innerHTML"))
-        # friend_link.click()
+            #test reload?
 
-        # friend_link = self.selenium.find_element(By.ID, "friend-link")
-        # self.assertEqual("Add friend", friend_link.get_attribute("innerHTML"))
-        # self.assertNotIn(second_user, user.friends.all())
-        # self.assertNotIn(user, second_user.friends.all())
+    def test_block_user_reloads_page(self):
 
-        #test reload?
+            user = User.objects.get(username='@janedoe')
+            second_user = User.objects.get(username='@petrapickles')
 
-def test_block_user_reloads_page(self):
+            self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
+            username_input = self.selenium.find_element(By.NAME, "username")
+            username_input.send_keys('@janedoe')
+            password_input = self.selenium.find_element(By.NAME, "password")
+            password_input.send_keys('Password123')
+            self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
 
-        user = User.objects.get(username='@janedoe')
-        second_user = User.objects.get(username='@petrapickles')
+            self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
 
-        self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        username_input = self.selenium.find_element(By.NAME, "username")
-        username_input.send_keys('@janedoe')
-        password_input = self.selenium.find_element(By.NAME, "password")
-        password_input.send_keys('Password123')
-        self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+            self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
 
-        self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
+            self.selenium.find_element(By.ID, "user-actions-dropdown").click()
 
-        self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
+            block_link = self.selenium.find_element(By.ID, "block-link")
+            self.assertEqual("Block user", block_link.get_attribute("innerHTML"))
+            block_link.click()
 
-        # self.selenium.find_element(By.ID, "user-actions-dropdown").click()
+            block_link = self.selenium.find_element(By.ID, "block-link")
+            self.assertEqual("Unblock user", block_link.get_attribute("innerHTML"))
+            self.assertIn(second_user, user.blocked_users.all())
 
-        # block_link = self.selenium.find_element(By.ID, "block-link")
-        # self.assertEqual("Block user", block_link.get_attribute("innerHTML"))
-        # block_link.click()
+            #test refresh?
 
-        # block_link = self.selenium.find_element(By.ID, "block-link")
-        # self.assertEqual("Unblock user", block_link.get_attribute("innerHTML"))
-        # self.assertIn(second_user, user.blocked_users.all())
+    def test_unblock_user_reloads_page(self):
 
-        #test refresh?
+            user = User.objects.get(username='@janedoe')
+            second_user = User.objects.get(username='@petrapickles')
+            user.blocked_users.add(second_user)
 
-def test_unblock_user_reloads_page(self):
+            self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
+            username_input = self.selenium.find_element(By.NAME, "username")
+            username_input.send_keys('@janedoe')
+            password_input = self.selenium.find_element(By.NAME, "password")
+            password_input.send_keys('Password123')
+            self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
 
-        user = User.objects.get(username='@janedoe')
-        second_user = User.objects.get(username='@petrapickles')
-        user.blocked_users.add(second_user)
+            self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
 
-        self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        username_input = self.selenium.find_element(By.NAME, "username")
-        username_input.send_keys('@janedoe')
-        password_input = self.selenium.find_element(By.NAME, "password")
-        password_input.send_keys('Password123')
-        self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+            self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
 
-        self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
+            self.selenium.find_element(By.ID, "user-actions-dropdown").click()
 
-        self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
+            block_link = self.selenium.find_element(By.ID, "block-link")
+            self.assertEqual("Unlock user", block_link.get_attribute("innerHTML"))
+            block_link.click()
 
-        # self.selenium.find_element(By.ID, "user-actions-dropdown").click()
-
-        # block_link = self.selenium.find_element(By.ID, "block-link")
-        # self.assertEqual("Unlock user", block_link.get_attribute("innerHTML"))
-        # block_link.click()
-
-        # block_link = self.selenium.find_element(By.ID, "block-link")
-        # self.assertEqual("Block user", block_link.get_attribute("innerHTML"))
-        # self.assertNotIn(second_user, user.blocked_users.all())
-
-        #test refresh?
+            block_link = self.selenium.find_element(By.ID, "block-link")
+            self.assertEqual("Block user", block_link.get_attribute("innerHTML"))
+            self.assertNotIn(second_user, user.blocked_users.all())
+            #test refresh?
