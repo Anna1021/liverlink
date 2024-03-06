@@ -7,7 +7,7 @@
                 data-bs-toggle="dropdown">
                 Filter Options
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdown-style">
                 {% csrf_token %}
                 {{formFilter.as_p}}
             </div>
@@ -15,7 +15,7 @@
                 data-bs-toggle="dropdown">
                 Sort Options
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdown-style">
                 {% csrf_token %}
                 {% include 'partials/bootstrap_form.html' with form=formSort %}
             </div>

@@ -17,7 +17,10 @@ class MessageFormTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.sender = User.objects.get(pk=1)
+        self.sender = User.objects.get(username='@johndoe')
+        self.sender.conversations.set([1,2])
+        self.receiver = User.objects.get(username='@janedoe')
+        self.receiver.conversations.set([1])
         self.form_input = {
             'content':"Ploof"
         }
@@ -66,3 +69,14 @@ class MessageFormTestCase(TestCase):
         form = MessageForm(self.conversation,user = self.sender, data=self.form_input)
         message = form.save()
         self.assertIsNone(message.previous_message)
+
+    def test_deleted_conversation_returns_after_message_sent(self):
+        users = User.objects.filter(username=self.receiver.username)
+        self.assertIn(self.receiver,self.conversation.users.all())
+        self.assertIn(self.conversation,self.receiver.conversations.all())
+        self.conversation.delete(users)
+        self.assertIn(self.receiver,self.conversation.users.all())
+        self.assertNotIn(self.conversation,self.receiver.conversations.all())
+        form = MessageForm(self.conversation,user = self.sender, data=self.form_input)
+        message = form.save()
+        self.assertIn(self.conversation,self.receiver.conversations.all())

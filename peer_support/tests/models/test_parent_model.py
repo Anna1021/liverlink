@@ -35,7 +35,6 @@ class ParentModelTestCase(TestCase):
     def test_child_condition_cannot_be_over_100_characters_long(self):
         self.parent.child_condition = 'x' * 101
         self._assert_parent_is_invalid()
-
     
     def test_child_age_of_diagnosis_can_be_blank(self):
         self.parent.child_age_of_diagnosis = None
@@ -48,8 +47,24 @@ class ParentModelTestCase(TestCase):
     def test_child_age_of_diagnosis_cannot_be_negative(self):
         self.parent.child_age_of_diagnosis = -1
         self._assert_parent_is_invalid()
+        
 
-    
+    def test_child_transplant_can_be_blank(self):
+        self.parent.child_transplant = ''
+        self._assert_parent_is_valid()
+
+    def test_child_transplant_need_not_be_unique(self):
+        self.parent.child_transplant = self.second_parent.child_transplant
+        self._assert_parent_is_valid()
+
+    def test_child_transplant_can_be_100_characters_long(self):
+        self.parent.child_transplant = 'x' * 100
+        self._assert_parent_is_valid()
+
+    def test_child_transplant_cannot_be_over_100_characters_long(self):
+        self.parent.child_transplant = 'x' * 101
+        self._assert_parent_is_invalid()
+
     def _assert_parent_is_valid(self):
         try:
             self.parent.full_clean()

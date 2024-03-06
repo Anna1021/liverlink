@@ -26,7 +26,7 @@
                 View user details</a></li>
             {% endif %}
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">Delete conversation</a></li>
+            <li><a class="dropdown-item" href="{% url 'delete_conversation' conversation.id %}">Delete conversation</a></li>
         </ul>
     </div>
 
