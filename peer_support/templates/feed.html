@@ -1,0 +1,26 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% block page %}
+
+<div class="col-sm-12 col-md-6 offset-md-3">
+  <h1>Feed</h1>
+  <!-- Choose to see a global feed or a friends-only feed -->
+  <form id="feedForm" method="GET" action="{% url 'feed' %}">
+    {% csrf_token %}
+    <input type="hidden" name="feed_type" id="feedType" value="{% if feed_type == 'global' %}global{% else %}friends{% endif %}">
+    <button type="button" id="toggleFeedButton">{% if feed_type == 'global' %}Friends-Only Feed{% else %}Global Feed{% endif %}</button>
+  </form>
+  <!-- display feed -->
+  {% for post in posts %}
+  <div class="post">
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.text }}</p>
+    <a href="{% url 'post_detail' post_id=post.id %}">View Post</a>
+  </div>
+  {% empty %}
+  <p>No posts available.</p>
+  {% endfor %}
+</div>
+<script src="{% static 'js/feed.js' %}"></script>
+  </body>
+{% endblock %}
