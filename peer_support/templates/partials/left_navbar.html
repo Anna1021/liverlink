@@ -2,29 +2,27 @@
 {% block content %}
 {% endblock %}
 {%load static%}
-<div class="card bg-dark shadow box-area my-2">
-    <nav class="nav flex-column py-2 px-2 mx-2">
+<div class="card bg-dark shadow box-area my-2 px-0">
+    <nav class="nav flex-column py-2 px-2">
         <div class="card-header">
             <h4 class="card-title pt-2"><b>Welcome  <span class="notranslate">{{user.username}}</span></b></h4>
         </div>
         <div class="card-body">
-            <div class="container text-center">
                 <a href="{% url 'dashboard' %}">
-                    <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100" >Home</button>
+                    <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item" >Home</button>
                 </a>
                 <a href="{% url 'resources' %}">
-                    <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100" >Resources</button>
+                    <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item" >Resources</button>
                 </a>
                 <a href="{% url 'conversation' 0 %}">
-                    <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100" >Messages</button>
+                    <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item" >Messages</button>
                 </a>
                 <a href="{% url 'peer_select' %}">
-                    <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100" >Find Friends</button>
+                    <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item" >Find Friends</button>
                 </a>
                 <a href="{% url 'friends_list' %}">
-                    <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100" >Friends list</button>
+                    <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item" >Friends list</button>
                 </a>
-            </div>
         </div>
     </nav>
   </div>

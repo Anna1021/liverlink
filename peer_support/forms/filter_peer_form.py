@@ -3,7 +3,7 @@ from peer_support.models import User
 from django.utils import timezone
 from datetime import timedelta
 from peer_support.models.model_choices import GENDER_CHOICES, ETHNICITY_CHOICES, LANGUAGE_CHOICES, COUNTRY_CHOICES, HOSPITAL_CHOICES
-from peer_support.forms.form_choices import CONDITION_CHOICES, USER_TYPE_CHOICES
+from peer_support.forms.form_choices import CONDITION_CHOICES, USER_TYPE_CHOICES, TRANSPLANT_CHOICES
 
 class FilterPeerForm(forms.Form):
     """Form enabling the filtering of users"""
@@ -19,13 +19,15 @@ class FilterPeerForm(forms.Form):
     hospital = forms.ChoiceField(choices=ALL_CHOICE+HOSPITAL_CHOICES,required=False)
     age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
-    condition=forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
+    condition=forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
     child_age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     child_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
-    child_condition=forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
+    child_condition=forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
     mentor_age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     mentor_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
     mentor_condition=forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
+    transplant=forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
+    child_transplant=forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
 
     def __init__(self, *args, **kwargs):
         """Initialise query set with users tasks"""
@@ -60,6 +62,7 @@ class FilterPeerForm(forms.Form):
         age_of_diagnosis_min = self.cleaned_data.get('age_of_diagnosis_min')
         age_of_diagnosis_max = self.cleaned_data.get('age_of_diagnosis_max')
         condition =self.cleaned_data.get('condition')
+        transplant=self.cleaned_data.get('transplant')
         patients = User.objects.filter(patient__isnull=False)
         if age_of_diagnosis_min is not None:
             patients = patients.filter(patient__age_of_diagnosis__gte=age_of_diagnosis_min)
@@ -67,12 +70,15 @@ class FilterPeerForm(forms.Form):
             patients = patients.filter(patient__age_of_diagnosis__lte=age_of_diagnosis_max)
         if condition and "any" != condition:
             patients = patients.filter(patient__condition__icontains=condition)
+        if transplant and "any" != transplant:
+            patients = patients.filter(patient__transplant__icontains=transplant)
         return patients
     
     def filter_by_parent(self):
         child_age_of_diagnosis_min = self.cleaned_data.get('child_age_of_diagnosis_min')
         child_age_of_diagnosis_max = self.cleaned_data.get('child_age_of_diagnosis_max')
         child_condition =self.cleaned_data.get('child_condition')
+        child_transplant=self.cleaned_data.get('child_transplant')
         parents = User.objects.filter(parent__isnull=False)
         if child_age_of_diagnosis_min is not None:
             parents = parents.filter(parent__child_age_of_diagnosis__gte=child_age_of_diagnosis_min)
@@ -80,12 +86,15 @@ class FilterPeerForm(forms.Form):
             parents = parents.filter(parent__child_age_of_diagnosis__lte=child_age_of_diagnosis_max)
         if child_condition and "any" != child_condition:
             parents = parents.filter(parent__child_condition__icontains=child_condition)
+        if child_transplant and "any" != child_transplant:
+            parents = parents.filter(parent__child_transplant__icontains=child_transplant)
         return parents
         
     def filter_by_mentor(self):
         mentor_age_of_diagnosis_min = self.cleaned_data.get('mentor_age_of_diagnosis_min')
         mentor_age_of_diagnosis_max = self.cleaned_data.get('mentor_age_of_diagnosis_max')
         mentor_condition =self.cleaned_data.get('mentor_condition')
+        transplant=self.cleaned_data.get('transplant')
         mentors = User.objects.filter(mentor__isnull=False)
         if mentor_age_of_diagnosis_min is not None:
             mentors = mentors.filter(mentor__age_of_diagnosis__gte=mentor_age_of_diagnosis_min)
@@ -93,6 +102,8 @@ class FilterPeerForm(forms.Form):
             mentors = mentors.filter(mentor__age_of_diagnosis__lte=mentor_age_of_diagnosis_max)
         if mentor_condition and "any" != mentor_condition :
             mentors = mentors.filter(mentor__condition__icontains=mentor_condition)
+        if transplant and "any" != transplant:
+            mentors = mentors.filter(mentor__transplant__icontains=transplant)
         return mentors
         
     def filter_by_user_type(self,user_type):

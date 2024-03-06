@@ -34,6 +34,7 @@ class SignUpFormTestCase(TestCase):
             'password_confirmation': 'Password123',
             'user_type': 'PT',
             'condition': 'Cancer',
+            'transplant': 'N',
             'age_of_diagnosis': 5,
         }
 
@@ -68,6 +69,7 @@ class SignUpFormTestCase(TestCase):
         self.assertTrue(isinstance(password_confirmation_widget, forms.PasswordInput))
         self.assertIn('user_type', form.fields)
         self.assertIn('condition', form.fields)
+        self.assertIn('transplant', form.fields)
         self.assertIn('age_of_diagnosis', form.fields)
 
     def test_form_uses_model_validation(self):
@@ -117,6 +119,7 @@ class SignUpFormTestCase(TestCase):
         self.assertEqual(user.language, 'en')
         self.assertEqual(user.bio, 'I am a test user.')
         self.assertEqual(user.condition, 'Cancer')
+        self.assertEqual(user.transplant, 'N')
         self.assertEqual(user.age_of_diagnosis, 5)
         is_password_correct = check_password('Password123', user.password)
         self.assertTrue(is_password_correct)
@@ -124,6 +127,7 @@ class SignUpFormTestCase(TestCase):
     def test_form_must_save_correctly_with_parent(self):
         self.form_input['user_type'] = 'PR'
         self.form_input['child_condition'] = 'Cancer'
+        self.form_input['child_transplant'] = 'N'
         self.form_input['child_age_of_diagnosis'] = 5
         form = SignUpForm(data=self.form_input)
         self.assertTrue(form.is_valid())
@@ -143,6 +147,7 @@ class SignUpFormTestCase(TestCase):
         self.assertEqual(user.language, 'en')
         self.assertEqual(user.bio, 'I am a test user.')
         self.assertEqual(user.child_condition, 'Cancer')
+        self.assertEqual(user.child_transplant, 'N')
         self.assertEqual(user.child_age_of_diagnosis, 5)
         is_password_correct = check_password('Password123', user.password)
         self.assertTrue(is_password_correct)
@@ -150,6 +155,7 @@ class SignUpFormTestCase(TestCase):
     def test_mentor_referal_validation(self):
         self.form_input['user_type'] = 'MT'
         self.form_input['condition'] = 'Cancer'
+        self.form_input['transplant'] = 'N'
         self.form_input['age_of_diagnosis'] = 5
         self.form_input['referral_code']='NONEXISTING'
         form = SignUpForm(data=self.form_input)
@@ -158,6 +164,7 @@ class SignUpFormTestCase(TestCase):
     def test_form_must_save_correctly_with_mentor(self):
         self.form_input['user_type'] = 'MT'
         self.form_input['condition'] = 'Cancer'
+        self.form_input['transplant'] = 'N'
         self.form_input['age_of_diagnosis'] = 5
         self.form_input['referral_code']='9C274FF391'
         form = SignUpForm(data=self.form_input)
@@ -178,6 +185,7 @@ class SignUpFormTestCase(TestCase):
         self.assertEqual(user.language, 'en')
         self.assertEqual(user.bio, 'I am a test user.')
         self.assertEqual(user.condition, 'Cancer')
+        self.assertEqual(user.transplant, 'N')
         self.assertEqual(user.age_of_diagnosis, 5)
         is_password_correct = check_password('Password123', user.password)
         self.assertTrue(is_password_correct)
