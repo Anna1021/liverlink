@@ -1,0 +1,24 @@
+<li>
+    <p><strong>Comment by:</strong> {{ comment.author }}</p>
+    <p>{{ comment.content }}</p>
+
+    <!-- Reply form for each comment -->
+    <form method="post" action="{% url 'post_detail' post_id=post.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+        {{ comment_form.as_p }}
+        <button type="submit">Reply</button>
+    </form>
+
+    <!-- Display replies to the comment -->
+    <ul>
+        {% for reply in comment.replies.all %}
+            <li>
+                <p><strong>Reply by:</strong> {{ reply.author }}</p>
+                <p>{{ reply.content }}</p>
+            </li>
+        {% empty %}
+            <li>No replies yet.</li>
+        {% endfor %}
+    </ul>
+</li>
