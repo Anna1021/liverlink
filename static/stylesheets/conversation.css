@@ -67,6 +67,10 @@
     overflow-y: scroll;
 }
 
+.no-conversations {
+    color: #212529;
+}
+
 /* message bubbles */
 .message-bubble {
     border-radius: 25px;
