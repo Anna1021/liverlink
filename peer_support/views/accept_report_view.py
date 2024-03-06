@@ -7,6 +7,9 @@ from django.contrib import messages
 @login_required
 def accept_report(request, report_id):
     """Deletes report and object attached."""
+    if not request.user.is_staff:
+        messages.error(request,"You do not have access to this view.")
+        return redirect(reverse('dashboard'))
     report = get_object_or_404(Report, id=report_id)
     reported_object = report.content_object
     if reported_object:
