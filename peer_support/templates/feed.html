@@ -4,12 +4,12 @@
 
 <title>Feed</title>
 
-
 <div class="card bg-dark shadow box-area my-2"> 
   <div class="row">
     <div class="col-md-8">
       <h1 class="card-header">Welcome to feed</h1>
     </div>
+    <!-- Button to switch between global feed and friends-only feed -->
     <div class="col-md-4">
       <form id="feedForm" method="GET" action="{% url 'feed' %}">
         {% csrf_token %}
@@ -17,7 +17,6 @@
         <button type="button" id="toggleFeedButton" class="btn btn-primary">{% if feed_type == 'global' %}Friends-Only Feed{% else %}Global Feed{% endif %}</button>
       </form>
     </div>
-  <!-- Button to switch between global feed and friends-only feed -->
   
   </div>
   <!-- scrollable -->
@@ -31,7 +30,7 @@
       <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info">View Post</a>
       <!-- delete -->
       {% if post.author == request.user %}
-        <a href="{% url 'delete_post' post_id=post.id %}" >Delete</a>
+        <a href="{% url 'delete_post' post_id=post.id %}">Delete</a>
       {% endif %}
 
     </div>

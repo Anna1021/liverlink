@@ -1,19 +1,10 @@
-from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ImproperlyConfigured
 from django.shortcuts import redirect, render, get_object_or_404
-from django.views import View
-from django.views.generic.edit import FormView, UpdateView
-from django.urls import reverse
-from peer_support.forms import LogInForm, PasswordForm, UserForm, SignUpForm
+from django.views.generic.edit import FormView
 from peer_support.views.helpers import login_prohibited
 #post
 from peer_support.models import Post, PostComment
-from peer_support.forms import PostForm, CommentForm
-from django.db.models import Q
+from peer_support.forms import CommentForm
 
 class PostView(LoginRequiredMixin,FormView):
 
@@ -43,12 +34,9 @@ class PostView(LoginRequiredMixin,FormView):
             parent_comment = None
             if parent_id:
                 parent_comment = PostComment.objects.get(id=parent_id)
-
             comment = comment_form.save(commit=False)
             comment.post = post
             comment.author = request.user
-
             comment.parent = parent_comment
-
             comment.save()
             return redirect('post_detail', post_id=post_id)

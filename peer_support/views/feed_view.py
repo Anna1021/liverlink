@@ -1,8 +1,7 @@
 from django.views import View
 from django.shortcuts import redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from peer_support.models import Post, PostComment
-from peer_support.forms import PostForm, CommentForm
+from peer_support.models import Post
 from django.db.models import Q
 class FeedView(LoginRequiredMixin, View):
     def get(self,request):

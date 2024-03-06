@@ -1,10 +1,6 @@
-from django.utils.text import slugify
-from django.urls import reverse
 from django.utils import timezone
 from django.db import models
-#post 
 from peer_support.models import User, Post
-from django.core.validators import RegexValidator
 
 
 class PostComment(models.Model):
