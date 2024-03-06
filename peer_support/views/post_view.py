@@ -70,5 +70,5 @@ def feed(request):
         user_friends = request.user.friends.all()
         # Retrieve both the user's own posts and posts from user's friends
         user_posts = Post.objects.filter(Q(author__in=user_friends) | Q(author=request.user)).order_by("-created_at")
-    return render(request, 'dashboard.html', {'posts': user_posts, 'feed_type': feed_type})
+    return render(request, 'partials/feed.html', {'posts': user_posts, 'feed_type': feed_type})
     
