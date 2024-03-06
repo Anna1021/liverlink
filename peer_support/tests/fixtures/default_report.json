@@ -1,0 +1,13 @@
+[
+  {
+    "model": "peer_support.report",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "reason": "spam",
+      "content_type": "peer_support.message",
+      "object_id": 1
+    }
+  }
+]
+  

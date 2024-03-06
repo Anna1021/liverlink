@@ -1,8 +1,8 @@
 """Tests of the conversation view."""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.forms import MessageForm
-from peer_support.models import User, Conversation,Message
+from peer_support.forms import MessageForm, ReportForm
+from peer_support.models import User, Conversation,Message, Report
 from django.contrib import messages
 
 class ConversationViewTestCase(TestCase):
@@ -82,3 +82,38 @@ class ConversationViewTestCase(TestCase):
         message = Message.objects.get(pk=2)
         self.assertEqual(message.sender, self.user)
         self.assertEqual(message.content, 'Ploof')
+
+    def test_successful_report(self):
+        message_id_to_report = 1
+        report_data = {
+            'action': message_id_to_report,
+            'reason': 'abuse'
+        }
+        before_report_message = Message.objects.get(pk=message_id_to_report)
+        self.assertIn(self.user, before_report_message.visible_to.all())
+        response = self.client.post(self.url, data=report_data)
+        form = ReportForm(data=report_data)
+        if form.is_valid():
+            # Simulate form save or processing if needed
+            print("Form is valid")
+        else:
+            print("Form errors:", form.errors)
+        report_message = Message.objects.get(pk=message_id_to_report)
+        self.assertNotIn(self.user, report_message.visible_to.all())
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Report.objects.filter(object_id=report_message.id).exists())
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertIn("Message reported successfully.", str(messages_list[0]))
+
+    def test_unsuccessful_report (self):
+        valid_message_id = 1  
+        report_data = {
+            'action': valid_message_id,
+            'reason': 'dfdsdf'
+        }
+        response = self.client.post(self.url, data=report_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertIn("There was an issue with the report.", str(messages_list[0]))
