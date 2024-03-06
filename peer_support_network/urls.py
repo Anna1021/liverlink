@@ -47,14 +47,14 @@ urlpatterns = [
     path('conversation_details/<int:conversation_id>',views.ConversationDetailsView.as_view(),name="conversation_details"),
     path('leave_conversation/<int:conversation_id>',views.LeaveConversationView.as_view(),name='leave_conversation'),
 
-    #post
-    path('create_post/', views.create_post, name='create_post'),
+    path('create_post/', views.CreatePostView.as_view(), name='create_post'),
     #path('add_comment/<int:post_id>/', views.add_comment, name='add_comment'), 
-    path('post/<int:post_id>/', views.post_detail, name='post_detail'),
-    #path('show_posts/', views.show_posts, name='show_posts'),
+    path('post/<int:post_id>/', views.PostView.as_view() , name='post_detail'),
     
     #feed
-    path('feed/', views.feed, name='feed'),
+    path('feed/', views.FeedView.as_view(), name='feed'),
+    path('delete_post/<int:post_id>', views.DeletePostView.as_view(), name='delete_post')
+
     #path('dashboard/', views.feed, name='feed'),
 
 ]
