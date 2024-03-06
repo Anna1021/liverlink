@@ -2,6 +2,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.models import User, Conversation
+from peer_support.forms import AddUsersForm
 from django.contrib import messages
 
 class ConversationViewTestCase(TestCase):
@@ -11,18 +12,29 @@ class ConversationViewTestCase(TestCase):
                 'peer_support/tests/fixtures/other_users.json',
                 'peer_support/tests/fixtures/default_conversation.json',
                 'peer_support/tests/fixtures/default_group_conversation.json',
-                'peer_support/tests/fixtures/default_message.json'
+                'peer_support/tests/fixtures/default_message.json',
+                'peer_support/tests/fixtures/other_messages.json',
     ]
 
 
     def setUp(self):
+        self.other_user_id = 2
         self.conversation = Conversation.objects.get(pk=2)
         self.url = reverse('conversation_details',kwargs={'conversation_id':self.conversation.id})
         self.no_conversation_url = reverse('conversation',kwargs={'conversation_id':0})
         self.user = User.objects.get(username='@johndoe')
         self.client.login(username=self.user.username, password="Password123")
+        self.user_to_add = User.objects.filter(pk=self.other_user_id)
+        self.user.friends.set(self.user_to_add)
+        self.form_input = {
+            'users' : [self.other_user_id]
+        }
+        self.rename_input ={
+            'rename_conversation':':3',
+            'new_name': 'test'
+        }
 
-    def test_conversation_url(self):
+    def test_conversation_details_url(self):
         self.assertEqual(self.url,'/conversation_details/2')
 
     def test_get_group_conversation_details(self):
@@ -62,3 +74,39 @@ class ConversationViewTestCase(TestCase):
         messages_list = list(response.context['messages'])
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
+
+    def test_unsuccessful_add_user(self):
+        self.form_input['users'] = []
+        before_count = self.conversation.users.count()
+        response = self.client.post(self.url,data=self.form_input)
+        after_count = self.conversation.users.count()
+        self.assertEqual(after_count, before_count)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation_details.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, AddUsersForm))
+        self.assertTrue(form.is_bound)
+
+    def test_successful_add_user(self):
+        before_count = self.conversation.users.count()
+        self.assertNotIn(self.user_to_add[0],self.conversation.users.all())
+        response = self.client.post(self.url,data=self.form_input)
+        after_count = self.conversation.users.count()
+        self.assertIn(self.user_to_add[0],self.conversation.users.all())
+        self.assertEqual(after_count, before_count+1)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation_details.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, AddUsersForm))
+        self.assertFalse(form.is_bound)
+
+    def test_successful_rename_conversation(self):
+        self.assertEqual(self.conversation.as_group().name,None)
+        response = self.client.post(self.url,data=self.rename_input)
+        renamed = Conversation.objects.get(pk=2)
+        self.assertEqual(renamed.as_group().name,'test')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation_details.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, AddUsersForm))
+        self.assertFalse(form.is_bound)

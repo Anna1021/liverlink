@@ -12,7 +12,8 @@ class ConversationViewTestCase(TestCase):
                 'peer_support/tests/fixtures/other_users.json',
                 'peer_support/tests/fixtures/default_conversation.json',
                 'peer_support/tests/fixtures/default_group_conversation.json',
-                'peer_support/tests/fixtures/default_message.json'
+                'peer_support/tests/fixtures/default_message.json',
+                'peer_support/tests/fixtures/other_messages.json',
     ]
 
 
@@ -79,9 +80,10 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(after_count, before_count+1)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'conversation.html')
-        message = Message.objects.get(pk=2)
+        message = self.conversation.messages.last()
         self.assertEqual(message.sender, self.user)
         self.assertEqual(message.content, 'Ploof')
+        self.assertIn(message,self.conversation.messages.all())
         form = response.context['form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)

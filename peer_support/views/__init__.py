@@ -30,3 +30,5 @@ from .clear_notifications_view import clear_notifications
 #from .post_comment_view import add_comment
 from .post_view import create_post, post_detail,feed
 from .conversation_details_view import ConversationDetailsView
+from .leave_conversation_view import LeaveConversationView
+from .information_view import InformationView

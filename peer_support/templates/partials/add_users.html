@@ -1,0 +1,12 @@
+<div class="col-md-5 nav-item dropdown">
+    <a href="#" class="btn add-btn nav-link" id="add-users-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Add members</a>
+    <ul class="dropdown-menu dropdown-menu-end add-btn" aria-labelledby="add-users-dropdown">
+        <li>
+            <form method="post" class="px-4 py-3" novalidate>
+                {% csrf_token %}
+                {% include 'partials/bootstrap_form.html' with form=form %}
+                <button type="submit">Add</button>
+            </form>
+        </li>
+    </ul>
+</div>

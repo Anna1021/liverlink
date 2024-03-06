@@ -1,7 +1,6 @@
 """Unit test of javascript in create_conversation view"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait,Select
@@ -15,7 +14,8 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
                 'peer_support/tests/fixtures/other_users.json',
                 'peer_support/tests/fixtures/default_conversation.json',
                 'peer_support/tests/fixtures/default_group_conversation.json',
-                'peer_support/tests/fixtures/default_message.json'
+                'peer_support/tests/fixtures/default_message.json',
+                'peer_support/tests/fixtures/other_messages.json',
     ]
 
     @classmethod
@@ -24,7 +24,7 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
         options = Options()
         options.add_argument("--headless") 
         options.add_argument("--window-size=1920,1080") 
-        cls.selenium = WebDriver(service=Service(), options=options)
+        cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(10)
         
     @classmethod
