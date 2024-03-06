@@ -16,6 +16,9 @@ class ConversationModelTestCase(TestCase):
 
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
+        self.user.conversations.set([1,2])
+        self.other_user = User.objects.get(username='@janedoe')
+        self.other_user.conversations.set([1])
         self.message = Message.objects.get(pk=1)
         self.conversation = Conversation.objects.get(pk=1)
 
@@ -46,12 +49,22 @@ class ConversationModelTestCase(TestCase):
         self.conversation.send(new_message)
         self.assertNotEqual(time_before,self.conversation.last_updated)
 
-    def test_conversation_delete(self):
+    def test_conversation_still_exists_after_deleted_for_one(self):
+        users_to_delete_message = self.conversation.users.filter(username=self.user.username)
+        users_before = self.conversation.users.count()
+        conversations_before = Conversation.objects.count()
+        self.assertIn(self.conversation,self.user.conversations.all())
+        self.message.delete(users_to_delete_message)
+        conversations_after = Conversation.objects.count()
+        users_after = self.conversation.users.count()
+        self.assertEqual(users_after,users_before)
+        self.assertEqual(conversations_after,conversations_before)
+
+    def test_conversation_delete_for_all_at_once(self):
         before_count = Conversation.objects.count()
-        self.conversation.delete()
+        self.conversation.delete(self.conversation.users.all())
         after_count = Conversation.objects.count()
         self.assertEqual(after_count,before_count-1)
-    
     
     
 
