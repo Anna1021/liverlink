@@ -55,8 +55,5 @@ urlpatterns = [
     #path('show_posts/', views.show_posts, name='show_posts'),
     
     #feed
-    #path('partials/feed/', views.feed, name='feed'),
-
     path('feed/', views.feed, name='feed'),
-    #new
 ]
