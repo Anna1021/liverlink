@@ -31,6 +31,8 @@ class ConversationJavascriptTest(StaticLiveServerTestCase):
         user = User.objects.get(username='@janedoe')
         second_user = User.objects.get(username='@petrapickles')
         user.blocked_users.add(second_user)
+        user.first_login = False
+        user.save()
 
         #Create a conversation containing two users
         conversation = Conversation.objects.create()

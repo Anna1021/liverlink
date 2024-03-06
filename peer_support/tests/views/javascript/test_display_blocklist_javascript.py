@@ -30,6 +30,8 @@ class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
 
         user = User.objects.get(username='@janedoe')
         blocked_user = User.objects.get(username='@peterpickles')
+        user.first_login = False
+        user.save()
 
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         username_input = self.selenium.find_element(By.NAME, "username")

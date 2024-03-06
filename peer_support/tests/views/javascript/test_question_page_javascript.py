@@ -31,6 +31,8 @@ class QuestionPageJavascriptTest(StaticLiveServerTestCase):
         user = User.objects.get(username='@janedoe')
         blocked_user = User.objects.get(username='@peterpickles')
         user.blocked_users.add(blocked_user)
+        user.first_login = False
+        user.save()
 
         #Create a question and response authored by @peterpickles
         question = Question.objects.create(author=blocked_user, title="Test title", body="This is the question body.")

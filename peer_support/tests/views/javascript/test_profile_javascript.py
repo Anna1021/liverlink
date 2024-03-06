@@ -38,6 +38,8 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
 
         user = User.objects.get(username='@janedoe')
         second_user = User.objects.get(username='@petrapickles')
+        user.first_login = False
+        user.save()
 
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         username_input = self.selenium.find_element(By.NAME, "username")
@@ -56,7 +58,10 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         self.assertEqual("Add friend", friend_link.get_attribute("innerHTML"))
         friend_link.click()
 
-        self.selenium.find_element(By.ID, "user-actions-dropdown").click()
+        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
+        )
+        user_actions_dropdown.click()
 
         friend_link = self.selenium.find_element(By.ID, "friend-link")
         self.assertEqual("Request sent", friend_link.get_attribute("innerHTML"))
@@ -72,6 +77,8 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         user = User.objects.get(username='@janedoe')
         second_user = User.objects.get(username='@petrapickles')
         user.friends.add(second_user)
+        user.first_login = False
+        user.save()
 
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         username_input = self.selenium.find_element(By.NAME, "username")
@@ -104,6 +111,8 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
 
         user = User.objects.get(username='@janedoe')
         second_user = User.objects.get(username='@petrapickles')
+        user.first_login = False
+        user.save()
 
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         username_input = self.selenium.find_element(By.NAME, "username")
@@ -128,7 +137,10 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         user_is_blocked = self.selenium.find_element(By.ID, "user-is-blocked")
         self.assertIsNotNone(user_is_blocked)
 
-        self.selenium.find_element(By.ID, "user-actions-dropdown").click()
+        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
+        )
+        user_actions_dropdown.click()
 
         block_link = self.selenium.find_element(By.ID, "block-link")
         self.assertEqual("Unblock this user", block_link.get_attribute("innerHTML"))
@@ -141,6 +153,8 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         user = User.objects.get(username='@janedoe')
         second_user = User.objects.get(username='@petrapickles')
         user.blocked_users.add(second_user)
+        user.first_login = False
+        user.save()
 
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         username_input = self.selenium.find_element(By.NAME, "username")
@@ -168,7 +182,10 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         self.assertEqual("Unblock this user", block_link.get_attribute("innerHTML"))
         block_link.click()
 
-        self.selenium.find_element(By.ID, "user-actions-dropdown").click()
+        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
+        )
+        user_actions_dropdown.click()
 
         profile_content = self.selenium.find_element(By.ID, "profile-content")
         self.assertIsNotNone(profile_content)
