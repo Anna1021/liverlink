@@ -19,7 +19,7 @@ class ConversationView(LoginRequiredMixin, FormView):
             return no_conversation_url(request)
         conversation = conversations[0]
         form = MessageForm(conversation,user=request.user)
-        blocked_dm = check_blocked_dm(current_user, conversation)
+        blocked_dm = check_blocked_dm(request.user, conversation)
         context = {"form":form, 'conversation':conversation,'user_conversations':request.user.sort_conversations(), 'blocked_dm':blocked_dm}
         return render(request,self.template_name,context)
 
