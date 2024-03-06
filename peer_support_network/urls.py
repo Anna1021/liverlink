@@ -27,6 +27,7 @@ urlpatterns = [
     path('settings/password/', views.PasswordView.as_view(), name='password'),
     path('settings/', views.ProfileUpdateView.as_view(), name='settings'),
     path('deactivate_user/', views.deactivate_user, name='deactivate_user'),
+    path('get_conversation/<int:user_id>', views.GetConversationView.as_view(), name='get_conversation'),
     path('settings/other_users/', views.OtherUserSettingsView.as_view(), name='other_user_settings'),
     path('block_user/<int:user_id>', views.BlockUserView.as_view(), name='block_user'),
     path('unblock_user/<int:user_id>', views.UnblockUserView.as_view(), name='unblock_user'),
