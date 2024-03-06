@@ -9,7 +9,7 @@
   max-width: 100%;
   height: auto
   }
-  
+
 /*
 * left side bar
 */
@@ -223,4 +223,9 @@
 .light-theme .subtext {
   --bs-text-opacity: 1;
   color: rgb(145, 142, 142);
+}
+
+.light-theme #theme {
+  color: rgba(0, 0, 0);
+
 }

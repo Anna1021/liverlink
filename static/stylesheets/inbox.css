@@ -40,9 +40,3 @@
     --bs-text-opacity: 1;
     color: rgb(195, 192, 192);
 }
-#theme{
-    cursor:pointer;
-    margin-top: auto;
-    margin-bottom: auto;
-    height: 30px;
-}

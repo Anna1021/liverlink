@@ -36,20 +36,19 @@ class ThemeSwitcherTest(StaticLiveServerTestCase):
         main_div = self.selenium.find_element(By.ID, "main")
         self.assertIn('dark-theme', main_div.get_attribute('class'))
         logo_image = self.selenium.find_element(By.CLASS_NAME, 'img-fluid')
-        theme_logo_image = self.selenium.find_element(By.CLASS_NAME, 'theme-icon')
-        theme_switcher = self.selenium.find_element(By.ID, "theme")
-        self.assertEqual(theme_logo_image.get_attribute('src'), self.live_server_url + '/static/images/moon.png')
-        theme_switcher.click() 
+        theme_logo_image = self.selenium.main_div = self.selenium.find_element(By.ID, "theme")
+        self.assertEqual(theme_logo_image.get_attribute('class'), 'bi bi-sun')
+        theme_logo_image.click() 
         WebDriverWait(self.selenium, 10).until(
             lambda driver: 'light-theme' in main_div.get_attribute('class')
         )
         self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/Pulse-logo_black.png')
-        self.assertEqual(theme_logo_image.get_attribute('src'), self.live_server_url + '/static/images/sun.png')
+        self.assertEqual(theme_logo_image.get_attribute('class'), 'bi bi-moon-fill')
         # toggle back to the dark theme and verify changes
-        theme_switcher.click()
+        theme_logo_image.click()
         WebDriverWait(self.selenium, 10).until(
             lambda driver: 'dark-theme' in main_div.get_attribute('class')
         )
 
         self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/pulseLogoCropped.png')
-        self.assertEqual(theme_logo_image.get_attribute('src'), self.live_server_url + '/static/images/moon.png')
+        self.assertEqual(theme_logo_image.get_attribute('class'), 'bi bi-sun')
