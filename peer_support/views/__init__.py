@@ -31,3 +31,4 @@ from .create_post_view import CreatePostView
 from .feed_view import FeedView
 from .conversation_details_view import ConversationDetailsView
 from .leave_conversation_view import LeaveConversationView
+from .information_view import InformationView
