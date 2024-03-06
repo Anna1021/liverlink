@@ -24,6 +24,11 @@
                 <a href="{% url 'friends_list' %}">
                     <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100" >Friends list</button>
                 </a>
+                {% if user.is_staff %}
+                    <a href="{% url 'moderation' %}">
+                        <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100" >Moderation</button>
+                    </a>
+                {% endif %}
             </div>
         </div>
     </nav>
