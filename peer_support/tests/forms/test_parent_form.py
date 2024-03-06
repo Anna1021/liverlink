@@ -26,6 +26,7 @@ class ParentFormTestCase(TestCase):
             'language': 'en',
             'bio': 'I am a test patient.',
             'child_condition': 'Haemochromatosis',
+            'child_transplant': 'Y',
             'child_age_of_diagnosis': 21,
         }
 
@@ -58,6 +59,7 @@ class ParentFormTestCase(TestCase):
         bio_widget = form.fields['bio'].widget
         self.assertTrue(isinstance(bio_widget, forms.Textarea))
         self.assertIn('child_condition', form.fields)
+        self.assertIn('child_transplant', form.fields)
         self.assertIn('child_age_of_diagnosis', form.fields)
         caod_widget = form.fields['child_age_of_diagnosis'].widget
         self.assertTrue(isinstance(caod_widget, forms.NumberInput))
@@ -89,5 +91,6 @@ class ParentFormTestCase(TestCase):
         self.assertEqual(user.language, 'en')
         self.assertEqual(user.bio, 'I am a test patient.'),
         self.assertEqual(user.child_condition, 'Haemochromatosis'),
+        self.assertEqual(user.child_transplant, 'Y'),
         self.assertEqual(user.child_age_of_diagnosis, 21),
         self.assertEqual(before_count, after_count)
