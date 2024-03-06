@@ -4,7 +4,7 @@ from django.shortcuts import render,reverse,redirect
 from django.views.generic.edit import FormView
 from peer_support.models import Conversation
 from peer_support.forms import MessageForm
-from .helpers import check_blocked_dm
+from .helpers import check_blocked_dm, conversation_does_not_exist, no_conversation_url
 
 class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
@@ -15,21 +15,12 @@ class ConversationView(LoginRequiredMixin, FormView):
         if conversation_id==0:
             return render(request,self.template_name,{'user_conversations':request.user.sort_conversations()})
         conversations = Conversation.objects.filter(id=conversation_id)
-        if conversations.count() == 0 or request.user not in conversations[0].users.all():
-            messages.error(request,"This conversation does not exist.")
-            context = {'user_conversations':request.user.sort_conversations()}
-            return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
-        conversation = conversations.all()[0]
-        current_user = request.user
-        if current_user not in conversation.users.all():
-            messages.error(request,"You do not have access to this conversation.")
-            context = {'user_conversations':request.user.sort_conversations()}
-            return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
-        form = MessageForm(conversation,user=current_user)
-        
+        if conversation_does_not_exist(request,conversations):
+            return no_conversation_url(request)
+        conversation = conversations[0]
+        form = MessageForm(conversation,user=request.user)
         blocked_dm = check_blocked_dm(current_user, conversation)
-
-        context = {"form":form, 'conversation':conversation,'user_conversations':request.user.sort_conversations(),'blocked_dm':blocked_dm}
+        context = {"form":form, 'conversation':conversation,'user_conversations':request.user.sort_conversations(), 'blocked_dm':blocked_dm}
         return render(request,self.template_name,context)
 
     def post(self,request,conversation_id):

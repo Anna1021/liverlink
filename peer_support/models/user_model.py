@@ -29,6 +29,7 @@ class User(AbstractUser):
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
     blocked_users = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='blocked_by')
     conversations = models.ManyToManyField('Conversation',blank=True)
+    first_login = models.BooleanField(default=True)
 
     class Meta:
         """Model options."""

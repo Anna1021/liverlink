@@ -102,6 +102,7 @@ class DeactivateUserViewTestCase(TestCase):
                                     language="en",
                                     bio="abc",
                                     condition="Hepatitis",
+                                    transplant="N",
                                     age_of_diagnosis=20)
 
     def test_user_cannot_log_in_after_deactivation(self):

@@ -26,6 +26,7 @@ urlpatterns = [
     path('log_out/', views.log_out, name='log_out'),
     path('settings/password/', views.PasswordView.as_view(), name='password'),
     path('settings/', views.ProfileUpdateView.as_view(), name='settings'),
+    path('information/', views.InformationView.as_view(), name='information'),
     path('deactivate_user/', views.deactivate_user, name='deactivate_user'),
     path('get_conversation/<int:user_id>', views.GetConversationView.as_view(), name='get_conversation'),
     path('settings/other_users/', views.OtherUserSettingsView.as_view(), name='other_user_settings'),
@@ -51,4 +52,5 @@ urlpatterns = [
     path('inbox/', views.InboxView.as_view(), name='inbox'),
     path('conversation_details/<int:conversation_id>',views.ConversationDetailsView.as_view(),name="conversation_details"),
     path('leave_conversation/<int:conversation_id>',views.LeaveConversationView.as_view(),name='leave_conversation'),
+    path('delete_conversation/<int:conversation_id>',views.DeleteConversationView.as_view(),name='delete_conversation'),
 ]

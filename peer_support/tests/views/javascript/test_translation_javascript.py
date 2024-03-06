@@ -1,7 +1,6 @@
 from selenium.common.exceptions import NoSuchElementException
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -16,7 +15,7 @@ class LiveTranslationTest(StaticLiveServerTestCase):
         super().setUpClass()
         options = Options()
         options.add_argument("--headless")
-        cls.selenium = WebDriver(service=Service(), options=options)
+        cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(10)
         
     @classmethod
@@ -26,7 +25,12 @@ class LiveTranslationTest(StaticLiveServerTestCase):
 
     def test_webpage_translates(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        
+        username_input = self.selenium.find_element(By.NAME, "username")
+        username_input.send_keys('@johndoe')
+        password_input = self.selenium.find_element(By.NAME, "password")
+        password_input.send_keys('Password123')
+        self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+
         # Checks translate widget is loaded
         try:
             translate_widget = WebDriverWait(self.selenium, 10).until(
@@ -42,6 +46,7 @@ class LiveTranslationTest(StaticLiveServerTestCase):
         password_input = self.selenium.find_element(By.NAME, "password")
         password_input.send_keys('Password123')
         self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+        self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
 
         self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
         self.selenium.back()
@@ -51,4 +56,4 @@ class LiveTranslationTest(StaticLiveServerTestCase):
             )
         except NoSuchElementException:
             self.fail("Google Translate widget not found on the page.")
-        
+

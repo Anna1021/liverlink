@@ -35,7 +35,7 @@
       "ethnicity": "BD",
       "language": "fr",
       "bio": "Hi, I'm Petra Pickles! I'm a student at King's College London.",
-      "friends": [4],
+      "friends": [4,5],
       "is_active": true
     }
   },

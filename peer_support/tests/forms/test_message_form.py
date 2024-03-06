@@ -13,10 +13,14 @@ class MessageFormTestCase(TestCase):
         'peer_support/tests/fixtures/default_conversation.json',
         'peer_support/tests/fixtures/default_group_conversation.json',
         'peer_support/tests/fixtures/default_message.json',
+        'peer_support/tests/fixtures/other_messages.json',
     ]
 
     def setUp(self):
-        self.sender = User.objects.get(pk=1)
+        self.sender = User.objects.get(username='@johndoe')
+        self.sender.conversations.set([1,2])
+        self.receiver = User.objects.get(username='@janedoe')
+        self.receiver.conversations.set([1])
         self.form_input = {
             'content':"Ploof"
         }
@@ -26,7 +30,7 @@ class MessageFormTestCase(TestCase):
         form = MessageForm(self.conversation)
         self.assertIn('content', form.fields)
 
-    def test_valid_user_form(self):
+    def test_valid_message_form(self):
         form = MessageForm(self.conversation, user=self.sender,data=self.form_input)
         self.assertTrue(form.is_valid())
 
@@ -41,7 +45,7 @@ class MessageFormTestCase(TestCase):
         form.save()
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count+1)
-        message = Message.objects.get(pk=2)
+        message = Message.objects.last()
         self.assertEqual(message.sender,self.sender)
         self.assertEqual(message.content,"Ploof")
 
@@ -51,7 +55,7 @@ class MessageFormTestCase(TestCase):
         form.save()
         messages_after = self.conversation.messages.count()
         self.assertEqual(messages_after,messages_before+1)
-        message = Message.objects.get(pk=2)
+        message = Message.objects.last()
         self.assertIn(message,self.conversation.messages.all())
 
     def test_previous_message_set_to_last_message(self):
@@ -65,3 +69,14 @@ class MessageFormTestCase(TestCase):
         form = MessageForm(self.conversation,user = self.sender, data=self.form_input)
         message = form.save()
         self.assertIsNone(message.previous_message)
+
+    def test_deleted_conversation_returns_after_message_sent(self):
+        users = User.objects.filter(username=self.receiver.username)
+        self.assertIn(self.receiver,self.conversation.users.all())
+        self.assertIn(self.conversation,self.receiver.conversations.all())
+        self.conversation.delete(users)
+        self.assertIn(self.receiver,self.conversation.users.all())
+        self.assertNotIn(self.conversation,self.receiver.conversations.all())
+        form = MessageForm(self.conversation,user = self.sender, data=self.form_input)
+        message = form.save()
+        self.assertIn(self.conversation,self.receiver.conversations.all())
