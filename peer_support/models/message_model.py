@@ -10,7 +10,6 @@ class Message(models.Model):
     visible_to = models.ManyToManyField(User, blank=True,related_name='visible_to')
     read_by = models.ManyToManyField(User, blank=True,related_name = 'read_by')
     previous_message = models.ForeignKey('self',null=True,on_delete=models.SET_NULL)
-    is_reported = models.BooleanField(default=False)
 
     def delete(self,users):
         """Delete message"""

@@ -2,14 +2,9 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render,reverse,redirect
 from django.views.generic.edit import FormView
-from peer_support.models import Conversation
-from peer_support.forms import MessageForm
-
+from peer_support.models import Conversation, Message
+from peer_support.forms import MessageForm, ReportForm
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
-from peer_support.models import Report, Message 
-from peer_support.forms import ReportForm 
-from django.contrib.contenttypes.models import ContentType
 
 class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
@@ -32,8 +27,7 @@ class ConversationView(LoginRequiredMixin, FormView):
             return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
         message_form = MessageForm(conversation,user=current_user)
         report_form = ReportForm()
-        non_reported_messages = conversation.messages.filter(is_reported=False)
-        context = {"message_form":message_form,"report_form":report_form , 'conversation':conversation,'user_conversations':request.user.sort_conversations(),'non_reported_messages': non_reported_messages}
+        context = {"message_form":message_form,"report_form":report_form , 'conversation':conversation,'user_conversations':request.user.sort_conversations()}
         return render(request,self.template_name,context)
 
     def post(self, request, conversation_id):
@@ -48,7 +42,7 @@ class ConversationView(LoginRequiredMixin, FormView):
         form = MessageForm(conversation,data=request.POST,user=request.user)
         if form.is_valid() and request.user in conversation.users.all():
             form.save()
-            return HttpResponseRedirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
+            return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
         else:
             messages.error(request,"This message is not valid")
             return self.form_invalid(form) 
@@ -57,10 +51,10 @@ class ConversationView(LoginRequiredMixin, FormView):
         message =get_object_or_404(Message, id=message_id)
         report_form =ReportForm(request.POST)
         if report_form.is_valid():
-            report_form.save_report_for_object(message)
-            message.is_reported=True
+            report_form.save_report_for_object(message,request.user)
+            message.visible_to.remove(request.user)
             message.save()
             messages.success(request,"Message reported successfully.")
         else:
             messages.error(request,"There was an issue with the report.")
-        return HttpResponseRedirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
+        return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))

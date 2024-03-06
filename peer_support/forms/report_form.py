@@ -6,10 +6,11 @@ class ReportForm(forms.ModelForm):
         model = Report
         fields = ['reason']
 
-    def save_report_for_object(self, obj):
+    def save_report_for_object(self, obj, user):
         """Saves report based on content type"""
         if not self.is_valid():
             raise ValueError("Cannot save report: the form is not valid.")
         self.instance.content_type = ContentType.objects.get_for_model(obj)
+        self.instance.reporter = user
         self.instance.object_id = obj.pk
         return super().save(commit=True)
