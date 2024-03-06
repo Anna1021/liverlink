@@ -4,7 +4,7 @@
 {% block page %}
 <form method="post" action="{% url 'create_post' %}">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
+    {% include 'partials/bootstrap_form.html' with form=form %}
+    <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 {% endblock %}

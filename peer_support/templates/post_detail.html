@@ -8,12 +8,10 @@
 
     <hr />
     <!-- Display existing comments -->
-    <h2>Comments</h2>
+    <h4>Comments</h4>
     <ul>
-        {% for comment in post.postcomment_set.all %}
+        {% for comment in post.get_comments %}
             {% include 'components/reply.html' with comment=comment %}
-        {% empty %}
-            <li>No comments yet.</li>
         {% endfor %}
     </ul>
 
@@ -21,7 +19,7 @@
     <h1>Add Comment</h1>
     <form method="post" action="{% url 'post_detail' post_id=post.id %}">
         {% csrf_token %}
-        {{ comment_form.as_p }}
+        {% include 'partials/bootstrap_form.html' with form=comment_form %}
         <button type="submit">Submit comment</button>
     </form>
 {% endblock %}

@@ -21,15 +21,6 @@ class PostView(LoginRequiredMixin,FormView):
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
 
-            # question_id = request.POST.get('question')
-            # parent_id = request.POST.get('parent')
-            # reply = form.save(commit=False)
-            # reply.user = request.user
-            # reply.question = Question(id=question_id)
-            # if parent_id:
-            #     reply.parent = Response(id=parent_id)
-            # reply.save()
-
             parent_id = request.POST.get('parent_id')
             parent_comment = None
             if parent_id:

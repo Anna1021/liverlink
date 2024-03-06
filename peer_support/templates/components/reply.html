@@ -1,5 +1,5 @@
 <li>
-    <p><strong>Comment by:</strong> {{ comment.author }}</p>
+    <p>{{ comment.author }}</p>
     <p>{{ comment.content }}</p>
 
     <!-- Reply form for each comment -->
@@ -11,14 +11,13 @@
     </form>
 
     <!-- Display replies to the comment -->
-    <ul>
-        {% for reply in comment.replies.all %}
-            <li>
-                <p><strong>Reply by:</strong> {{ reply.author }}</p>
-                <p>{{ reply.content }}</p>
-            </li>
-        {% empty %}
-            <li>No replies yet.</li>
-        {% endfor %}
-    </ul>
+    <blockquote class="post-comment-container">
+        <ul>
+            {% for reply in comment.get_replies %}
+                <li>
+                    {% include 'components/reply.html' with comment=reply %}
+                </li>
+            {% endfor %}
+        </ul>
+    </blockquote>
 </li>
