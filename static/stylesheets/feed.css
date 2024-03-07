@@ -6,6 +6,12 @@
     background-color: rgb(246, 229, 252);
 }
 
-
+.post-card{
+    background-color: aliceblue;
+    border-radius: 10px;
+    color:black;
+    margin: 5px;
+    padding: 5px;
+}
 
 

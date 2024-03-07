@@ -34,16 +34,14 @@
     <!-- display feed -->
     <div class="scrollable-feed"> 
     {% for post in posts %}
-    <div class="post">
-      <!-- <h3>{{ post.title }}</h3> -->
+    <!-- <div class="post post-card">
       <p>{{ post.text }}</p>
       <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info">View Post</a>
-      <!-- delete -->
       {% if post.author == request.user %}
         <a href="{% url 'delete_post' post_id=post.id %}">Delete</a>
       {% endif %}
-
-    </div>
+    </div> -->
+    {% include 'partials/post_details.html' with post=post from_feed=True %}
     {% empty %}
     <p>No posts available.</p>
     {% endfor %}

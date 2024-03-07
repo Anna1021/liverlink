@@ -1,9 +1,11 @@
 {% extends 'dashboard.html' %} 
 {% block page %}
-    <h1>Post Detail</h1>
+    <!-- <h1>Post Detail</h1>
     <p><strong>Author:</strong> {{ post.author }}</p>
-    <p><strong>Text:</strong> {{ post.text }}</p>
-    <p><strong>Created At:</strong> {{ post.created_at }}</p>
+    <p class="text-wrap"><strong>Text:</strong> {{ post.text }}</p>
+    <p><strong>Created At:</strong> {{ post.created_at }}</p> -->
+
+    {% include 'partials/post_details.html' with post=post %}
 
     <hr />
     <!-- Display existing comments -->
