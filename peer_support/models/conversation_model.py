@@ -41,9 +41,13 @@ class Conversation(models.Model):
         """Return second member of the conversation"""
         return self.users.all()[1]  
 
-    def delete(self):
-        """Delete conversation and its messages"""
+    def delete(self,users):
+        """Delete conversation and its messages for personal view or completely"""
         for message in self.messages.all():
-            message.delete(self.users.all()) 
-        Conversation.objects.filter(pk=self.pk).delete()  
+            message.delete(users.all()) 
+        if users.count() == 1:
+            user = users.first()
+            user.conversations.remove(self)
+        else:
+            Conversation.objects.filter(pk=self.pk).delete()  
 

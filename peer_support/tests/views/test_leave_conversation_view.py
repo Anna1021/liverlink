@@ -4,7 +4,7 @@ from django.urls import reverse
 from peer_support.models import Message,Conversation,User
 from django.contrib import messages
 
-class DeleteMessageViewTestCase(TestCase):
+class LeaveConversationViewTestCase(TestCase):
     """Tests of the leave conversation view"""
     
     fixtures = ['peer_support/tests/fixtures/default_user.json',

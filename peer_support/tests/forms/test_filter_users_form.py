@@ -198,6 +198,17 @@ class FilterPeerFormTestCase(TestCase):
         for user in results:
             self.assertEqual(user.patient.condition, condition)
 
+    def test_patient_transplant_status(self):
+        transplant = "Y"
+        form_data = self.showAll
+        form_data['user_type'] = ['PT']        
+        form_data['transplant'] = transplant
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertEqual(user.patient.transplant, transplant)
+
     def test_parent_child_age_of_dio_min(self):
         min_age = 5
         form_data = self.showAll
@@ -230,6 +241,17 @@ class FilterPeerFormTestCase(TestCase):
         results = form.filter_users(self.users)
         for user in results:
             self.assertEqual(user.parent.child_condition, child_condition)
+
+    def test_child_transplant_status(self):
+        child_transplant = "Y"
+        form_data = self.showAll
+        form_data['user_type'] = ['PR']        
+        form_data['child_transplant'] = child_transplant
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertEqual(user.parent.child_transplant, child_transplant)
     
     def test_mentor_age_of_dio_min(self):
         min_age = 5
@@ -263,6 +285,17 @@ class FilterPeerFormTestCase(TestCase):
         results = form.filter_users(self.users)
         for user in results:
             self.assertEqual(user.mentor.condition, mentor_condition)
+
+    def test_mentor_transplant_status(self):
+        transplant = "Y"
+        form_data = self.showAll
+        form_data['user_type'] = ['MT']        
+        form_data['transplant'] = transplant
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertEqual(user.mentor.transplant, transplant)
  
     def test_min_age_greater_than_max_age(self):
         form_data = self.showAll
@@ -321,40 +354,49 @@ class FilterPeerFormTestCase(TestCase):
         form_data['min_age'] = -1
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
+
     def test_negative_max_age(self):
         form_data = self.showAll
         form_data['max_age'] = -5 
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
+
     def test_negative_age_of_diagnosis_min(self):
         form_data = self.showAll
         form_data['age_of_diagnosis_min'] = -10 
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
+
     def test_negative_age_of_diagnosis_max(self):
         form_data = self.showAll
         form_data['age_of_diagnosis_max'] = -20 
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
+
     def test_negative_child_age_of_diagnosis_min(self):
         form_data = self.showAll
         form_data['child_age_of_diagnosis_min'] = -3 
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
+
     def test_negative_child_age_of_diagnosis_max(self):
         form_data = self.showAll
         form_data['child_age_of_diagnosis_max'] = -7 
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
+
     def test_mentor_age_of_diagnosis_min(self):
         form_data = self.showAll
         form_data['mentor_age_of_diagnosis_min'] = -3 
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
+
     def test_negative_mentor_of_diagnosis_max(self):
         form_data = self.showAll
         form_data['mentor_age_of_diagnosis_max'] = -7 
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
+
+    
 
     

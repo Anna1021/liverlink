@@ -7,6 +7,7 @@ class Patient(User):
 
     condition = models.CharField(max_length=100, blank=True, null=True)
     age_of_diagnosis = models.PositiveIntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
+    transplant = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Patient'
