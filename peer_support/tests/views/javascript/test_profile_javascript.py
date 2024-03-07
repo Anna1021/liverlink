@@ -52,7 +52,10 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
 
         self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
        
-        self.selenium.find_element(By.ID, "user-actions-dropdown").click()
+        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
+        )
+        user_actions_dropdown.click()
 
         friend_link = self.selenium.find_element(By.ID, "friend-link")
         self.assertEqual("Add friend", friend_link.get_attribute("innerHTML"))
@@ -91,7 +94,10 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
 
         self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
 
-        self.selenium.find_element(By.ID, "user-actions-dropdown").click()
+        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
+        )
+        user_actions_dropdown.click()
 
         friend_link = self.selenium.find_element(By.ID, "friend-link")
         self.assertEqual("Remove friend", friend_link.get_attribute("innerHTML"))
@@ -125,7 +131,10 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
 
         self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
 
-        self.selenium.find_element(By.ID, "user-actions-dropdown").click()
+        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
+        )
+        user_actions_dropdown.click()
 
         profile_content = self.selenium.find_element(By.ID, "profile-content")
         self.assertIsNotNone(profile_content)
@@ -173,7 +182,10 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
 
         self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
 
-        self.selenium.find_element(By.ID, "user-actions-dropdown").click()
+        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
+        )
+        user_actions_dropdown.click()
 
         user_is_blocked = self.selenium.find_element(By.ID, "user-is-blocked")
         self.assertIsNotNone(user_is_blocked)
@@ -188,7 +200,7 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         user_actions_dropdown.click()
 
         profile_content = self.selenium.find_element(By.ID, "profile-content")
-        self.assertIsNotNone(profile_content)
+        self.assertIsNotNone(profile_content) 
 
         block_link = self.selenium.find_element(By.ID, "block-link")
         self.assertEqual("Block this user", block_link.get_attribute("innerHTML"))

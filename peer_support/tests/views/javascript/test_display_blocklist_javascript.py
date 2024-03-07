@@ -4,6 +4,8 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from peer_support.models import User
 
 class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
@@ -48,7 +50,9 @@ class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
 
         self.selenium.find_element(By.XPATH, "//button[@id='display-blocklist']").click()
 
-        block_toggle_button = self.selenium.find_element(By.CLASS_NAME, "block-user-toggle-btn")
+        block_toggle_button = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.CLASS_NAME, "block-user-toggle-btn"))
+        )
 
         self.assertIn(blocked_user, user.blocked_users.all())
         self.assertEqual(1, user.blocked_users.all().count())
@@ -58,7 +62,9 @@ class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
 
         block_toggle_button.click()
 
-        block_toggle_button = self.selenium.find_element(By.CLASS_NAME, "block-user-toggle-btn") #refresh button
+        block_toggle_button = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.CLASS_NAME, "block-user-toggle-btn"))
+        )
 
         self.assertNotIn(blocked_user, user.blocked_users.all())
         self.assertEqual(0, user.blocked_users.all().count())
@@ -68,7 +74,9 @@ class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
 
         block_toggle_button.click()
 
-        block_toggle_button = self.selenium.find_element(By.CLASS_NAME, "block-user-toggle-btn")
+        block_toggle_button = WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.CLASS_NAME, "block-user-toggle-btn"))
+        )
 
         self.assertIn(blocked_user, user.blocked_users.all())
         self.assertEqual(1, user.blocked_users.all().count())
