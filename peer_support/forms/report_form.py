@@ -2,6 +2,7 @@ from django import forms
 from peer_support.models import Report
 from django.contrib.contenttypes.models import ContentType
 class ReportForm(forms.ModelForm):
+    """Form enabling users to report content"""
     class Meta:
         model = Report
         fields = ['reason']

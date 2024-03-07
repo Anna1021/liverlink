@@ -1,12 +1,11 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from peer_support.models import Report, Message  # Import the model that will be reported
+from peer_support.models import Report, Message, User
 from peer_support.forms import ReportForm
 from django.contrib.contenttypes.models import ContentType
 
-User = get_user_model()
-
 class ReportFormTest(TestCase):
+    """Unit test of report form"""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',

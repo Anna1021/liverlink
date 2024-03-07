@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
 class ModerationViewTestCase(TestCase):
-    """Tests of the Peer Select view."""
+    """Tests of the moderation view."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
@@ -26,7 +26,7 @@ class ModerationViewTestCase(TestCase):
         message_to_report = Message.objects.first() 
         message_content_type = ContentType.objects.get_for_model(message_to_report)
         self.report = Report.objects.create(
-            user=self.admin_user,  
+            reporter=self.admin_user,  
             reason='spam',  
             reported_at=timezone.now(),
             content_type=message_content_type,

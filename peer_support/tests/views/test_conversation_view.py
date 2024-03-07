@@ -93,11 +93,6 @@ class ConversationViewTestCase(TestCase):
         self.assertIn(self.user, before_report_message.visible_to.all())
         response = self.client.post(self.url, data=report_data)
         form = ReportForm(data=report_data)
-        if form.is_valid():
-            # Simulate form save or processing if needed
-            print("Form is valid")
-        else:
-            print("Form errors:", form.errors)
         report_message = Message.objects.get(pk=message_id_to_report)
         self.assertNotIn(self.user, report_message.visible_to.all())
         self.assertEqual(response.status_code, 302)

@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, reverse
 from peer_support.models import Report, Message, User
 from django.contrib import messages
 
@@ -13,9 +13,8 @@ def accept_report(request, report_id):
     report = get_object_or_404(Report, id=report_id)
     reported_object = report.content_object
     if reported_object:
-        if isinstance(reported_object, Message):
-            all_users = User.objects.all()
-            reported_object.delete(all_users)  
+        all_users = User.objects.all()
+        reported_object.delete(all_users)  
         report.delete()
         messages.success(request, "Report and the reported object have been successfully deleted.")
     else:
