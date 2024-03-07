@@ -1,5 +1,6 @@
 from django.db import models
 from peer_support.models import User, Message
+from django.apps import apps
 
 class Conversation(models.Model):
     """Model used for direct conversations between two users"""
@@ -7,14 +8,17 @@ class Conversation(models.Model):
     messages = models.ManyToManyField(Message,blank=True)
     last_updated = models.DateTimeField(auto_now=True)
 
+
     def __str__(self):
         """Return a string representing the display name of the conversation"""
         members = self.users.all()
         return ", ".join([i.username for i in members]) 
 
-    def add_user(self,user):
+    def add_users(self,users):
         """Add user to a group"""
-        self.users.add(user)
+        for user in users.all():
+            self.users.add(user)
+            user.conversations.add(self)
 
     def send(self,message):
         """Send message to the conversation"""
@@ -23,6 +27,7 @@ class Conversation(models.Model):
 
     def as_group(self):
         """Return object as an instance of GroupConversation"""
+        GroupConversation = apps.get_model('peer_support', 'GroupConversation')
         try:
             return self.groupconversation
         except GroupConversation.DoesNotExist:
@@ -36,25 +41,13 @@ class Conversation(models.Model):
         """Return second member of the conversation"""
         return self.users.all()[1]  
 
-    def delete(self):
-        """Delete conversation and its messages"""
+    def delete(self,users):
+        """Delete conversation and its messages for personal view or completely"""
         for message in self.messages.all():
-            message.delete(self.users.all()) 
-        Conversation.objects.filter(pk=self.pk).delete()  
+            message.delete(users.all()) 
+        if users.count() == 1:
+            user = users.first()
+            user.conversations.remove(self)
+        else:
+            Conversation.objects.filter(pk=self.pk).delete()  
 
-class GroupConversation(Conversation):
-    """Model used for group conversations between 2+ users"""
-    name = models.CharField(max_length=20,null=True)
-
-    def remove_user(self,user):
-        """Remove user from group and delete self if no users in group"""
-        self.users.remove(user)
-        user.conversations.remove(self)
-        if self.users.count()==0:
-            self.delete() 
-
-    def __str__(self):
-        """Return a string representing the display name of the conversation"""
-        if self.name is None:
-            return super().__str__()
-        return self.name

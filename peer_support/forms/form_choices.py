@@ -72,3 +72,9 @@ SORT_USER_CHOICES = [
     ('age_asc', 'Age Ascending'),
     ('age_desc', 'Age Descending'),
 ]
+
+TRANSPLANT_CHOICES = [
+    ('', '---------'),
+    ('Y', 'Yes'), 
+    ('N', 'No'),
+]

@@ -26,6 +26,7 @@ class MentorFormTestCase(TestCase):
             'language': 'en',
             'bio': 'I am a test mentor.',
             'condition': 'Haemochromatosis',
+            'transplant': 'Y',
             'age_of_diagnosis': 21,
             'referral_code': "9C274FF391", 
         }
@@ -59,6 +60,7 @@ class MentorFormTestCase(TestCase):
         bio_widget = form.fields['bio'].widget
         self.assertTrue(isinstance(bio_widget, forms.Textarea))
         self.assertIn('condition', form.fields)
+        self.assertIn('transplant', form.fields)
         self.assertIn('age_of_diagnosis', form.fields)
         aod_widget = form.fields['age_of_diagnosis'].widget
         self.assertTrue(isinstance(aod_widget, forms.NumberInput))
@@ -91,6 +93,7 @@ class MentorFormTestCase(TestCase):
         self.assertEqual(user.language, 'en')
         self.assertEqual(user.bio, 'I am a test mentor.'),
         self.assertEqual(user.condition, 'Haemochromatosis'),
+        self.assertEqual(user.transplant, 'Y'),
         self.assertEqual(user.age_of_diagnosis, 21),
         self.assertEqual(user.referral_code, "9C274FF391")
         self.assertEqual(before_count, after_count)

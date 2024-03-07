@@ -56,6 +56,7 @@ class UserProfileModelTestCase(TestCase):
                                     language="en",
                                     bio="abc",
                                     condition="Hepatitis",
+                                    transplant="N",
                                     age_of_diagnosis=20)
         after_count = UserProfile.objects.count()
         self.assertEqual(before_count+1, after_count)
@@ -79,6 +80,7 @@ class UserProfileModelTestCase(TestCase):
                                     language="en",
                                     bio="abc",
                                     child_condition="Hepatitis",
+                                    child_transplant="N",
                                     child_age_of_diagnosis=20)
         after_count = UserProfile.objects.count()
         self.assertEqual(before_count+1, after_count)
@@ -102,6 +104,7 @@ class UserProfileModelTestCase(TestCase):
                                     language="en",
                                     bio="abc",
                                     condition="Hepatitis",
+                                    transplant="N",
                                     age_of_diagnosis=20,
                                     referral_code='TEST123')
         after_count = UserProfile.objects.count()
