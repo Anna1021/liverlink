@@ -50,7 +50,6 @@
     {% empty %}
         Type out your first message in the box below!
     {% endfor %}
-    </div>
     <form method="post">
         {% csrf_token %}
         {{ message_form.content }}
