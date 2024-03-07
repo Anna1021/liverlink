@@ -13,8 +13,13 @@
     <div class="col-md-4">
       <form id="feedForm" method="GET" action="{% url 'feed' %}">
         {% csrf_token %}
-        <input type="hidden" name="feed_type" id="feedType" value="{% if feed_type == 'global' %}global{% else %}friends{% endif %}">
-        <button type="button" id="toggleFeedButton" class="btn btn-primary">{% if feed_type == 'global' %}Friends-Only Feed{% else %}Global Feed{% endif %}</button>
+        <input type="hidden" name="feed_type" id="feedType" value="{{feed_type}}">
+        <button type="button" id="toggleFeedButton" class="btn btn-outline-primary">
+          <div class="row">
+            <div class="col-md-6 {% if feed_type == 'global' %}selected-feed{% endif %}">Global</div>
+            <div class="col-md-6 {% if feed_type == 'friends' %}selected-feed{% endif %}">Friends</div>
+          </div>
+        </button>
       </form>
     </div>
   

@@ -15,7 +15,7 @@
     </ul>
 
     <!-- Add Comment -->
-    <h1>Add Comment</h1>
+    <h4>Add Comment</h4>
     <form method="post" action="{% url 'post_detail' post_id=post.id %}">
         {% csrf_token %}
         {% include 'partials/bootstrap_form.html' with form=comment_form %}
