@@ -50,10 +50,9 @@
     {% empty %}
         Type out your first message in the box below!
     {% endfor %}
-    </div>
     <form method="post">
         {% csrf_token %}
-        {{ form.content }}
+        {{ message_form.content }}
         <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
     </form>
     {% else %}
