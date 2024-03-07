@@ -26,6 +26,7 @@ class PatientFormTestCase(TestCase):
             'language': 'en',
             'bio': 'I am a test patient.',
             'condition': 'Haemochromatosis',
+            'transplant': 'Y',
             'age_of_diagnosis': 21,
         }
 
@@ -58,6 +59,7 @@ class PatientFormTestCase(TestCase):
         bio_widget = form.fields['bio'].widget
         self.assertTrue(isinstance(bio_widget, forms.Textarea))
         self.assertIn('condition', form.fields)
+        self.assertIn('transplant', form.fields)
         self.assertIn('age_of_diagnosis', form.fields)
         aod_widget = form.fields['age_of_diagnosis'].widget
         self.assertTrue(isinstance(aod_widget, forms.NumberInput))
@@ -89,5 +91,6 @@ class PatientFormTestCase(TestCase):
         self.assertEqual(user.language, 'en')
         self.assertEqual(user.bio, 'I am a test patient.'),
         self.assertEqual(user.condition, 'Haemochromatosis'),
+        self.assertEqual(user.transplant, 'Y'),
         self.assertEqual(user.age_of_diagnosis, 21),
         self.assertEqual(before_count, after_count)

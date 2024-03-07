@@ -17,9 +17,3 @@ class Message(models.Model):
             self.visible_to.remove(user)
         if self.visible_to.count() == 0:
             Message.objects.filter(pk=self.pk).delete()
-
-    def same_sender(self):
-        """Return whether sender of previous message as same as sender of this message"""
-        if self.previous_message is not None:
-            return self.sender == self.previous_message.sender
-        return False

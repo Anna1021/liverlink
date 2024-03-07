@@ -154,3 +154,18 @@ h3.profile-title {
   background-color:#2E2D38;
   z-index: 50;
 }
+
+.navbar {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+}
+
+.navbar-item {
+  flex: 1; 
+  max-width: 200px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+  margin: 0 5px; 
+}

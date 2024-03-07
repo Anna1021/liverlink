@@ -26,6 +26,7 @@ urlpatterns = [
     path('log_out/', views.log_out, name='log_out'),
     path('settings/password/', views.PasswordView.as_view(), name='password'),
     path('settings/', views.ProfileUpdateView.as_view(), name='settings'),
+    path('information/', views.InformationView.as_view(), name='information'),
     path('deactivate_user/', views.deactivate_user, name='deactivate_user'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('resources/', views.resources, name='resources'),
@@ -48,5 +49,6 @@ urlpatterns = [
     path('moderation/',views.ModerationView.as_view(),name="moderation"),
     path('accept_report/<int:report_id>',views.accept_report,name="accept_report"),
     path('decline_report/<int:report_id>',views.decline_report,name="decline_report"),
-
+    path('leave_conversation/<int:conversation_id>',views.LeaveConversationView.as_view(),name='leave_conversation'),
+    path('delete_conversation/<int:conversation_id>',views.DeleteConversationView.as_view(),name='delete_conversation'),
 ]
