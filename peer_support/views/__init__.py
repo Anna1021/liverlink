@@ -27,7 +27,6 @@ from .clear_notifications_view import clear_notifications
 
 from .post_view import PostView
 from .delete_post_view import DeletePostView
-from .create_post_view import CreatePostView
 from .feed_view import FeedView
 from .conversation_details_view import ConversationDetailsView
 from .leave_conversation_view import LeaveConversationView

@@ -19,6 +19,11 @@
     </div>
   
   </div>
+  <form method="post" class="px-4 py-3" novalidate>
+    {% csrf_token %}
+    {% include 'partials/bootstrap_form.html' with form=form %}
+    <button type="submit">Add</button>
+  </form>
   <!-- scrollable -->
   <div class="card-body scrollable-container"> 
     <!-- display feed -->

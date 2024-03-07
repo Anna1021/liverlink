@@ -47,8 +47,6 @@ urlpatterns = [
     path('inbox/', views.InboxView.as_view(), name='inbox'),
     path('conversation_details/<int:conversation_id>',views.ConversationDetailsView.as_view(),name="conversation_details"),
     path('leave_conversation/<int:conversation_id>',views.LeaveConversationView.as_view(),name='leave_conversation'),
-
-    path('create_post/', views.CreatePostView.as_view(), name='create_post'),
     #path('add_comment/<int:post_id>/', views.add_comment, name='add_comment'), 
     path('post/<int:post_id>/', views.PostView.as_view() , name='post_detail'),
     
