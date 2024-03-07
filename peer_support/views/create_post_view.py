@@ -3,6 +3,8 @@ from django.shortcuts import render,redirect
 from django.views.generic.edit import FormView
 from peer_support.models import Post
 from peer_support.forms import PostForm
+from django.contrib import messages
+
 
 class CreatePostView(LoginRequiredMixin,FormView):
     
@@ -16,5 +18,9 @@ class CreatePostView(LoginRequiredMixin,FormView):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
+            messages.success(request, 'Post created successfully.')
             return redirect('feed') 
+        else:
+            messages.error(request, 'Failed to create post.')
+            return render(request, 'create_post.html', {'form': form})
         

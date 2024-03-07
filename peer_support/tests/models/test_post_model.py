@@ -36,7 +36,7 @@ class PostModelTestCase(TestCase):
         self.post.text = ""
         self._assert_post_is_invalid()
 
-    def test_title_must_not_contain_more_than_280_characters(self):
+    def test_text_must_not_contain_more_than_280_characters(self):
         self.post.text = 'x' * 281
         self._assert_post_is_invalid()
     
@@ -48,15 +48,12 @@ class PostModelTestCase(TestCase):
     #def test_ordering(self)
     
     def test_get_comments(self):
-        user = User.objects.get(username='@johndoe')
-        post = Post.objects.get(pk=1)
+        post1 = Post.objects.create(author=self.user, text="Post 1")
+        post2 = Post.objects.create(author=self.user, text="Post 2")
 
-        post1 = Post.objects.create(author=user, text="Post 1")
-        post2 = Post.objects.create(author=user, text="Post 2")
-
-        comment1 = PostComment.objects.create(author=user, post=post1, content="Comment 1") # comment1 is a comment to post1
-        comment2 = PostComment.objects.create(author=user, post=post1, content="Comment 2", parent=comment1) # comment2 is a reply to comment1, comment to post1
-        comment3 = PostComment.objects.create(author=user, post=post2, content="Comment 3")  # comment3 is unrelated to post1.
+        comment1 = PostComment.objects.create(author=self.user, post=post1, content="Comment 1") # comment1 is a comment to post1
+        comment2 = PostComment.objects.create(author=self.user, post=post1, content="Comment 2", parent=comment1) # comment2 is a reply to comment1, comment to post1
+        comment3 = PostComment.objects.create(author=self.user, post=post2, content="Comment 3")  # comment3 is unrelated to post1.
 
         comments = post1.get_comments()
         self.assertIn(comment1, comments)
