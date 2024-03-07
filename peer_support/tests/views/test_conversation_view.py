@@ -37,6 +37,14 @@ class ConversationViewTestCase(TestCase):
         form = response.context['message_form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
+    
+    def test_get_report(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation.html')
+        form = response.context['report_form']
+        self.assertTrue(isinstance(form, ReportForm))
+        self.assertFalse(form.is_bound)
 
     def test_cannot_get_conversation_user_is_not_in(self):
         invalid_url = reverse('conversation',kwargs={'conversation_id':2})
@@ -80,9 +88,10 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(after_count, before_count+1)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('conversation', kwargs={'conversation_id': self.conversation.id}))
-        message = Message.objects.get(pk=2)
+        message = self.conversation.messages.last()
         self.assertEqual(message.sender, self.user)
         self.assertEqual(message.content, 'Ploof')
+        self.assertIn(message,self.conversation.messages.all())
 
     def test_successful_report(self):
         message_id_to_report = 1
