@@ -181,3 +181,6 @@ border: 1px solid #720fe3;
    color: rgba(255, 255, 255, 0.55);
 
 }
+.dark-theme #Apply-btn{
+  background-color: #c4c8cf;
+}
