@@ -56,14 +56,14 @@
                         {% else %}
                         <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}" data-action="add-friend">Add friend</a>
                         {% endif%}
-                      <a class="dropdown-item" href="{% url 'get_conversation' user.id %}" id="message-link" data-action="message">Send message</a> <!-- To be updated: functionality --> 
+                      <a class="dropdown-item" href="{% url 'get_conversation' user.id %}" id="message-link" data-action="message">Send message</a> 
                       {% endif %}
                       {% if user in blocklist %}
                       <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="unblock-user">Unblock this user</a>
                       {% else %}
                       <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="block-user">Block this user</a>
                       {% endif %}
-                      <a class="dropdown-item" href="#" id="report-link" data-action="report-user">Report this user</a> <!-- To be updated: functionality -->
+                      <a class="dropdown-item" href="#" id="report-link" data-action="report-user">Report this user</a>
                     </div>
                   </div>
                 {% endif %}
