@@ -4,6 +4,7 @@
         "pk": 2,
         "fields": {
             "user": 2,
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
             "theme": "DF",
             "font": "CA",
             "font_size": "XL"
