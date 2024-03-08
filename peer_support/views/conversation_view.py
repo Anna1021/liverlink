@@ -2,13 +2,13 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render,reverse,redirect
 from django.views.generic.edit import FormView
-from peer_support.models import Conversation
-from peer_support.forms import MessageForm
-from .helpers import check_blocked_dm, conversation_does_not_exist, no_conversation_url
+from .helpers import check_blocked_dm, conversation_does_not_exist, no_conversation_url, conversation_does_not_exist
+from peer_support.models import Conversation, Message
+from peer_support.forms import MessageForm, ReportForm
+from django.shortcuts import get_object_or_404
 
 class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
-    form_class = MessageForm
     template_name = "conversation.html"
 
     def get(self,request,conversation_id):
@@ -19,23 +19,37 @@ class ConversationView(LoginRequiredMixin, FormView):
             return no_conversation_url(request)
         conversation = conversations[0]
         form = MessageForm(conversation,user=request.user)
+        message_form = MessageForm(conversation,user=request.user)
+        report_form = ReportForm()
         blocked_dm = check_blocked_dm(request.user, conversation)
-        context = {"form":form, 'conversation':conversation,'user_conversations':request.user.sort_conversations(), 'blocked_dm':blocked_dm}
+        context = { 'blocked_dm':blocked_dm,'message_form':message_form, 'report_form':report_form , 'conversation':conversation,'user_conversations':request.user.sort_conversations()}
         return render(request,self.template_name,context)
 
-    def post(self,request,conversation_id):
-        """Post request for user to send message to conversation"""
-        conversation = Conversation.objects.get(id=conversation_id)
-        form = MessageForm(conversation,data=request.POST,user=request.user)
-        blocked_dm = check_blocked_dm(request.user, conversation)
-        if form.is_valid() and request.user in conversation.users.all() and not blocked_dm:
-            form.save()
-            return render(request,self.template_name,{'form':MessageForm(conversation,user=request.user),'conversation':conversation,'user_conversations':request.user.sort_conversations()})
-        elif blocked_dm:
-            messages.error(request,"You cannot message this user.")
-            return render(request,self.template_name,{'form':form,'conversation':conversation,'user_conversations':request.user.sort_conversations()}) 
+    def post(self, request, conversation_id):
+        action=request.POST.get('action')
+        if action:
+            return self.handle_report_message(request,conversation_id,action)
+        else:
+            return self.handle_post_message(request,conversation_id)
+
+    def handle_post_message(self,request,conversation_id):
+        conversation = get_object_or_404(Conversation,id=conversation_id)
+        message_form = MessageForm(conversation,data=request.POST,user=request.user)
+        if message_form.is_valid() and request.user in conversation.users.all():
+            message_form.save()
+            return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
         else:
             messages.error(request,"This message is not valid")
-            return render(request,self.template_name,{'form':form,'conversation':conversation,'user_conversations':request.user.sort_conversations()})
+            return self.form_invalid(message_form) 
 
-        
+    def handle_report_message(self,request,conversation_id,message_id):
+        message =get_object_or_404(Message, id=message_id)
+        report_form =ReportForm(request.POST)
+        if report_form.is_valid():
+            report_form.save_report_for_object(message,request.user)
+            message.visible_to.remove(request.user)
+            message.save()
+            messages.success(request,"Message reported successfully.")
+        else:
+            messages.error(request,"There was an issue with the report.")
+        return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))

@@ -56,7 +56,7 @@
         <div style="opacity: 50%;">You can no longer send messages to this user.</div>
         {% endif %}
         {% csrf_token %}
-        {{ form.content }}
+        {{ message_form.content }}
         <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
     </form>
     {% else %}
