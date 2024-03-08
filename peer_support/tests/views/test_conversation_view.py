@@ -16,7 +16,6 @@ class ConversationViewTestCase(TestCase):
                 'peer_support/tests/fixtures/other_messages.json',
     ]
 
-
     def setUp(self):
         self.conversation = Conversation.objects.get(pk=1)
         self.url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
@@ -48,7 +47,7 @@ class ConversationViewTestCase(TestCase):
         self.assertIsNone(self.conversation.as_group())
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'conversation.html')
-        form = response.context['form']
+        form = response.context['message_form']
         self.assertTrue(isinstance(form, MessageForm))
         self.assertFalse(form.is_bound)
         blocked_dm = response.context['blocked_dm']
@@ -105,14 +104,7 @@ class ConversationViewTestCase(TestCase):
         response = self.client.post(self.url,data=self.form_input)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'conversation.html')
-        form = response.context['form']
-        self.assertTrue(isinstance(form, MessageForm))
-        self.assertTrue(form.is_bound)
-        messages_list = list(response.context['messages'])
-        self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.ERROR)
+        self.assertEqual(response.status_code, 302)
 
     def test_successful_message_send(self):
         before_count = Message.objects.count()

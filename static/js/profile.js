@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $('#block-link').click(function() {
         var userId = $(this).data('user-id');
         var action = $(this).attr('data-action');

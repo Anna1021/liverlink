@@ -7,7 +7,6 @@ from django.contrib import messages
 
 def login_prohibited(view_function):
     """Decorator for view functions that redirect users away if they are logged in."""
-    
     def modified_view_function(request):
         if request.user.is_authenticated:
             return redirect(settings.REDIRECT_URL_WHEN_LOGGED_IN)
@@ -50,7 +49,6 @@ def check_blocked_dm(current_user, conversation):
         for user in conversation.users.all(): 
             if current_user in user.blocked_users.all() or user in current_user.blocked_users.all():
                 blocked_dm = True
-
     return blocked_dm
 
 def conversation_does_not_exist(request,conversations):

@@ -1,11 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render,reverse,redirect
+from django.shortcuts import render,reverse,redirect, get_object_or_404
 from django.views.generic.edit import FormView
 from .helpers import check_blocked_dm, conversation_does_not_exist, no_conversation_url, conversation_does_not_exist
 from peer_support.models import Conversation, Message
 from peer_support.forms import MessageForm, ReportForm
-from django.shortcuts import get_object_or_404
 
 class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
@@ -18,7 +17,6 @@ class ConversationView(LoginRequiredMixin, FormView):
         if conversation_does_not_exist(request,conversations):
             return no_conversation_url(request)
         conversation = conversations[0]
-        form = MessageForm(conversation,user=request.user)
         message_form = MessageForm(conversation,user=request.user)
         report_form = ReportForm()
         blocked_dm = check_blocked_dm(request.user, conversation)
@@ -35,8 +33,12 @@ class ConversationView(LoginRequiredMixin, FormView):
     def handle_post_message(self,request,conversation_id):
         conversation = get_object_or_404(Conversation,id=conversation_id)
         message_form = MessageForm(conversation,data=request.POST,user=request.user)
-        if message_form.is_valid() and request.user in conversation.users.all():
+        blocked_dm = check_blocked_dm(request.user, conversation)
+        if message_form.is_valid() and request.user in conversation.users.all() and not blocked_dm:
             message_form.save()
+            return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
+        elif blocked_dm:
+            messages.error(request,"You cannot message this user.")
             return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
         else:
             messages.error(request,"This message is not valid")

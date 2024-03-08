@@ -1,13 +1,9 @@
 $(document).ready(function() {
-
     hideBlockedMessages()
-
     $('#conversation').animate(
         {scrollTop:$('#conversation').prop('scrollHeight')});
-
     function hideBlockedMessages(){
         var blocked_messages = document.getElementsByName('blocked-message');
-
         for (var i = 0; i < blocked_messages.length; ++i) {
             let message = blocked_messages[i]
             message.innerHTML = "You have blocked this user. Click to reveal text."

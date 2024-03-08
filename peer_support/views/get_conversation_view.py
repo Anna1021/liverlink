@@ -11,9 +11,7 @@ class GetConversationView(LoginRequiredMixin, View):
         """Get the direct conversation between two users."""
         current_user = request.user
         second_user = User.objects.get(id=user_id)
-
         conversation = self.get_conversation(current_user, second_user)
-
         return redirect(reverse('conversation', kwargs={'conversation_id': conversation.id}))
     
     def create_conversation(self, current_user, second_user):
@@ -26,12 +24,10 @@ class GetConversationView(LoginRequiredMixin, View):
         return conversation
     
     def get_conversation(self, current_user, second_user):
-        """Return a direct conversation between two users."""
         conversations = Conversation.objects.filter(users__in=[current_user]).filter(users__in=[second_user]).distinct()
         direct_conversations = []
         for conversation in conversations:
             if conversation.as_group() is None: direct_conversations.append(conversation)
-
         if direct_conversations == []:
             return self.create_conversation(current_user, second_user)
         else:

@@ -2,13 +2,11 @@ from peer_support.models import Question
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from peer_support.forms import NewReplyForm, NewResponseForm
-from django.contrib import messages
 
 @login_required
 def questionPage(request, id):
     response_form = NewResponseForm()
     reply_form = NewReplyForm()
-
     if request.method == 'POST':
             response_form = NewResponseForm(request.POST)
             if response_form.is_valid():
@@ -17,9 +15,7 @@ def questionPage(request, id):
                 response.question = Question(id=id)
                 response.save()
                 return redirect('/question/'+str(id)+'#'+str(response.id))
-
     question = Question.objects.get(id=id)
-
     context = {
         'question': question,
         'response_form': response_form,
