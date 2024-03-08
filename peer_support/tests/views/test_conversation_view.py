@@ -1,8 +1,8 @@
 """Tests of the conversation view."""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.forms import MessageForm
-from peer_support.models import User, Conversation,Message
+from peer_support.forms import MessageForm, ReportForm
+from peer_support.models import User, Conversation,Message, Report
 from django.contrib import messages
 
 class ConversationViewTestCase(TestCase):
@@ -34,8 +34,16 @@ class ConversationViewTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'conversation.html')
-        form = response.context['form']
+        form = response.context['message_form']
         self.assertTrue(isinstance(form, MessageForm))
+        self.assertFalse(form.is_bound)
+    
+    def test_get_report(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation.html')
+        form = response.context['report_form']
+        self.assertTrue(isinstance(form, ReportForm))
         self.assertFalse(form.is_bound)
 
     def test_cannot_get_conversation_user_is_not_in(self):
@@ -78,12 +86,39 @@ class ConversationViewTestCase(TestCase):
         response = self.client.post(self.url, data=self.form_input)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count+1)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'conversation.html')
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('conversation', kwargs={'conversation_id': self.conversation.id}))
         message = self.conversation.messages.last()
         self.assertEqual(message.sender, self.user)
         self.assertEqual(message.content, 'Ploof')
         self.assertIn(message,self.conversation.messages.all())
-        form = response.context['form']
-        self.assertTrue(isinstance(form, MessageForm))
-        self.assertFalse(form.is_bound)
+
+    def test_successful_report(self):
+        message_id_to_report = 1
+        report_data = {
+            'action': message_id_to_report,
+            'reason': 'abuse'
+        }
+        before_report_message = Message.objects.get(pk=message_id_to_report)
+        self.assertIn(self.user, before_report_message.visible_to.all())
+        response = self.client.post(self.url, data=report_data)
+        form = ReportForm(data=report_data)
+        report_message = Message.objects.get(pk=message_id_to_report)
+        self.assertNotIn(self.user, report_message.visible_to.all())
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Report.objects.filter(object_id=report_message.id).exists())
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertIn("Message reported successfully.", str(messages_list[0]))
+
+    def test_unsuccessful_report (self):
+        valid_message_id = 1  
+        report_data = {
+            'action': valid_message_id,
+            'reason': 'dfdsdf'
+        }
+        response = self.client.post(self.url, data=report_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertIn("There was an issue with the report.", str(messages_list[0]))
