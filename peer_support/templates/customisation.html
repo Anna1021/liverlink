@@ -12,22 +12,35 @@
     </div>
     {% endfor %}
 </div>
-<button class="btn btn-primary">Update</button>
+<button id="update-button" class="btn btn-primary">Update</button>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM loaded');
-        var pictures = document.querySelectorAll('.picture-container img');
-        pictures.forEach(function(picture) {
-            picture.addEventListener('click', function() {
-                pictures.forEach(function(picture) {
-                    picture.parentElement.classList.remove('picture-selected');
-                });
-                this.parentElement.classList.add('picture-selected');
+document.addEventListener('DOMContentLoaded', function() {
+    var pictures = document.querySelectorAll('.picture-container img');
+    var selectedPicturePath = '';
+    pictures.forEach(function(picture) {
+        picture.addEventListener('click', function() {
+            // Remove selection from all picstures
+            pictures.forEach(function(pic) {
+                pic.parentElement.classList.remove('picture-selected');
             });
+
+            // Add selection to the clicked picture
+            this.parentElement.classList.add('picture-selected');
+            selectedPicturePath = this.src.substring(this.src.lastIndexOf('/', this.src.lastIndexOf('/') - 1) + 1);
         });
     });
+
+    document.getElementById('update-button').addEventListener('click', function() {
+        fetch('{% url "update_profile_picture" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}' 
+            },
+            body: JSON.stringify({'profile_picture': selectedPicturePath })
+        })
+    });
+});
+
 </script>
-
 {% endblock %}
-
-

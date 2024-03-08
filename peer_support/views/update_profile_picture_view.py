@@ -1,0 +1,19 @@
+import json
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import JsonResponse
+from django.shortcuts import redirect
+from peer_support.models import UserProfile
+
+@login_required
+def update_profile_picture(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        profile_picture = data.get('profile_picture')
+        user_profile = UserProfile.objects.get(user=request.user)
+        user_profile.profile_picture = profile_picture
+        user_profile.save()
+        messages.add_message(request, messages.SUCCESS, "Profile picture updated!")
+        return redirect('customisation')
+    else:
+        return JsonResponse({'status': 'fail'})
