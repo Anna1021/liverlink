@@ -6,11 +6,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-img">
-                    {% if mentor %}
-                        <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" style="border: 7px solid rgb(101, 209, 101);"/>
-                    {% else %}
-                        <img src="{% static user.userprofile.profile_picture %}" alt="User Profile Picture" />
-                    {% endif %}
+                    <img src="{% static user.userprofile.profile_picture %}" alt="User Profile Picture" />
                 </div>
             </div>
             <div class="col-md-6">
