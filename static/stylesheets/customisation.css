@@ -18,7 +18,11 @@
     border-radius: 10px;
 }
 
+.picture-container img:hover {
+    cursor: pointer;
+}
+
 .picture-selected {
-    border: 5px solid white;
+    border: 7px solid white;
     border-radius: 15px;
 }

@@ -1,14 +1,7 @@
-.avatar {
-    width: 5rem;
-    height: 5rem;
-    line-height: 2rem;
-    border-radius: 50%;
-    display: inline-block;
-    background: #ced4da no-repeat center/cover;
-    position: relative;
-    text-align: center;
-    font-weight: 600;
-    vertical-align: bottom;
+.friend-profile-picture {
+    width: 100px;  /* Set the width */
+    height: 100px;  /* Set the height */
+    margin-right: 15px;
 }
 
 .friend-card-body {

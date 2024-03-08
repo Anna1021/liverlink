@@ -16,5 +16,4 @@ class ProfileView(LoginRequiredMixin, View):
             context['patient'] = user.patient
         else:
             context['mentor'] = user.mentor
-        context['user_profile'] = UserProfile.objects.get(user=user)
         return render(request, 'profile.html', context)
