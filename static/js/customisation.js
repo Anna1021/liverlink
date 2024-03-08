@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.status === 'success') {
                 alert('Profile picture updated successfully!');
             } else {
-                alert('Select a profile picture to update.');
+                alert('Select a profile picture.');
             }
         })
         .catch(error => {

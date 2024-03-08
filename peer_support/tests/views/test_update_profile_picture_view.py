@@ -26,6 +26,12 @@ class UpdateProfilePictureViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {'status': 'success'})
 
+    def test_update_profile_picture_without_profile_picture(self):
+        data = {'profile_picture': ''}
+        response = self.client.post(self.url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {'status': 'fail'})
+
     def test_update_profile_picture_without_post_request(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
