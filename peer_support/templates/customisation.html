@@ -1,15 +1,33 @@
 {% extends 'settings.html' %}
 {% load static %}
 {% block title %}
-<div class="ps-title-text">Customisation</div>
+    <div class="ps-title-text">Customisation</div>
 {% endblock %}
 
 {% block page %}
-<div class="picture-grid">
+<div class="picture-grid pt-3 pb-3">
     {% for picture in profile_pictures %}
     <div class="picture-container">
         <img src="{% static 'profile_pictures/'|add:picture %}" alt="Profile Picture">
     </div>
     {% endfor %}
 </div>
+<button class="btn btn-primary">Update</button>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded');
+        var pictures = document.querySelectorAll('.picture-container img');
+        pictures.forEach(function(picture) {
+            picture.addEventListener('click', function() {
+                pictures.forEach(function(picture) {
+                    picture.parentElement.classList.remove('picture-selected');
+                });
+                this.parentElement.classList.add('picture-selected');
+            });
+        });
+    });
+</script>
+
 {% endblock %}
+
+
