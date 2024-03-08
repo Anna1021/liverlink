@@ -28,7 +28,7 @@ class ConversationView(LoginRequiredMixin, FormView):
         form = MessageForm(conversation,data=request.POST,user=request.user)
         if form.is_valid() and request.user in conversation.users.all():
             form.save()
-            return render(request,self.template_name,{'form':MessageForm(conversation,user=request.user),'conversation':conversation,'user_conversations':request.user.sort_conversations()})
+            return redirect(reverse('conversation',kwargs={'conversation_id':conversation.id}),{'form':MessageForm(conversation,user=request.user),'conversation':conversation,'user_conversations':request.user.sort_conversations()})
         else:
             messages.error(request,"This message is not valid")
             return render(request,self.template_name,{'form':form,'conversation':conversation,'user_conversations':request.user.sort_conversations()})
