@@ -1,0 +1,12 @@
+.add-friend-btn {
+    position: relative;
+    z-index: 50;
+}
+
+.success_button {
+    background-color: #29c175;
+    color: #fff;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    z-index: 51;
+}

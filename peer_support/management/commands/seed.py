@@ -150,7 +150,7 @@ class Command(BaseCommand):
         child_condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
         child_age_of_diagnosis = randint(0, 30)
         child_transplant = self.faker.random_element(elements=(tuple(transplant[0] for transplant in TRANSPLANT_CHOICES)))
-        user_data.update({'child_condition': child_condition, 'child_age_of_diagnosis': child_age_of_diagnosis, child_transplant: 'child_transplant'})
+        user_data.update({'child_condition': child_condition, 'child_age_of_diagnosis': child_age_of_diagnosis, 'child_transplant': child_transplant})
         self.try_create_parent(user_data)
     
     def generate_mentor(self):

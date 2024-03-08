@@ -1,0 +1,15 @@
+{% extends 'settings.html' %}
+{% load static %}
+{% block title %}
+<div class="ps-title-text">Customisation</div>
+{% endblock %}
+
+{% block page %}
+<div class="picture-grid">
+    {% for picture in profile_pictures %}
+    <div class="picture-container">
+        <img src="{% static 'profile_pictures/'|add:picture %}" alt="Profile Picture">
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

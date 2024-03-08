@@ -1,0 +1,18 @@
+.picture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 10px;
+}
+
+.picture-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.picture-container img {
+    width: 30px; /* Adjust the width */
+    height: 30px; /* Adjust the height */
+    object-fit: contain;
+}

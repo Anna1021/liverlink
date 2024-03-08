@@ -1,0 +1,129 @@
+/* conversation name cards */
+.conversation-card {
+    width :max-content;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin:0;
+    width:calc(100%);
+}
+
+.conversation-card:hover {
+    background-color: gainsboro;
+}
+
+.conversation-list {
+    border-radius: 8px;
+    background-color: rgb(220, 234, 245);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height:90%;
+    list-style-type: none;
+    padding-left: 0px;
+}
+
+.conversation-menu{
+    height:89vh;
+}
+
+#id_content{
+    width : 94%;
+}
+
+.user-list-header{
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding:0;
+}
+
+.user-list{
+    list-style-type: none;
+    background-color: aliceblue;
+    padding-left: 0;
+    width: 100%;
+    border-radius: 5px;
+}
+.add-btn{
+    background-color: aliceblue;
+    margin:0;
+    width: 100%;
+}
+
+.user-card{
+    width:100%;
+    padding-left: 0;
+    margin-left:0;
+    list-style: none;
+}
+
+.user-card:hover{
+    background-color: azure;
+}
+
+#conversation{
+    height: 70vh;
+    width:100%;
+    overflow-y: scroll;
+}
+
+.no-conversations {
+    color: #212529;
+}
+
+/* message bubbles */
+.message-bubble {
+    border-radius: 25px;
+    padding : 5px;
+    margin: 5px;
+    height: fit-content;
+    width:75%;
+    align-items: center;
+    color: black;
+}
+
+.self-bubble{
+    float: right;
+    background-color: azure;
+}
+
+.other-sender{
+    text-align: left;
+
+}
+
+.other-bubble{
+    float: left;
+    background-color: bisque;
+}
+
+.leave-btn{
+    width:50%;
+}
+
+.leave-confirmation{
+    padding:0;
+    margin: 0;
+}
+
+#conversation-name{
+    display: block;
+}
+
+#conversation-name-input{
+    display: none;
+    margin-top:5px;
+}
+
+#rename-button{
+    margin: 5px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+    box-shadow: none;
+}
+
+#name-form{
+    display: flex;
+    height:5.7vh;
+}
