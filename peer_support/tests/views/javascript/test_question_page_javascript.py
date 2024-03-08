@@ -34,7 +34,6 @@ class QuestionPageJavascriptTest(StaticLiveServerTestCase):
         user.first_login = False
         user.save()
 
-        #Create a question and response authored by @peterpickles
         question = Question.objects.create(author=blocked_user, title="Test title", body="This is the question body.")
         response = Response.objects.create(user=blocked_user, question=question, body="This is the response body.")
 
