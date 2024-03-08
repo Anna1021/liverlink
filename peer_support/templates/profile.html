@@ -83,7 +83,7 @@
                 </div>
             </div>
             <div class="col-md-7">
-                {% if user.isactive is false%}
+                {% if not user.is_active %}
                 <div class="profile-subheading" id="current-user-is-inactive">This user is inactive.</div>
                 {% elif current_user in blocklist %}
                 <div class="profile-subheading" id="current-user-is-blocked">You cannot view this user's profile.</div>
