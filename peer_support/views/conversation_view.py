@@ -34,12 +34,13 @@ class ConversationView(LoginRequiredMixin, FormView):
         conversation = get_object_or_404(Conversation,id=conversation_id)
         message_form = MessageForm(conversation,data=request.POST,user=request.user)
         if message_form.is_valid() and request.user in conversation.users.all():
-            message_form.save()
+            message = message_form.save()
+            # return JsonResponse(message.id,safe=False)
             return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
         else:
             messages.error(request,"This message is not valid")
             return self.form_invalid(message_form) 
-
+        
     def handle_report_message(self,request,conversation_id,message_id):
         message =get_object_or_404(Message, id=message_id)
         report_form =ReportForm(request.POST)

@@ -4,14 +4,15 @@
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="message-menu-dropdown">
         <li><a class="dropdown-item" href="{% url 'delete_message' conversation.id message.id %}">Delete for me</a></li>
-        {% if message.sender == user %}
-        <li><a class="dropdown-item" name="delete_all" value=":3" href="{% url 'delete_message' conversation.id message.id %}">Delete for everyone</a></li>
+        {% if self_msg %}
+            <li><a class="dropdown-item" name="delete_all" value=":3" href="{% url 'delete_message' conversation.id message.id %}">Delete for everyone</a></li>
+        {% else %}
+            <li><form method="post">
+                {% csrf_token %}
+                {% include 'partials/bootstrap_form.html' with form=report_form %}
+                <input type="hidden" name="action" value="{{message.id}}">
+                <button type="submit">Report</button>
+            </form></li>
         {% endif %}
-        <li><form method="post">
-            {% csrf_token %}
-                        {% include 'partials/bootstrap_form.html' with form=report_form %}
-            <input type="hidden" name="action" value="{{message.id}}">
-            <button type="submit">Report</button>
-        </form></li>
     </ul>
 </div>
