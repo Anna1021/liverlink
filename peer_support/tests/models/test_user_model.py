@@ -246,6 +246,10 @@ class UserModelTestCase(TestCase):
         self.user.conversations.clear()
         self._assert_user_is_valid()
 
+
+    def test_first_login_defaults_to_true(self):
+        self.assertTrue(self.user.first_login)
+
     
     def test_full_name_must_be_correct(self):
         full_name = self.user.full_name()
