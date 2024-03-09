@@ -27,7 +27,7 @@ class User(AbstractUser):
     language = models.CharField(max_length=50,choices=LANGUAGE_CHOICES, blank=True)
     bio = models.CharField(max_length=500, blank=True)
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
-    conversations = models.ManyToManyField('Conversation',blank=True)
+    conversations = models.ManyToManyField('Conversation', blank=True)
     first_login = models.BooleanField(default=True)
 
     class Meta:
@@ -45,7 +45,6 @@ class User(AbstractUser):
 
         if not self.location:
             return ""
-
         return dict(COUNTRY_CHOICES)[self.location]
 
     def gender_name(self):
@@ -53,7 +52,6 @@ class User(AbstractUser):
             
         if not self.gender:
             return ""
-        
         return dict(GENDER_CHOICES)[self.gender] 
     
     def ethnicity_name(self):
@@ -61,10 +59,8 @@ class User(AbstractUser):
 
         if not self.ethnicity:
             return ""
-
         name = next((name for _, subcategories in ETHNICITY_CHOICES 
                      for code, name in subcategories if code == self.ethnicity), "")
-
         return name
     
     def language_name(self):
@@ -72,7 +68,6 @@ class User(AbstractUser):
 
         if not self.language:
             return ""
-
         return dict(LANGUAGE_CHOICES)[self.language]
 
     def gravatar(self, size=120):

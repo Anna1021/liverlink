@@ -25,7 +25,23 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
 
     def save(self):
         """Create a new user."""
-        user_data = {
+
+        user_data = self.get_user_data()
+        user_type = self.cleaned_data.get('user_type')
+
+        if user_type == 'PT':
+            user = self.create_patient(user_data)
+        elif user_type == 'PR':
+            user = self.create_parent(user_data)
+        else:
+            user = self.create_mentor(user_data)
+
+        return user
+
+    def get_user_data(self):
+        """Get the common user data."""
+
+        return {
             'username': self.cleaned_data.get('username'),
             'first_name': self.cleaned_data.get('first_name'),
             'last_name': self.cleaned_data.get('last_name'),
@@ -39,31 +55,38 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             'language': self.cleaned_data.get('language'),
             'bio': self.cleaned_data.get('bio'),
         }
-        user_type = self.cleaned_data.get('user_type')
-        if user_type == 'PT':
-            user_data.update({
-                'condition': self.cleaned_data.get('condition'),
-                'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
-            })
-            user = Patient.objects.create_user(**user_data)
-        elif user_type == 'PR':
-            user_data.update({
-                'child_condition': self.cleaned_data.get('child_condition'),
-                'child_age_of_diagnosis': self.cleaned_data.get('child_age_of_diagnosis'),
-            })
-            user = Parent.objects.create_user(**user_data)
-        else:
-            user_data.update({
-                'condition': self.cleaned_data.get('condition'),
-                'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
-                'referral_code': self.cleaned_data.get('referral_code')
-            })
-            user = Mentor.objects.create_user(**user_data)
 
-        return user
+    def create_patient(self, user_data):
+        """Create a new Patient user."""
+
+        user_data.update({
+            'condition': self.cleaned_data.get('condition'),
+            'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
+        })
+        return Patient.objects.create_user(**user_data)
+
+    def create_parent(self, user_data):
+        """Create a new Parent user."""
+
+        user_data.update({
+            'child_condition': self.cleaned_data.get('child_condition'),
+            'child_age_of_diagnosis': self.cleaned_data.get('child_age_of_diagnosis'),
+        })
+        return Parent.objects.create_user(**user_data)
+
+    def create_mentor(self, user_data):
+        """Create a new Mentor user."""
+
+        user_data.update({
+            'condition': self.cleaned_data.get('condition'),
+            'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
+            'referral_code': self.cleaned_data.get('referral_code')
+        })
+        return Mentor.objects.create_user(**user_data)
 
     def clean(self):
         """Validation of referral code"""
+        
         cleaned_data = super().clean()
         user_type = cleaned_data.get('user_type')
         referral_code = cleaned_data.get('referral_code')

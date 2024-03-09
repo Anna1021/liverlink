@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def friends_list(request):
     """Display the list of friends."""
+    
     user = request.user
     friends = user.friends.all()
     context = {'friends': friends}

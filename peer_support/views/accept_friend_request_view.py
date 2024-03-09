@@ -6,6 +6,7 @@ from peer_support.models import Notification, FriendRequest
 
 class AcceptFriendRequestView(LoginRequiredMixin, View):
     """Accept a friend request and create a notification."""
+
     def get(self, request, friend_request_id, notification_id):
         friend_request = FriendRequest.objects.get(id=friend_request_id)
         friend_request.is_accepted = True
@@ -18,6 +19,7 @@ class AcceptFriendRequestView(LoginRequiredMixin, View):
 
     def send_notification(self, request, friend_request):
         """Send a notification."""
+        
         Notification.objects.create(
             title='Friend Request Accepted',
             description=f'{request.user.username} accepted your friend request.',
