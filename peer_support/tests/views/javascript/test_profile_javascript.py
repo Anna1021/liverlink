@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from peer_support.models import User, FriendRequest, Notification
+from selenium.common.exceptions import TimeoutException
 
 class ProfileJavascriptTest(StaticLiveServerTestCase):
     """Unit tests of javascript in profile view."""
@@ -28,6 +29,7 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         cls.selenium = WebDriver(service=Service(), options=options)
         cls.selenium.maximize_window()
         cls.selenium.implicitly_wait(40)
+        cls.wait = WebDriverWait(cls.selenium, 40)
         
     @classmethod
     def tearDownClass(cls):
@@ -35,48 +37,47 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_add_friend_sends_request(self):
-
         user = User.objects.get(username='@janedoe')
         second_user = User.objects.get(username='@petrapickles')
         user.first_login = False
         user.save()
+        self.selenium.get(f'{self.live_server_url}/log_in/')
+        try:
+            username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
+            username_input.send_keys('@janedoe')
 
-        self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        username_input = self.selenium.find_element(By.NAME, "username")
-        username_input.send_keys('@janedoe')
-        password_input = self.selenium.find_element(By.NAME, "password")
-        password_input.send_keys('Password123')
-        self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+            password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "password")))
+            password_input.send_keys('Password123')
 
-        self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
+            login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
+            login_button.click()
 
-        self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
-       
-        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
-        )
-        user_actions_dropdown.click()
+            find_friends_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]")))
+            find_friends_button.click()
 
-        friend_link = self.selenium.find_element(By.ID, "friend-link")
-        self.assertEqual("Add friend", friend_link.get_attribute("innerHTML"))
-        friend_link.click()
+            second_user_profile_link = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/profile/@petrapickles/']")))
+            second_user_profile_link.click()
 
-        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
-        )
-        user_actions_dropdown.click()
+            user_actions_dropdown = self.wait.until(EC.visibility_of_element_located((By.ID, "user-actions-dropdown")))
+            user_actions_dropdown.click()
 
-        friend_link = self.selenium.find_element(By.ID, "friend-link")
-        self.assertEqual("Request sent", friend_link.get_attribute("innerHTML"))
-        self.assertTrue(FriendRequest.objects.filter(sender=user, receiver=second_user).exists())
-        friend_request = FriendRequest.objects.get(sender=user, receiver=second_user)
-        self.assertTrue(Notification.objects.filter(friend_request=friend_request).exists())
+            friend_link = self.wait.until(EC.element_to_be_clickable((By.ID, "friend-link")))
+            self.assertEqual("Add friend", friend_link.text)
+            friend_link.click()
+            user_actions_dropdown = self.wait.until(EC.visibility_of_element_located((By.ID, "user-actions-dropdown")))
+            user_actions_dropdown.click()
+            self.wait.until(EC.text_to_be_present_in_element((By.ID, "friend-link"), "Request sent"))
+            self.assertEqual("Request sent", friend_link.get_attribute("innerHTML"))
 
-        Notification.objects.get(friend_request=friend_request).delete()
-        friend_request.delete()
+            friend_request = FriendRequest.objects.get(sender=user, receiver=second_user)
+            self.assertTrue(Notification.objects.filter(friend_request=friend_request).exists())
+            Notification.objects.get(friend_request=friend_request).delete()
+            friend_request.delete()
+
+        except TimeoutException as e:
+            self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
 
     def test_remove_friend(self):
-
         user = User.objects.get(username='@janedoe')
         second_user = User.objects.get(username='@petrapickles')
         user.friends.add(second_user)
@@ -84,34 +85,39 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         user.save()
 
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        username_input = self.selenium.find_element(By.NAME, "username")
-        username_input.send_keys('@janedoe')
-        password_input = self.selenium.find_element(By.NAME, "password")
-        password_input.send_keys('Password123')
-        self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+        try:
+            username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
+            username_input.send_keys('@janedoe')
 
-        self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Friends list')]").click()
+            password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "password")))
+            password_input.send_keys('Password123')
 
-        self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
+            login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
+            login_button.click()
 
-        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
-        )
-        user_actions_dropdown.click()
+            friends_list_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Friends list')]")))
+            friends_list_button.click()
 
-        friend_link = self.selenium.find_element(By.ID, "friend-link")
-        self.assertEqual("Remove friend", friend_link.get_attribute("innerHTML"))
-        friend_link.click()
+            second_user_profile_link = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/profile/@petrapickles/']")))
+            second_user_profile_link.click()
 
-        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
-        )
-        user_actions_dropdown.click()
+            user_actions_dropdown = self.wait.until(EC.visibility_of_element_located((By.ID, "user-actions-dropdown")))
+            user_actions_dropdown.click()
 
-        friend_link = self.selenium.find_element(By.ID, "friend-link")
-        self.assertEqual("Add friend", friend_link.get_attribute("innerHTML"))
-        self.assertNotIn(second_user, user.friends.all())
-        self.assertNotIn(user, second_user.friends.all())
+            friend_link = self.wait.until(EC.element_to_be_clickable((By.ID, "friend-link")))
+            self.assertEqual("Remove friend", friend_link.get_attribute("innerHTML"))
+            friend_link.click()
+
+            user_actions_dropdown = self.wait.until(EC.visibility_of_element_located((By.ID, "user-actions-dropdown")))
+            user_actions_dropdown.click()
+
+            friend_link = self.wait.until(EC.presence_of_element_located((By.ID, "friend-link")))
+            self.assertEqual("Add friend", friend_link.get_attribute("innerHTML"))
+            
+            self.assertNotIn(second_user, user.friends.all())
+            self.assertNotIn(user, second_user.friends.all())
+        except TimeoutException as e:
+            self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
 
     def test_block_user_reloads_page(self):
 
@@ -121,41 +127,38 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         user.save()
 
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        username_input = self.selenium.find_element(By.NAME, "username")
-        username_input.send_keys('@janedoe')
-        password_input = self.selenium.find_element(By.NAME, "password")
-        password_input.send_keys('Password123')
-        self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+        try:
+            username_input = self.wait.until(EC.element_to_be_clickable((By.NAME, "username")))
+            username_input.send_keys('@janedoe')
+            password_input = self.wait.until(EC.element_to_be_clickable((By.NAME, "password")))
+            password_input.send_keys('Password123')
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
 
-        self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]"))).click()
 
-        self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/profile/@petrapickles/']"))).click()
 
-        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
-        )
-        user_actions_dropdown.click()
+            user_actions_dropdown = self.wait.until(EC.visibility_of_element_located((By.ID, "user-actions-dropdown")))
+            user_actions_dropdown.click()
 
-        profile_content = self.selenium.find_element(By.ID, "profile-content")
-        self.assertIsNotNone(profile_content)
+            self.wait.until(EC.visibility_of_element_located((By.ID, "profile-content")))
 
-        block_link = self.selenium.find_element(By.ID, "block-link")
-        self.assertEqual("Block this user", block_link.get_attribute("innerHTML"))
-        block_link.click()
+            block_link = self.wait.until(EC.element_to_be_clickable((By.ID, "block-link")))
+            self.assertEqual("Block this user", block_link.get_attribute("innerHTML"))
+            block_link.click()
 
-        user_is_blocked = self.selenium.find_element(By.ID, "user-is-blocked")
-        self.assertIsNotNone(user_is_blocked)
+            self.wait.until(EC.visibility_of_element_located((By.ID, "user-is-blocked")))
 
-        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
-        )
-        user_actions_dropdown.click()
+            user_actions_dropdown = self.wait.until(EC.visibility_of_element_located((By.ID, "user-actions-dropdown")))
+            user_actions_dropdown.click()
 
-        block_link = self.selenium.find_element(By.ID, "block-link")
-        self.assertEqual("Unblock this user", block_link.get_attribute("innerHTML"))
-        self.assertIn(second_user, user.blocked_users.all())
-
-        user.blocked_users.remove(second_user)
+            block_link = self.wait.until(EC.element_to_be_clickable((By.ID, "block-link")))
+            self.assertEqual("Unblock this user", block_link.get_attribute("innerHTML"))
+            self.assertIn(second_user, user.blocked_users.all())
+            user.blocked_users.remove(second_user)
+        except TimeoutException as e:
+            self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
+            
 
     def test_unblock_user_reloads_page(self):
 
@@ -166,42 +169,34 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         user.save()
 
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        username_input = self.selenium.find_element(By.NAME, "username")
-        username_input.send_keys('@janedoe')
-        password_input = self.selenium.find_element(By.NAME, "password")
-        password_input.send_keys('Password123')
-        self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+        try:
+            self.wait.until(EC.element_to_be_clickable((By.NAME, "username"))).send_keys('@janedoe')
+            self.wait.until(EC.element_to_be_clickable((By.NAME, "password"))).send_keys('Password123')
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
 
-        self.selenium.find_element(By.XPATH, "//a[@id='user-account-dropdown']/span").click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@id='user-account-dropdown']/span"))).click()
 
-        self.selenium.find_element(By.LINK_TEXT, "Settings").click()
+            self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Settings"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Other users"))).click()
 
-        self.selenium.find_element(By.LINK_TEXT, "Other users").click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@id='display-blocklist']"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/profile/@petrapickles/']"))).click()
 
-        self.selenium.find_element(By.XPATH, "//button[@id='display-blocklist']").click()
+            self.wait.until(EC.element_to_be_clickable((By.ID, "user-actions-dropdown"))).click()
+            self.wait.until(EC.visibility_of_element_located((By.ID, "user-is-blocked")))
 
-        self.selenium.find_element(By.XPATH, "//a[@href='/profile/@petrapickles/']").click()
+            block_link = self.wait.until(EC.element_to_be_clickable((By.ID, "block-link")))
+            self.assertEqual("Unblock this user", block_link.get_attribute("innerHTML"))
+            block_link.click()
 
-        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
-        )
-        user_actions_dropdown.click()
+            self.wait.until(EC.element_to_be_clickable((By.ID, "user-actions-dropdown"))).click()
 
-        user_is_blocked = self.selenium.find_element(By.ID, "user-is-blocked")
-        self.assertIsNotNone(user_is_blocked)
+            self.wait.until(EC.visibility_of_element_located((By.ID, "profile-content")))
 
-        block_link = self.selenium.find_element(By.ID, "block-link")
-        self.assertEqual("Unblock this user", block_link.get_attribute("innerHTML"))
-        block_link.click()
-
-        user_actions_dropdown = WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))
-        )
-        user_actions_dropdown.click()
-
-        profile_content = self.selenium.find_element(By.ID, "profile-content")
-        self.assertIsNotNone(profile_content) 
-
-        block_link = self.selenium.find_element(By.ID, "block-link")
-        self.assertEqual("Block this user", block_link.get_attribute("innerHTML"))
-        self.assertNotIn(second_user, user.blocked_users.all())
+            block_link = self.wait.until(EC.element_to_be_clickable((By.ID, "block-link")))
+            self.assertEqual("Block this user", block_link.get_attribute("innerHTML"))
+            
+            user.refresh_from_db()
+            self.assertNotIn(second_user, user.blocked_users.all())
+        except TimeoutException as e:
+            self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
