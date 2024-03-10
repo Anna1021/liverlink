@@ -154,9 +154,8 @@ class Command(BaseCommand):
         user_data = self.generate_user_data()
         condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
         age_of_diagnosis = randint(0, 30)
-        user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis})
         referral_code = uuid.uuid4().hex[:10].upper()
-        user_data.update({'referral_code': referral_code})
+        user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'referral_code': referral_code})
         self.try_create_mentor(user_data)
 
     def generate_notification(self):
