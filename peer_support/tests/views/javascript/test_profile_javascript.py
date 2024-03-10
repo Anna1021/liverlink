@@ -18,6 +18,7 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/other_parents.json',
+        'peer_support/tests/fixtures/other_user_profiles.json'
     ]
 
     @classmethod
