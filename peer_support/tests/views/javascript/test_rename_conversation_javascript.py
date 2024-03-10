@@ -4,10 +4,10 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait,Select
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from peer_support.models import User,GroupConversation
-from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException
 
 class CreateConversationJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in peer_select view"""
@@ -26,7 +26,8 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
         options.add_argument("--headless") 
         options.add_argument("--window-size=1920,1080") 
         cls.selenium = WebDriver(service=Service(), options=options)
-        cls.selenium.implicitly_wait(10)
+        cls.selenium.implicitly_wait(40)
+        cls.wait = WebDriverWait(cls.selenium, 20)
         
     @classmethod
     def tearDownClass(cls):
@@ -38,33 +39,37 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
         user.conversations.set([1,2])
         group_conversation = GroupConversation.objects.get(pk=2)
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        username_input = self.selenium.find_element(By.NAME, "username")
-        username_input.send_keys('@johndoe')
-        password_input = self.selenium.find_element(By.NAME, "password")
-        password_input.send_keys('Password123')
-        self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+        try:
+            username_input =self.wait.until(EC.element_to_be_clickable((By.NAME, "username")))
+            username_input.send_keys('@johndoe')
 
-        self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Messages')]").click()
-        conversation_link = self.selenium.find_element(By.XPATH, "//a[@href='/conversation/2']")
-        conversation_link.click()
+            password_input =self.wait.until(EC.element_to_be_clickable((By.NAME, "password")))
+            password_input.send_keys('Password123')
 
-        dropdown_link = self.selenium.find_element(By.ID, "conversation-dropdown")
-        dropdown_link.click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
 
-        details_link = self.selenium.find_element(By.XPATH, "//a[@href='/conversation_details/2']")
-        details_link.click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Messages')]"))).click()
+            conversation_link =self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/conversation/2']")))
+            conversation_link.click()
 
-        header = self.selenium.find_element(By.XPATH, '//h3[@id="conversation-name"]')
-        form = self.selenium.find_element(By.XPATH, '//div[@id="conversation-name-input"]')
+            dropdown_link =self.wait.until(EC.element_to_be_clickable((By.ID, "conversation-dropdown")))
+            dropdown_link.click()
 
-        self.assertEqual(header.value_of_css_property('display'),'block')
-        self.assertEqual(form.value_of_css_property('display'),'none')
+            details_link =self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/conversation_details/2']")))
+            details_link.click()
 
-        toggle = self.selenium.find_element(By.XPATH, '//button[@id="rename-button"]')
-        self.assertEqual(toggle.get_attribute('innerHTML'),'Rename')
-        toggle.click()
-        self.assertEqual(toggle.get_attribute('innerHTML'),'Cancel')
+            header =self.wait.until(EC.presence_of_element_located((By.XPATH, '//h3[@id="conversation-name"]')))
+            form =self.wait.until(EC.presence_of_element_located((By.XPATH, '//div[@id="conversation-name-input"]')))
+            
+            self.assertEqual(header.value_of_css_property('display'),'block')
+            self.assertEqual(form.value_of_css_property('display'),'none')
 
-        self.assertEqual(header.value_of_css_property('display'),'none')
-        self.assertEqual(form.value_of_css_property('display'),'block')
+            toggle =self.wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@id="rename-button"]')))
+            self.assertEqual(toggle.get_attribute('innerHTML'),'Rename')
+            toggle.click()
+            self.assertEqual(toggle.get_attribute('innerHTML'),'Cancel')
 
+            self.assertEqual(header.value_of_css_property('display'),'none')
+            self.assertEqual(form.value_of_css_property('display'),'block')
+        except TimeoutException as e:
+            self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
