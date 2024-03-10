@@ -11,17 +11,6 @@ class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
     template_name = "conversation.html"
 
-    def get_context_data(self,user,conversation):
-        context = {
-            'message_form':MessageForm(conversation,user=user), 
-            'report_form':ReportForm() , 
-            'conversation':conversation,
-            'user_conversations':user.sort_conversations()
-            }
-
-    def form_invalid(self,form,user,conversation):
-        return self.render_to_response(self.get_context_data(user,conversation))
-
     def get(self,request,conversation_id):
         if conversation_id==0:
             return render(request,self.template_name,{'user_conversations':request.user.sort_conversations()})

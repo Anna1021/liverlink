@@ -7,12 +7,6 @@ $(document).ready(function() {
 });
 
 const chatSocket = new WebSocket("ws://" + window.location.host + "/");
-chatSocket.onopen = function (e) {
-console.log("The connection was setup successfully !");
-};
-chatSocket.onclose = function (e) {
-console.log("Something unexpected happened !");
-};
 document.querySelector("#id_content").focus();
 document.querySelector('#message-form').addEventListener("submit", function(){
     chatSocket.send(JSON.stringify({sender:username,conversation_id:conversation_id}));
