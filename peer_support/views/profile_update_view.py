@@ -34,12 +34,6 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         else:
             user = self.request.user
         return user
-    
-    def get_context_data(self, **kwargs):
-        """Return context data for the view."""
-        context = super().get_context_data(**kwargs)
-        context['user_profile'] = UserProfile.objects.get(user=self.request.user)
-        return context
 
     def get_success_url(self):
         """Return redirect URL after successful update."""
