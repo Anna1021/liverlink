@@ -65,8 +65,8 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-        var username = "{{ user.username }}"
-        var delete_url = "{% if conversation_id == 0 %}{% url 'delete_message' conversation_id %} {% endif %}";
+        var username = "{{ user.username }}";
+        var conversation_id = "{{ conversation.id }}";
     
 </script>
 <script src="{% static 'js/conversation.js' %}"></script>

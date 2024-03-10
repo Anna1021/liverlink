@@ -46,13 +46,9 @@ class ConversationView(LoginRequiredMixin, FormView):
         message_form = MessageForm(conversation,data=request.POST,user=request.user)
         if message_form.is_valid() and request.user in conversation.users.all():
             message = message_form.save()
-            return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
         else:
-            for field, errors in message_form.errors.items():
-                # Iterate through each field and its corresponding error messages
-                print(f"Field '{field}': {', '.join(errors)}")
             messages.error(request,"This message is not valid")
-            return self.form_invalid(message_form,request.user,conversation) 
+        return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
         
     def handle_report_message(self,request,conversation_id,message_id):
         message =get_object_or_404(Message, id=message_id)
