@@ -15,12 +15,12 @@ console.log("Something unexpected happened !");
 };
 document.querySelector("#id_content").focus();
 document.querySelector('#message-form').addEventListener("submit", function(){
-    chatSocket.send(JSON.stringify({sender:user}));
+    chatSocket.send(JSON.stringify({sender:username}));
     sessionStorage.clear();
 })
 chatSocket.onmessage = function (e) {
-    data = JSON.parse(e);
-    if (user!=data.sender){
+    const data = JSON.parse(e.data);
+    if (username != data.sender){
         reloadPage();
     }
 };
