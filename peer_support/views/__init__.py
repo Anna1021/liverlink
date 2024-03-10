@@ -25,5 +25,9 @@ from .inbox_view import InboxView
 from .delete_notification_view import delete_notification
 from .clear_notifications_view import clear_notifications
 from .conversation_details_view import ConversationDetailsView
+from .moderation_view import ModerationView
+from .accept_report_view import accept_report
+from .decline_report_view import decline_report
 from .leave_conversation_view import LeaveConversationView
 from .information_view import InformationView
+from .delete_conversation_view import DeleteConversationView

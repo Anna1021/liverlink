@@ -40,7 +40,7 @@ class MessageModelTestCase(TestCase):
         conversation = Conversation.objects.get(pk=1)
         number_messages_in_conversation = conversation.messages.count()
         before_count = Message.objects.count()
-        conversation.delete()
+        conversation.delete(conversation.users.all())
         after_count = Message.objects.count()
         self.assertEqual(after_count,before_count-number_messages_in_conversation)
 
@@ -55,12 +55,25 @@ class MessageModelTestCase(TestCase):
         self.assertEqual(messages_after,messages_before)
         self.assertEqual(self.message.visible_to.count(),1)
 
-    def test_message_removed_when_deleted_for_all(self):
+    def test_message_removed_when_deleted_for_all_at_once(self):
         conversation = Conversation.objects.get(pk=1)
         users_to_delete_message = conversation.users.all()
         visible_before = self.message.visible_to.count()
         self.assertEqual(visible_before,conversation.users.count())
         messages_before = Message.objects.count()
+        self.message.delete(users_to_delete_message)
+        messages_after = Message.objects.count()
+        self.assertEqual(messages_after,messages_before-1)
+
+    def test_message_removed_when_deleted_for_all_individually(self):
+        conversation = Conversation.objects.get(pk=1)
+        users_to_delete_message = conversation.users.exclude(username=self.user.username)
+        messages_before = Message.objects.count()
+        self.message.delete(users_to_delete_message)
+        messages_after = Message.objects.count()
+        self.assertEqual(messages_after,messages_before)
+        self.assertEqual(self.message.visible_to.count(),1)
+        users_to_delete_message = conversation.users.filter(username=self.user.username)
         self.message.delete(users_to_delete_message)
         messages_after = Message.objects.count()
         self.assertEqual(messages_after,messages_before-1)

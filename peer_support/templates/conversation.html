@@ -26,7 +26,7 @@
                 View user details</a></li>
             {% endif %}
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">Delete conversation</a></li>
+            <li><a class="dropdown-item" href="{% url 'delete_conversation' conversation.id %}">Delete conversation</a></li>
         </ul>
     </div>
 
@@ -50,10 +50,9 @@
     {% empty %}
         Type out your first message in the box below!
     {% endfor %}
-    </div>
     <form method="post">
         {% csrf_token %}
-        {{ form.content }}
+        {{ message_form.content }}
         <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
     </form>
     {% else %}

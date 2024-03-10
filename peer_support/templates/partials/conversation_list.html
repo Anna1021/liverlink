@@ -7,10 +7,9 @@
         {% conversation_name user conversation %}
     </a>
     {% empty %}
-    No conversations!
+    <div class="no-conversations">No conversations!</div>
     </li>
     {% endfor %}
-    
 </ul>
 <a href="{% url 'create_conversation' %}" class="text-center fs-3"><i class="bi-pencil-square"></i></a>
 </nav>

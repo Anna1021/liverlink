@@ -46,5 +46,9 @@ urlpatterns = [
     path('clear_notifications/', views.clear_notifications, name='clear_notifications'),
     path('inbox/', views.InboxView.as_view(), name='inbox'),
     path('conversation_details/<int:conversation_id>',views.ConversationDetailsView.as_view(),name="conversation_details"),
+    path('moderation/',views.ModerationView.as_view(),name="moderation"),
+    path('accept_report/<int:report_id>',views.accept_report,name="accept_report"),
+    path('decline_report/<int:report_id>',views.decline_report,name="decline_report"),
     path('leave_conversation/<int:conversation_id>',views.LeaveConversationView.as_view(),name='leave_conversation'),
+    path('delete_conversation/<int:conversation_id>',views.DeleteConversationView.as_view(),name='delete_conversation'),
 ]
