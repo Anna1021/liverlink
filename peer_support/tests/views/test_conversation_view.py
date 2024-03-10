@@ -72,26 +72,29 @@ class ConversationViewTestCase(TestCase):
     def test_unsuccessful_message_send(self):
         self.form_input['content'] = ''
         before_count = Message.objects.count()
-        response = self.client.post(self.url,data=self.form_input)
+        response = self.client.post(self.url,data=self.form_input,follow=True)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count)
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, self.url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'conversation.html')
-        form = response.context['form']
+        form = response.context['message_form']
         self.assertTrue(isinstance(form, MessageForm))
-        self.assertTrue(form.is_bound)
+        self.assertFalse(form.is_bound)
 
     def test_successful_message_send(self):
         before_count = Message.objects.count()
-        response = self.client.post(self.url, data=self.form_input)
+        response = self.client.post(self.url, data=self.form_input,follow=True)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count+1)
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('conversation', kwargs={'conversation_id': self.conversation.id}))
+        self.assertRedirects(response, self.url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')
         message = self.conversation.messages.last()
         self.assertEqual(message.sender, self.user)
         self.assertEqual(message.content, 'Ploof')
         self.assertIn(message,self.conversation.messages.all())
+        form = response.context['message_form']
+        self.assertTrue(isinstance(form, MessageForm))
+        self.assertFalse(form.is_bound)
 
     def test_successful_report(self):
         message_id_to_report = 1
