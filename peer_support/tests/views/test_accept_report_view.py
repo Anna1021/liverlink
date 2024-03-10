@@ -19,21 +19,34 @@ class AcceptReportViewTest(TestCase):
     def setUp(self):
         self.admin_user = User.objects.get(username='@admin')
         self.message_to_report = Message.objects.first() 
+        self.user_to_report = User.objects.get(username='@janedoe')
+        self.user_to_report.is_active = True
+        self.user_to_report.save()
         message_content_type = ContentType.objects.get_for_model(self.message_to_report)
-        self.report = Report.objects.create(
+        user_content_type = ContentType.objects.get_for_model(self.message_to_report)
+        self.report_message = Report.objects.create(
             reporter=self.admin_user,  
             reason='spam',  
             reported_at=timezone.now(),
             content_type=message_content_type,
             object_id=self.message_to_report.pk,
         )
-        self.url = reverse('accept_report', kwargs={'report_id':self.report.id})
+        self.report_user = Report.objects.create(
+            reporter=self.admin_user,  
+            reason='spam',  
+            reported_at=timezone.now(),
+            content_type=user_content_type,
+            object_id=self.user_to_report.pk,
+            content_object=self.user_to_report,
+        )
+        self.url_message = reverse('accept_report', kwargs={'report_id':self.report_message.id})
+        self.url_user = reverse('accept_report', kwargs={'report_id':self.report_user.id})
         self.client.force_login(self.admin_user)
     
     def test_access_control_non_staff(self):
         self.client.logout()
         self.client.force_login(User.objects.get(username='@johndoe'))
-        response = self.client.get(self.url)
+        response = self.client.get(self.url_message)
         self.assertNotEqual(response.status_code, 200)
         self.assertRedirects(response, reverse('dashboard'))  
         messages = list(get_messages(response.wsgi_request))
@@ -42,19 +55,28 @@ class AcceptReportViewTest(TestCase):
     
     def test_redirect_if_not_logged_in(self):
         self.client.logout()
-        response = self.client.get(self.url)
-        self.assertRedirects(response, f'/log_in/?next={self.url}')
+        response = self.client.get(self.url_message)
+        self.assertRedirects(response, f'/log_in/?next={self.url_message}')
 
-    def test_successful_deletion_by_staff(self):
-        response = self.client.get(self.url)
+    def test_successful_message_deletion_by_staff(self):
+        response = self.client.get(self.url_message)
         self.assertRedirects(response, reverse('moderation'))
-        self.assertFalse(Report.objects.filter(pk=self.report.pk).exists())
+        self.assertFalse(Report.objects.filter(pk=self.report_message.pk).exists())
         self.assertFalse(Message.objects.filter(content="Test message").exists())
         messages = list(get_messages(response.wsgi_request))
         self.assertTrue(any(["successfully deleted" in message.message for message in messages]))
 
     def test_reported_object_not_found(self):
-        self.report.content_object.delete(User.objects.all())
-        response = self.client.get(self.url)
+        self.report_message.content_object.delete(User.objects.all())
+        response = self.client.get(self.url_message)
         messages = list(get_messages(response.wsgi_request))
         self.assertTrue(any(["could not be found" in message.message for message in messages]))
+
+    def test_successful_user_deactivation_by_staff(self):
+        self.assertTrue(User.objects.filter(username='@janedoe').exists())
+        response = self.client.get(self.url_user)
+        self.assertRedirects(response, reverse('moderation'))
+        self.assertFalse(Report.objects.filter(pk=self.report_user.pk).exists())
+        self.assertFalse(User.objects.get(pk=self.user_to_report.pk).is_active)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any(["successfully deleted" in message.message for message in messages]))

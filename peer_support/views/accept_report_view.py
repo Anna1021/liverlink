@@ -13,11 +13,14 @@ def accept_report(request, report_id):
     report = get_object_or_404(Report, id=report_id)
     reported_object = report.content_object
     if reported_object:
-        all_users = User.objects.all()
-        reported_object.delete(all_users)  
+        if (isinstance(reported_object, Message)):
+            all_users = User.objects.all()
+            reported_object.delete(all_users)  
+        if (isinstance(reported_object, User)):
+            reported_object.is_active = False
+            reported_object.save()
         report.delete()
         messages.success(request, "Report and the reported object have been successfully deleted.")
     else:
         messages.error(request, "The reported object could not be found.")
-    
     return redirect('moderation')

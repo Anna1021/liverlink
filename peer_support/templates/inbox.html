@@ -11,7 +11,15 @@
         <div class="notification-list d-flex justify-content-between">
             <div class="notification-list_content">
                 <div class="notification-list_img">
+                    <a
+                    {% if notification.title == 'Friend Request' %}
+                     href="{% url 'profile' notification.friend_request.sender.username %}" aria-label="user-profile-hyperlink"
+                    {% elif  notification.title == 'New conversation' %}
+                     href="{% url 'conversation' 0 %}" aria-label="conversation-hyperlink"
+                    {% endif %}
+                    >
                     <img src="https://www.icegif.com/wp-content/uploads/2022/01/icegif-788.gif" alt="user">
+                    </a>
                 </div>
                 <div class="notification-list_detail">
                     <p><b>{{ notification.title }}</b></p>

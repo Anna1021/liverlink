@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import RegexValidator
+from datetime import date
 
 class NewPasswordMixin(forms.Form):
     """Form mixing for new_password and password_confirmation fields."""
@@ -23,4 +24,8 @@ class NewPasswordMixin(forms.Form):
         password_confirmation = self.cleaned_data.get('password_confirmation')
         if new_password != password_confirmation:
             self.add_error('password_confirmation', 'Confirmation does not match password.')
+        dob = self.cleaned_data.get('date_of_birth')
+        today = date.today()
+        if dob is not None and (dob.year + 13, dob.month, dob.day) > (today.year, today.month, today.day):
+            self.add_error('date_of_birth', 'You must be 13 years old to register.')
         return cleaned_data
