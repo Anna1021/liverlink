@@ -11,6 +11,17 @@ class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
     template_name = "conversation.html"
 
+    def get_context_data(self,user,conversation):
+        context = {
+            'message_form':MessageForm(conversation,user=user), 
+            'report_form':ReportForm() , 
+            'conversation':conversation,
+            'user_conversations':user.sort_conversations()
+            }
+
+    def form_invalid(self,form,user,conversation):
+        return self.render_to_response(self.get_context_data(user,conversation))
+
     def get(self,request,conversation_id):
         if conversation_id==0:
             return render(request,self.template_name,{'user_conversations':request.user.sort_conversations()})
@@ -39,7 +50,7 @@ class ConversationView(LoginRequiredMixin, FormView):
             return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
         else:
             messages.error(request,"This message is not valid")
-            return self.form_invalid(message_form) 
+            #return self.form_invalid(message_form) 
         
     def handle_report_message(self,request,conversation_id,message_id):
         message =get_object_or_404(Message, id=message_id)

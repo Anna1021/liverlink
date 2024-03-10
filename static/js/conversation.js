@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    let msg = localStorage.getItem("message");
+    let msg = sessionStorage.getItem("message");
     if (msg!=null) $('#id_content').val(msg);
     
     $('#conversation').animate(
@@ -14,17 +14,15 @@ chatSocket.onclose = function (e) {
 console.log("Something unexpected happened !");
 };
 document.querySelector("#id_content").focus();
-document.querySelector("#id_content").onkeyup = function (e) {
-if (e.keyCode == 13) {
-    document.querySelector("#send-message").click();
-}
-};
-document.querySelector("#send-message").onclick = function (e) {
-    if ($('#id_content').val() != ""){
-        chatSocket.send(JSON.stringify());
-    }
-};
+document.querySelector('#message-form').addEventListener("submit", function(){
+    $('#id_content').val("");
+    chatSocket.send(JSON.stringify());
+})
 chatSocket.onmessage = function (e) {
-    localStorage.setItem("message",$("#id_content").val());
-    window.location.reload();
+    reloadPage();
 };
+
+function reloadPage(){
+    sessionStorage.setItem("message",$("#id_content").val());
+    window.location.reload();
+}
