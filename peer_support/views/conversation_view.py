@@ -50,7 +50,7 @@ class ConversationView(LoginRequiredMixin, FormView):
             return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
         else:
             messages.error(request,"This message is not valid")
-            #return self.form_invalid(message_form) 
+            return self.form_invalid(message_form) 
         
     def handle_report_message(self,request,conversation_id,message_id):
         message =get_object_or_404(Message, id=message_id)
