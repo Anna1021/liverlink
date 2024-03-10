@@ -13,9 +13,9 @@ def decline_report(request, report_id):
     report = get_object_or_404(Report, id=report_id)
     reported_object = report.content_object
     if reported_object:
-        all_users = User.objects.all()
-        reported_object.visible_to.add(report.reporter)  
-        reported_object.save()
+        if (isinstance(reported_object, Message)):
+            reported_object.visible_to.add(report.reporter)  
+            reported_object.save()             
         report.delete()
         messages.success(request, "Report and the reported object have been successfully deleted.")
     else:
