@@ -1,5 +1,7 @@
 $(document).ready(function() {
-
+    let msg = localStorage.getItem("message");
+    if (msg!=null) $('#id_content').val(msg);
+    
     $('#conversation').animate(
         {scrollTop:$('#conversation').prop('scrollHeight')});
 });
@@ -18,11 +20,11 @@ if (e.keyCode == 13) {
 }
 };
 document.querySelector("#send-message").onclick = function (e) {
-var messageInput = document.querySelector(
-    "#id_content"
-).value;
-chatSocket.send(JSON.stringify({ message: messageInput, sender:user}));
+    if ($('#id_content').val() != ""){
+        chatSocket.send(JSON.stringify());
+    }
 };
 chatSocket.onmessage = function (e) {
+    localStorage.setItem("message",$("#id_content").val());
     window.location.reload();
 };
