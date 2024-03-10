@@ -47,21 +47,27 @@ class PostModelTestCase(TestCase):
     
     #def test_ordering(self)
     
-    def test_get_comments(self):
+    def test_comment_belongs_to_a_post(self):
         post1 = Post.objects.create(author=self.user, text="Post 1")
-        post2 = Post.objects.create(author=self.user, text="Post 2")
-
-        comment1 = PostComment.objects.create(author=self.user, post=post1, content="Comment 1") # comment1 is a comment to post1
-        comment2 = PostComment.objects.create(author=self.user, post=post1, content="Comment 2", parent=comment1) # comment2 is a reply to comment1, comment to post1
-        comment3 = PostComment.objects.create(author=self.user, post=post2, content="Comment 3")  # comment3 is unrelated to post1.
-
+        comment1 = PostComment.objects.create(author=self.user, post=post1, content="Comment 1") 
         comments = post1.get_comments()
         self.assertIn(comment1, comments)
-        self.assertNotIn(comment2, comments) # not a direct comment to post1.
-        self.assertNotIn(comment3, comments) 
         self.assertEqual(comments.count(), 1) 
 
+    def test_comment_does_not_belong_to_a_post(self):
+        post1 = Post.objects.create(author=self.user, text="Post1")
+        post2 = Post.objects.create(author=self.user, text="Post2")
+        comment3 = PostComment.objects.create(author=self.user, post=post2, content="Comment 3") 
+        comments = post1.get_comments()
+        self.assertNotIn(comment3, comments) 
 
+    def test_reply_to_comment_is_not_a_comment_of_post(self):
+        post1 = Post.objects.create(author=self.user, text="Post 1")
+        comment1 = PostComment.objects.create(author=self.user, post=post1, content="Comment 1")
+        comment2 = PostComment.objects.create(author=self.user, post=post1, content="Comment 2", parent=comment1)
+        comments = post1.get_comments()
+        self.assertNotIn(comment2, comments)
+    
     def _assert_post_is_valid(self):
         try:
             self.post.full_clean()
