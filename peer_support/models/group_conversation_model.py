@@ -12,7 +12,7 @@ class GroupConversation(Conversation):
         self.users.remove(user)
         user.conversations.remove(self)
         if self.users.count()==0:
-            self.delete() 
+            self.delete(self.users) 
 
     def rename(self, new_name):
         """Rename conversation"""

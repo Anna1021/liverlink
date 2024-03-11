@@ -26,7 +26,7 @@
                 View user details</a></li>
             {% endif %}
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'conversation' 0 %}">Delete conversation</a></li>
+            <li><a class="dropdown-item" href="{% url 'delete_conversation' conversation.id %}">Delete conversation</a></li>
         </ul>
     </div>
 
@@ -42,7 +42,7 @@
                     <a href="{% url 'profile' message.sender.username %}" class="notranslate self-sender">{% sender_if_applicable message user conversation %}</a>
             {% endif %}
                 <div class="col-md-10">
-                    <div>{{ message.content }}</div>
+                    <div {% if message.sender in user.blocked_users.all %} data-text="{{message.content}}" name="blocked-message" class="text-muted" {% endif %}>{{ message.content }}</div>
                 </div>
                 {% include 'partials/message_menu.html' %}
             </div>
@@ -51,9 +51,12 @@
         Type out your first message in the box below!
     {% endfor %}
     </div>
-    <form method="post">
+    <form method="post" {% if blocked_dm %} inert style="opacity: 50%;" {% endif %}>
+        {% if blocked_dm %}
+        <div style="opacity: 50%;">You can no longer send messages to this user.</div>
+        {% endif %}
         {% csrf_token %}
-        {{ form.content }}
+        {{ message_form.content }}
         <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
     </form>
     {% else %}

@@ -15,6 +15,7 @@
       "fields": {
         "user_ptr": 3,
         "condition": "Cirrhosis",
+        "transplant": "Y",
         "age_of_diagnosis": 13,
         "is_active": true
       }

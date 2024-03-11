@@ -29,6 +29,7 @@ class MessageForm(forms.ModelForm):
         )
         for user in self.conversation.users.all():
             message.visible_to.add(user)
+            user.conversations.add(self.conversation)
         self.conversation.send(message)
         return message
     # split this down into smaller functions
