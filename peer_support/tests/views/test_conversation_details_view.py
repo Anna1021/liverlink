@@ -16,7 +16,6 @@ class ConversationViewTestCase(TestCase):
                 'peer_support/tests/fixtures/other_messages.json',
     ]
 
-
     def setUp(self):
         self.other_user_id = 2
         self.conversation = Conversation.objects.get(pk=2)

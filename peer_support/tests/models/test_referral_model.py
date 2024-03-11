@@ -16,7 +16,7 @@ class ReferralModelTestCase(TestCase):
 
     def test_unique_code_constraint(self):
         with self.assertRaises(IntegrityError):
-            second_referral = Referral.objects.create(referrer=self.referrer, code='ABC123')
+            Referral.objects.create(referrer=self.referrer, code='ABC123')
 
     def test_max_length_code(self):
         self.referral.code ='A' * 20
@@ -24,7 +24,7 @@ class ReferralModelTestCase(TestCase):
 
     def test_invalid_referrer(self):
         with self.assertRaises(IntegrityError):
-            referrer = Referral.objects.create(referrer=None, code='XYZ456') 
+            Referral.objects.create(referrer=None, code='XYZ456') 
 
     def _assert_referral_is_valid(self):
         try:

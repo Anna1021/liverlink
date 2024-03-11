@@ -1,7 +1,7 @@
 from django.test import TestCase
 from peer_support.forms import NewReplyForm
 
-class NewReplyFormTest(TestCase):
+class NewReplyFormTestCase(TestCase):
     """Unit tests of the NewReply form."""
 
     def test_form_valid_with_data(self):

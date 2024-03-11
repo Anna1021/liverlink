@@ -2,14 +2,13 @@ from django.test import TestCase
 from peer_support.models import Question, Response, User
 from django.core.exceptions import ValidationError
 
-class QuestionModelTest(TestCase):
+class QuestionModelTestCase(TestCase):
     """Unit tests for the Question model."""
+    
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json'
     ]
-
-    GRAVATAR_URL = "https://www.gravatar.com/avatar/363c1b0cd64dadffb867236a00e62986"
 
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')

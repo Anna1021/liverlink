@@ -126,9 +126,3 @@ class PeerSelectViewTestCase(TestCase):
         users = response.context['users']
         for user in users:
             self.assertNotIn(user, self.user.blocked_by.all())
-
-    def test_send_friend_request(self):
-        pass
-
-    def test_card_click_redirects_to_profile(self):
-        pass

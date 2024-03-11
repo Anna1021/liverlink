@@ -1,13 +1,11 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
-from peer_support.models import Question, Response
+from peer_support.models import Question, Response, User
 from peer_support.forms import NewResponseForm
 from django.urls import reverse
 
-User = get_user_model()
-
-class QuestionPageTest(TestCase):
+class QuestionPageTestCase(TestCase):
     """Tests of the Question Page view."""
+
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json'

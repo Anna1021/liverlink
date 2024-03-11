@@ -104,7 +104,6 @@ class SortPeerFormTestCase(TestCase):
         users = User.objects.all()
         sorted_users = form.sort_users(users, new_user)
         self.assertTrue(sorted_users, "Sorted users should not be empty.")
-    
        
     def test_empty_user_sort_without_errors_patient(self):
         new_user = Patient.objects.create_user(
@@ -150,7 +149,6 @@ class SortPeerFormTestCase(TestCase):
         users = User.objects.all()
         sorted_users = form.sort_users(users, new_user)
         self.assertTrue(sorted_users, "Sorted users should not be empty.")
-  
     
     def test_mentor_sort_filter(self):
         current_mentor =  Mentor.objects.get(username='@johndoe')

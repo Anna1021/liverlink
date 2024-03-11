@@ -6,7 +6,7 @@ from peer_support.models import User
 from django.utils.http import urlencode
 from peer_support.forms import FilterPeerForm, SortPeerForm, SearchPeerForm
 
-class FriendsListView(TestCase):
+class FriendsListViewTestCase(TestCase):
     """Tests of the friends list view."""
     
     fixtures = ['peer_support/tests/fixtures/default_user.json',

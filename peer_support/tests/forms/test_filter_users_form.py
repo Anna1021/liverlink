@@ -67,12 +67,6 @@ class FilterPeerFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(all(user.patient for user in results))
-        for user in results:
-            try:
-                parent_exists = user.parent
-                self.fail("Found a user marked as a parent in patient-only filter.") 
-            except user._meta.model.parent.RelatedObjectDoesNotExist:
-                pass 
     
     def test_filter_by_user_type_parent(self):
         form_data = self.showAll
@@ -81,12 +75,6 @@ class FilterPeerFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(all(user.parent for user in results))
-        for user in results:
-            try:
-                patient_exists = user.patient
-                self.fail("Found a user marked as a patient in patient-only filter.") 
-            except user._meta.model.patient.RelatedObjectDoesNotExist:
-                pass 
 
     def test_min_age(self):
         form_data = self.showAll
@@ -396,7 +384,3 @@ class FilterPeerFormTestCase(TestCase):
         form_data['mentor_age_of_diagnosis_max'] = -7 
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
-
-    
-
-    

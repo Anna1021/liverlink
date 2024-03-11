@@ -2,7 +2,7 @@ from django.test import TestCase
 from peer_support.models import Report, Message, User
 from django.contrib.contenttypes.models import ContentType
 
-class ReportModelTest(TestCase):
+class ReportModelTestCase(TestCase):
     """Tests of the report view"""
 
     fixtures = [
@@ -10,7 +10,6 @@ class ReportModelTest(TestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/default_message.json',
     ]
-
 
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')

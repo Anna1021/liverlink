@@ -5,7 +5,7 @@ from peer_support.models import Report, Message, User
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
-class AcceptReportViewTest(TestCase):
+class AcceptReportViewTestCase(TestCase):
     """Tests of the accept report view"""
 
     fixtures = [

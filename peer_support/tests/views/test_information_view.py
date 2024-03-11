@@ -4,7 +4,7 @@ from django.urls import reverse
 from peer_support.models import User
 from peer_support.tests.helpers import reverse_with_next
 
-class InformationViewTest(TestCase):
+class InformationViewTestCase(TestCase):
     """Test suite for the information view."""
 
     fixtures = ['peer_support/tests/fixtures/default_user.json']

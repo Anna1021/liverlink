@@ -65,7 +65,3 @@ class ConversationModelTestCase(TestCase):
         self.conversation.delete(self.conversation.users.all())
         after_count = Conversation.objects.count()
         self.assertEqual(after_count,before_count-1)
-    
-    
-
-    

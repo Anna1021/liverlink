@@ -1,5 +1,4 @@
 """Unit tests of the message form."""
-from django import forms
 from django.test import TestCase
 from peer_support.forms import MessageForm
 from peer_support.models import User, Message, Conversation
@@ -21,9 +20,7 @@ class MessageFormTestCase(TestCase):
         self.sender.conversations.set([1,2])
         self.receiver = User.objects.get(username='@janedoe')
         self.receiver.conversations.set([1])
-        self.form_input = {
-            'content':"Ploof"
-        }
+        self.form_input = {'content':"Ploof"}
         self.conversation = Conversation.objects.get(pk=1)
 
     def test_form_has_necessary_fields(self):

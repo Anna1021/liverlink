@@ -17,7 +17,7 @@ class ProfileViewTest(TestCase):
         'peer_support/tests/fixtures/other_patients.json'
     ]
 
-    def setUp(self):
+    def setUp(self): # fix this @yara
         self.parent = Parent.objects.get(username='@johndoe')
         self.patient = Patient.objects.get(username='@janedoe')
         Mentor.objects.create_user(first_name='Test',

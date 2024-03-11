@@ -1,5 +1,4 @@
 """Unit tests of the conversation form."""
-from django import forms
 from django.test import TestCase
 from peer_support.forms import AddUsersForm
 from peer_support.models import User, Conversation

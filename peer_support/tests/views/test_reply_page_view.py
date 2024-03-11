@@ -1,12 +1,8 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.models import Question, Response
-from peer_support.forms import NewReplyForm
-from peer_support.tests.helpers import reverse_with_next
+from peer_support.models import Question, Response, User
 
-User = get_user_model()
-class ReplyPageTest(TestCase):
+class ReplyPageTestCase(TestCase):
     """Tests of the Reply Page view."""
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
