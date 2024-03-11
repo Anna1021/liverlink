@@ -16,20 +16,13 @@ class ModerationViewTestCase(TestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/default_message.json',
+        'peer_support/tests/fixtures/other_reports_message.json',
     ]
 
     def setUp(self):
         self.url = reverse('moderation')
         self.admin_user = User.objects.get(username='@admin')
-        message_to_report = Message.objects.first() 
-        message_content_type = ContentType.objects.get_for_model(message_to_report)
-        self.report = Report.objects.create(
-            reporter=self.admin_user,  
-            reason='spam',  
-            reported_at=timezone.now(),
-            content_type=message_content_type,
-            object_id=message_to_report.pk,
-        )
+        self.report_message = Report.objects.get(pk=1)
         self.client.force_login(self.admin_user)
 
     def test_get_moderation_redirects_when_not_logged_in(self):

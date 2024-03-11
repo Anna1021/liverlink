@@ -29,3 +29,9 @@ class NewPasswordMixin(forms.Form):
         if dob is not None and (dob.year + 13, dob.month, dob.day) > (today.year, today.month, today.day):
             self.add_error('date_of_birth', 'You must be 13 years old to register.')
         return cleaned_data
+    
+def apply_filter_if_needed(queryset, field_name, value):
+    if value and value != "any":
+        filter_kwargs = {field_name: value}
+        return queryset.filter(**filter_kwargs)
+    return queryset

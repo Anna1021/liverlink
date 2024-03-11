@@ -14,7 +14,7 @@ class ReportFormTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='12345') # use fixture @riya
+        self.user = User.objects.get(username="@johndoe")
         self.object_to_report = Message.objects.first()
         self.form_data = {'reason': 'spam'} 
 

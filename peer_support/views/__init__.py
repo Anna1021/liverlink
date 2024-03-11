@@ -30,8 +30,8 @@ from .clear_notifications_view import clear_notifications
 from .conversation_details_view import ConversationDetailsView
 from .remove_friend_view import remove_friend
 from .moderation_view import ModerationView
-from .accept_report_view import accept_report
-from .decline_report_view import decline_report
+from .accept_report_view import AcceptReportView
+from .decline_report_view import DeclineReportView
 from .leave_conversation_view import LeaveConversationView
 from .get_conversation_view import GetConversationView
 from .information_view import InformationView

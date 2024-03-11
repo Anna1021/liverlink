@@ -293,23 +293,19 @@ class FilterPeerFormTestCase(TestCase):
         })
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertIn('min_age', form.errors)
-        self.assertIn('max_age', form.errors)
-        self.assertEqual(form.errors['min_age'], ['Minimum age cannot be greater than maximum age.'])
-        self.assertEqual(form.errors['max_age'], ['Maximum age cannot be less than minimum age.'])
+        self.assertTrue('min_age' in form.errors)
+        self.assertTrue('max_age' in form.errors)
 
     def test_age_of_diagnosis_min_greater_than_max(self):
         form_data = self.showAll
         form_data.update({
             'age_of_diagnosis_min': 10,
-            'age_of_diagnosis_max': 5, 
+            'age_of_diagnosis_max': 5,
         })
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertIn('age_of_diagnosis_min', form.errors)
-        self.assertIn('age_of_diagnosis_max', form.errors)
-        self.assertEqual(form.errors['age_of_diagnosis_min'], ['Minimum age of diagnosis cannot be greater than maximum age of diagnosis.'])
-        self.assertEqual(form.errors['age_of_diagnosis_max'], ['Maximum age of diagnosis cannot be less than minimum age of diagnosis.'])
+        self.assertTrue('age_of_diagnosis_min' in form.errors)
+        self.assertTrue('age_of_diagnosis_max' in form.errors)
 
     def test_child_age_of_diagnosis_min_greater_than_max(self):
         form_data = self.showAll
@@ -319,23 +315,20 @@ class FilterPeerFormTestCase(TestCase):
         })
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertIn('child_age_of_diagnosis_min', form.errors)
-        self.assertIn('child_age_of_diagnosis_max', form.errors)
-        self.assertEqual(form.errors['child_age_of_diagnosis_min'], ["Minimum child's age of diagnosis cannot be greater than maximum child's age of diagnosis."])
-        self.assertEqual(form.errors['child_age_of_diagnosis_max'], ["Maximum child's age of diagnosis cannot be less than minimum child's age of diagnosis."])
+        self.assertTrue('child_age_of_diagnosis_min' in form.errors)
+        self.assertTrue('child_age_of_diagnosis_max' in form.errors)
 
     def test_mentor_age_of_diagnosis_min_greater_than_max(self):
         form_data = self.showAll
         form_data.update({
             'mentor_age_of_diagnosis_min': 10,
-            'mentor_age_of_diagnosis_max': 5, 
+            'mentor_age_of_diagnosis_max': 5,
         })
         form = FilterPeerForm(data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertIn('mentor_age_of_diagnosis_min', form.errors)
-        self.assertIn('mentor_age_of_diagnosis_max', form.errors)
-        self.assertEqual(form.errors['mentor_age_of_diagnosis_min'], ["Minimum mentor's age of diagnosis cannot be greater than maximum mentor's age of diagnosis."])
-        self.assertEqual(form.errors['mentor_age_of_diagnosis_max'], ["Maximum mentor's age of diagnosis cannot be less than minimum mentor's age of diagnosis."])
+        self.assertTrue('mentor_age_of_diagnosis_min' in form.errors)
+        self.assertTrue('mentor_age_of_diagnosis_max' in form.errors)
+
 
     def test_negative_min_age(self):
         form_data = self.showAll

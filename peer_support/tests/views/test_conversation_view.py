@@ -111,7 +111,7 @@ class ConversationViewTestCase(TestCase):
         response = self.client.post(self.url, data=self.form_input,follow=True)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count+1)
-        self.assertRedirects(response, self.url, status_code=302, target_status_code=302)
+        self.assertRedirects(response, self.url, status_code=302, target_status_code=200)
         self.assertRedirects(response, reverse('conversation', kwargs={'conversation_id': self.conversation.id}))
         message = self.conversation.messages.last()
         self.assertEqual(message.sender, self.user)

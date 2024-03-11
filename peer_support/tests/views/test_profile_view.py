@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.models import Report, User
+from peer_support.models import Report, User,Message
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.contrib import messages
@@ -14,20 +14,13 @@ class ProfileViewTest(TestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/other_user_profiles.json',
+        'peer_support/tests/fixtures/other_reports_user.json',
     ]
 
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
-        self.user_to_report = User.objects.get(username='@janedoe')
-        user_content_type = ContentType.objects.get_for_model(self.user_to_report)
-        self.report_user = Report.objects.create(
-            reporter=self.user,  
-            reason='spam',  
-            reported_at=timezone.now(),
-            content_type=user_content_type,
-            object_id=self.user_to_report.pk,
-            content_object=self.user_to_report,
-        )
+        self.report_user = Report.objects.get(pk=2)
+        self.user_to_report = User.objects.get(pk =self.report_user.object_id)
         self.url = reverse('profile', kwargs={'username':self.user_to_report})
         self.client.force_login(self.user)
     
