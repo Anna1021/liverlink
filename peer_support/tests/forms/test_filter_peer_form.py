@@ -59,7 +59,6 @@ class FilterPeerFormTestCase(TestCase):
         expected_user_count = self.users.count()
         self.assertEqual(results.count(), expected_user_count, f"Expected {expected_user_count} users, but got {results.count()}")
 
-
     def test_filter_by_user_type_patient(self):
         form_data = self.showAll
         form_data['user_type'] = ['PT']

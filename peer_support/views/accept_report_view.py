@@ -6,6 +6,7 @@ from django.views import View
 
 class AcceptReportView(LoginRequiredMixin, View):
     """Delete report and remove object attached"""
+
     def get(self,request, report_id):
         if not request.user.is_staff:
             messages.error(request, "You do not have access to this view.")
@@ -19,6 +20,8 @@ class AcceptReportView(LoginRequiredMixin, View):
         return redirect('moderation')
 
     def process_reported_object(self, report):
+        """Processes the reported object based on its type."""
+        
         reported_object = report.content_object
         if not reported_object:
             return False

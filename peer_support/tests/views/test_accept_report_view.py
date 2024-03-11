@@ -2,8 +2,6 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.messages import get_messages
 from peer_support.models import Report, Message, User
-from django.contrib.contenttypes.models import ContentType
-from django.utils import timezone
 
 class AcceptReportViewTestCase(TestCase):
     """Tests of the accept report view"""

@@ -21,6 +21,7 @@ class DeclineReportView(LoginRequiredMixin, View):
     
     def process_reported_object(self, report):
         """Processes the reported object based on its type."""
+        
         reported_object = report.content_object
         if not reported_object:
             return False
