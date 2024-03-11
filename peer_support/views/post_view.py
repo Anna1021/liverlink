@@ -1,8 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic.edit import FormView
-from peer_support.views.helpers import login_prohibited
-#post
 from peer_support.models import Post, PostComment
 from peer_support.forms import CommentForm
 
@@ -10,7 +8,7 @@ class PostView(LoginRequiredMixin,FormView):
 
     def get(self,request,post_id):
         post = get_object_or_404(Post, pk=post_id)
-        comments = PostComment.objects.filter(post=post, parent=None) # filter out parent comment
+        comments = PostComment.objects.filter(post=post, parent=None) 
         comment_form = CommentForm()
         return render(request, 'post_detail.html', {'post': post,'comments': comments, 'comment_form': comment_form})
 
@@ -20,7 +18,6 @@ class PostView(LoginRequiredMixin,FormView):
         comments = PostComment.objects.filter(post=post, parent=None) # filter out parent comment
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
-
             parent_id = request.POST.get('parent_id')
             parent_comment = None
             if parent_id:

@@ -15,7 +15,7 @@ class PostModelTestCase(TestCase):
         """
         test_post = Post.objects.create(
             author=self.user,
-            text='The quick brown fox jumps over the lazy dog.'
+            text='User post'
         )
         test_post.save() 
         """
@@ -27,12 +27,12 @@ class PostModelTestCase(TestCase):
         self.assertEqual(self.post.author,self.user)
 
     def test_correct_text(self):
-        self.assertEqual(self.post.text,"The quick brown fox jumps over the lazy dog.")
+        self.assertEqual(self.post.text,"User post")
 
     def test_timestamp(self):
         self.assertIsNotNone(self.post.created_at)
 
-    def test_post_text_must_have_at_least_one_character(self):
+    def test_text_must_not_be_empty(self):
         self.post.text = ""
         self._assert_post_is_invalid()
 
@@ -44,9 +44,7 @@ class PostModelTestCase(TestCase):
         self.post.delete()
         with self.assertRaises(Post.DoesNotExist):
             Post.objects.get(pk=self.post.pk)
-    
-    #def test_ordering(self)
-    
+        
     def test_comment_belongs_to_a_post(self):
         post1 = Post.objects.create(author=self.user, text="Post 1")
         comment1 = PostComment.objects.create(author=self.user, post=post1, content="Comment 1") 
@@ -77,8 +75,4 @@ class PostModelTestCase(TestCase):
     def _assert_post_is_invalid(self):
         with self.assertRaises(ValidationError):
             self.post.full_clean()
-
-
-
-
 
