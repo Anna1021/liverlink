@@ -51,19 +51,13 @@ class PostCommentModelTestCase(TestCase):
 
     def test_get_delete_str_method(self):
         self.assertEqual(self.comment.get_delete_str(), str(self.comment))
-
-
-
-
+        
     """
     def test_delete_comment(self):
         self.comment.delete()
         with self.assertRaises(PostComment.DoesNotExist):
             PostComment.objects.get(pk=self.comment.pk)
     """
-
-    
-
     def _assert_comment_is_valid(self):
         try:
             self.comment.full_clean()

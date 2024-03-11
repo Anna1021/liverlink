@@ -55,15 +55,8 @@ urlpatterns = [
     path('accept_report/<int:report_id>',views.accept_report,name="accept_report"),
     path('decline_report/<int:report_id>',views.decline_report,name="decline_report"),
     path('leave_conversation/<int:conversation_id>',views.LeaveConversationView.as_view(),name='leave_conversation'),
-    #path('add_comment/<int:post_id>/', views.add_comment, name='add_comment'), 
     path('post/<int:post_id>/', views.PostView.as_view() , name='post_detail'),
-    
-    #feed
     path('feed/', views.FeedView.as_view(), name='feed'),
-    path('delete_post/<int:post_id>', views.DeletePostView.as_view(), name='delete_post')
-
-    #path('dashboard/', views.feed, name='feed'),
-
-
+    path('delete_post/<int:post_id>', views.DeletePostView.as_view(), name='delete_post'),
     path('delete_conversation/<int:conversation_id>',views.DeleteConversationView.as_view(),name='delete_conversation'),
 ]

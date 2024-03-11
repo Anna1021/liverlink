@@ -5,8 +5,9 @@ from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
-
 class DeletePostView(LoginRequiredMixin,View):
+    """Delete post"""
+    
     def get(self,request, post_id):
         post = get_object_or_404(Post, pk=post_id)
         if post.author == request.user:

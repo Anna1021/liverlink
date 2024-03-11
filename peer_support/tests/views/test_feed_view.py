@@ -3,7 +3,7 @@ from django.urls import reverse
 from peer_support.forms import PostForm
 from peer_support.models import User, Post
 
-class FeedViewTest(TestCase):
+class FeedViewTestCase(TestCase):
     """Tests of the feed view."""
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
@@ -82,6 +82,16 @@ class FeedViewTest(TestCase):
         }
         response = self.client.post(self.url, form_data)
         self.assertRedirects(response, reverse('feed'))
+
+    def test_post_invalid_data(self):
+        self.client.login(username=self.user.username, password='Password123')
+        form_data = {
+            'text': ''
+        }
+        response = self.client.post(self.url, form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'feed.html')
+        
 
     def test_global_feed_contains_all_posts(self):
         response = self.client.get(self.url + '?feed_type=global')

@@ -60,5 +60,3 @@ class PatientModelTestCase(TestCase):
     def _assert_patient_is_invalid(self):
         with self.assertRaises(ValidationError):
             self.patient.full_clean()
-
-    

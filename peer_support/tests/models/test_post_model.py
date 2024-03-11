@@ -4,6 +4,7 @@ from peer_support.models import Post, PostComment, User
 
 class PostModelTestCase(TestCase):
     """Unit tests for the post model"""
+
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/default_post.json'
@@ -12,14 +13,7 @@ class PostModelTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
         self.post = Post.objects.get(pk=1)
-        """
-        test_post = Post.objects.create(
-            author=self.user,
-            text='User post'
-        )
-        test_post.save() 
-        """
-    
+
     def test_valid_post(self):
         self._assert_post_is_valid()
     
@@ -75,4 +69,3 @@ class PostModelTestCase(TestCase):
     def _assert_post_is_invalid(self):
         with self.assertRaises(ValidationError):
             self.post.full_clean()
-

@@ -7,6 +7,7 @@ from django.db.models import Q
 
 class FeedView(LoginRequiredMixin, FormView):
     """Feed view."""
+    
     def get(self,request):
         feed_type = request.GET.get('feed_type','global')  
         user_posts = self.retrieve_posts(request)
@@ -14,6 +15,8 @@ class FeedView(LoginRequiredMixin, FormView):
         return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
 
     def post(self,request):
+        """Submit post"""
+
         feed_type = request.GET.get('feed_type')  
         user_posts = self.retrieve_posts(request)
         form = PostForm(request.POST)
@@ -26,6 +29,8 @@ class FeedView(LoginRequiredMixin, FormView):
             return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
 
     def retrieve_posts(self,request):
+        """Retrieve posts and display them in chronological order."""
+
         feed_type = request.GET.get('feed_type') 
         user_posts = None
         if feed_type == 'global':

@@ -4,6 +4,8 @@ from django.views.generic.edit import FormView
 from peer_support.models import Post, PostComment
 from peer_support.forms import CommentForm
 
+
+
 class PostView(LoginRequiredMixin,FormView):
 
     def get(self,request,post_id):
@@ -15,7 +17,6 @@ class PostView(LoginRequiredMixin,FormView):
     def post(self,request, post_id):
         """Show the detail of a post and comment on the post"""
         post = get_object_or_404(Post, pk=post_id)
-        comments = PostComment.objects.filter(post=post, parent=None) # filter out parent comment
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             parent_id = request.POST.get('parent_id')
@@ -28,3 +29,6 @@ class PostView(LoginRequiredMixin,FormView):
             comment.parent = parent_comment
             comment.save()
             return redirect('post_detail', post_id=post_id)
+        else:
+            return render(request, 'post_detail.html', {'form': comment_form})
+    
