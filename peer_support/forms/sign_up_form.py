@@ -1,5 +1,5 @@
 from django import forms
-from peer_support.models import User, Parent, Patient, Mentor, Referral
+from peer_support.models import User, Parent, Patient, Mentor, Professional, Referral
 from .helpers import NewPasswordMixin
 from .form_choices import USER_TYPE_CHOICES, CONDITION_CHOICES, TRANSPLANT_CHOICES
 
@@ -14,6 +14,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     referral_code = forms.CharField(required=False, max_length=10, initial='')
     transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
     child_transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
+    expertise = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
 
     class Meta:
         """Form options."""
@@ -56,7 +57,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 'child_transplant': self.cleaned_data.get('child_transplant'),
             })
             user = Parent.objects.create_user(**user_data)
-        else:
+        elif user_type == 'MT':
             user_data.update({
                 'condition': self.cleaned_data.get('condition'),
                 'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
@@ -64,6 +65,12 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 'referral_code': self.cleaned_data.get('referral_code')
             })
             user = Mentor.objects.create_user(**user_data)
+        else:
+            user_data.update({
+                'expertise': self.cleaned_data.get('expertise'),
+                'referral_code': self.cleaned_data.get('referral_code')
+            })
+            user = Professional.objects.create_user(**user_data)
 
         return user
 

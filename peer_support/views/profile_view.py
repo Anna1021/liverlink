@@ -15,6 +15,8 @@ class ProfileView(LoginRequiredMixin, View):
             context['parent'] = user.parent
         elif hasattr(user, 'patient'):
             context['patient'] = user.patient
+        elif hasattr(user, 'professional'):
+            context['professional'] = user.professional
         else:
             context['mentor'] = user.mentor
 

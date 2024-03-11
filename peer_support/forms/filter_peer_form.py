@@ -28,6 +28,7 @@ class FilterPeerForm(forms.Form):
     mentor_condition=forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
     transplant=forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
     child_transplant=forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
+    expertise=forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
 
     def __init__(self, *args, **kwargs):
         """Initialise query set with users tasks"""
@@ -105,6 +106,13 @@ class FilterPeerForm(forms.Form):
         if transplant and "any" != transplant:
             mentors = mentors.filter(mentor__transplant__icontains=transplant)
         return mentors
+    
+    def filter_by_professional(self):
+        expertise =self.cleaned_data.get('expertise')
+        professionals = User.objects.filter(professional__isnull=False)
+        if expertise and "any" != expertise :
+            professionals = professionals.filter(expertise__icontains=expertise)
+        return professionals
         
     def filter_by_user_type(self,user_type):
         """Generates a list of users based on user type and user type specific fields"""
@@ -118,6 +126,9 @@ class FilterPeerForm(forms.Form):
         if "MT" in user_type:
             mentors=self.filter_by_mentor()
             combined_queryset = combined_queryset | mentors
+        if "PF" in user_type:
+            professionals=self.filter_by_professional()
+            combined_queryset = combined_queryset | professionals
         return combined_queryset
     
     def filter_by_age_range(self,users):

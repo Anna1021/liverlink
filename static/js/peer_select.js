@@ -32,6 +32,8 @@ $(document).ready(function () {
         $('#id_mentor_condition').parent().hide();
         $('#id_transplant').parent().hide();
         $('#id_child_transplant').parent().hide();
+        $('#id_expertise').parent().hide();
+
     }
 
     hideAllConditionalFields();
@@ -58,6 +60,8 @@ $(document).ready(function () {
                     $('#id_mentor_age_of_diagnosis_max').parent().show();
                     $('#id_mentor_condition').parent().show();
                     $('#id_transplant').parent().show();
+                } else if (userType === 'PF') {
+                    $('#id_expertise').parent().show();
                 }
             }
         });

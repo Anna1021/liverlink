@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-img">
-                    {% if mentor %}
+                    {% if mentor or professional %}
                         <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" style="border: 7px solid rgb(101, 209, 101);"/>
                     {% else %}
                         <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" />
@@ -23,6 +23,8 @@
                         <h7>MENTOR</h7>
                     {% elif parent %}
                         <h7>PARENT</h7>
+                    {% elif professional %}
+                        <h7>PROFESSIONAL</h7>
                     {% endif %}
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
@@ -143,6 +145,16 @@
                                 </div>
                                 <div class="col-md-6">
                                     <p>{{ parent.child_condition }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if professional %}
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Expertise</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ professional.expertise }}</p>
                                 </div>
                             </div>
                         {% endif %}

@@ -9,6 +9,7 @@ $(document).ready(function() {
     $('#id_referral_code').parent().hide();
     $('#id_transplant').parent().hide();
     $('#id_child_transplant').parent().hide();
+    $('#id_expertise').parent().hide();
   
   function showHideFields(userType) {
       if (userType == 'PT') {
@@ -19,6 +20,7 @@ $(document).ready(function() {
           $('#id_referral_code').parent().hide();
           $('#id_transplant').parent().show();
           $('#id_child_transplant').parent().hide();
+          $('#id_expertise').parent().hide();
       } else if (userType == 'PR') {
           $('#id_condition').parent().hide();
           $('#id_age_of_diagnosis').parent().hide();
@@ -27,6 +29,7 @@ $(document).ready(function() {
           $('#id_referral_code').parent().hide();
           $('#id_transplant').parent().hide();
           $('#id_child_transplant').parent().show();
+          $('#id_expertise').parent().hide();
       } else if (userType == 'MT') {
           $('#id_condition').parent().show();
           $('#id_age_of_diagnosis').parent().show();
@@ -35,6 +38,16 @@ $(document).ready(function() {
           $('#id_referral_code').parent().show();
           $('#id_transplant').parent().show();
           $('#id_child_transplant').parent().hide();
+          $('#id_expertise').parent().hide();
+      } else if (userType == 'PF'){
+          $('#id_condition').parent().hide();
+          $('#id_age_of_diagnosis').parent().hide();
+          $('#id_child_condition').parent().hide();
+          $('#id_child_age_of_diagnosis').parent().hide();
+          $('#id_referral_code').parent().show();
+          $('#id_transplant').parent().hide();
+          $('#id_child_transplant').parent().hide();
+          $('#id_expertise').parent().show();
       } else {
           $('#id_condition').parent().hide();
           $('#id_age_of_diagnosis').parent().hide();
@@ -43,6 +56,7 @@ $(document).ready(function() {
           $('#id_referral_code').parent().hide();
           $('#id_transplant').parent().hide();
           $('#id_child_transplant').parent().hide();
+          $('#id_expertise').parent().hide();
       }
   }
 
