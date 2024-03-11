@@ -25,6 +25,7 @@ class ConversationViewTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         self.user_to_add = User.objects.filter(pk=self.other_user_id)
         self.user.friends.set(self.user_to_add)
+        self.user.conversations.set([1,2])
         self.form_input = {
             'users' : [self.other_user_id]
         }

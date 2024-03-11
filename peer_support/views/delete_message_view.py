@@ -4,20 +4,18 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from peer_support.models import Conversation
 from peer_support.forms import MessageForm
-from .helpers import conversation_does_not_exist,message_does_not_exist,no_conversation_url
+from .helpers import get_conversation,get_message,no_conversation_url
 
 class DeleteMessageView(LoginRequiredMixin,View):
     """Deletes a message for either the user alone or for everyone in the conversation"""
 
     def get(self,request,conversation_id,message_id):
-        conversations = Conversation.objects.filter(id=conversation_id)
-        if conversation_does_not_exist(request,conversations):
+        conversation = get_conversation(request,conversation_id)
+        if not conversation:
             return no_conversation_url(request)
-        conversation = conversations[0]
-        conversation_messages = conversation.messages.filter(id=message_id)
-        if message_does_not_exist(request,conversation_messages):
+        message = get_message(request,conversation,message_id)
+        if not message:
             return no_conversation_url(request)
-        message = conversation_messages[0]
         if request.GET.get('delete_all'):
             users = conversation.users.all()
         else:

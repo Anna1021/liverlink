@@ -15,10 +15,9 @@ class MessageForm(forms.ModelForm):
         self.conversation = conversation
         self.user = user
 
-    def save(self):
-        """Send message"""
+    def create_message(self):
+        """Create a message"""
 
-        super().save(commit=False)
         previous_message = None
         if self.conversation.messages.count()>0:
             previous_message = self.conversation.messages.last()
@@ -30,6 +29,13 @@ class MessageForm(forms.ModelForm):
         for user in self.conversation.users.all():
             message.visible_to.add(user)
             user.conversations.add(self.conversation)
+        return message
+
+    def save(self):
+        """Send message"""
+
+        super().save(commit=False)
+        message = self.create_message()
         self.conversation.send(message)
         return message
     # split this down into smaller functions @hannah

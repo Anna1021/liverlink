@@ -20,6 +20,7 @@ class CreateConversationViewTestCase(TestCase):
         self.url = reverse('create_conversation')
         self.user = User.objects.get(username='@johndoe')
         self.client.login(username=self.user.username, password="Password123")
+        self.user.conversations.set([1,2])
         self.user.friends.set(User.objects.exclude(pk=1))
         self.other_users = [2]
 

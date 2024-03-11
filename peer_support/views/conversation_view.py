@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.views.generic.edit import FormView
-from .helpers import check_blocked_dm, conversation_does_not_exist, no_conversation_url, conversation_does_not_exist
+from .helpers import check_blocked_dm, no_conversation_url, get_conversation
 from peer_support.models import Conversation, Message
 from peer_support.forms import MessageForm, ReportForm
 
@@ -14,10 +14,9 @@ class ConversationView(LoginRequiredMixin, FormView):
     def get(self,request,conversation_id):
         if conversation_id==0:
             return render(request,self.template_name,{'user_conversations':request.user.sort_conversations()})
-        conversations = Conversation.objects.filter(id=conversation_id)
-        if conversation_does_not_exist(request,conversations):
+        conversation = get_conversation(request,conversation_id)
+        if not conversation:
             return no_conversation_url(request)
-        conversation = conversations[0]
         message_form = MessageForm(conversation,user=request.user)
         report_form = ReportForm()
         blocked_dm = check_blocked_dm(request.user, conversation)

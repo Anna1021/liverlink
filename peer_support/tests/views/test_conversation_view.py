@@ -24,6 +24,7 @@ class ConversationViewTestCase(TestCase):
             'content':'Ploof'
         }
         self.user = User.objects.get(username='@janedoe')
+        self.user.conversations.set([1])
         self.client.login(username=self.user.username, password="Password123")
 
     def test_conversation_url(self):
@@ -64,6 +65,15 @@ class ConversationViewTestCase(TestCase):
     def test_cannot_get_conversation_user_is_not_in(self):
         invalid_url = reverse('conversation',kwargs={'conversation_id':2})
         response = self.client.get(invalid_url,follow=True)
+        self.assertRedirects(response, self.no_conversation_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+
+    def test_cannot_get_deleted_conversation(self):
+        self.conversation.delete(User.objects.filter(username=self.user.username))
+        response = self.client.get(self.url,follow=True)
         self.assertRedirects(response, self.no_conversation_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'conversation.html')
         messages_list = list(response.context['messages'])

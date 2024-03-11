@@ -19,6 +19,7 @@ class DeleteMessageViewTestCase(TestCase):
         self.message = Message.objects.get(pk=1)
         self.conversation = Conversation.objects.get(pk=1)
         self.user = User.objects.get(username='@johndoe')
+        self.user.conversations.set([1,2])
         self.client.login(username=self.user.username, password="Password123")
         self.url = reverse('delete_message',kwargs={'conversation_id':self.conversation.id,'message_id':self.message.id})
 
@@ -43,6 +44,7 @@ class DeleteMessageViewTestCase(TestCase):
         response = self.client.get(self.url,follow=True)
         self.client.logout()
         other_user = User.objects.get(username='@janedoe')
+        other_user.conversations.set([1])
         self.client.login(username=other_user.username, password="Password123")
         response = self.client.get(self.url,follow=True)
         visible_to_after = self.message.visible_to.count()
