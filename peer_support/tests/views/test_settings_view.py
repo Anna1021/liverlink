@@ -20,20 +20,21 @@ class ProfileViewTest(TestCase):
     def setUp(self):
         self.parent = Parent.objects.get(username='@johndoe')
         self.patient = Patient.objects.get(username='@janedoe')
-        Mentor.objects.create_user(first_name = 'Test',
-                            last_name = 'Mentor',
-                            username = '@testmentor',
-                            email = 'testmentor@example.org',
-                            password = 'Password123',
-                            date_of_birth = '1980-01-01',
-                            gender = 'F',
-                            location = 'FR',
-                            ethnicity = 'RO',
-                            language = 'en',
-                            bio = 'I am a test mentor.',
-                            condition = 'Cirrhosis',
-                            age_of_diagnosis = 15,
-                            referral_code = 'TEST123')
+        Mentor.objects.create_user(first_name='Test',
+                                   last_name='Mentor',
+                                   username='@testmentor',
+                                   email='testmentor@example.org',
+                                   password='Password123',
+                                   date_of_birth='1980-01-01',
+                                   gender='F',
+                                   location='FR',
+                                   ethnicity='RO',
+                                   language='en',
+                                   bio='I am a test mentor.',
+                                   condition='Cirrhosis',
+                                   age_of_diagnosis=15,
+                                   transplant='N',
+                                   referral_code='TEST123')
         self.mentor = Mentor.objects.get(username='@testmentor')
         self.url = reverse('settings')
         self.parent_form_input = {
@@ -48,6 +49,7 @@ class ProfileViewTest(TestCase):
             'language': 'en',
             'bio': 'I am a test parent.',
             'child_condition': 'Haemochromatosis',
+            'child_transplant': 'N',
             'child_age_of_diagnosis': 21,
         }
         self.patient_form_input = {
@@ -62,6 +64,7 @@ class ProfileViewTest(TestCase):
             'language': 'en',
             'bio': 'I am a test patient.',
             'condition': 'Haemochromatosis',
+            'transplant': 'N',
             'age_of_diagnosis': 21,
         }
         self.mentor_form_input = {
@@ -77,6 +80,7 @@ class ProfileViewTest(TestCase):
             'bio': 'I am a test mentor.',
             'condition': 'Haemochromatosis',
             'age_of_diagnosis': 21,
+            'transplant': 'N',
             'referral_code': 'TEST123'
         }
 
@@ -142,7 +146,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.patient.language, 'en'),
         self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe"),
         self.assertEqual(self.patient.condition, "Biliary atresia"),
-        self.assertEqual(self.patient.age_of_diagnosis, 2)
+        self.assertEqual(self.patient.age_of_diagnosis, 2),
 
     def test_unsuccessful_profile_update_for_parent(self):
         self.client.login(username=self.parent.username, password='Password123')
@@ -168,7 +172,8 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.parent.language, 'en'),
         self.assertEqual(self.parent.bio, "I'm a test user"),
         self.assertEqual(self.parent.child_condition, "Hepatitis"),
-        self.assertEqual(self.parent.child_age_of_diagnosis, 20)
+        self.assertEqual(self.parent.child_age_of_diagnosis, 20),
+        self.assertEqual(self.parent.child_transplant, 'N')
 
     def test_unsuccessful_profile_update_for_mentor(self):
         self.client.login(username=self.mentor.username, password='Password123')
@@ -195,6 +200,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.mentor.bio, "I am a test mentor."),
         self.assertEqual(self.mentor.condition, 'Cirrhosis'),
         self.assertEqual(self.mentor.age_of_diagnosis, 15),
+        self.assertEqual(self.mentor.transplant, 'N'),
         self.assertEqual(self.mentor.referral_code, 'TEST123')
 
     def test_unsuccessful_profile_update_due_to_duplicate_username(self):
@@ -214,13 +220,13 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.patient.first_name, 'Jane')
         self.assertEqual(self.patient.last_name, 'Doe')
         self.assertEqual(self.patient.email, 'janedoe@example.org')
-        self.assertEqual(self.patient.date_of_birth, datetime.date(2004, 3, 2)),
-        self.assertEqual(self.patient.gender, 'F'),
-        self.assertEqual(self.patient.location, 'GB'),
-        self.assertEqual(self.patient.ethnicity, 'BR'),
-        self.assertEqual(self.patient.language, 'en'),
-        self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe"),
-        self.assertEqual(self.patient.condition, "Biliary atresia"),
+        self.assertEqual(self.patient.date_of_birth, datetime.date(2004, 3, 2))
+        self.assertEqual(self.patient.gender, 'F')
+        self.assertEqual(self.patient.location, 'GB')
+        self.assertEqual(self.patient.ethnicity, 'BR')
+        self.assertEqual(self.patient.language, 'en')
+        self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe")
+        self.assertEqual(self.patient.condition, "Biliary atresia")
         self.assertEqual(self.patient.age_of_diagnosis, 2)
 
     def test_successful_profile_update_for_patient(self):
@@ -247,7 +253,8 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.patient.language, 'en'),
         self.assertEqual(self.patient.bio, "I am a test patient."),
         self.assertEqual(self.patient.condition, "Haemochromatosis"),
-        self.assertEqual(self.patient.age_of_diagnosis, 21)
+        self.assertEqual(self.patient.age_of_diagnosis, 21),
+        self.assertEqual(self.patient.transplant, 'N')
 
     def test_successful_profile_update_for_parent(self):
         self.client.login(username=self.parent.username, password='Password123')
@@ -273,7 +280,8 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.parent.language, 'en'),
         self.assertEqual(self.parent.bio, "I am a test parent."),
         self.assertEqual(self.parent.child_condition, "Haemochromatosis"),
-        self.assertEqual(self.parent.child_age_of_diagnosis, 21)
+        self.assertEqual(self.parent.child_age_of_diagnosis, 21),
+        self.assertEqual(self.parent.child_transplant, 'N')
 
     def test_successful_profile_update_for_mentor(self):
         self.client.login(username=self.mentor.username, password='Password123')
@@ -300,7 +308,8 @@ class ProfileViewTest(TestCase):
         self.assertEqual(self.mentor.bio, 'I am a test mentor.'),
         self.assertEqual(self.mentor.condition, 'Haemochromatosis'),
         self.assertEqual(self.mentor.age_of_diagnosis, 21),
-        self.assertEqual(self.mentor.referral_code, 'TEST123')
+        self.assertEqual(self.mentor.referral_code, 'TEST123'),
+        self.assertEqual(self.mentor.transplant, 'N')
 
     def test_post_profile_redirects_when_not_logged_in(self):
         redirect_url = reverse_with_next('log_in', self.url)

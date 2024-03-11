@@ -15,6 +15,7 @@
       "ethnicity": "BR",
       "language": "en",
       "bio": "Hi, I'm Jane Doe",
+      "blocked_users": [4],
       "is_active": true
     }
   },

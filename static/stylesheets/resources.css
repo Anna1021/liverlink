@@ -4,7 +4,7 @@
     overflow-y: auto;
     width: 752px;
     word-wrap: break-word;
-    padding-right: 15px;
+    padding-right: 10px;
 }
 
 .question-list-item {
@@ -231,6 +231,11 @@ blockquote {
   padding: 4px 12px;
   border-radius: 4px;
   cursor: pointer;
+}
+
+a.username {
+  color: inherit;
+  text-decoration: none;
 }
 
 .question-body,.question-title,.responses-container{

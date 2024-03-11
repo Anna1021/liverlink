@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait,Select
 from selenium.webdriver.support import expected_conditions as EC
 from peer_support.models import User
-from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException
 
 class CreateConversationJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in peer_select view"""
@@ -25,7 +25,8 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
         options.add_argument("--headless") 
         options.add_argument("--window-size=1920,1080") 
         cls.selenium = WebDriver(options=options)
-        cls.selenium.implicitly_wait(10)
+        cls.selenium.implicitly_wait(40)
+        cls.wait = WebDriverWait(cls.selenium, 20)
         
     @classmethod
     def tearDownClass(cls):
@@ -36,33 +37,43 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
         user = User.objects.get(username='@johndoe')
         user.friends.set(User.objects.exclude(username='@johndoe'))
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        username_input = self.selenium.find_element(By.NAME, "username")
-        username_input.send_keys('@johndoe')
-        password_input = self.selenium.find_element(By.NAME, "password")
-        password_input.send_keys('Password123')
-        self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
+        try:
+            username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
+            username_input.send_keys('@johndoe')
+            password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "password")))
+            password_input.send_keys('Password123')
+            login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
+            login_button.click()
 
-        self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Messages')]").click()
-        #find options
-        create_conversation_link = self.selenium.find_element(By.XPATH, "//a[@href='/create_conversation/']")
-        create_conversation_link.click()
+            messages_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Messages')]")))
+            messages_button.click()
 
-        direct_button = self.selenium.find_element(By.XPATH, '//button[@id="direct"]')
-        group_button = self.selenium.find_element(By.XPATH, '//button[@id="group"]')
+            create_conversation_link = self.wait.until(
+                EC.element_to_be_clickable((By.XPATH, "//a[@href='/create_conversation/']")))
+            create_conversation_link.click()
 
-        self.assertFalse(direct_button.is_enabled())
-        self.assertFalse(group_button.is_enabled())
+            direct_button = self.wait.until(EC.presence_of_element_located((By.XPATH, '//button[@id="direct"]')))
 
-        select_menu = self.selenium.find_element(By.XPATH, '//select[@id="id_users"]')
-        select = Select(select_menu)
-        select.select_by_index(0)
+            group_button = self.wait.until(EC.presence_of_element_located((By.XPATH, '//button[@id="group"]')))
 
-        self.assertTrue(direct_button.is_enabled())
-        self.assertTrue(group_button.is_enabled())
+            self.assertFalse(direct_button.is_enabled())
+            self.assertFalse(group_button.is_enabled())
 
-        Keys.CONTROL
-        select.select_by_index(1)
+            select_menu = self.wait.until(EC.presence_of_element_located((By.XPATH, '//select[@id="id_users"]')))
+            select = Select(select_menu)
+            select.select_by_index(0)
 
-        self.assertFalse(direct_button.is_enabled())
-        self.assertTrue(group_button.is_enabled())
+            self.wait.until(lambda driver: direct_button.is_enabled())
+            self.wait.until(lambda driver: group_button.is_enabled())
 
+            self.assertTrue(direct_button.is_enabled())
+            self.assertTrue(group_button.is_enabled())
+
+            select.select_by_index(1)
+
+            self.wait.until_not(lambda driver: direct_button.is_enabled())
+
+            self.assertFalse(direct_button.is_enabled())
+            self.assertTrue(group_button.is_enabled())
+        except TimeoutException as e:
+            self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")

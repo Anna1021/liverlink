@@ -7,6 +7,12 @@ GENDER_CHOICES = [
     ('N', 'Prefer not to say'),
 ]
 
+REPORT_CHOICES = (
+    ('spam', 'Spam'),
+    ('abuse', 'Abuse'),
+    ('other', 'Other'),
+)
+
 ETHNICITY_CHOICES = [
     ('Asian or Asian British', [
         ('IN', 'Indian'),

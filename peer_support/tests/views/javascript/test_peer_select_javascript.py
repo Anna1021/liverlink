@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 class PeerSelectJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in peer_select view"""
@@ -14,9 +15,11 @@ class PeerSelectJavascriptTest(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.add_argument("--headless") 
+        options.add_argument("--headless")
+        options.add_argument("--window-size=1920,1080")  
         cls.selenium = WebDriver(options=options)
-        cls.selenium.implicitly_wait(10)
+        cls.selenium.implicitly_wait(40)
+        cls.wait = WebDriverWait(cls.selenium, 20)
         
     @classmethod
     def tearDownClass(cls):
@@ -25,44 +28,37 @@ class PeerSelectJavascriptTest(StaticLiveServerTestCase):
 
     def test_dynamic_form_peer_select(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        username_input=self.selenium.find_element(By.NAME, "username")
-        username_input.send_keys('@johndoe')
-        password_input=self.selenium.find_element(By.NAME, "password")
-        password_input.send_keys('Password123')
-        self.selenium.find_element(By.XPATH, '//input[@value="Log in"]').click()
-        wait = WebDriverWait(self.selenium, 50)
-        self.selenium.find_element(By.XPATH, "//button[contains(text(), 'Find Friends')]").click()
+        
+        try:
+            username_input = self.wait.until(EC.element_to_be_clickable((By.NAME, "username")))
+            username_input.send_keys('@johndoe')
+            password_input = self.wait.until(EC.element_to_be_clickable((By.NAME, "password")))
+            password_input.send_keys('Password123')
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]"))).click()
+    
+            dropdown_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@id='dropdownMenuButton']")))
+            dropdown_button.click()
 
-        dropdown_button=self.selenium.find_element(By.XPATH, "//button[@id='dropdownMenuButton']")
-        dropdown_button.click()
+            patient_checkbox = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@type="checkbox" and @value="PT"]')))
+            if not patient_checkbox.is_selected():
+                patient_checkbox.click()
 
-        patient_checkbox=wait.until(
-            EC.element_to_be_clickable((By.XPATH, '//input[@type="checkbox" and @value="PT"]'))
-        )
-        if not patient_checkbox.is_selected():
-            patient_checkbox.click()
-        age_of_diagnosis_min_field=wait.until(
-            EC.visibility_of_element_located((By.XPATH, "//input[@name='age_of_diagnosis_min']"))
-        )
-        self.assertTrue(age_of_diagnosis_min_field.is_displayed(), "age_of_diagnosis_min field is not visible")
+            age_of_diagnosis_min_field = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='age_of_diagnosis_min']")))
+            assert age_of_diagnosis_min_field.is_displayed(), "age_of_diagnosis_min field is not visible"
 
-        parent_checkbox=wait.until(
-            EC.element_to_be_clickable((By.XPATH, '//input[@type="checkbox" and @value="PR"]'))
-        )
-        if not parent_checkbox.is_selected():
-            parent_checkbox.click()
-        child_age_of_diagnosis_min_field = wait.until(
-            EC.visibility_of_element_located((By.XPATH,"//input[@name='child_age_of_diagnosis_min']"))
-        )
-        self.assertTrue(child_age_of_diagnosis_min_field.is_displayed(), "child_age_of_diagnosis_min field is not visible")
+            parent_checkbox = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@type="checkbox" and @value="PR"]')))
+            if not parent_checkbox.is_selected():
+                parent_checkbox.click()
 
-        mentor_checkbox=wait.until(
-            EC.element_to_be_clickable((By.XPATH, '//input[@type="checkbox" and @value="MT"]'))
-        )
-        self.selenium.execute_script("arguments[0].click();", mentor_checkbox)
-        if not mentor_checkbox.is_selected():
-            mentor_checkbox.click()
-        Mentor_age_of_diagnosis_min_field=WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.XPATH,"//input[@name='mentor_age_of_diagnosis_min']"))
-        )
-        self.assertTrue(Mentor_age_of_diagnosis_min_field.is_displayed(), "mentor_age_of_diagnosis_min field is not visible")
+            child_age_of_diagnosis_min_field = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='child_age_of_diagnosis_min']")))
+            assert child_age_of_diagnosis_min_field.is_displayed(), "child_age_of_diagnosis_min field is not visible"
+
+            mentor_checkbox = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@type="checkbox" and @value="MT"]')))
+            self.selenium.execute_script("arguments[0].click();", mentor_checkbox)
+            
+            Mentor_age_of_diagnosis_min_field = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='mentor_age_of_diagnosis_min']")))
+            assert Mentor_age_of_diagnosis_min_field.is_displayed(), "mentor_age_of_diagnosis_min field is not visible"
+
+        except TimeoutException as e:
+            self.fail(f"Test failed due to timeout while self.waiting for the question to be visible or interactable: {e}")

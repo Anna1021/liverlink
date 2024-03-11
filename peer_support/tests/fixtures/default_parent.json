@@ -6,6 +6,7 @@
             "user_ptr": 1,
             "child_condition": "Hepatitis",
             "child_age_of_diagnosis": 20,
+            "child_transplant": "N",
             "is_active": true
         }
     }

@@ -1,6 +1,5 @@
 from django import forms
 from peer_support.models import User
-#from peer_support.models.model_choices import HOSPITAL_CHOICES
 
 class UserForm(forms.ModelForm):
     """Form to update user profiles."""
