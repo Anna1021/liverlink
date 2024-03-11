@@ -23,19 +23,13 @@ class ConversationView(LoginRequiredMixin, FormView):
         context = {'message_form':message_form, 'report_form':report_form , 'conversation':conversation,'user_conversations':request.user.sort_conversations()}
         return render(request,self.template_name,context)
 
-    def post(self, request, conversation_id):
-        action=request.POST.get('action')
-        if action:
-            return self.handle_report_message(request,conversation_id,action)
-        else:
-            return self.handle_post_message(request,conversation_id)
-
-    def handle_post_message(self,request,conversation_id):
-        conversation = get_object_or_404(Conversation,id=conversation_id)
-        message_form = MessageForm(conversation,data=request.POST,user=request.user)
-        if message_form.is_valid() and request.user in conversation.users.all():
-            message_form.save()
-            return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
+    def post(self,request,conversation_id):
+        """Post request for user to send message to conversation"""
+        conversation = Conversation.objects.get(id=conversation_id)
+        form = MessageForm(conversation,data=request.POST,user=request.user)
+        if form.is_valid() and request.user in conversation.users.all():
+            form.save()
+            return redirect(reverse('conversation',kwargs={'conversation_id':conversation.id}),{'form':MessageForm(conversation,user=request.user),'conversation':conversation,'user_conversations':request.user.sort_conversations()})
         else:
             messages.error(request,"This message is not valid")
             return self.form_invalid(message_form) 

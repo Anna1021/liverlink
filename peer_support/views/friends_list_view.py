@@ -6,6 +6,7 @@ from django.contrib import messages
 @login_required
 def friends_list(request):
     """Display the list of friends."""
+    
     user = request.user
     friends = user.friends.all()
     formSearch=SearchPeerForm(data=request.GET)

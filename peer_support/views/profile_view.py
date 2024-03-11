@@ -8,9 +8,15 @@ class ProfileView(LoginRequiredMixin, View):
     
     def get(self, request, username):
         """Get request for user to view profile"""
+
+        context = self.set_context(username)
+        return render(request, 'profile.html', context)
+    
+    def set_context(self, username):
+        """Classify the user and set context for the profile view"""
+
         user = User.objects.get(username=username)
         context = {'user': user}
-
         if hasattr(user, 'parent'):
             context['parent'] = user.parent
         elif hasattr(user, 'patient'):
@@ -20,4 +26,4 @@ class ProfileView(LoginRequiredMixin, View):
         else:
             context['mentor'] = user.mentor
 
-        return render(request, 'profile.html', context)
+        return context
