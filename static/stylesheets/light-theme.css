@@ -98,7 +98,6 @@
 }
 
 
-
 .light-theme .navbar-dark .navbar-nav .nav-link {
     color: black !important;
 }
@@ -184,7 +183,7 @@
   font-weight: 400;
   line-height: 1.5;
   color: #212529;
-  background-color: rgb(231, 231, 231);
+  background-color: rgb(255, 249, 249);
   background-clip: padding-box;
   border: 1px solid #ced4da;
   -webkit-appearance: none;
@@ -233,4 +232,25 @@
   background-color: #720fe3;
   color: rgb(0, 0, 0);
  
+}
+
+.light-theme .conversation-btn{
+  border-color: transparent;
+}
+
+.light-theme .conversation-list {
+  border-radius: 8px;
+  background-color: rgb(204, 243, 249);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 90%;
+  list-style-type: none;
+  padding-left: 0px;
+}
+.light-theme .tutorial .btn{
+  background-color: var(--filter-btn-color);
+  color: var(--btn-text-color);
+  border-color: #d4aeff;
+  box-shadow: #d4aeff;
+
 }
