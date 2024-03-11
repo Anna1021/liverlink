@@ -90,6 +90,7 @@ class FilterPeerForm(forms.Form):
     
     def filter_by_age_range(self, users):
         """Filters users based on age."""
+
         current_date = timezone.now().date()
         min_age = self.cleaned_data.get('min_age')
         max_age = self.cleaned_data.get('max_age')
@@ -103,6 +104,7 @@ class FilterPeerForm(forms.Form):
 
     def filter_by_gender(self, users):
         """Filters users based on selected genders."""
+        
         selected_genders = self.cleaned_data.get('gender')
         if selected_genders:
             users = users.filter(gender__in=selected_genders)

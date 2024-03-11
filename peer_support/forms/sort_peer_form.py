@@ -38,6 +38,7 @@ class SortPeerForm(forms.Form):
     
     def calculate_match_score(self, current_user, other_user):
         """Calculates the score of each user in relation to the current user """
+
         score = 0
         weighting_types = {"user_type":1,"age":0.4,"hospital":1,"age_of_diagnosis":0.2,"condition":1,
                      "child_age_of_diagnosis":0.2,"child_condition":1}
@@ -61,6 +62,7 @@ class SortPeerForm(forms.Form):
     
     def calculate_user_type_score(self, current_user, other_user, weighting,score):
         """Calculates user type specific score."""
+        
         if hasattr(current_user, 'patient') and hasattr(other_user, 'patient'):
             score += 1 * weighting['user_type']
             score += self.calculate_condition_match(current_user.patient, other_user.patient, weighting['condition'], weighting['age_of_diagnosis'])
