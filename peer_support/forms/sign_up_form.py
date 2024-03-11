@@ -96,3 +96,5 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             except Referral.DoesNotExist:
                 self.add_error('referral_code', "Please enter a valid referral code.")
         return cleaned_data
+
+# maybe move age validation to here

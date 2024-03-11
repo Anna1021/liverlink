@@ -9,6 +9,7 @@ class SortPeerForm(forms.Form):
     
     def calculate_user_type_score(self,current_user,other_user,weighting,score):
         """Calculates user type specific score"""
+
         if hasattr(current_user, 'patient') and hasattr(other_user, 'patient'):
             score+=1* weighting['user_type']
             if current_user.patient.condition == other_user.patient.condition:
@@ -34,6 +35,7 @@ class SortPeerForm(forms.Form):
 
     def calculate_age_score(self,current_user,other_user,weighting,score):
         """Calclates score based on age proximity"""
+
         if current_user.date_of_birth and other_user.date_of_birth:
             age_difference = abs(current_user.date_of_birth.year - other_user.date_of_birth.year)
             if age_difference <= 5:
@@ -42,6 +44,7 @@ class SortPeerForm(forms.Form):
 
     def calculate_match_score(self, current_user, other_user):
         """Calculates the score of each user in relation to the current user """
+
         score = 0
         weighting = {"user_type":1,"age":0.4,"gender":0.2,
                      "language":0.9,"ethnicity":0.2,"country":1,
@@ -73,6 +76,7 @@ class SortPeerForm(forms.Form):
     
     def sort_users(self, users, current_user):
         """Sorts users based on the selected criterion."""
+        
         cleaned_data = self.cleaned_data 
         sort_by = cleaned_data.get('sort_by')
         if sort_by == 'username_asc':

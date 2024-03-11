@@ -3,6 +3,7 @@ from peer_support.models import Message
 
 class MessageForm(forms.ModelForm):
     """Form enabling users to send messages in a conversation"""
+
     class Meta:
         model = Message
         fields = ['content']
@@ -16,6 +17,7 @@ class MessageForm(forms.ModelForm):
 
     def save(self):
         """Send message"""
+
         super().save(commit=False)
         previous_message = None
         if self.conversation.messages.count()>0:
@@ -29,3 +31,4 @@ class MessageForm(forms.ModelForm):
             message.visible_to.add(user)
         self.conversation.send(message)
         return message
+    # split this down into smaller functions

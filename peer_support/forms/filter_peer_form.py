@@ -7,6 +7,7 @@ from peer_support.forms.form_choices import CONDITION_CHOICES, USER_TYPE_CHOICES
 
 class FilterPeerForm(forms.Form):
     """Form enabling the filtering of users"""
+
     USER_TYPE_CHOICES = USER_TYPE_CHOICES[1:]
     ALL_CHOICE = [('any', 'Any')]
     user_type=forms.MultipleChoiceField(choices=USER_TYPE_CHOICES,widget=forms.CheckboxSelectMultiple,required=False)
@@ -29,10 +30,12 @@ class FilterPeerForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         """Initialise query set with users tasks"""
+
         super(FilterPeerForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         """Validation of age fields"""
+
         cleaned_data = super().clean()
         min_age = cleaned_data.get('min_age')
         max_age = cleaned_data.get('max_age')
@@ -97,6 +100,7 @@ class FilterPeerForm(forms.Form):
         
     def filter_by_user_type(self,user_type):
         """Generates a list of users based on user type and user type specific fields"""
+
         combined_queryset = User.objects.none()
         if "PT" in user_type:
             patients=self.filter_by_patient()
@@ -111,6 +115,7 @@ class FilterPeerForm(forms.Form):
     
     def filter_by_age_range(self,users):
         """Filters users based on age"""
+
         current_date = timezone.now().date()
         min_age = self.cleaned_data.get('min_age')
         if min_age is not None:
@@ -124,6 +129,7 @@ class FilterPeerForm(forms.Form):
         
     def filter_users(self, users):
         """Filters users based on critera provided"""
+        
         user_type = self.cleaned_data.get('user_type')
         if user_type:
             combined_queryset = self.filter_by_user_type(user_type)
