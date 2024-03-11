@@ -1,0 +1,35 @@
+{% extends 'dashboard.html' %}
+{% block page %}
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+<div class="card bg-dark shadow box-area my-2">
+    <div class="container my-2">
+            <select id="barChartDataSelect">
+                <option value="userTypes">User Types</option>
+                <option value="userAges">User Ages</option>
+            </select>
+            
+            <canvas id="barChart"></canvas>
+
+            <select id="pieChartDataSelect">
+                <option value="ethnicity">Ethnicity Distribution</option>
+                <option value="liverDisease">Liver Disease Distribution</option>
+            </select>
+
+            <canvas id="ethnicityChart" style="margin-top: 20px;"></canvas>
+
+<script>
+    var num_patients={{num_patients}};
+    var num_parents={{num_parents}};
+    var num_mentors={{num_mentors}};
+    var age_range_labels={{age_range_labels|safe}};
+    var age_range_counts={{age_range_counts|safe}};
+    var ethnicities={{ethnicities|safe}};
+    var ethnicity_count={{ethnicity_count|safe}};
+    var condition_labels={{condition_labels|safe}};
+    var condition_count={{condition_count|safe}}
+</script>
+<script src="{% static 'js/user_info.js' %}"></script>
+</div>
+</div>
+{% endblock %}

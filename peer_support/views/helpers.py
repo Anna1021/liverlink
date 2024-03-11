@@ -1,9 +1,11 @@
 import uuid
-from peer_support.models import Referral, Mentor, User
+from peer_support.models import Referral, Mentor, User, Patient
 from django.conf import settings
 from django.shortcuts import redirect,reverse
 from peer_support.models import Notification
 from django.contrib import messages
+from collections import Counter
+from datetime import date
 
 def login_prohibited(view_function):
     """Decorator for view functions that redirect users away if they are logged in."""
@@ -72,3 +74,36 @@ def message_does_not_exist(request,conversation_messages):
 def no_conversation_url(request):
     context = {'user_conversations':request.user.sort_conversations()}
     return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
+
+def calculate_age(born):
+    today = date.today()
+    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+def get_age_ranges():
+    users_ages = [calculate_age(user.date_of_birth) for user in User.objects.all() if user.date_of_birth is not None]
+    age_ranges = {"13-20": 0, "21-30": 0, "31-40": 0, "41-50": 0, "51-60": 0, "61-70": 0, "71+":0}
+    for age in users_ages:
+        if 13 <= age <= 20:
+            age_ranges["13-20"]+=1
+        elif 21 <= age <= 30:
+            age_ranges["21-30"]+=1
+        elif 31 <= age <= 40:
+            age_ranges["31-40"]+=1
+        elif 41 <= age <= 50:
+            age_ranges["41-50"]+=1
+        elif 51 <= age <= 60:
+            age_ranges["51-60"]+=1
+        elif 61 <= age <= 70:
+            age_ranges["61-70"]+=1
+        else:
+            age_ranges["71+"]+=1
+    return age_ranges
+
+def get_user_ethnicities():
+    users_ethnicities = User.objects.values_list('ethnicity', flat=True)
+    return Counter(users_ethnicities) 
+
+
+def get_patient_conditions():
+    patient_conditions = Patient.objects.values_list('condition', flat=True)
+    return Counter(patient_conditions) 
