@@ -45,8 +45,8 @@
         <div class="row message-bubble self-bubble">
             {% else %}
             <div class="row message-bubble other-bubble">
-                <a href="{% url 'profile' message.sender.username %}" class="notranslate self-sender">{%
-                    sender_if_applicable message user conversation %}</a>
+                <a href="{% url 'profile' message.sender.username %}" class="notranslate self-sender">
+                    {%sender_if_applicable message user conversation %}</a>
                 {% endif %}
                 <div class="col-md-10">
                     <div {% if message.sender in user.blocked_users.all %} data-text="{{message.content}}"

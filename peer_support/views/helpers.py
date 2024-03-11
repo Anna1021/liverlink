@@ -59,11 +59,12 @@ def check_blocked_dm(current_user, conversation):
                 blocked_dm = True
     return blocked_dm
 
-def conversation_does_not_exist(request,conversations):
-    if conversations.count() == 0 or request.user not in conversations[0].users.all():
+def get_conversation(request,conversation_id):
+    conversations = request.user.conversations.filter(id=conversation_id)
+    if conversations.count() == 0:
         messages.error(request,"This conversation does not exist.")
-        return True
-    return False
+        return None
+    return conversations.get(id=conversation_id)
 
 def conversation_is_direct(request,conversation):
     if conversation.as_group() is None:
@@ -71,11 +72,12 @@ def conversation_is_direct(request,conversation):
         return True
     return False
 
-def message_does_not_exist(request,conversation_messages):
+def get_message(request,conversation,message_id):
+    conversation_messages = conversation.messages.filter(id=message_id)
     if conversation_messages.count() == 0 or request.user not in conversation_messages[0].visible_to.all():
         messages.error(request,"This message does not exist.")
-        return True
-    return False
+        return None
+    return conversation_messages.get(id=message_id)
 
 def no_conversation_url(request):
     context = {'user_conversations':request.user.sort_conversations()}
