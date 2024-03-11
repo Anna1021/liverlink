@@ -4,6 +4,7 @@
   --dark-submit-btn-color: #7868E6;
   --dark-btn-text-color: #161D6F;
 }
+
 .dark-theme .sign-up .btn, 
 .dark-theme .log-in .btn{
   background-color: var(--dark-submit-btn-color);
@@ -25,9 +26,11 @@
   border-radius: 0.25rem;
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+
 /*
 * website logo
 */
+
 .dark-theme .img-fluid{
     max-width: 100%;
     height: auto
@@ -36,6 +39,7 @@
 /*
 * left side bar
 */
+
 .dark-theme #left-nav{
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
@@ -50,12 +54,13 @@
 /*
 * top main nav bar
 */
+
 .dark-theme #top-nav {
     background-color:var(--dark-main-bg-color);
     color: white; 
   }
 
-  .dark-theme #resources-card, .dark-theme #friend-card {
+.dark-theme #resources-card, .dark-theme #friend-card {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 20px; 
@@ -75,6 +80,7 @@
   color: white;
   font-weight: 700;
 }
+
 .dark-theme #friend-inner-card {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
@@ -109,6 +115,7 @@
   font-size: 30px;
   color: #ffffff;
 }
+
 .dark-theme .nav-tabs,
 .dark-theme .nav-link.active {
   border: none;
@@ -123,6 +130,7 @@
 .dark-theme #login-message {
   font-size: calc(1.375rem + 1.5vw);
 }
+
 .dark-theme .notification-list {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -154,23 +162,28 @@
 /*
 * sort/filter buttons
 */
+
 .dark-theme .SortFilter .btn {
   background-color: var(--dark-filter-btn-color);
   color: var(--dark-btn-text-color);
   border-color: #d4aeff;
   box-shadow: #d4aeff;
 }
+
 /*
 * Add friend/apply button
 */
+
 .dark-theme .add-friend .btn,
 .dark-theme .btn-submit  {
 background-color: var(--dark-submit-btn-color);
 border: 1px solid #720fe3;
 }
+
 /*
 * success add friend button
 */
+
 .dark-theme .success_button{
   background-color: rgb(13, 160, 13) !important;
   color: rgb(255, 255, 255) !important;
@@ -181,9 +194,11 @@ border: 1px solid #720fe3;
    color: rgba(255, 255, 255, 0.55);
 
 }
+
 .dark-theme #Apply-btn{
   background-color: #c4c8cf;
 }
+
 .dark-theme .home-btn{
   background-color: grey ;
   border: 1px solid #000000;

@@ -64,7 +64,6 @@
   border: 1px solid transparent!important;
 }
 
-
 .light-theme .sign-up .btn, 
 .light-theme .log-in .btn{
   background-color: var(--submit-btn-color);
@@ -166,15 +165,6 @@
   border-bottom: 2px solid #56555e;
 }
 
-
-.light-theme #loginBox {
-  border-radius: 20px;
-  background-color:var(--main-bg-color);
-  color: #000000;
-}
-.light-theme #login-message {
-  font-size: calc(1.375rem + 1.5vw);
-}
 .light-theme .form-control {
   display: block;
   width: 100%;
@@ -192,6 +182,7 @@
   border-radius: 0.25rem;
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+
 .light-theme .notification-list {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -234,6 +225,10 @@
  
 }
 
+/*
+ * conversations
+ */
+
 .light-theme .conversation-btn{
   border-color: transparent;
 }
@@ -254,6 +249,16 @@
   border-color: #d4aeff;
   box-shadow: #d4aeff;
 
+}
+
+.light-theme #loginBox {
+  border-radius: 20px;
+  background-color:var(--main-bg-color);
+  color: #000000;
+}
+
+.light-theme #login-message {
+  font-size: calc(1.375rem + 1.5vw);
 }
 
 .light-theme .home-btn{
