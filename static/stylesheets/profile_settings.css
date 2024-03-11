@@ -66,3 +66,36 @@ i.ps-icons {
     display: inline-block;
     margin-right: 35px;
 }
+
+/*
+ * Blocklist modal styling
+ */ 
+
+ 
+.table-hover tbody tr:hover th, .table-hover tbody tr:hover td {
+    background-color: #FAFAFA;
+}
+
+a.bl-username {
+    font-weight: 400;
+    color: black;
+    text-decoration: none;
+}
+
+img.bl-gravatar {
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+}
+
+.btn-unblock, .btn-unblock:hover, .btn-unblock:focus {
+    background-color: red;
+    color: white;
+    box-shadow: none;
+}
+
+.btn-block, .btn-block:hover, .btn-block:focus {
+    background-color: gainsboro;
+    color: black;
+    box-shadow: none;
+}

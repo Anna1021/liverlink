@@ -27,6 +27,7 @@ class User(AbstractUser):
     language = models.CharField(max_length=50,choices=LANGUAGE_CHOICES, blank=True)
     bio = models.CharField(max_length=500, blank=True)
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
+    blocked_users = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='blocked_by')
     conversations = models.ManyToManyField('Conversation',blank=True)
     first_login = models.BooleanField(default=True)
 
