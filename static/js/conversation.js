@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    let msg = sessionStorage.getItem("message");
+    let msg = sessionStorage.getItem(storageKey);
     if (msg!=null) $('#id_content').val(msg);
     hideBlockedMessages()
     $('#conversation').animate(
@@ -16,6 +16,9 @@ $(document).ready(function() {
             }.bind(this, message))
         }
     }
+    setInterval(function(){
+        sessionStorage.setItem(storageKey,$("#id_content").val())
+    },2000)
 });
 
 const chatSocket = new WebSocket("ws://" + window.location.host + "/");
@@ -33,6 +36,6 @@ chatSocket.onmessage = function (e) {
 };
 
 function reloadPage(){
-    sessionStorage.setItem("message",$("#id_content").val());
+    sessionStorage.setItem(storageKey,$("#id_content").val());
     window.location.reload();
 }
