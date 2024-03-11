@@ -7,7 +7,6 @@ from peer_support.forms import NewReplyForm, NewResponseForm
 def question_page(request, id):
     response_form = NewResponseForm()
     reply_form = NewReplyForm()
-
     if request.method == 'POST':
             response_form = NewResponseForm(request.POST)
             if response_form.is_valid():
@@ -21,5 +20,6 @@ def question_page(request, id):
         'question': question,
         'response_form': response_form,
         'reply_form': reply_form,
+        'current_user': request.user,
     }
     return render(request, 'question.html', context)

@@ -1,0 +1,149 @@
+"""Tests of the block user view."""
+from django.test import TestCase
+from django.urls import reverse
+from peer_support.tests.helpers import reverse_with_next
+from peer_support.models import User, FriendRequest, Notification
+
+class BlockUserViewTestCase(TestCase):
+    """Tests of the block user view."""
+    
+    fixtures = ['peer_support/tests/fixtures/default_user.json',
+                'peer_support/tests/fixtures/other_users.json']
+
+    def setUp(self):
+        self.user = User.objects.get(username='@johndoe')
+        self.second_user = User.objects.get(username='@janedoe')
+        self.url = reverse('block_user', args=[self.second_user.id])
+        self.client.login(username=self.user.username, password='Password123')
+
+    def test_block_user_url(self):
+        self.assertEqual(self.url, '/block_user/2')
+
+    def test_block_user(self):
+        before_count = self.user.blocked_users.count()
+        response = self.client.get(self.url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        after_count = self.user.blocked_users.count()
+        self.assertEqual(before_count + 1, after_count)
+        self.assertIn(self.second_user, self.user.blocked_users.all())
+        self.assertNotIn(self.user, self.second_user.blocked_users.all())
+
+    def test_block_user_successfully_deletes_associated_friend_requests_from_blocking_user(self):
+        initial_friend_request_count = FriendRequest.objects.count()
+        self.assertEqual(initial_friend_request_count, 0)
+        url = reverse('send_friend_request', args=[self.second_user.id])
+        self.assertEqual(url, '/send_friend_request/2')
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        after_friend_request_count = FriendRequest.objects.count()
+        self.assertEqual(initial_friend_request_count + 1, after_friend_request_count)
+        friend_request = FriendRequest.objects.first()
+        self.assertEqual(friend_request.sender, self.user)
+        self.assertEqual(friend_request.receiver, self.second_user)
+        self.test_block_user()
+        final_friend_request_count = FriendRequest.objects.count()
+        self.assertEqual(initial_friend_request_count, final_friend_request_count)
+        self.assertFalse(FriendRequest.objects.filter(sender=self.user).filter(receiver=self.second_user).exists())
+
+    def test_block_user_successfully_deletes_associated_friend_requests_from_blocked_user(self):
+        self.client.logout()
+        self.client.login(username=self.second_user.username, password='Password123')
+        initial_friend_request_count = FriendRequest.objects.count()
+        self.assertEqual(initial_friend_request_count, 0)
+        url = reverse('send_friend_request', args=[self.user.id])
+        self.assertEqual(url, '/send_friend_request/1')
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        after_friend_request_count = FriendRequest.objects.count()
+        self.assertEqual(initial_friend_request_count + 1, after_friend_request_count)
+        friend_request = FriendRequest.objects.first()
+        self.assertEqual(friend_request.sender, self.second_user)
+        self.assertEqual(friend_request.receiver, self.user)
+        self.client.logout()
+        self.client.login(username=self.user.username, password='Password123')
+        self.test_block_user()
+        final_friend_request_count = FriendRequest.objects.count()
+        self.assertEqual(initial_friend_request_count, final_friend_request_count)
+        self.assertFalse(FriendRequest.objects.filter(sender=self.second_user).filter(receiver=self.user).exists())
+
+    def test_block_user_successfully_deletes_associated_notifications_from_blocking_user(self):
+        initial_friend_request_count = FriendRequest.objects.count()
+        initial_notification_count = Notification.objects.count()
+        self.assertEqual(initial_friend_request_count, 0)
+        self.assertEqual(initial_notification_count, 0)
+        url = reverse('send_friend_request', args=[self.second_user.id])
+        self.assertEqual(url, '/send_friend_request/2')
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        after_friend_request_count = FriendRequest.objects.count()
+        after_notification_count = Notification.objects.count()
+        self.assertEqual(initial_friend_request_count + 1, after_friend_request_count)
+        self.assertEqual(initial_notification_count + 1, after_notification_count)
+        friend_request = FriendRequest.objects.first()
+        notification = Notification.objects.get(friend_request=friend_request)
+        self.assertEqual(friend_request.sender, self.user)
+        self.assertEqual(friend_request.receiver, self.second_user)
+        self.assertEqual(notification.title, 'Friend Request')
+        self.assertEqual(notification.description, '@johndoe sent you a friend request.')
+        self.assertEqual(notification.user, User.objects.get(username=self.second_user.username))
+        self.assertEqual(notification.friend_request, friend_request)
+        self.test_block_user()
+        final_friend_request_count = FriendRequest.objects.count()
+        final_notification_count = Notification.objects.count()
+        self.assertEqual(initial_friend_request_count, final_friend_request_count)
+        self.assertEqual(initial_notification_count, final_notification_count)
+        self.assertFalse(FriendRequest.objects.filter(sender=self.user).filter(receiver=self.second_user).exists())
+        self.assertFalse(Notification.objects.filter(friend_request=friend_request).exists())
+
+    def test_block_user_successfully_deletes_associated_notifications_from_blocked_user(self):
+        self.client.logout()
+        self.client.login(username=self.second_user.username, password='Password123')
+        initial_friend_request_count = FriendRequest.objects.count()
+        initial_notification_count = Notification.objects.count()
+        self.assertEqual(initial_friend_request_count, 0)
+        self.assertEqual(initial_notification_count, 0)
+        url = reverse('send_friend_request', args=[self.user.id])
+        self.assertEqual(url, '/send_friend_request/1')
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        after_friend_request_count = FriendRequest.objects.count()
+        after_notification_count = Notification.objects.count()
+        self.assertEqual(initial_friend_request_count + 1, after_friend_request_count)
+        self.assertEqual(initial_notification_count + 1, after_notification_count)
+        friend_request = FriendRequest.objects.first()
+        notification = Notification.objects.get(friend_request=friend_request)
+        self.assertEqual(friend_request.sender, self.second_user)
+        self.assertEqual(friend_request.receiver, self.user)
+        self.assertEqual(notification.title, 'Friend Request')
+        self.assertEqual(notification.description, '@janedoe sent you a friend request.')
+        self.assertEqual(notification.user, User.objects.get(username=self.user.username))
+        self.assertEqual(notification.friend_request, friend_request)
+        self.client.logout()
+        self.client.login(username=self.user.username, password='Password123')
+        self.test_block_user()
+        final_friend_request_count = FriendRequest.objects.count()
+        final_notification_count = Notification.objects.count()
+        self.assertEqual(initial_friend_request_count, final_friend_request_count)
+        self.assertEqual(initial_notification_count, final_notification_count)
+        self.assertFalse(FriendRequest.objects.filter(sender=self.second_user).filter(receiver=self.user).exists())
+        self.assertFalse(Notification.objects.filter(friend_request=friend_request).exists())
+
+    def test_block_user_successfully_removes_friend(self):
+        before_friends_count = self.user.friends.count()
+        self.user.friends.add(self.second_user)
+        after_friends_count = self.user.friends.count()
+        self.assertIn(self.second_user, self.user.friends.all())
+        self.assertIn(self.user, self.second_user.friends.all())
+        self.assertEqual(before_friends_count + 1, after_friends_count)
+        self.test_block_user()
+        self.user.refresh_from_db()
+        final_friends_count = self.user.friends.count()
+        self.assertNotIn(self.second_user, self.user.friends.all())
+        self.assertNotIn(self.user, self.second_user.friends.all())
+        self.assertEqual(before_friends_count, final_friends_count)
+
+    def test_block_user_without_being_logged_in(self):
+        self.client.logout()
+        redirect_url = reverse_with_next('log_in', self.url)
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)

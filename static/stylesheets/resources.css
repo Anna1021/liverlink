@@ -221,6 +221,11 @@ blockquote {
   cursor: pointer;
 }
 
+a.username {
+  color: inherit;
+  text-decoration: none;
+}
+
 .question-body,.question-title,.responses-container{
   width: 752px;
   word-wrap: break-word;

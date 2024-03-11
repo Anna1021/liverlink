@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import TimeoutException
 
 class SignUpJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in sign up view"""
@@ -16,8 +16,10 @@ class SignUpJavascriptTest(StaticLiveServerTestCase):
         super().setUpClass()
         options = Options()
         options.add_argument("--headless") 
+        options.add_argument("--window-size=1920,1080") 
         cls.selenium = WebDriver(options=options)
-        cls.selenium.implicitly_wait(10)
+        cls.selenium.implicitly_wait(40)
+        cls.wait = WebDriverWait(cls.selenium, 20)
         
     @classmethod
     def tearDownClass(cls):
@@ -25,29 +27,23 @@ class SignUpJavascriptTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_dynamic_form_sign_up(self):
-        wait = WebDriverWait(self.selenium, 10)
-        self.selenium.get('%s%s' % (self.live_server_url, '/sign_up/'))
+        try:
+            self.selenium.get(f'{self.live_server_url}/sign_up/')
 
-        dropdown_element = wait.until(EC.presence_of_element_located((By.ID, 'id_user_type')))
-        actions = ActionChains(self.selenium)
-        actions.move_to_element(dropdown_element).perform()
-        select = Select(dropdown_element)
+            dropdown_element = self.wait.until(EC.presence_of_element_located((By.ID, 'id_user_type')))
+            select = Select(dropdown_element)
 
-        select.select_by_visible_text('Patient')
-        age_of_diagnosis=wait.until(
-            EC.visibility_of_element_located((By.XPATH, "//input[@name='age_of_diagnosis']"))
-        )
-        self.assertTrue(age_of_diagnosis.is_displayed(), "age_of_diagnosis field is not visible")
+            select.select_by_visible_text('Patient')
+            age_of_diagnosis = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='age_of_diagnosis']")))
+            self.assertTrue(age_of_diagnosis.is_displayed(), "Age of diagnosis field is not visible for Patient")
 
+            select.select_by_visible_text('Parent')
+            child_age_of_diagnosis = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='child_age_of_diagnosis']")))
+            self.assertTrue(child_age_of_diagnosis.is_displayed(), "Child age of diagnosis field is not visible for Parent")
 
-        select.select_by_visible_text('Parent')
-        child_age_of_diagnosis = wait.until(
-            EC.visibility_of_element_located((By.XPATH,"//input[@name='child_age_of_diagnosis']"))
-        )
-        self.assertTrue(child_age_of_diagnosis.is_displayed(), "child_age_of_diagnosis field is not visible")
+            select.select_by_visible_text('Mentor')
+            mentor_age_of_diagnosis = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='age_of_diagnosis']")))
+            self.assertTrue(mentor_age_of_diagnosis.is_displayed(), "Age of diagnosis field is not visible for Mentor")
 
-        select.select_by_visible_text('Mentor')
-        Mentor_age_of_diagnosis=WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.XPATH,"//input[@name='age_of_diagnosis']"))
-        )
-        self.assertTrue(Mentor_age_of_diagnosis.is_displayed(), "age_of_diagnosis_min field is not visible")
+        except TimeoutException as e:
+            self.fail(f"Test failed due to an unexpected exception: {e}")

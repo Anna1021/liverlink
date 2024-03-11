@@ -37,3 +37,15 @@
     font-weight: 600;
     color: #91BBD3;
 }
+
+/*
+ * User actions menu styling
+ */
+
+.actions-icon, .actions-icon:hover {
+    background-color: transparent;
+    outline: none;
+    min-width: fit-content;
+    border: none;
+    color: white;
+}

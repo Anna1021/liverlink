@@ -5,7 +5,7 @@ from django import forms
 from django.test import TestCase
 from peer_support.forms import SignUpForm
 from peer_support.models import Patient, Parent, Mentor, Referral
-from django.core.exceptions import ValidationError
+from datetime import date, timedelta
 
 class SignUpFormTestCase(TestCase):
     """Unit tests of the sign up form."""
@@ -206,3 +206,13 @@ class SignUpFormTestCase(TestCase):
         form = SignUpForm(data=self.form_input)
         form.full_clean()
         self.assertFalse(form.is_valid())
+
+    def test_valid_date_of_birth(self):
+        form = SignUpForm(data=self.form_input)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_date_of_birth_less_than_13_years_ago(self):
+        self.form_input['date_of_birth'] = date.today() - timedelta(days=365*12)
+        form = SignUpForm(data=self.form_input)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['date_of_birth'], ['You must be 13 years old to register.'])
