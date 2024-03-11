@@ -17,16 +17,20 @@ $(document).ready(function() {
         }
     }
     setInterval(function(){
-        sessionStorage.setItem(storageKey,$("#id_content").val())
+        if (conversation_id!="0"){
+            sessionStorage.setItem(storageKey,$("#id_content").val())
+        }
     },2000)
 });
 
 const chatSocket = new WebSocket("ws://" + window.location.host + "/");
-document.querySelector("#id_content").focus();
-document.querySelector('#message-form').addEventListener("submit", function(){
-    chatSocket.send(JSON.stringify({sender:username,conversation_id:conversation_id}));
-    sessionStorage.clear();
-})
+if(conversation_id!=0){
+    document.querySelector("#id_content").focus();
+    document.querySelector('#message-form').addEventListener("submit", function(){
+        chatSocket.send(JSON.stringify({sender:username,conversation_id:conversation_id}));
+        sessionStorage.clear();
+    })
+}
 chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     let usernames = data.users.split("', '");
