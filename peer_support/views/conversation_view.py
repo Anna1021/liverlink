@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render,reverse,redirect, get_object_or_404
+from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.views.generic.edit import FormView
 from .helpers import check_blocked_dm, conversation_does_not_exist, no_conversation_url, conversation_does_not_exist
 from peer_support.models import Conversation, Message
@@ -8,6 +8,7 @@ from peer_support.forms import MessageForm, ReportForm
 
 class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
+
     template_name = "conversation.html"
 
     def get(self,request,conversation_id):

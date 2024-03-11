@@ -4,8 +4,9 @@ from django.shortcuts import redirect
 from peer_support.models import Notification
 
 @login_required
-def delete_notification(request, notification_id):
+def delete_notification(request, notification_id): # can request be removed @fabiha
     """Delete a notification."""
+    
     notification = get_object_or_404(Notification, id=notification_id)
     if notification.friend_request:
         notification.friend_request.delete()

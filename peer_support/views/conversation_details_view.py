@@ -9,6 +9,7 @@ from .helpers import conversation_does_not_exist, conversation_is_direct, no_con
 
 class ConversationDetailsView(LoginRequiredMixin,FormView):
     """View group conversation details"""
+
     model = Conversation
     template_name = 'conversation_details.html' 
 
@@ -45,4 +46,3 @@ class ConversationDetailsView(LoginRequiredMixin,FormView):
             return render(request,self.template_name,self.get_context_data(request.user,conversation))
         else:
             return self.add_users(request,conversation)
-            

@@ -6,7 +6,7 @@ from peer_support.forms import ReportForm
 from django.contrib import messages
 
 class ProfileView(LoginRequiredMixin, View):
-    """Displays other user's profile"""
+    """Displays user's profile"""
     
     def get(self, request, username):
         """Get request for user to view profile"""
@@ -14,7 +14,7 @@ class ProfileView(LoginRequiredMixin, View):
         context = self.set_context(username)
         return render(request, 'profile.html', context)
     
-    def set_context(self, username):
+    def set_context(self, request, username):
         """Classify the user and set context for the profile view"""
 
         user = User.objects.get(username=username)
@@ -33,6 +33,7 @@ class ProfileView(LoginRequiredMixin, View):
     
     def post(self,request, username):
         """Reporting profile"""
+        
         user =get_object_or_404(User, username=username)
         report_form =ReportForm(request.POST)
         if report_form.is_valid():

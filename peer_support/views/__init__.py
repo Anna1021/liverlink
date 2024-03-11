@@ -13,10 +13,10 @@ from .conversation_view import ConversationView
 from .peer_select_view import PeerView
 from .create_conversation_view import CreateConversationView
 from .delete_message_view import DeleteMessageView
-from .new_question_page_view import newQuestionPage
-from .reply_page_view import replyPage
+from .new_question_page_view import new_question_page
+from .reply_page_view import reply_page
 from .resources_view import resources
-from .question_page_view import questionPage
+from .question_page_view import question_page
 from .send_friend_request_view import SendFriendRequestView
 from .accept_friend_request_view import AcceptFriendRequestView
 from .friends_list_view import friends_list

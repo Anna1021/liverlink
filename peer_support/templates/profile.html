@@ -7,9 +7,10 @@
             <div class="col-md-4">
                 <div class="profile-img">
                     {% if mentor %}
-                        <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" style="border: 7px solid rgb(101, 209, 101);"/>
+                    <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt=""
+                        style="border: 7px solid rgb(101, 209, 101);" />
                     {% else %}
-                        <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" />
+                    <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" />
                     {% endif %}
                 </div>
             </div>
@@ -18,11 +19,11 @@
                     <h5>{{ user.full_name }}</h5>
                     <h6>{{ user.username }}</h6>
                     {% if patient %}
-                        <h7>PATIENT</h7>
+                    <h7>PATIENT</h7>
                     {% elif mentor %}
-                        <h7>MENTOR</h7>
+                    <h7>MENTOR</h7>
                     {% elif parent %}
-                        <h7>PARENT</h7>
+                    <h7>PARENT</h7>
                     {% endif %}
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
@@ -42,36 +43,46 @@
                         <span class="bi bi-gear-fill"></span>
                     </a>
                 </div>
-                
+
                 {% else %}
                 <div id="user-actions-dropdown" style="float: right;">
-                    <a class="actions-icon" href="#" id="actionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="user-actions-dropdown">
+                    <a class="actions-icon" href="#" id="actionsDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" aria-haspopup="true" aria-label="user-actions-dropdown">
                         <span class="bi bi-three-dots-vertical"></span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="actionsDropdown" data-popper-placement="bottom-end">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="actionsDropdown"
+                        data-popper-placement="bottom-end">
                         {% if not current_user in blocklist and not user in blocklist %}
                         {% if is_friend %}
-                        <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}" data-action="remove-friend">Remove friend</a>
+                        <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}"
+                            data-action="remove-friend">Remove friend</a>
                         {% elif request_sent %}
-                        <a class="dropdown-item" style="font-style: italic;" id="friend-link" data-user-id="{{user.id}}" data-action="inactive">Request sent</a>
+                        <a class="dropdown-item" style="font-style: italic;" id="friend-link" data-user-id="{{user.id}}"
+                            data-action="inactive">Request sent</a>
                         {% else %}
-                        <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}" data-action="add-friend">Add friend</a>
+                        <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}"
+                            data-action="add-friend">Add friend</a>
                         {% endif%}
-                        <a class="dropdown-item" href="{% url 'get_conversation' user.id %}" id="message-link" data-action="message">Send message</a>
+                        <a class="dropdown-item" href="{% url 'get_conversation' user.id %}" id="message-link"
+                            data-action="message">Send message</a>
                         {% endif %}
                         {% if user in blocklist %}
-                        <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="unblock-user">Unblock this user</a>
+                        <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}"
+                            data-action="unblock-user">Unblock this user</a>
                         {% else %}
-                        <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="block-user">Block this user</a>
+                        <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}"
+                            data-action="block-user">Block this user</a>
                         {% endif %}
-                        <a class="dropdown-item" href="#" id="report-link" data-action="report-user"><form method="post">
-                            {% csrf_token %}
-                                        {% include 'partials/bootstrap_form.html' with form=report_form %}
-                            <input type="hidden" name="action" value="{{message.id}}">
-                            <button type="submit">Report</button>
-                        </form></a>
+                        <a class="dropdown-item" href="#" id="report-link" data-action="report-user">
+                            <form method="post">
+                                {% csrf_token %}
+                                {% include 'partials/bootstrap_form.html' with form=report_form %}
+                                <input type="hidden" name="action" value="{{message.id}}">
+                                <button type="submit">Report</button>
+                            </form>
+                        </a>
                     </div>
-                  </div>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -150,48 +161,48 @@
                                 </div>
                             </div>
                             {% if patient or mentor %}
-                                <div class="row">
-                                    <div class="profile-subheading col-md-6">
-                                        <label>Age of diagnosis</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        {% if patient %}
-                                            <p>{{ patient.age_of_diagnosis }}</p>
-                                        {% elif mentor %}
-                                            <p>{{ mentor.age_of_diagnosis }}</p>
-                                        {% endif %}
-                                    </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Age of diagnosis</label>
                                 </div>
-                                <div class="row">
-                                    <div class="profile-subheading col-md-6">
-                                        <label>Condition</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        {% if patient %}
-                                            <p>{{ patient.condition }}</p>
-                                        {% elif mentor %}
-                                            <p>{{ mentor.condition }}</p>
-                                        {% endif %}
-                                    </div>
+                                <div class="col-md-6">
+                                    {% if patient %}
+                                    <p>{{ patient.age_of_diagnosis }}</p>
+                                    {% elif mentor %}
+                                    <p>{{ mentor.age_of_diagnosis }}</p>
+                                    {% endif %}
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Condition</label>
+                                </div>
+                                <div class="col-md-6">
+                                    {% if patient %}
+                                    <p>{{ patient.condition }}</p>
+                                    {% elif mentor %}
+                                    <p>{{ mentor.condition }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
                             {% endif %}
                             {% if parent %}
-                                <div class="row">
-                                    <div class="profile-subheading col-md-6">
-                                        <label>Child's age of diagnosis</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p>{{ parent.child_age_of_diagnosis }}</p>
-                                    </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Child's age of diagnosis</label>
                                 </div>
-                                <div class="row">
-                                    <div class="profile-subheading col-md-6">
-                                        <label>Child's condition</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p>{{ parent.child_condition }}</p>
-                                    </div>
+                                <div class="col-md-6">
+                                    <p>{{ parent.child_age_of_diagnosis }}</p>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="profile-subheading col-md-6">
+                                    <label>Child's condition</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{ parent.child_condition }}</p>
+                                </div>
+                            </div>
                             {% endif %}
                         </div>
                         <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">

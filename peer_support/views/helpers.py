@@ -7,6 +7,7 @@ from django.contrib import messages
 
 def login_prohibited(view_function):
     """Decorator for view functions that redirect users away if they are logged in."""
+
     def modified_view_function(request):
         if request.user.is_authenticated:
             return redirect(settings.REDIRECT_URL_WHEN_LOGGED_IN)
@@ -15,6 +16,8 @@ def login_prohibited(view_function):
     return modified_view_function
 
 def notifications(request):
+    """Returns whether notifications have been viewed for the current user."""
+
     if request.user.is_authenticated:
         has_unviewed_notifications = Notification.objects.filter(user=request.user, viewed=False).exists()
         return {'has_unviewed_notifications': has_unviewed_notifications}
@@ -23,12 +26,15 @@ def notifications(request):
     
 def create_referral(user):
     """ Only creates referrals if the user is a mentor. """
+
     if isinstance(user, Mentor): 
         code = uuid.uuid4().hex[:10].upper()
         referral = Referral.objects.create(referrer=user, code=code)
         return referral
 
 def get_referral_code(user):
+    """Gets the referral code for a user, if it exists."""
+
     referral = Referral.objects.filter(referrer=user).first()
     if referral:
         return referral.code
@@ -36,6 +42,7 @@ def get_referral_code(user):
 
 def get_addable_peers(current_user):
     """Gets users who are not admin, friends, blocked or user"""
+
     friends_ids = current_user.friends.values_list('id', flat=True)
     blocked_users_ids = current_user.blocked_users.values_list('id', flat=True)
     blocked_by_ids = current_user.blocked_by.values_list('id', flat=True)
@@ -44,6 +51,7 @@ def get_addable_peers(current_user):
 
 def check_blocked_dm(current_user, conversation):
     """Check if the conversation is a DM and, if so, whether there is a block between the 2 users."""
+    
     blocked_dm = False
     if conversation.as_group() is None:
         for user in conversation.users.all(): 

@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def resources(request):
-    """display the first 10 questions from newest to oldest"""
+    """Display questions and resources in chronological order."""
+
     questions = Question.objects.order_by('-created_at')
     context = {'questions': questions}
     return render(request, 'resources.html', context)

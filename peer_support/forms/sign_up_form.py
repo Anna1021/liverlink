@@ -64,7 +64,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
         user_data.update({
             'condition': self.cleaned_data.get('condition'),
             'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
-                'transplant': self.cleaned_data.get('transplant'),
+            'transplant': self.cleaned_data.get('transplant'),
         })
         return Patient.objects.create_user(**user_data)
 
@@ -74,7 +74,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
         user_data.update({
             'child_condition': self.cleaned_data.get('child_condition'),
             'child_age_of_diagnosis': self.cleaned_data.get('child_age_of_diagnosis'),
-                'child_transplant': self.cleaned_data.get('child_transplant'),
+            'child_transplant': self.cleaned_data.get('child_transplant'),
         })
         return Parent.objects.create_user(**user_data)
 
@@ -84,7 +84,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
         user_data.update({
             'condition': self.cleaned_data.get('condition'),
             'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
-                'transplant': self.cleaned_data.get('transplant'),
+            'transplant': self.cleaned_data.get('transplant'),
             'referral_code': self.cleaned_data.get('referral_code')
         })
         return Mentor.objects.create_user(**user_data)

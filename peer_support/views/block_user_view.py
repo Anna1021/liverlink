@@ -9,6 +9,7 @@ class BlockUserView(LoginRequiredMixin, View):
 
     def get(self, request, user_id):
         """Block the specified user and delete all corresponding relationships and objects."""
+        
         blocked_user = User.objects.get(id=user_id)
         request.user.blocked_users.add(blocked_user)
         if blocked_user in request.user.friends.all():

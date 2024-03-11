@@ -9,6 +9,7 @@ class GetConversationView(LoginRequiredMixin, View):
 
     def get(self, request, user_id):
         """Get the direct conversation between two users."""
+
         current_user = request.user
         second_user = User.objects.get(id=user_id)
         conversation = self.get_conversation(current_user, second_user)
@@ -16,6 +17,7 @@ class GetConversationView(LoginRequiredMixin, View):
     
     def create_conversation(self, current_user, second_user):
         """Create a direct conversation between two users."""
+        
         conversation = Conversation.objects.create()
         conversation.users.add(current_user)
         conversation.users.add(second_user)

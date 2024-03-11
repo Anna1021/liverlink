@@ -7,6 +7,7 @@ from peer_support.models import Notification
 
 class CreateConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
+
     form_class = ConversationForm
     template_name = "create_conversation.html"
 
@@ -16,6 +17,7 @@ class CreateConversationView(LoginRequiredMixin, FormView):
 
     def post(self,request):
         """Post request for user to send message to conversation"""
+
         form = ConversationForm(request.user,data = request.POST)
         create_group = False
         if request.POST.get('group'):
@@ -29,6 +31,7 @@ class CreateConversationView(LoginRequiredMixin, FormView):
         
     def send_notification(self, request_user, conversation):
         """Sends notification to users in conversation"""
+        
         for user in conversation.users.all().exclude(id=request_user.id):
             Notification.objects.create(
                 title = "New conversation",

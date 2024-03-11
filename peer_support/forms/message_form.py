@@ -32,4 +32,4 @@ class MessageForm(forms.ModelForm):
             user.conversations.add(self.conversation)
         self.conversation.send(message)
         return message
-    # split this down into smaller functions
+    # split this down into smaller functions @hannah

@@ -20,7 +20,6 @@ class ResponseModelTestCase(TestCase):
         )
         test_question.save()
 
-        # Create a response
         test_response = Response.objects.create(
             user=self.user,
             question=test_question,

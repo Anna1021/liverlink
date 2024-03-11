@@ -2,15 +2,15 @@ from peer_support.models import Question, Response
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from peer_support.forms import NewReplyForm
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from peer_support.models import Question, Response
 from peer_support.forms import NewReplyForm
 
 @login_required(login_url='log_in')
-def replyPage(request):
-    """reply to the question"""
+def reply_page(request): # break this down @anna
+    """Reply to the question"""
+
     if request.method == 'POST':
         form = NewReplyForm(request.POST)
         if form.is_valid():
@@ -27,5 +27,4 @@ def replyPage(request):
             return render(request, 'resources.html', {'form': form})
     else:
         form = NewReplyForm()
-        
     return render(request, 'resources.html', {'form': form})

@@ -1,12 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect, reverse
-from peer_support.models import Report, Message, User
+from peer_support.models import Report, Message
 from django.contrib import messages
 
 @login_required
 def decline_report(request, report_id):
-    """Delete report make object viewable"""
+    """Deletes report to make object viewable"""
+
     if not request.user.is_staff:
             messages.error(request,"You do not have access to this view.")
             return redirect(reverse('dashboard'))
