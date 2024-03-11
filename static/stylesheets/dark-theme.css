@@ -184,3 +184,8 @@ border: 1px solid #720fe3;
 .dark-theme #Apply-btn{
   background-color: #c4c8cf;
 }
+.dark-theme .home-btn{
+  background-color: grey ;
+  border: 1px solid #000000;
+  color: white;
+}
