@@ -20,9 +20,9 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
         """Form options."""
 
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio']
+        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth'] #, 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio'
         widgets = {
-            'bio': forms.Textarea(attrs={'rows': 3}),
+            # 'bio': forms.Textarea(attrs={'rows': 3}),
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }
 
@@ -35,12 +35,12 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             'email': self.cleaned_data.get('email'),
             'password': self.cleaned_data.get('new_password'),
             'date_of_birth': self.cleaned_data.get('date_of_birth'),
-            'gender': self.cleaned_data.get('gender'),
-            'location': self.cleaned_data.get('location'),
-            'hospital': self.cleaned_data.get('hospital'),
-            'ethnicity': self.cleaned_data.get('ethnicity'),
-            'language': self.cleaned_data.get('language'),
-            'bio': self.cleaned_data.get('bio'),
+            # 'gender': self.cleaned_data.get('gender'),
+            # 'location': self.cleaned_data.get('location'),
+            # 'hospital': self.cleaned_data.get('hospital'),
+            # 'ethnicity': self.cleaned_data.get('ethnicity'),
+            # 'language': self.cleaned_data.get('language'),
+            # 'bio': self.cleaned_data.get('bio'),
         }
         user_type = self.cleaned_data.get('user_type')
         if user_type == 'PT':

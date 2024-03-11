@@ -12,9 +12,17 @@ $(document).ready(function() {
     $('#id_expertise').parent().hide();
   
   function showHideFields(userType) {
-      if (userType == 'PT') {
-          $('#id_condition').parent().show();
-          $('#id_age_of_diagnosis').parent().show();
+    if (userType == 'PF' || userType == 'MT') {
+        $('#id_referral_code').parent().show();
+    } else {
+        $('#id_referral_code').parent().hide();
+    }
+  }
+
+  /*
+  if (userType == 'PT') {
+          $('#id_condition').parent().hide();
+          $('#id_age_of_diagnosis').parent().hide();
           $('#id_child_condition').parent().hide();
           $('#id_child_age_of_diagnosis').parent().hide();
           $('#id_referral_code').parent().hide();
@@ -24,19 +32,19 @@ $(document).ready(function() {
       } else if (userType == 'PR') {
           $('#id_condition').parent().hide();
           $('#id_age_of_diagnosis').parent().hide();
-          $('#id_child_condition').parent().show();
-          $('#id_child_age_of_diagnosis').parent().show();
+          $('#id_child_condition').parent().hide();
+          $('#id_child_age_of_diagnosis').parent().hide();
           $('#id_referral_code').parent().hide();
           $('#id_transplant').parent().hide();
-          $('#id_child_transplant').parent().show();
+          $('#id_child_transplant').parent().hide();
           $('#id_expertise').parent().hide();
       } else if (userType == 'MT') {
-          $('#id_condition').parent().show();
-          $('#id_age_of_diagnosis').parent().show();
+          $('#id_condition').parent().hide();
+          $('#id_age_of_diagnosis').parent().hide();
           $('#id_child_condition').parent().hide();
           $('#id_child_age_of_diagnosis').parent().hide();
           $('#id_referral_code').parent().show();
-          $('#id_transplant').parent().show();
+          $('#id_transplant').parent().hide();
           $('#id_child_transplant').parent().hide();
           $('#id_expertise').parent().hide();
       } else if (userType == 'PF'){
@@ -47,7 +55,7 @@ $(document).ready(function() {
           $('#id_referral_code').parent().show();
           $('#id_transplant').parent().hide();
           $('#id_child_transplant').parent().hide();
-          $('#id_expertise').parent().show();
+          $('#id_expertise').parent().hide();
       } else {
           $('#id_condition').parent().hide();
           $('#id_age_of_diagnosis').parent().hide();
@@ -58,7 +66,7 @@ $(document).ready(function() {
           $('#id_child_transplant').parent().hide();
           $('#id_expertise').parent().hide();
       }
-  }
+  */
 
   // Function to handle user type change
   function handleUserTypeChange() {
