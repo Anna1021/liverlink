@@ -27,7 +27,7 @@ class AcceptReportView(LoginRequiredMixin, View):
             return False
         if isinstance(reported_object, Message):
             self.handle_reported_message(reported_object)
-        elif isinstance(reported_object, User):
+        else:
             self.handle_reported_user(reported_object)
         report.delete()
         return True

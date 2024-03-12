@@ -44,10 +44,9 @@ class SortPeerForm(forms.Form):
     def calculate_age_score(self,current_user,other_user,weighting,score):
         """Calclates score based on age proximity"""
 
-        if current_user.date_of_birth and other_user.date_of_birth:
-            age_difference = abs(current_user.date_of_birth.year - other_user.date_of_birth.year)
-            if age_difference <= 5:
-                score += 1*weighting['age']
+        age_difference = abs(current_user.date_of_birth.year - other_user.date_of_birth.year)
+        if age_difference <= 5:
+            score += 1*weighting['age']
         return score
     
     def calculate_user_type_score(self, current_user, other_user, weighting,score):
