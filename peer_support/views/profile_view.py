@@ -11,7 +11,7 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request, username):
         """Get request for user to view profile"""
 
-        context = self.set_context(username)
+        context = self.set_context(request,username)
         return render(request, 'profile.html', context)
     
     def set_context(self, request, username):
