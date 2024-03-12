@@ -1,4 +1,3 @@
-import datetime
 from django.test import TestCase
 from peer_support.models import Report, Message, User
 from peer_support.forms import ReportForm

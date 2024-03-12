@@ -1,4 +1,4 @@
-"""Unit test of javascript in peer_select view"""
+"""Unit test of javascript in reply_page view"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
@@ -38,27 +38,17 @@ class ReplyPageTest(StaticLiveServerTestCase):
             self.selenium.get(f'{self.live_server_url}/log_in/')
             username_input =self.wait.until(EC.visibility_of_element_located((By.NAME, "username")))
             username_input.send_keys('@johndoe')
-
             password_input =self.wait.until(EC.visibility_of_element_located((By.NAME, "password")))
             password_input.send_keys('Password123')
-
-            login_button =self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
-            login_button.click()
-
-            resources_button =self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Resources')]")))
-            resources_button.click()
-
-            link =self.wait.until(EC.element_to_be_clickable((By.XPATH, "//p[@class='question-list-item-title' and contains(text(), 'Sample Question Title')]")))
-            link.click()
-
-            reply_button =self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".reply-button")))
-            reply_button.click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Resources')]"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//p[@class='question-list-item-title' and contains(text(), 'Sample Question Title')]"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".reply-button"))).click()
 
             reply_form_container =self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".reply-form-container.enabled")))
             self.assertTrue(reply_form_container.is_displayed())
 
-            cancel_button =self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".reply-form-cancel-button")))
-            cancel_button.click()
+            self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".reply-form-cancel-button"))).click()
 
             self.wait.until_not(lambda driver: driver.find_element(By.CSS_SELECTOR, ".reply-form-container.enabled").is_displayed())
         

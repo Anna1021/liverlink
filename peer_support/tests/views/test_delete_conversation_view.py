@@ -1,4 +1,4 @@
-"""Tests for the leave conversation view"""
+"""Tests for the delete conversation view"""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.models import Conversation,User

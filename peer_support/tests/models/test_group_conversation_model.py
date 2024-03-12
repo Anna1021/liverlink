@@ -1,6 +1,6 @@
 """Unit tests for the Group Conversation model."""
 from django.test import TestCase
-from peer_support.models import User,Message,Conversation
+from peer_support.models import User, Message, Conversation
 
 class GroupConversationModelTestCase(TestCase):
     """Unit tests for the Group Conversation model."""

@@ -49,6 +49,7 @@ class Conversation(models.Model):
 
     def delete(self,users):
         """Delete conversation and its messages for personal view or completely"""
+        
         for message in self.messages.all():
             message.delete(users.all()) 
         if users.count() == 1:

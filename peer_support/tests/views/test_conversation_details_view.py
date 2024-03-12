@@ -5,8 +5,8 @@ from peer_support.models import User, Conversation
 from peer_support.forms import AddUsersForm
 from django.contrib import messages
 
-class ConversationViewTestCase(TestCase):
-    """Tests of the conversation view."""
+class ConversationDetailsViewTestCase(TestCase):
+    """Tests of the conversation details view."""
 
     fixtures = ['peer_support/tests/fixtures/default_user.json',
                 'peer_support/tests/fixtures/other_users.json',

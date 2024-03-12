@@ -3,7 +3,7 @@ from peer_support.models import Report, Message, User
 from django.contrib.contenttypes.models import ContentType
 
 class ReportModelTestCase(TestCase):
-    """Tests of the report view"""
+    """Unit test of report model"""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',

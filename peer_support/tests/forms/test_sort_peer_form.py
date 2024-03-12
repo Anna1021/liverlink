@@ -2,7 +2,7 @@
 import datetime
 from django.test import TestCase
 from peer_support.forms import SortPeerForm 
-from peer_support.models import User,Patient,Parent,Mentor
+from peer_support.models import User, Patient, Parent, Mentor
 
 class SortPeerFormTestCase(TestCase):
     """Unit test of SortPeerForm"""

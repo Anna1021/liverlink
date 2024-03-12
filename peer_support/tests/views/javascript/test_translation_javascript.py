@@ -10,6 +10,7 @@ from peer_support.models import User
 
 class LiveTranslationTest(StaticLiveServerTestCase):
     """Unit test of javascript which translates all views which contain navbar"""
+
     fixtures = ['peer_support/tests/fixtures/default_user.json']
 
     @classmethod
@@ -37,13 +38,11 @@ class LiveTranslationTest(StaticLiveServerTestCase):
             username_input.send_keys('@johndoe')
             password_input = self.wait.until(EC.visibility_of_element_located((By.NAME, "password")))
             password_input.send_keys('Password123')
-            login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
-            login_button.click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
         except TimeoutException as e:
             self.fail(f"Test failed due to timeout while waiting for an element: {e}")
-
         try:
-            translate_widget =self.wait.until(EC.presence_of_element_located((By.ID, "google_translate_element")))
+            self.wait.until(EC.presence_of_element_located((By.ID, "google_translate_element")))
         except NoSuchElementException:
             self.fail("Google Translate widget not found on the page.")
 
@@ -57,18 +56,14 @@ class LiveTranslationTest(StaticLiveServerTestCase):
             username_input.send_keys('@johndoe')
             password_input = self.wait.until(EC.visibility_of_element_located((By.NAME, "password")))
             password_input.send_keys('Password123')
-            login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
-            login_button.click()
-            find_friends_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]")))
-            find_friends_button.click()
-            find_friends_button_again = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]")))
-            find_friends_button_again.click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]"))).click()
             self.selenium.back()
         except TimeoutException as e:
             self.fail(f"Test failed due to timeout while waiting for an element: {e}")
-
         try:
-            translate_widget =self.wait.until(EC.presence_of_element_located((By.ID, "google_translate_element")))
+            self.wait.until(EC.presence_of_element_located((By.ID, "google_translate_element")))
         except NoSuchElementException:
             self.fail("Google Translate widget not found on the page.")
 

@@ -31,14 +31,12 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
 
         user_data = self.get_user_data()
         user_type = self.cleaned_data.get('user_type')
-
         if user_type == 'PT':
             user = self.create_patient(user_data)
         elif user_type == 'PR':
             user = self.create_parent(user_data)
         else:
             user = self.create_mentor(user_data)
-
         return user
 
     def get_user_data(self):
@@ -89,19 +87,26 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             'referral_code': self.cleaned_data.get('referral_code')
         })
         return Mentor.objects.create_user(**user_data)
-
-    def clean(self):
-        """Validation of referral code and DOB."""
-        cleaned_data = super().clean()
-        user_type = cleaned_data.get('user_type')
-        referral_code = cleaned_data.get('referral_code')
+    
+    def validate_referral_code(self, referral_code, user_type):
         if user_type == 'MT':
             try:
                 Referral.objects.get(code=referral_code)
             except Referral.DoesNotExist:
                 self.add_error('referral_code', "Please enter a valid referral code.")
-        dob = self.cleaned_data.get('date_of_birth')
+
+    def validate_dob(self, dob):
         today = date.today()
-        if dob is not None and (dob.year + 13, dob.month, dob.day) > (today.year, today.month, today.day):
+        if dob and (dob.year + 13, dob.month, dob.day) > (today.year, today.month, today.day):
             self.add_error('date_of_birth', 'You must be 13 years old to register.')
+
+    def clean(self):
+        """Validation of referral code and DOB."""
+        
+        cleaned_data = super().clean()
+        user_type = cleaned_data.get('user_type')
+        referral_code = cleaned_data.get('referral_code')
+        dob = cleaned_data.get('date_of_birth')
+        self.validate_referral_code(referral_code, user_type)
+        self.validate_dob(dob)
         return cleaned_data

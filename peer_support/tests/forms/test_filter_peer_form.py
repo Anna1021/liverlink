@@ -1,9 +1,7 @@
 """Unit test for the FilterPeerForm"""
 from django.test import TestCase
 from peer_support.forms import FilterPeerForm 
-from django.test import TestCase
 from peer_support.models import User
-
 
 class FilterPeerFormTestCase(TestCase):
     """Unit test for the FilterPeerForm"""

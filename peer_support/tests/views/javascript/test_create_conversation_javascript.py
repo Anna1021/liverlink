@@ -44,18 +44,11 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
             username_input.send_keys('@johndoe')
             password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "password")))
             password_input.send_keys('Password123')
-            login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
-            login_button.click()
-
-            messages_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Messages')]")))
-            messages_button.click()
-
-            create_conversation_link = self.wait.until(
-                EC.element_to_be_clickable((By.XPATH, "//a[@href='/create_conversation/']")))
-            create_conversation_link.click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Messages')]"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/create_conversation/']"))).click()
 
             direct_button = self.wait.until(EC.presence_of_element_located((By.XPATH, '//button[@id="direct"]')))
-
             group_button = self.wait.until(EC.presence_of_element_located((By.XPATH, '//button[@id="group"]')))
 
             self.assertFalse(direct_button.is_enabled())
