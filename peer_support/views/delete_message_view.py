@@ -2,7 +2,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.shortcuts import redirect
 from django.urls import reverse
-from peer_support.models import Conversation
 from peer_support.forms import MessageForm
 from .helpers import get_conversation,get_message,no_conversation_url
 

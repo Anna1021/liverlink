@@ -15,5 +15,4 @@ def deactivate_user(request):
         messages.add_message(request, messages.SUCCESS, "Profile successfully deactivated!")
         logout(request)
         return redirect('home')
-
     return HttpResponseForbidden()
