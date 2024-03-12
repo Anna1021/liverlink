@@ -204,3 +204,12 @@ border: 1px solid #720fe3;
   border: 1px solid #000000;
   color: white;
 }
+
+.dark-theme .responses-container-heading {
+  color: #ffffff;
+}
+
+.dark-theme .response-author {
+  color: rgb(185, 185, 255);
+  font-style: italic;
+}

@@ -1,3 +1,4 @@
+import datetime
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from peer_support.models import Report, Message, User
@@ -15,7 +16,7 @@ class ReportFormTest(TestCase):
     ]
 
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.user = User.objects.create_user(username='testuser', password='12345', date_of_birth=datetime.date(1990,1,1))
         self.object_to_report = Message.objects.first()
         self.form_data = {'reason': 'spam'} 
 
