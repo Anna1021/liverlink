@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Case, When, Value, IntegerField
 from .form_choices import SORT_USER_CHOICES
 
 class SortPeerForm(forms.Form):
@@ -33,11 +34,11 @@ class SortPeerForm(forms.Form):
                      "child_age_of_diagnosis":0.2,"child_condition":1}
         score = self.calculate_user_type_score(current_user,other_user,weighting_types,score)
         score = self.calculate_age_score(current_user,other_user,weighting_types,score)
-        weighting = {"gender": 0.2, "language": 0.9, "ethnicity": 0.2, "location": 1, "hospital": 1,}
+        weighting_user = {"gender": 0.2, "language": 0.9, "ethnicity": 0.2, "location": 1, "hospital": 1,}
         matches = {
             attribute: getattr(current_user, attribute, None) == getattr(other_user, attribute, None)
-            for attribute in weighting}
-        score += sum(weight for attribute, weight in weighting.items() if matches[attribute])
+            for attribute in weighting_user}
+        score += sum(weight for attribute, weight in weighting_user.items() if matches[attribute])
         return score
 
     def calculate_age_score(self,current_user,other_user,weighting,score):
@@ -69,8 +70,9 @@ class SortPeerForm(forms.Form):
             score += condition_weight
         age_of_diagnosis_1 = getattr(user_type_1, 'age_of_diagnosis', None)
         age_of_diagnosis_2 = getattr(user_type_2, 'age_of_diagnosis', None)
-        if abs(age_of_diagnosis_1 - age_of_diagnosis_2) < 5:
-            score += age_diagnosis_weight
+        if age_of_diagnosis_1 and age_of_diagnosis_2:
+            if abs(age_of_diagnosis_1 - age_of_diagnosis_2) < 5:
+                score += age_diagnosis_weight
         return score
 
 

@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from peer_support.models import User
 
 class PeerSelectJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in peer_select view"""
@@ -28,6 +29,10 @@ class PeerSelectJavascriptTest(StaticLiveServerTestCase):
 
     def test_dynamic_form_peer_select(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
+
+        user = User.objects.get(username='@johndoe')
+        user.first_login = False
+        user.save()
         
         try:
             username_input = self.wait.until(EC.element_to_be_clickable((By.NAME, "username")))

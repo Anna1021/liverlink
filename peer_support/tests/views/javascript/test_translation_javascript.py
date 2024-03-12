@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from peer_support.models import User
 
 class LiveTranslationTest(StaticLiveServerTestCase):
     """Unit test of javascript which translates all views which contain navbar"""
@@ -27,6 +28,9 @@ class LiveTranslationTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_webpage_translates(self):
+        user = User.objects.get(username='@johndoe')
+        user.first_login = False
+        user.save()
         try:
             self.selenium.get(f'{self.live_server_url}/log_in/')
             username_input = self.wait.until(EC.visibility_of_element_located((By.NAME, "username")))
@@ -44,6 +48,9 @@ class LiveTranslationTest(StaticLiveServerTestCase):
             self.fail("Google Translate widget not found on the page.")
 
     def test_page_reloads_widget_when_navigation_arrows_used(self):
+        user = User.objects.get(username='@johndoe')
+        user.first_login = False
+        user.save()
         try:
             self.selenium.get(f'{self.live_server_url}/log_in/')
             username_input = self.wait.until(EC.visibility_of_element_located((By.NAME, "username")))

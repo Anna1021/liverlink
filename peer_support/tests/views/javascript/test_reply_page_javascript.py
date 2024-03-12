@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from peer_support.models import User
 
 class ReplyPageTest(StaticLiveServerTestCase):
     """Unit test of javascript in reply_page view"""
@@ -30,6 +31,9 @@ class ReplyPageTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_reply_form_toggle(self):
+        user = User.objects.get(username='@johndoe')
+        user.first_login = False
+        user.save()
         try:
             self.selenium.get(f'{self.live_server_url}/log_in/')
             username_input =self.wait.until(EC.visibility_of_element_located((By.NAME, "username")))

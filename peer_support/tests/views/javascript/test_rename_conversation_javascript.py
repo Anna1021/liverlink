@@ -38,7 +38,8 @@ class RenameConversationJavascriptTest(StaticLiveServerTestCase):
         user = User.objects.get(username='@johndoe')
         user.conversations.set([1,2])
         user.first_login=False
-        group_conversation = GroupConversation.objects.get(pk=2)
+        user.save()
+        
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         try:
             username_input =self.wait.until(EC.element_to_be_clickable((By.NAME, "username")))

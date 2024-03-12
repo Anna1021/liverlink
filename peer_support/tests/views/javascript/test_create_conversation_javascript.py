@@ -37,6 +37,7 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
         user = User.objects.get(username='@johndoe')
         user.friends.set(User.objects.exclude(username='@johndoe'))
         user.first_login = False
+        user.save()
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         try:
             username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
