@@ -52,12 +52,11 @@ def get_addable_peers(current_user):
 def check_blocked_dm(current_user, conversation):
     """Check if the conversation is a DM and, if so, whether there is a block between the 2 users."""
     
-    blocked_dm = False
     if conversation.as_group() is None:
-        for user in conversation.users.all(): 
-            if current_user in user.blocked_users.all() or user in current_user.blocked_users.all():
-                blocked_dm = True
-    return blocked_dm
+        user = conversation.users.exclude(id=current_user.id).get()
+        if current_user in user.blocked_users.all() or user in current_user.blocked_users.all():
+            return True
+    return False
 
 def get_conversation(request,conversation_id):
     conversations = request.user.conversations.filter(id=conversation_id)
