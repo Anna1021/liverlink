@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from peer_support.models import User,GroupConversation
 from selenium.common.exceptions import TimeoutException
 
-class CreateConversationJavascriptTest(StaticLiveServerTestCase):
+class RenameConversationJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in peer_select view"""
     fixtures = ['peer_support/tests/fixtures/default_user.json',
                 'peer_support/tests/fixtures/other_users.json',
@@ -37,6 +37,7 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
     def test_dynamic_form_display(self):
         user = User.objects.get(username='@johndoe')
         user.conversations.set([1,2])
+        user.first_login=False
         group_conversation = GroupConversation.objects.get(pk=2)
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         try:
