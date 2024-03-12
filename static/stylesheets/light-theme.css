@@ -266,3 +266,11 @@
     border: 1px solid #720fe3;
     color: var(--btn-text-color);
 }
+
+.light-theme .responses-container-heading {
+  color: #1B1F3B;
+}
+.light-theme .response-author {
+  color: blue;
+  font-style: italic;
+}

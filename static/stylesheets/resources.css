@@ -136,6 +136,7 @@ blockquote {
   color: white;
   margin: 0 auto;
   cursor: pointer;
+  margin-bottom: 25px;
 }
 
 .question-title {
@@ -157,21 +158,12 @@ blockquote {
   margin-top: 30px;
 }
 
-.responses-container-heading {
-  color: #1B1F3B;
-}
-
 .no-responses-text {
   color: #1B1F3B;
 }
 
 .response-body {
   margin: 0;
-}
-
-.response-author {
-  color: blue;
-  font-style: italic;
 }
 
 .reply-button {
