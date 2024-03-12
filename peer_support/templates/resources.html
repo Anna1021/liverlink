@@ -1,9 +1,9 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 {% block page %}
-  <div class="main">
-    <div id="resources-card" class="card shadow box-area my-2">
-  {% include 'partials/resources-navbar.html' %}
+<div class="main">
+  <div id="resources-card" class="card shadow box-area my-2">
+    {% include 'partials/resources-navbar.html' %}
     <div class="page">
       <!-- Questions Section -->
       <div class="section">
@@ -12,11 +12,13 @@
           {% for question in questions %}
           <div class="question-list-item">
             <a href="{% url 'question' question.id %}">
-              <p class="question-list-item-title">{{question.title}}</p>
+              <p class="question-list-item-title">{{ question.title }}</p>
               <p class="question-list-item-author">
-                by {{question.author.username}}
+                by {{ question.author.username }}
               </p>
             </a>
+            <!-- Delete button styled as a link -->
+            <a href="{% url 'delete_question' id=question.id %}" class="btn delete-btn btn-lg btn-outline-danger" role="button">Delete</a>
           </div>
           {% endfor %}
         </div>

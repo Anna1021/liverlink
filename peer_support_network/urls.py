@@ -56,4 +56,5 @@ urlpatterns = [
     path('decline_report/<int:report_id>',views.decline_report,name="decline_report"),
     path('leave_conversation/<int:conversation_id>',views.LeaveConversationView.as_view(),name='leave_conversation'),
     path('delete_conversation/<int:conversation_id>',views.DeleteConversationView.as_view(),name='delete_conversation'),
+    path('delete_question/<int:id>/', views.delete_question, name='delete_question'),
 ]

@@ -261,7 +261,8 @@
   font-size: calc(1.375rem + 1.5vw);
 }
 
-.light-theme .home-btn{
+.light-theme .home-btn,
+.light-theme .delete-btn {
     background-color: var(--submit-btn-color) ;
     border: 1px solid #720fe3;
     color: var(--btn-text-color);
