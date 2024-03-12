@@ -36,6 +36,7 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
     def test_dynamic_button_disabling(self):
         user = User.objects.get(username='@johndoe')
         user.friends.set(User.objects.exclude(username='@johndoe'))
+        user.first_login = False
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         try:
             username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
