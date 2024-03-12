@@ -21,7 +21,7 @@ class ProfileViewTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
         self.url = reverse('profile',kwargs={'username':self.user.username})
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
 
     def test_profile_url(self):
         self.assertEqual(self.url,'/profile/@johndoe/')

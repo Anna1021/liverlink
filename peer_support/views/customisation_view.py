@@ -9,6 +9,7 @@ class CustomisationView(LoginRequiredMixin, View):
 
     def get(self, request):
         """Get request for user to view customisation settings"""
+        
         profile_pictures = os.listdir(os.path.join(settings.STATIC_ROOT, 'profile_pictures'))
         context = {'profile_pictures': profile_pictures}
         return render(request, 'customisation.html', context)

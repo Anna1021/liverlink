@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.tests.helpers import reverse_with_next
-from peer_support.models import UserProfile, User
+from peer_support.models import User
 
 class CustomisationViewTestCase(TestCase):
     """Tests for the customisation view."""

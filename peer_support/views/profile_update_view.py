@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
 from django.urls import reverse
-from peer_support.models import Patient, Parent, Mentor, UserProfile
+from peer_support.models import Patient, Parent, Mentor
 from peer_support.forms import UserForm, PatientForm, ParentForm, MentorForm
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
