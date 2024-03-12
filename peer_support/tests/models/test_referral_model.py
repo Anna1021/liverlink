@@ -1,4 +1,5 @@
 """Unit tests for the Referral model."""
+import datetime
 from django.test import TestCase
 from peer_support.models import Referral, Mentor
 from django.core.exceptions import ValidationError
@@ -8,7 +9,7 @@ class ReferralModelTestCase(TestCase):
     """Unit tests for the Referral model."""
 
     def setUp(self):
-        self.referrer = Mentor.objects.create(username='@johndoe')
+        self.referrer = Mentor.objects.create(username='@johndoe', date_of_birth=datetime.date(1990,1,1))
         self.referral = Referral.objects.create(referrer=self.referrer, code='ABC123')
 
     def test_valid_referrer(self):

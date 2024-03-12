@@ -123,9 +123,9 @@ class UserModelTestCase(TestCase):
         self._assert_user_is_invalid()
 
 
-    def test_date_of_birth_may_be_blank(self):
+    def test_date_of_birth_may_not_be_blank(self):
         self.user.date_of_birth = None
-        self._assert_user_is_valid()
+        self._assert_user_is_invalid()
 
     def test_date_of_birth_need_not_be_unique(self):
         second_user = User.objects.get(username='@janedoe')
