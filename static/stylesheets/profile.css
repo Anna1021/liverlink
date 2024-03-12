@@ -65,6 +65,10 @@
  * User actions menu styling
  */
 
+.profile-icon {
+    float: right;
+}
+
 .actions-icon, .actions-icon:hover {
     background-color: transparent;
     outline: none;
