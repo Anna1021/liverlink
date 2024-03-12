@@ -13,6 +13,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_form_class(self):
         """Return form class based on model of current user."""
+        
         if Patient.objects.filter(id=self.request.user.id).exists():
             return PatientForm
         elif Parent.objects.filter(id=self.request.user.id).exists():
@@ -24,6 +25,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         """Return the object (user) to be updated."""
+
         user_id = self.request.user.id
         if Patient.objects.filter(id=user_id).exists():
             user = Patient.objects.get(id=user_id)
@@ -37,5 +39,6 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         """Return redirect URL after successful update."""
+
         messages.add_message(self.request, messages.SUCCESS, "Profile updated!")
         return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
