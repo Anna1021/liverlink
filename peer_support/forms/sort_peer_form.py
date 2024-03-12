@@ -15,8 +15,8 @@ class SortPeerForm(forms.Form):
         sort_options = {
             'username_asc': lambda qs: qs.order_by('username'),
             'username_desc': lambda qs: qs.order_by('-username'),
-            'age_asc': lambda qs: self.mark_users_if_dob_exists(qs).order_by('dob_is_null', '-date_of_birth'),
-            'age_desc': lambda qs: self.mark_users_if_dob_exists(qs).order_by('dob_is_null', 'date_of_birth'),
+            'age_asc': lambda qs: qs.order_by('-date_of_birth'),
+            'age_desc': lambda qs: qs.order_by('date_of_birth'),
         }
         if sort_by in sort_options:
             users = sort_options[sort_by](users)
@@ -24,16 +24,6 @@ class SortPeerForm(forms.Form):
             user_scores = [(user, self.calculate_match_score(current_user, user)) for user in users]
             sorted_users = sorted(user_scores, key=lambda x: x[1], reverse=True)
             users = [user_score[0] for user_score in sorted_users]
-        return users
-
-    def mark_users_if_dob_exists(self,users):
-        users = users.annotate(
-            dob_is_null=Case(
-                When(date_of_birth=None, then=Value(1)),
-                default=Value(0),
-                output_field=IntegerField()
-            )
-        )
         return users
     
     def calculate_match_score(self, current_user, other_user):
@@ -80,9 +70,8 @@ class SortPeerForm(forms.Form):
             score += condition_weight
         age_of_diagnosis_1 = getattr(user_type_1, 'age_of_diagnosis', None)
         age_of_diagnosis_2 = getattr(user_type_2, 'age_of_diagnosis', None)
-        if age_of_diagnosis_1 and age_of_diagnosis_2:
-            if abs(age_of_diagnosis_1 - age_of_diagnosis_2) < 5:
-                score += age_diagnosis_weight
+        if abs(age_of_diagnosis_1 - age_of_diagnosis_2) < 5:
+            score += age_diagnosis_weight
         return score
 
 

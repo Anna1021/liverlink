@@ -19,7 +19,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
     email = models.EmailField(unique=True, blank=False)
-    date_of_birth = models.DateField(blank=True, null=True)
+    date_of_birth = models.DateField(blank=False, null=False)
     gender = models.CharField(max_length=50,choices=GENDER_CHOICES, blank=True)
     location = models.CharField(max_length=50,choices=COUNTRY_CHOICES, blank=True)
     hospital = models.CharField(max_length=500, choices=HOSPITAL_CHOICES, blank=True)

@@ -1,6 +1,7 @@
 from django import forms
 from peer_support.models import User, Parent, Patient, Mentor, Referral
 from .helpers import NewPasswordMixin
+from datetime import date
 from .form_choices import USER_TYPE_CHOICES, CONDITION_CHOICES, TRANSPLANT_CHOICES
 
 class SignUpForm(NewPasswordMixin, forms.ModelForm):
@@ -90,8 +91,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
         return Mentor.objects.create_user(**user_data)
 
     def clean(self):
-        """Validation of referral code"""
-        
+        """Validation of referral code and DOB."""
         cleaned_data = super().clean()
         user_type = cleaned_data.get('user_type')
         referral_code = cleaned_data.get('referral_code')
@@ -100,6 +100,8 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 Referral.objects.get(code=referral_code)
             except Referral.DoesNotExist:
                 self.add_error('referral_code', "Please enter a valid referral code.")
+        dob = self.cleaned_data.get('date_of_birth')
+        today = date.today()
+        if dob is not None and (dob.year + 13, dob.month, dob.day) > (today.year, today.month, today.day):
+            self.add_error('date_of_birth', 'You must be 13 years old to register.')
         return cleaned_data
-
-# maybe move age validation to here

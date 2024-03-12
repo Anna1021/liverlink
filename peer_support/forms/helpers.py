@@ -1,6 +1,5 @@
 from django import forms
 from django.core.validators import RegexValidator
-from datetime import date
 
 class NewPasswordMixin(forms.Form):
     """Form mixing for new_password and password_confirmation fields."""

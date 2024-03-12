@@ -1,4 +1,5 @@
 import uuid
+import datetime
 from django.test import TestCase
 from peer_support.models import Mentor, Referral, User, Conversation, GroupConversation
 from peer_support.views.helpers import create_referral, get_referral_code, get_addable_peers, check_blocked_dm
@@ -13,7 +14,7 @@ class HelpersViewTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.mentor = Mentor.objects.create(username='test_mentor')
+        self.mentor = Mentor.objects.create(username='@test_mentor', date_of_birth=datetime.date(1990,1,1),)
         
     def test_create_referral(self):
         referral = create_referral(self.mentor)

@@ -1,4 +1,5 @@
 """Unit test of SortPeerForm"""
+import datetime
 from django.test import TestCase
 from peer_support.forms import SortPeerForm 
 from peer_support.models import User,Patient,Parent,Mentor
@@ -17,8 +18,8 @@ class SortPeerFormTestCase(TestCase):
     def setUp(self):
         self.current_user_patient = Patient.objects.get(username='@janedoe')
         self.current_user_parent =  Parent.objects.get(username='@mohamedalf')
-        self.username_asc_order= ['@alexsmith', '@janedoe', '@johndoe', '@mohamedalf','@peterpickles','@petrapickles','@sambennet']
-        self.age_asc_order=['@janedoe', '@petrapickles', '@johndoe', '@alexsmith','@mohamedalf','@peterpickles']
+        self.username_asc_order= ['@alexsmith', '@janedoe', '@johndoe', '@mohamedalf', '@peterpickles', '@petrapickles', '@sambennet']
+        self.age_asc_order=['@janedoe', '@petrapickles', '@sambennet', '@johndoe', '@alexsmith', '@mohamedalf', '@peterpickles']
         self.users = User.objects.all()
 
     def test_form_has_necessary_fields(self):
@@ -53,7 +54,7 @@ class SortPeerFormTestCase(TestCase):
         form = SortPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_patient)
-        expected_order = self.age_asc_order+['@sambennet']
+        expected_order = self.age_asc_order
         sorted_usernames = [user.username for user in sorted_users]
         self.assertEqual(sorted_usernames, expected_order)
 
@@ -62,7 +63,7 @@ class SortPeerFormTestCase(TestCase):
         form = SortPeerForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_patient)
-        expected_order = self.age_asc_order[::-1]+['@sambennet']
+        expected_order = self.age_asc_order[::-1]
         sorted_usernames = [user.username for user in sorted_users]
         self.assertEqual(sorted_usernames, expected_order)
         
@@ -95,6 +96,7 @@ class SortPeerFormTestCase(TestCase):
         new_user = User.objects.create_user(
             username="@newuser",
             email="newuser@example.com",
+            date_of_birth=datetime.date(1990,1,1),
             first_name="New",
             last_name="User",
             password="testpassword123")
@@ -109,6 +111,7 @@ class SortPeerFormTestCase(TestCase):
         new_user = Patient.objects.create_user(
             username="@newuser",
             email="newuser@example.com",
+            date_of_birth=datetime.date(1990,1,1),
             first_name="New",
             last_name="User",
             password="testpassword123"
@@ -124,6 +127,7 @@ class SortPeerFormTestCase(TestCase):
         new_user = Parent.objects.create_user(
             username="@newuser",
             email="newuser@example.com",
+            date_of_birth=datetime.date(1990,1,1),
             first_name="New",
             last_name="User",
             password="testpassword123"
@@ -139,6 +143,7 @@ class SortPeerFormTestCase(TestCase):
         new_user = Mentor.objects.create_user(
             username="@newuser",
             email="newuser@example.com",
+            date_of_birth=datetime.date(1990,1,1),
             first_name="New",
             last_name="User",
             password="testpassword123"
