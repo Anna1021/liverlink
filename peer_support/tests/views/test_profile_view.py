@@ -230,6 +230,15 @@ class ProfileViewTest(TestCase):
         parent = response.context['parent']
         self.assertEqual(parent, self.user.parent)
 
+    def test_get_profile_admin(self):
+        user = User.objects.get(username='@admin')
+        url = reverse('profile', kwargs={'username': user.username})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profile.html')
+        admin = response.context['admin']
+        self.assertEqual(admin, user)
+
     def test_get_profile_patient(self):
         user = User.objects.get(username='@janedoe')
         url = reverse('profile', kwargs={'username': user.username})

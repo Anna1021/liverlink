@@ -23,8 +23,10 @@ class ProfileView(LoginRequiredMixin, View):
             context['parent'] = user.parent
         elif hasattr(user, 'patient'):
             context['patient'] = user.patient
-        else:
+        elif hasattr(user, 'mentor'):
             context['mentor'] = user.mentor
+        else:
+            context['admin'] = user
         context['blocklist'] = request.user.blocked_users.all() | user.blocked_users.all()
         context['is_friend'] = request.user in user.friends.all()
         context['conversation_form'] = ConversationForm(request.user)
