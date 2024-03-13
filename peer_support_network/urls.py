@@ -57,4 +57,5 @@ urlpatterns = [
     path('leave_conversation/<int:conversation_id>',views.LeaveConversationView.as_view(),name='leave_conversation'),
     path('delete_conversation/<int:conversation_id>',views.DeleteConversationView.as_view(),name='delete_conversation'),
     path('delete_question/<int:id>/', views.delete_question, name='delete_question'),
+    path('delete_reply/<int:reply_id>/', views.delete_reply, name='delete_reply'),
 ]

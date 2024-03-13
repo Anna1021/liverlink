@@ -213,3 +213,28 @@ border: 1px solid #720fe3;
   color: rgb(185, 185, 255);
   font-style: italic;
 }
+.dark-theme .no-responses-text {
+  color: #ffffff;
+}
+.dark-theme .delete-response-button {
+  background-color: rgb(205, 205, 233);
+  color: black;
+  border-color: #9da1d3;
+  box-shadow: #afaeff;
+  border-radius: 0.25rem;
+}
+.dark-theme .delete-btn {
+  border: 1px solid #9da1d3;
+  background-color: rgb(205, 205, 233);
+  color: black;
+  box-shadow: #e4d0fc;
+  font-size: 12px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; 
+}
+
+.dark-theme .delete-btn:hover {
+  background-color: #9da1d3; 
+  color: white; 
+}

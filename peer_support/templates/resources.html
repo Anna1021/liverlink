@@ -17,8 +17,17 @@
                 by {{ question.author.username }}
               </p>
             </a>
-            <!-- Delete button styled as a link -->
-            <a href="{% url 'delete_question' id=question.id %}" class="btn delete-btn btn-lg btn-outline-danger" role="button">Delete</a>
+            <form method="post" action="{% url 'delete_question' id=question.id %}" onsubmit="return confirmDelete()">
+              {% csrf_token %}
+              <button type="submit" class="btn delete-btn btn-lg btn-outline-danger">Delete</button>
+          </form>
+          
+          <script>
+              function confirmDelete() {
+                  return confirm('Are you sure you want to delete this question?');
+              }
+          </script>
+          
           </div>
           {% endfor %}
         </div>
