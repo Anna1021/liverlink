@@ -57,6 +57,28 @@ class ProfileViewTest(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertIn("There was an issue with the report.", str(messages_list[0]))
 
+    def test_report_profile_with_missing_form_name_has_no_effect(self):
+        before_count = Report.objects.count()
+        report_data = {
+            'action': self.user_to_report.pk,
+            'reason': 'abuse'
+        }
+        response = self.client.post(self.url_report, data=report_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        after_count = Report.objects.count()
+        self.assertEqual(before_count, after_count)
+
+    def test_get_conversation_with_missing_form_name_has_no_effect(self):
+        before_count = Conversation.objects.count()
+        conversation_data = {
+            'users': [self.user_to_message.id]
+        }
+        response = self.client.post(self.url, data=conversation_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.redirect_chain[-1][0], self.url)
+        after_count = Conversation.objects.count()
+        self.assertEqual(before_count, after_count)
+
     def test_get_conversation_when_no_conversation_exists_creates_conversation(self):
         self.assertEqual(Conversation.objects.count(), 0)
         conversation_data = {

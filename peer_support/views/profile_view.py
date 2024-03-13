@@ -41,9 +41,8 @@ class ProfileView(LoginRequiredMixin, View):
             user = User.objects.get(username=username)
             conversation_form = ConversationForm(request.user, data = request.POST)
             conversation_form.fields['users'].queryset = User.objects.all()
-            if conversation_form.is_valid():
-                conversation = conversation_form.save(request.user)
-                return redirect(reverse('conversation', kwargs={'conversation_id': conversation.id}))
+            conversation = conversation_form.save(request.user)
+            return redirect(reverse('conversation', kwargs={'conversation_id': conversation.id}))
             
         elif 'report' in request.POST:
             user = get_object_or_404(User, username=username)
