@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Message, Conversation
+from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Message, Conversation, Question
 import uuid
 
 from faker import Faker
@@ -46,6 +46,13 @@ conversation_fixtures = [
     {'users': [patient_fixtures[0], parent_fixtures[2]],  'messages': [message_fixtures[1]]},                                
 ]
 
+question_fixtures = [
+    {'author': patient_fixtures[0], 'title': 'Question 1', 'body': 'This is my first question.'},
+    {'author': parent_fixtures[0], 'title': 'Question 2', 'body': 'I have a question for you.'},
+    {'author': patient_fixtures[1], 'title': 'Question 3', 'body': 'Can you help me with this?'},
+    {'author': parent_fixtures[1], 'title': 'Question 4', 'body': 'I need help.'},
+]
+
 class Command(BaseCommand):
     """Build automation command to seed the database."""
 
@@ -53,7 +60,9 @@ class Command(BaseCommand):
     PARENT_COUNT = 100
     MENTOR_COUNT = 100
     NOTIFICATION_COUNT = 500
+    MESSAGE_COUNT = 1000
     CONVERSATION_COUNT = 500
+    QUESTION_COUNT = 250
     DEFAULT_PASSWORD = 'Password123'
     help = 'Seeds the database with sample data'
 
@@ -75,11 +84,14 @@ class Command(BaseCommand):
         self.create_notifications()
         self.notifications = Notification.objects.all()
 
-        # self.create_messages()
-        # self.messages = Message.objects.all()
+        self.create_messages()
+        self.messages = Message.objects.all()
 
         # self.create_conversations()
         # self.conversations = Conversation.objects.all()
+
+        self.create_questions()
+        self.questions = Question.objects.all()
 
     def create_patients(self):
         self.generate_patient_fixtures()
@@ -97,6 +109,18 @@ class Command(BaseCommand):
         self.generate_notification_fixtures()
         self.generate_random_notifications()
 
+    def create_messages(self):
+        self.generate_message_fixtures()
+        self.generate_random_messages()
+
+    # def create_conversations(self):
+    #     self.generate_conversation_fixtures()
+    #     self.generate_random_conversations()
+
+    def create_questions(self):
+        self.generate_question_fixtures()
+        self.generate_random_questions()
+
     def generate_patient_fixtures(self):
         for data in patient_fixtures:
             self.try_create_patient(data)
@@ -112,6 +136,18 @@ class Command(BaseCommand):
     def generate_notification_fixtures(self):
         for data in notification_fixtures:
             self.try_create_notification(data)
+
+    def generate_message_fixtures(self):
+        for data in message_fixtures:
+            self.try_create_message(data)
+
+    # def generate_conversation_fixtures(self):
+    #     for data in conversation_fixtures:
+    #         self.try_create_conversation(data)
+
+    def generate_question_fixtures(self):
+        for data in question_fixtures:
+            self.create_question(data)
 
     def generate_random_patients(self):
         patient_count = Patient.objects.count()
@@ -144,6 +180,30 @@ class Command(BaseCommand):
             self.generate_notification()
             notification_count = Notification.objects.count()
         print("Notification seeding complete.      ")
+
+    def generate_random_messages(self):
+        message_count = Message.objects.count()
+        while message_count < self.MESSAGE_COUNT:
+            print(f"Seeding message {message_count}/{self.MESSAGE_COUNT}", end='\r')
+            self.generate_message()
+            message_count = Message.objects.count()
+        print("Message seeding complete.      ")
+
+    # def generate_random_conversations(self):
+    #     conversation_count = Conversation.objects.count()
+    #     while conversation_count < self.CONVERSATION_COUNT:
+    #         print(f"Seeding conversation {conversation_count}/{self.CONVERSATION_COUNT}", end='\r')
+    #         self.generate_conversation()
+    #         conversation_count = Conversation.objects.count()
+    #     print("Conversation seeding complete.      ")
+
+    def generate_random_questions(self):
+        question_count = Question.objects.count()
+        while question_count < self.QUESTION_COUNT:
+            print(f"Seeding question {question_count}/{self.QUESTION_COUNT}", end='\r')
+            self.generate_question()
+            question_count = Question.objects.count()
+        print("Question seeding complete.      ")
 
     def generate_user_data(self):
         first_name = self.faker.first_name()
@@ -190,6 +250,27 @@ class Command(BaseCommand):
         description = self.faker.text(max_nb_chars=100)
         user = self.users[randint(0, len(self.users) - 1)]
         self.try_create_notification({'title': title, 'description': description, 'user': user})
+
+    def generate_message(self):
+        sender = self.users[randint(0, len(self.users) - 1)]
+        content = self.faker.text(max_nb_chars=100)
+        self.try_create_message({'sender': sender, 'content': content})
+
+    # def generate_conversation(self):
+    #     users = [self.users[randint(0, len(self.users) - 1)], self.users[randint(0, len(self.users) - 1)]]
+    #     messages = []
+    #     for _ in range(3):
+    #         message = self.messages[randint(0, len(self.messages) - 1)]
+    #         message.sender = users[randint(0, len(users) - 1)]
+    #         messages.append(message)
+    #     self.try_create_conversation({'users': users, 'messages': messages})
+
+    def generate_question(self):
+        author = self.users[randint(0, len(self.users) - 1)]
+        title = self.faker.sentence()
+        body = self.faker.text(max_nb_chars=100)
+        author = {'username': author.username}
+        self.try_create_question({'author': author, 'title': title, 'body': body})
         
     def try_create_patient(self, data):
         try:
@@ -215,9 +296,30 @@ class Command(BaseCommand):
         except:
             pass
 
+    def try_create_message(self, data):
+        try:
+            self.create_message(data)
+        except:
+            pass
+
+    # def try_create_conversation(self, data):
+    #     try:
+    #         self.create_conversation(data)
+    #     except:
+    #         pass
+
+    def try_create_question(self, data):
+        try:
+            self.create_question(data)
+        except:
+            pass
+
     def create_user(self, model, data):
         user = model.objects.create(**data)
         user.set_password(Command.DEFAULT_PASSWORD)
+        if data['username'] == '@johndoe':
+            user.is_superuser = True
+            user.is_staff = True
         user.save()
         if model == Mentor:
             Referral.objects.create(referrer=user, code=data['referral_code'])
@@ -235,6 +337,26 @@ class Command(BaseCommand):
     def create_notification(self, data):
         notification = Notification.objects.create(**data)
         notification.save()
+
+    def create_message(self, data):
+        message = Message.objects.create(**data)
+        message.save()
+
+    # def create_conversation(self, data):
+    #     conversation = Conversation.objects.create()
+    #     conversation.users.set(data['users'])
+    #     conversation.messages.set(data['messages'])
+    #     conversation.save()
+
+    def create_question(self, data):
+        Question.objects.create(
+            author=self.get_user(data['author']),
+            title=data['title'],
+            body=data['body']
+        )
+
+    def get_user(self, data):
+        return User.objects.get(username=data['username'])
 
 def create_username(first_name, last_name):
     return '@' + first_name.lower() + last_name.lower()
