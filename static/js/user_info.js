@@ -43,6 +43,10 @@ document.getElementById("barChartDataSelect").addEventListener("change", functio
         updateBarChartData(userTypesData);
     } else if (selectedValue==="userAges") {
         updateBarChartData(userAgesData);
+    } else if (selectedValue === "ethnicity") {
+        updateBarChartData(ethnicityData);
+    } else if (selectedValue === "liverDisease") {
+        updateBarChartData(liverDiseaseData);
     }
 });
 
@@ -90,7 +94,10 @@ document.getElementById("pieChartDataSelect").addEventListener("change", functio
         updatePieChartData(ethnicityData);
     } else if (selectedValue === "liverDisease") {
         updatePieChartData(liverDiseaseData);
-    }
+    } else if (selectedValue==="userTypes") {
+        updateBarChartData(userTypesData);
+    } else if (selectedValue==="userAges") {
+        updateBarChartData(userAgesData);}
 });
 
 updatePieChartData(ethnicityData);
