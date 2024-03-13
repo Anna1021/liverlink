@@ -7,14 +7,16 @@ from peer_support.forms import PatientForm, ParentForm, MentorForm
 from peer_support.models import Patient, Parent, Mentor
 from peer_support.tests.helpers import reverse_with_next
 
-class ProfileViewTest(TestCase):
+class SettingsViewTest(TestCase):
     """Test suite for the profile settings view."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/default_parent.json',
         'peer_support/tests/fixtures/other_users.json',
-        'peer_support/tests/fixtures/other_patients.json'
+        'peer_support/tests/fixtures/other_patients.json',
+        'peer_support/tests/fixtures/default_user_profile.json',
+        'peer_support/tests/fixtures/other_user_profiles.json',
     ]
 
     def setUp(self):

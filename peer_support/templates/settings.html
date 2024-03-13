@@ -1,22 +1,24 @@
 {% extends 'base_content.html' %}
 {% block content %}
+{% load static %}
 <div class="container">
   <div class="row">
     <div class="col-12">
       <h2>Profile settings</h2>
       <div class="col-2 ps-col">
         <div style="padding: 10px"></div>
-        <img src="{{ user.gravatar }}" class="ps-gravatar" alt="Your gravatar">   </img>
+        <img src="{% static user.userprofile.profile_picture %}" alt="Profile Picture" class="ps-gravatar">
         <div style="padding: 10px"></div>
         <div class="divider"></div>
         <div style="padding: 5px"></div>
         <ul class="ps-list">
           <li class="ps-list-item"><a class="ps-link" href="{% url 'settings' %}"><i class="bi bi-gear ps-icons"> </i>Personal information</a></li>
           <li class="ps-list-item"><a class="ps-link" href="{% url 'password' %}"><i class="bi bi-lock ps-icons"> </i>Password & security</a></li>
+          <li class="ps-list-item"><a class="ps-link" href="{% url 'customisation' %}"><i class="bi bi-brush ps-icons"> </i>Customisation</a></li>
           <li class="ps-list-item"><a class="ps-link" href="{% url 'other_user_settings' %}"><i class="bi bi-person ps-icons"> </i>Other users</a></li>
           <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-bell ps-icons"> </i>Notifications</a></li>
           <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-brightness-low ps-icons"> </i>Accessibility</a></li>
-          <li class="ps-list-item"><a class="ps-link" href="{% url 'information' %}"><i class="bi bi-info"> </i>Information</a></li>
+          <li class="ps-list-item"><a class="ps-link" href="{% url 'information' %}"><i class="bi bi-info ps-icons"> </i>Information</a></li>
         </ul>
       </div>
       <div class="col-8 ps-col">
