@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Conversation
+from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Message, Conversation
 import uuid
 
 from faker import Faker
@@ -32,13 +32,28 @@ notification_fixtures = [
     {'title': 'New message', 'description': 'You have received a new message.', 'user': patient_fixtures[0]},
 ]
 
+message_fixtures = [
+    {'sender': patient_fixtures[0], 'content': 'Hello, how are you?'},
+    {'sender': parent_fixtures[0], 'content': 'I am good, thank you.'},
+    {'sender': parent_fixtures[0], 'content': 'How are you?'},
+    {'sender': patient_fixtures[1], 'content': 'I am good'},
+    {'sender': parent_fixtures[1], 'content': 'Hi'},
+]
+
+conversation_fixtures = [
+    {'users': [patient_fixtures[0], parent_fixtures[0]], 'messages': [message_fixtures[0], message_fixtures[1], message_fixtures[2]]},
+    {'users': [patient_fixtures[1], parent_fixtures[1]], 'messages': [message_fixtures[3], message_fixtures[4]]},
+    {'users': [patient_fixtures[0], parent_fixtures[2]],  'messages': [message_fixtures[1]]},                                
+]
+
 class Command(BaseCommand):
     """Build automation command to seed the database."""
 
     PATIENT_COUNT = 100
     PARENT_COUNT = 100
     MENTOR_COUNT = 100
-    NOTIFICATION_COUNT = 10
+    NOTIFICATION_COUNT = 500
+    CONVERSATION_COUNT = 500
     DEFAULT_PASSWORD = 'Password123'
     help = 'Seeds the database with sample data'
 
@@ -55,8 +70,16 @@ class Command(BaseCommand):
         self.create_mentors()
         self.mentors = Mentor.objects.all()
 
+        self.users = User.objects.all()
+
         self.create_notifications()
         self.notifications = Notification.objects.all()
+
+        # self.create_messages()
+        # self.messages = Message.objects.all()
+
+        # self.create_conversations()
+        # self.conversations = Conversation.objects.all()
 
     def create_patients(self):
         self.generate_patient_fixtures()
@@ -148,7 +171,7 @@ class Command(BaseCommand):
     def generate_parent(self):
         user_data = self.generate_user_data()
         child_condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
-        child_age_of_diagnosis = randint(0, 30)
+        child_age_of_diagnosis = randint(0, 20)
         child_transplant = self.faker.random_element(elements=(tuple(transplant[0] for transplant in TRANSPLANT_CHOICES)))
         user_data.update({'child_condition': child_condition, 'child_age_of_diagnosis': child_age_of_diagnosis, 'child_transplant': child_transplant})
         self.try_create_parent(user_data)
@@ -165,7 +188,7 @@ class Command(BaseCommand):
     def generate_notification(self):
         title = self.faker.sentence()
         description = self.faker.text(max_nb_chars=100)
-        user = User.objects.get(username='@johndoe')
+        user = self.users[randint(0, len(self.users) - 1)]
         self.try_create_notification({'title': title, 'description': description, 'user': user})
         
     def try_create_patient(self, data):
