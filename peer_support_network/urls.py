@@ -35,6 +35,7 @@ urlpatterns = [
     path('block_user/<int:user_id>', views.BlockUserView.as_view(), name='block_user'),
     path('unblock_user/<int:user_id>', views.UnblockUserView.as_view(), name='unblock_user'),
     path('remove_friend/<int:user_id>', views.remove_friend, name='remove_friend'),
+    path('settings/feedback/', views.FeedbackView.as_view(), name='feedback'),
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('resources/', views.resources, name='resources'),
     path('question/<int:id>', views.question_page, name='question'),

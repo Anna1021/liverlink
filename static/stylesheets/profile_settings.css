@@ -13,6 +13,13 @@
     padding-bottom: 5px;
 }
 
+.ps-muted-text {
+    font-size: 16px;
+    color: grey;
+    padding-bottom: 5px;
+    font-style: italic;
+}
+
 .divider {
     border-top: 1px solid #DADADA;
 }
