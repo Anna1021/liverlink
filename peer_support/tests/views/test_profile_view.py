@@ -6,6 +6,7 @@ from peer_support.models import User, FriendRequest, Report
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.contrib import messages
+from django.contrib.messages import get_messages
 
 class ProfileViewTestCase(TestCase):
     """Tests of the other user profile view."""
@@ -199,3 +200,11 @@ class ProfileViewTestCase(TestCase):
         redirect_url = reverse_with_next('log_in', self.url)
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_non_existent_profile_redirect(self):
+        non_existent_username = 'noonehere'
+        url = reverse('profile', kwargs={'username': non_existent_username})
+        response = self.client.get(url)
+        self.assertRedirects(response, reverse('dashboard'))
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any(["does not exist" in str(message) for message in messages]))
