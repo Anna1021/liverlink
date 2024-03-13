@@ -33,6 +33,5 @@ from .moderation_view import ModerationView
 from .accept_report_view import AcceptReportView
 from .decline_report_view import DeclineReportView
 from .leave_conversation_view import LeaveConversationView
-from .get_conversation_view import GetConversationView
 from .information_view import InformationView
 from .delete_conversation_view import DeleteConversationView

@@ -16,8 +16,12 @@
         <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}"
             data-action="add-friend">Add friend</a>
         {% endif%}
-        <a class="dropdown-item" href="{% url 'get_conversation' user.id %}" id="message-link"
-            data-action="message">Send message</a>
+        <a class="dropdown-item-form" href="#" id="message-link" data-action="message">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="users" value="{{user.id}}">
+                <button type="submit" class="dropdown-item" name="message">Send message</button>
+            </form></a>
         {% endif %}
         {% if user in blocklist %}
         <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}"
@@ -31,7 +35,7 @@
                 {% csrf_token %}
                 {% include 'partials/bootstrap_form.html' with form=report_form %}
                 <input type="hidden" name="action" value="{{message.id}}">
-                <button type="submit">Report</button>
+                <button type="submit" name="report">Report</button>
             </form>
         </a>
     </div>

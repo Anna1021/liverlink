@@ -70,4 +70,6 @@ class User(AbstractUser):
         return dict(LANGUAGE_CHOICES)[self.language]
 
     def sort_conversations(self):
+        """Return a sorted list of the user's conversations."""
+
         return self.conversations.order_by("-last_updated")

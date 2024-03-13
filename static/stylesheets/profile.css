@@ -69,6 +69,16 @@
     float: right;
 }
 
+a.dropdown-item-form {
+    padding: 0px;
+    text-decoration: none;
+    display: block;
+}
+
+a.dropdown-item-form:hover {
+    background-color: #e9ecef;
+}
+
 .actions-icon, .actions-icon:hover {
     background-color: transparent;
     outline: none;
