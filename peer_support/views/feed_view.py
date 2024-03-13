@@ -12,6 +12,11 @@ class FeedView(LoginRequiredMixin, FormView):
         feed_type = request.GET.get('feed_type','global')  
         user_posts = self.retrieve_posts(request)
         form = PostForm()
+        current_user = request.user 
+        if current_user.first_login == True:
+            current_user.first_login = False
+            current_user.save()
+            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form,'first':True})
         return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
 
     def post(self,request):

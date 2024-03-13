@@ -12,5 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // Submit the form when the button is clicked
       document.getElementById('feedForm').submit();
     });
+
+    $('#post_form').on('shown.bs.modal', function () {
+      $('#myInput').trigger('focus')
+    })
   });
   

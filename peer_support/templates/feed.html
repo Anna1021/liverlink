@@ -1,5 +1,5 @@
 {% extends 'dashboard.html' %}
-{% load static %}
+<!-- {% load static %} -->
 {% block page %}
 
 <title>Feed</title>
@@ -7,7 +7,7 @@
 <div class="card bg-dark shadow box-area my-2"> 
   <div class="row">
     <div class="col-md-8">
-      <h1 class="card-header">Welcome to feed</h1>
+      <h1 class="card-header">Your feed</h1>
     </div>
     <!-- Button to switch between global feed and friends-only feed -->
     <div class="col-md-4">
@@ -24,23 +24,25 @@
     </div>
   
   </div>
-  <form method="post" class="px-4 py-3" novalidate>
-    {% csrf_token %}
-    {% include 'partials/bootstrap_form.html' with form=form %}
-    <button type="submit">Add</button>
-  </form>
-  <!-- scrollable -->
+
+  <button type="button" class="btn btn-light" id="create-post" data-bs-toggle="modal" data-bs-target="#create_post">Create post</button>
+  <div class="modal fade" id="create_post" tabindex="-1" aria-labelledby="create_post" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <form method="post" class="px-4 py-3" novalidate>
+              {% csrf_token %}
+              {% include 'partials/bootstrap_form.html' with form=form %}
+              <button type="submit">Add</button>
+            </form>
+          </div>
+        </div>
+    </div>
+  </div>
+ 
   <div class="card-body scrollable-container"> 
-    <!-- display feed -->
     <div class="scrollable-feed"> 
     {% for post in posts %}
-    <!-- <div class="post post-card">
-      <p>{{ post.text }}</p>
-      <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info">View Post</a>
-      {% if post.author == request.user %}
-        <a href="{% url 'delete_post' post_id=post.id %}">Delete</a>
-      {% endif %}
-    </div> -->
     {% include 'partials/post_details.html' with post=post from_feed=True %}
     {% empty %}
     <p>No posts available.</p>
@@ -49,6 +51,7 @@
   </div>
 </div>
 
+
 <script src="{% static 'js/feed.js' %}"></script>
-   
+
 {% endblock %}
