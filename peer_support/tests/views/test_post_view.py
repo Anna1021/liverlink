@@ -64,14 +64,14 @@ class PostViewTestCase(TestCase):
             'content': '', 
             'post': self.post.id,
         }
-        response = self.client.post(self.url, invalid_comment_form_data)
+        response = self.client.post(self.url, data=invalid_comment_form_data)
         response_count_after = PostComment.objects.count()
         self.assertEqual(response_count_after, response_count_before)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'post_detail.html')
         self.assertIn('form', response.context)
-        form = response.context['form']
+        form = response.context['comment_form']
         self.assertFalse(form.is_valid())
-        self.assertIn('body', form.errors)  
-        self.assertEqual(form.errors['body'], ['This field is required.'])
+        self.assertIn('content', form.errors)  
+        self.assertEqual(form.errors['content'], ['This field is required.'])
 

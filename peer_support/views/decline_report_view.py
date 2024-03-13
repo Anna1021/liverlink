@@ -9,7 +9,7 @@ def decline_report(request, report_id):
     """Delete report make object viewable"""
     if not request.user.is_staff:
             messages.error(request,"You do not have access to this view.")
-            return redirect(reverse('dashboard'))
+            return redirect(reverse('feed'))
     report = get_object_or_404(Report, id=report_id)
     reported_object = report.content_object
     if reported_object:
