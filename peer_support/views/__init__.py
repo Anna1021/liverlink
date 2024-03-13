@@ -1,6 +1,5 @@
 """Views for the tasks app."""
 
-from .dashboard_view import dashboard
 from .home_view import home
 from .log_in_view import LogInView
 from .log_out_view import log_out

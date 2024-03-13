@@ -33,6 +33,9 @@ class PostModelTestCase(TestCase):
     def test_text_must_not_contain_more_than_280_characters(self):
         self.post.text = 'x' * 281
         self._assert_post_is_invalid()
+
+    def test_correct_visibility(self):
+        self.assertEqual(self.post.visibility,"G")
     
     def test_delete_post(self):
         self.post.delete()

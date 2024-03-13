@@ -6,7 +6,7 @@ from peer_support.models import User, Post
 class PostComment(models.Model):
     """Model for Post Comments"""
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='replies')
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL,null=True)
     parent = models.ForeignKey('self', null=True, default = None, blank=True, on_delete=models.CASCADE)
     content = models.CharField(max_length=255)
     created_at = models.DateTimeField(default=timezone.now)

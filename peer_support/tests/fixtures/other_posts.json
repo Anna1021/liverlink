@@ -5,7 +5,8 @@
       "fields": {
         "author": 2,
         "text":"Friend post",
-        "created_at": "2024-03-07T21:21:05+00:00"
+        "created_at": "2024-03-07T21:21:05+00:00",
+        "visibility":"F"
       }
     },
     {
@@ -14,7 +15,8 @@
         "fields": {
             "author": 3,
             "text":"Stranger post",
-            "created_at": "2024-03-10T10:46:05+00:00"
+            "created_at": "2024-03-10T10:46:05+00:00",
+            "visibility":"F"
         }
     }
 ]
