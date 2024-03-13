@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Message, Conversation, Question
+from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Message, Conversation, Question, Response
 import uuid
 
 from faker import Faker
@@ -53,6 +53,13 @@ question_fixtures = [
     {'author': parent_fixtures[1], 'title': 'Question 4', 'body': 'I need help.'},
 ]
 
+response_fixtures = [
+    {'user': mentor_fixtures[0], 'question': question_fixtures[0], 'body': 'This is my first response.'},
+    {'user': mentor_fixtures[1], 'question': question_fixtures[1], 'body': 'I have a response for you.'},
+    {'user': mentor_fixtures[2], 'question': question_fixtures[2], 'body': 'I can help you with this.'},
+    {'user': parent_fixtures[0], 'question': question_fixtures[3], 'body': 'I can help you.'},
+]
+
 class Command(BaseCommand):
     """Build automation command to seed the database."""
 
@@ -63,6 +70,7 @@ class Command(BaseCommand):
     MESSAGE_COUNT = 1000
     CONVERSATION_COUNT = 500
     QUESTION_COUNT = 250
+    RESPONSE_COUNT = 1000
     DEFAULT_PASSWORD = 'Password123'
     help = 'Seeds the database with sample data'
 
@@ -93,6 +101,9 @@ class Command(BaseCommand):
         self.create_questions()
         self.questions = Question.objects.all()
 
+        self.create_responses()
+        self.responses = Response.objects.all()
+
     def create_patients(self):
         self.generate_patient_fixtures()
         self.generate_random_patients()
@@ -121,6 +132,10 @@ class Command(BaseCommand):
         self.generate_question_fixtures()
         self.generate_random_questions()
 
+    def create_responses(self):
+        self.generate_response_fixtures()
+        self.generate_random_responses()
+
     def generate_patient_fixtures(self):
         for data in patient_fixtures:
             self.try_create_patient(data)
@@ -148,6 +163,10 @@ class Command(BaseCommand):
     def generate_question_fixtures(self):
         for data in question_fixtures:
             self.create_question(data)
+
+    def generate_response_fixtures(self):
+        for data in response_fixtures:
+            self.create_response(data)
 
     def generate_random_patients(self):
         patient_count = Patient.objects.count()
@@ -205,6 +224,14 @@ class Command(BaseCommand):
             question_count = Question.objects.count()
         print("Question seeding complete.      ")
 
+    def generate_random_responses(self):
+        response_count = Response.objects.count()
+        while response_count < self.RESPONSE_COUNT:
+            print(f"Seeding response {response_count}/{self.RESPONSE_COUNT}", end='\r')
+            self.generate_response()
+            response_count = Response.objects.count()
+        print("Response seeding complete.      ")
+
     def generate_user_data(self):
         first_name = self.faker.first_name()
         last_name = self.faker.last_name()
@@ -217,7 +244,6 @@ class Command(BaseCommand):
         ethnicity = self.faker.random_element(elements=[ethnicity[0] for group in ETHNICITY_CHOICES for ethnicity in group[1]])
         language = self.faker.random_element(elements=(tuple(language[0] for language in LANGUAGE_CHOICES)))
         bio = self.faker.text(max_nb_chars=100)
-        
         return {'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital, 'ethnicity': ethnicity, 'language': language, 'bio': bio}
 
     def generate_patient(self):
@@ -249,6 +275,7 @@ class Command(BaseCommand):
         title = self.faker.sentence()
         description = self.faker.text(max_nb_chars=100)
         user = self.users[randint(0, len(self.users) - 1)]
+        user = {'username': user.username}
         self.try_create_notification({'title': title, 'description': description, 'user': user})
 
     def generate_message(self):
@@ -258,11 +285,8 @@ class Command(BaseCommand):
 
     # def generate_conversation(self):
     #     users = [self.users[randint(0, len(self.users) - 1)], self.users[randint(0, len(self.users) - 1)]]
-    #     messages = []
-    #     for _ in range(3):
-    #         message = self.messages[randint(0, len(self.messages) - 1)]
-    #         message.sender = users[randint(0, len(users) - 1)]
-    #         messages.append(message)
+    #     messages = [self.messages[randint(0, len(self.messages) - 1)], self.messages[randint(0, len(self.messages) - 1)]]
+    #     users = {'usernames': [user.username for user in users]}
     #     self.try_create_conversation({'users': users, 'messages': messages})
 
     def generate_question(self):
@@ -271,6 +295,14 @@ class Command(BaseCommand):
         body = self.faker.text(max_nb_chars=100)
         author = {'username': author.username}
         self.try_create_question({'author': author, 'title': title, 'body': body})
+
+    def generate_response(self):
+        user = self.users[randint(0, len(self.users) - 1)]
+        question = self.questions[randint(0, len(self.questions) - 1)]
+        body = self.faker.text(max_nb_chars=100)
+        user = {'username': user.username}
+        question = {'title': question.title} # Can we create a primary key for response model? such as id 
+        self.try_create_response({'user': user, 'question': question, 'body': body})
         
     def try_create_patient(self, data):
         try:
@@ -303,14 +335,20 @@ class Command(BaseCommand):
             pass
 
     # def try_create_conversation(self, data):
-    #     try:
-    #         self.create_conversation(data)
-    #     except:
-    #         pass
+    #     # try:
+    #     self.create_conversation(data)
+    #     # except:
+    #     #     pass
 
     def try_create_question(self, data):
         try:
             self.create_question(data)
+        except:
+            pass
+
+    def try_create_response(self, data):
+        try:
+            self.create_response(data)
         except:
             pass
 
@@ -335,25 +373,26 @@ class Command(BaseCommand):
         self.create_user(Mentor, data)
 
     def create_notification(self, data):
-        notification = Notification.objects.create(**data)
-        notification.save()
+        data['user'] = self.get_user(data['user'])
+        Notification.objects.create(**data)
 
     def create_message(self, data):
         message = Message.objects.create(**data)
         message.save()
 
     # def create_conversation(self, data):
-    #     conversation = Conversation.objects.create()
-    #     conversation.users.set(data['users'])
-    #     conversation.messages.set(data['messages'])
-    #     conversation.save()
+    #     data['users'] = [self.get_user(user) for user in data['users']]
+    #     Conversation.objects.create()
 
     def create_question(self, data):
-        Question.objects.create(
-            author=self.get_user(data['author']),
-            title=data['title'],
-            body=data['body']
-        )
+        data['author'] = self.get_user(data['author'])
+        Question.objects.create(**data)
+
+    def create_response(self, data):
+        data['user'] = self.get_user(data['user'])
+        data['question'] = Question.objects.filter(title=data['question']['title']).first() # Change this when primary key implemented
+        # Change it to a get
+        Response.objects.create(**data)
 
     def get_user(self, data):
         return User.objects.get(username=data['username'])
