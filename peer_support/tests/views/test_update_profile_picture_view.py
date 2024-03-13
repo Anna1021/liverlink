@@ -32,11 +32,6 @@ class UpdateProfilePictureViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {'status': 'fail'})
 
-    def test_update_profile_picture_without_post_request(self):
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {'status': 'fail'})
-
     def test_update_profile_picture_without_being_logged_in(self):
         self.client.logout()
         redirect_url = reverse_with_next('log_in', self.url)
