@@ -17,21 +17,6 @@
     left: 0;
 }
 
-.notification-list {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    padding: 20px;
-    margin-bottom: 7px;
-    background: #2E2D38;
-    color: white;
-    -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-    border-radius: 10px; 
-}
 
 .notification-list .notification-list_content {
     display: -webkit-box;
