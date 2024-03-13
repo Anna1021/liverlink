@@ -1,12 +1,12 @@
-"""Tests for the feedback view."""
+"""Tests for the submit feedback view."""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.forms import FeedbackForm
 from peer_support.models import User, Feedback
 from peer_support.tests.helpers import reverse_with_next
 
-class FeedbackViewTestCase(TestCase):
-    """Test suite for the feedback view."""
+class SubmitFeedbackViewTestCase(TestCase):
+    """Test suite for the submit feedback view."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json'
@@ -27,7 +27,7 @@ class FeedbackViewTestCase(TestCase):
         self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'feedback.html')
+        self.assertTemplateUsed(response, 'submit_feedback.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, FeedbackForm))
 

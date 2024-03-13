@@ -1,14 +1,10 @@
-{% extends 'settings.html' %}
-{% block title %} 
-    <div class="ps-title-text">Submit feedback</div>
-{% endblock %}
-
+{% extends 'dashboard.html' %}
 {% block page %}
-    <form action="{% url 'feedback' %}" method="post">
-      {% csrf_token %}
-      {% include 'partials/bootstrap_form.html' with form=form %}
-      <div class="ps-muted-text">Your feedback will remain anonymous.</div>
-      <input type="submit" value="Submit feedback" class="btn btn-primary">
-    </form>
-
+{% load static %}
+    <h1>Feedback</h1>
+    {% for fb in feedback %}
+        {% include 'partials/feedback_card.html' with feedback=fb %}
+    {% empty %}
+        <p>No feedback found.</p>
+    {% endfor %}
 {% endblock %}

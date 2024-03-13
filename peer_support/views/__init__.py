@@ -38,4 +38,6 @@ from .leave_conversation_view import LeaveConversationView
 from .get_conversation_view import GetConversationView
 from .information_view import InformationView
 from .delete_conversation_view import DeleteConversationView
+from .submit_feedback_view import SubmitFeedbackView
 from .feedback_view import FeedbackView
+from .delete_feedback_view import delete_feedback
