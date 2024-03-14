@@ -375,6 +375,7 @@ class Command(BaseCommand):
     #     reporter = self.users[randint(0, len(self.users) - 1)]
     #     reason = self.faker.random_element(elements=(tuple(report[0] for report in REPORT_CHOICES)))
     #     content_type = self.faker.random_element(elements=('Notification', 'Message')) # What other content type can we have?
+    #     # content_type can be any object in the database
     #     object_id = self.get_content_type(content_type).model_class().objects.order_by('?').first().pk
     #     reporter = {'username': reporter.username}
     #     self.try_create_report({'reporter': reporter, 'reason': reason, 'content_type': content_type, 'object_id': object_id})

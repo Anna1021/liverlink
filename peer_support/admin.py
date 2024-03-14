@@ -4,8 +4,6 @@ from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserP
 
 from .models import Report, Message
 # Register your models here.
-admin.site.register(models.Question)
-admin.site.register(models.Response)
 
 class UserProfileInline(admin.StackedInline):
     """Configuration of the admin interface for user profiles."""
@@ -96,4 +94,20 @@ class MessageAdmin(admin.ModelAdmin):
 
     list_display = [
         'id','sender','content', 'send_time', 'previous_message'
+    ]
+
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for questions."""
+
+    list_display = [
+        'id', 'author', 'title'
+    ]
+
+@admin.register(Response)
+class ResponseAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for responses."""
+
+    list_display = [
+        'id', 'user', 'question', 'parent', 'body'
     ]
