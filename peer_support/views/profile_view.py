@@ -38,21 +38,32 @@ class ProfileView(LoginRequiredMixin, View):
     
     def post(self, request, username):
         """Handle POST requests for the ReportForm and ConversationForm."""
-        
+
         if 'message' in request.POST:
-            user = User.objects.get(username=username)
-            conversation_form = ConversationForm(request.user, data = request.POST)
-            conversation_form.fields['users'].queryset = User.objects.all()
-            conversation = conversation_form.save(request.user)
-            return redirect(reverse('conversation', kwargs={'conversation_id': conversation.id}))
-            
+            return self._handle_conversation_submission(request, username)
         elif 'report' in request.POST:
-            user = get_object_or_404(User, username=username)
-            report_form = ReportForm(request.POST)
-            if report_form.is_valid():
-                report_form.save_report_for_object(user, request.user)
-                messages.success(request, "Profile reported successfully.")
-            else:
-                messages.error(request, "There was an issue with the report.")
+            return self._handle_report_submission(request, username)
+        else:
+            messages.error(request, "There was an issue with the report.")
+        return redirect(reverse('profile', kwargs={'username': username}))
+
+    def _handle_conversation_submission(self, request, username):
+        """Handle conversation form submission."""
+
+        user = User.objects.get(username=username)
+        conversation_form = ConversationForm(request.user, data=request.POST)
+        conversation_form.fields['users'].queryset = User.objects.all()
+        conversation = conversation_form.save(request.user)
+        return redirect(reverse('conversation', kwargs={'conversation_id': conversation.id}))
+
+    def _handle_report_submission(self, request, username):
+        """Handle report form submission."""
         
+        user = get_object_or_404(User, username=username)
+        report_form = ReportForm(request.POST)
+        if report_form.is_valid():
+            report_form.save_report_for_object(user, request.user)
+            messages.success(request, "Profile reported successfully.")
+        else:
+            messages.error(request, "There was an issue with the report.")
         return redirect(reverse('profile', kwargs={'username': username}))
