@@ -14,8 +14,8 @@ The members of the team are:
 The project is called `peer_support_network`.  It currently consists of a single app `peer_support`.
 
 ## Deployed version of the application
-The deployed version of the application can be found at [*peersupport.pythonanywhere.com*](https://peersupport.pythonanywhere.com).
-The administrative interface can be found at [*peersupport.pythonanywhere.com/admin*](https://peersupport.pythonanywhere.com/admin).
+The deployed version of the application can be found at [*Liverly.pythonanywhere.com*](http://Liverly.pythonanywhere.com).
+The administrative interface can be found at [*Liverly.pythonanywhere.com/admin*](http://Liverly.pythonanywhere.com/admin).
 
 ## Installation instructions
 To install the software and use it in your local development environment, you must first set up and activate a local development environment.  From the root of the project:
