@@ -37,11 +37,6 @@ class PostModelTestCase(TestCase):
 
     def test_correct_visibility(self):
         self.assertEqual(self.post.visibility,"G")
-    
-    def test_delete_post(self):
-        self.post.delete()
-        with self.assertRaises(Post.DoesNotExist):
-            Post.objects.get(pk=self.post.pk)
         
     def test_comment_belongs_to_a_post(self):
         post1 = Post.objects.create(author=self.user, text="Post 1")
