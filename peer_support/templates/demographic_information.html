@@ -12,27 +12,18 @@
                 role="tab">User information</a>
         </li>
     </ul>
-
     <div class="container my-2">
-        <h3>djgh;sdfjgh</h3>
-            <select id="barChartDataSelect">
-                <option value="userTypes">User Tyes</option>
-                <option value="userAges">User Ages</option>
-                <option value="ethnicity">Ethnicity Distribution</option>
-                <option value="liverDisease">Liver Disease Distribution</option>
-            </select>
-            
-            <canvas id="barChart"></canvas>
-
-            <select id="pieChartDataSelect">
-                <option value="userTypes">User Types</option>
-                <option value="userAges">User Ages</option>
-                <option value="ethnicity">Ethnicity Distribution</option>
-                <option value="liverDisease">Liver Disease Distribution</option>
-            </select>
-
-            <canvas id="ethnicityChart" style="margin-top: 20px;"></canvas>
-
+        <select id="barChartDataSelect">
+            {%include "partials/demographic_options.html" %}
+        </select>
+        <canvas id="barChart"></canvas>
+        <select id="pieChartDataSelect">
+            {%include "partials/demographic_options.html" %}
+        </select>
+        <canvas id="ethnicityChart" style="margin-top: 20px;"></canvas>
+    
+    </div>
+</div>
 <script>
     var num_patients={{num_patients}};
     var num_parents={{num_parents}};
@@ -41,10 +32,20 @@
     var age_range_counts={{age_range_counts|safe}};
     var ethnicities={{ethnicities|safe}};
     var ethnicity_count={{ethnicity_count|safe}};
-    var condition_labels={{condition_labels|safe}};
-    var condition_count={{condition_count|safe}}
+    var patient_condition_labels={{patient_condition_labels|safe}};
+    var patient_condition_count={{patient_condition_count|safe}};
+    var parent_child_condition_labels={{parent_child_condition_labels|safe}};
+    var parent_child_condition_count={{parent_child_condition_count|safe}};
+    var gender_labels={{gender_labels|safe}};
+    var gender_count={{gender_count|safe}};
+    var location_labels={{location_labels|safe}};
+    var location_count={{location_count|safe}};
+    var mentor_condition_labels = {{mentor_condition_labels|safe}};
+    var mentor_condition_count = {{mentor_condition_count|safe}};
+    console.log("Mentor Condition Labels: here", mentor_condition_labels); // Debugging: Print labels
+    console.log("Mentor Condition Count: here", mentor_condition_count);
+
 </script>
 <script src="{% static 'js/user_info.js' %}"></script>
-</div>
-</div>
+
 {% endblock %}

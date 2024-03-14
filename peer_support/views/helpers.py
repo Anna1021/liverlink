@@ -1,5 +1,5 @@
 import uuid
-from peer_support.models import Referral, Mentor, User, Patient
+from peer_support.models import Referral, Mentor, User, Patient, Parent
 from django.conf import settings
 from django.shortcuts import redirect,reverse
 from peer_support.models import Notification
@@ -103,7 +103,24 @@ def get_user_ethnicities():
     users_ethnicities = User.objects.values_list('ethnicity', flat=True)
     return Counter(users_ethnicities) 
 
-
 def get_patient_conditions():
     patient_conditions = Patient.objects.values_list('condition', flat=True)
     return Counter(patient_conditions) 
+
+def get_mentor_conditions():
+    mentor_conditions = Mentor.objects.values_list('condition', flat=True)
+    return Counter(mentor_conditions) 
+
+def get_parent_child_conditions():
+    parent_child_conditions = Parent.objects.values_list('child_condition', flat=True)
+    return Counter(parent_child_conditions) 
+
+def get_genders():
+    genders = User.objects.values_list('gender', flat=True)
+    return Counter(genders) 
+
+def get_locations():
+    location = User.objects.values_list('location', flat=True)
+    return Counter(location) 
+
+
