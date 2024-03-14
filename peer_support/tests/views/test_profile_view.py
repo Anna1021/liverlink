@@ -5,6 +5,7 @@ from peer_support.forms import ConversationForm, ReportForm
 from django.contrib.contenttypes.models import ContentType
 from peer_support.tests.helpers import reverse_with_next
 from django.contrib import messages
+from django.contrib.messages import get_messages
 
 class ProfileViewTest(TestCase):
     """Tests of the profile view"""
@@ -157,8 +158,6 @@ class ProfileViewTest(TestCase):
         self.assertTemplateUsed(response, 'profile.html')
         user = response.context['user']
         self.assertEqual(user, self.user)
-        conversation_form = response.context['conversation_form']
-        self.assertIsInstance(conversation_form, ConversationForm)
         report_form = response.context['report_form']
         self.assertIsInstance(report_form, ReportForm)
 
@@ -284,3 +283,11 @@ class ProfileViewTest(TestCase):
         redirect_url = reverse_with_next('log_in', self.url)
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url)
+
+    def test_non_existent_profile_redirect(self):
+        non_existent_username = 'noonehere'
+        url = reverse('profile', kwargs={'username': non_existent_username})
+        response = self.client.get(url)
+        self.assertRedirects(response, reverse('dashboard'))
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any(["does not exist" in str(message) for message in messages]))

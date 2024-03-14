@@ -1,15 +1,15 @@
 {% load conversation_tags %}
 <nav class="col-md-3 d-md-block sidebar collapse pb-3">
-    <ul class="conversation-list">
-        {% for conversation in user_conversations %}
-        <li>
-            <a href="{% url 'conversation' conversation.id %}" class="btn conversation-card notranslate">
-                {% conversation_name user conversation %}
-            </a>
-            {% empty %}
-            No conversations!
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'create_conversation' %}" class="text-center fs-3"><i class="bi-pencil-square"></i></a>
+<ul class="conversation-list">
+    {% for conversation in user_conversations %}
+    <li>
+    <a href="{% url 'conversation' conversation.id %}" class="btn conversation-btn conversation-card notranslate">
+        {% conversation_name user conversation %}
+    </a>
+    {% empty %}
+    <div class="no-conversations">No conversations!</div>
+    </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'create_conversation' %}" class="text-center fs-3"><i class="bi-pencil-square"></i></a>
 </nav>

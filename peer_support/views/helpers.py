@@ -81,3 +81,7 @@ def get_message(request,conversation,message_id):
 def no_conversation_url(request):
     context = {'user_conversations':request.user.sort_conversations()}
     return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
+
+def user_exists(username):
+    return User.objects.filter(username=username).exists()
+

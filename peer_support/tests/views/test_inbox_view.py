@@ -28,6 +28,7 @@ class InboxViewTestCase(TestCase):
         self.assertEqual(notifications.count(), 2)
         self.assertEqual(notifications[0], Notification.objects.get(id=1))
         self.assertEqual(notifications[1], Notification.objects.get(id=3))
+        self.assertTemplateUsed(response, 'inbox.html')
 
     def test_inbox_without_being_logged_in(self):
         self.client.logout()

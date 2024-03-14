@@ -12,7 +12,8 @@ from selenium.common.exceptions import TimeoutException
 class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
     """Unit tests of javascript in display_blocklist template of other_user_settings view."""
 
-    fixtures = ['peer_support/tests/fixtures/other_users.json']
+    fixtures = ['peer_support/tests/fixtures/other_users.json',
+                'peer_support/tests/fixtures/other_user_profiles.json']
 
     @classmethod
     def setUpClass(cls):

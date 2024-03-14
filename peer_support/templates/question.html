@@ -1,7 +1,7 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 {% block page %}
-<div class="card bg-dark shadow box-area my-2">
+<div class="card shadow box-area my-2">
     {% include 'partials/resources-navbar.html' %}
     <div class="page question-page">
         <h2 class="question-title">{{ question.title }}</h2>
@@ -14,11 +14,11 @@
         <div class="responses-container">
             <h4 class="responses-container-heading">Responses</h4>
             {% if not question.responses.all %}
-            <p class="no-responses-text">No responses yet</p>
+                <p class="no-responses-text">No responses yet</p>
             {% else %}
-            {% for response in question.get_responses %}
-            {% include 'partials/response.html' with response=response %}
-            {% endfor %}
+                {% for response in question.get_responses %}
+                    {% include 'partials/response.html' with response=response %}
+                {% endfor %}
             {% endif %}
         </div>
 

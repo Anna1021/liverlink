@@ -186,7 +186,7 @@ class Command(BaseCommand):
 
     def try_create_notification(self, data):
         try:
-          self.create_notification(data)
+            self.create_notification(data)
         except:
             pass
 

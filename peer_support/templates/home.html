@@ -4,16 +4,16 @@
   <div class="container vh-100">
     <div class="row h-100">
       <div class="col-12 my-auto">
-        <div class="card offset-sm-2 offset-md-4 offset-lg-7">
+        <div id="home" class="card offset-sm-2 offset-md-4 offset-lg-7">
           <h1>LiverLink.</h1>
           <p>A social networking system to facilitate interaction between peers with long term conditions</p>
           <div class="col text-center py-2">
-            <a href="{% url 'sign_up' %}" class="btn btn-lg btn-secondary">
+            <a href='{% url 'sign_up' %}' class="btn home-btn btn-lg">
               Sign up
             </a>
           </div>
           <div class="col text-center py-2">
-            <a href="{% url 'log_in' %}" class="btn btn-lg btn-secondary">
+            <a href='{% url 'log_in' %}' class="btn home-btn btn-lg">
               Log in
             </a>
           </div>

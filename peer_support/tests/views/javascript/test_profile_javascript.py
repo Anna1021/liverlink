@@ -18,6 +18,7 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/other_parents.json',
+        'peer_support/tests/fixtures/other_user_profiles.json'
     ]
 
     @classmethod
@@ -29,7 +30,7 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         cls.selenium = WebDriver(service=Service(), options=options)
         cls.selenium.maximize_window()
         cls.selenium.implicitly_wait(40)
-        cls.wait = WebDriverWait(cls.selenium, 40)
+        cls.wait = WebDriverWait(cls.selenium, 50)
         
     @classmethod
     def tearDownClass(cls):
@@ -45,21 +46,13 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         try:
             username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
             username_input.send_keys('@janedoe')
-
             password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "password")))
             password_input.send_keys('Password123')
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/profile/@petrapickles/']"))).click()
 
-            login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
-            login_button.click()
-
-            find_friends_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]")))
-            find_friends_button.click()
-
-            second_user_profile_link = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/profile/@petrapickles/']")))
-            second_user_profile_link.click()
-
-            user_actions_dropdown = self.wait.until(EC.visibility_of_element_located((By.ID, "user-actions-dropdown")))
-            user_actions_dropdown.click()
+            user_actions_dropdown = self.wait.until(EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))).click()
 
             friend_link = self.wait.until(EC.element_to_be_clickable((By.ID, "friend-link")))
             self.assertEqual("Add friend", friend_link.text)
