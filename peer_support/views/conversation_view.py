@@ -27,7 +27,7 @@ class ConversationView(LoginRequiredMixin, FormView):
             'report_form':report_form , 
             'conversation':conversation,
             'user_conversations':request.user.sort_conversations(),
-            'loaded_messages':self.load_messages(conversation)}
+            'loaded_messages':self.load_messages(request,conversation)}
         return render(request,self.template_name,context)
 
     def post(self, request, conversation_id):
@@ -37,8 +37,15 @@ class ConversationView(LoginRequiredMixin, FormView):
         else:
             return self.handle_post_message(request,conversation_id)
 
-    def load_messages(self,conversation):
-        return conversation.messages.all()[-20:]
+    def load_messages(self,request,conversation):
+        messages_to_load = request.GET.get('current_messages_get')
+        print(messages_to_load)
+        if not messages_to_load:
+            messages_to_load=0
+        else:
+            messages_to_load = int(messages_to_load)
+        messages_to_load += 20
+        return list(conversation.messages.all())[-messages_to_load:]
 
     def handle_post_message(self,request,conversation_id):
         conversation = get_object_or_404(Conversation,id=conversation_id)
