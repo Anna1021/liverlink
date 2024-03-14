@@ -1,10 +1,11 @@
 from django.core.management.base import BaseCommand
 
-from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Message, Conversation, Question, Response, Report
+from peer_support.models import User, Parent, Patient, Mentor, Referral, FriendRequest, Notification, Message, Conversation, Question, Response, Report
 import uuid
 
 from faker import Faker
 from random import randint
+import random
 from django.contrib.contenttypes.models import ContentType
 from peer_support.models.model_choices import *
 from peer_support.forms.form_choices import CONDITION_CHOICES, TRANSPLANT_CHOICES
@@ -25,6 +26,12 @@ mentor_fixtures = [
     {'username': '@sarahsmith', 'email': 'sarah.smith@example.org', 'first_name': 'Sarah', 'last_name': 'Smith', 'date_of_birth': '1992-05-15', 'gender': 'F', 'location': 'US', 'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hello, I am Sarah.', 'condition': 'Diabetes', 'age_of_diagnosis': 7, 'referral_code':'ABC123'},
     {'username': '@davidbrown', 'email': 'david.brown@example.org', 'first_name': 'David', 'last_name': 'Brown', 'date_of_birth': '1985-09-20', 'gender': 'M', 'location': 'CA', 'hospital': 'Countess of Chester Hospital NHS Foundation Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hey there, I am David.', 'age_of_diagnosis': 8, 'referral_code':'DEF456'},
     {'username': '@emilywilson', 'email': 'emily.wilson@example.org', 'first_name': 'Emily', 'last_name': 'Wilson', 'date_of_birth': '1978-12-03', 'gender': 'F', 'location': 'AU', 'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am Emily.', 'age_of_diagnosis': 3, 'referral_code':'GHI789'},
+]
+
+friend_request_fixtures = [
+    {'sender': patient_fixtures[0], 'receiver': parent_fixtures[0]},
+    {'sender': parent_fixtures[0], 'receiver': patient_fixtures[0]},
+    {'sender': patient_fixtures[1], 'receiver': parent_fixtures[1]},
 ]
 
 notification_fixtures = [
@@ -73,6 +80,7 @@ class Command(BaseCommand):
     PATIENT_COUNT = 100
     PARENT_COUNT = 100
     MENTOR_COUNT = 100
+    FRIEND_REQUEST_COUNT = 100
     NOTIFICATION_COUNT = 500
     MESSAGE_COUNT = 1000
     CONVERSATION_COUNT = 500
@@ -96,6 +104,9 @@ class Command(BaseCommand):
         self.mentors = Mentor.objects.all()
 
         self.users = User.objects.all()
+
+        self.create_friend_requests()
+        self.friend_requests = FriendRequest.objects.all()
 
         self.create_notifications()
         self.notifications = Notification.objects.all()
@@ -126,6 +137,10 @@ class Command(BaseCommand):
     def create_mentors(self):
         self.generate_mentor_fixtures()
         self.generate_random_mentors()
+
+    def create_friend_requests(self):
+        self.generate_friend_request_fixtures()
+        self.generate_random_friend_requests()
 
     def create_notifications(self):
         self.generate_notification_fixtures()
@@ -162,6 +177,10 @@ class Command(BaseCommand):
     def generate_mentor_fixtures(self):
         for data in mentor_fixtures:
             self.try_create_mentor(data)
+
+    def generate_friend_request_fixtures(self):
+        for data in friend_request_fixtures:
+            self.try_create_friend_request(data)
 
     def generate_notification_fixtures(self):
         for data in notification_fixtures:
@@ -210,6 +229,14 @@ class Command(BaseCommand):
             self.generate_mentor()
             mentor_count = Mentor.objects.count()
         print("Mentor seeding complete.      ")
+
+    def generate_random_friend_requests(self):
+        friend_request_count = FriendRequest.objects.count()
+        while friend_request_count < self.FRIEND_REQUEST_COUNT:
+            print(f"Seeding friend request {friend_request_count}/{self.FRIEND_REQUEST_COUNT}", end='\r')
+            self.generate_friend_request()
+            friend_request_count = FriendRequest.objects.count()
+        print("Friend request seeding complete.      ")
 
     def generate_random_notifications(self):
         notification_count = Notification.objects.count()
@@ -299,12 +326,24 @@ class Command(BaseCommand):
         user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'referral_code': referral_code, 'transplant': transplant})
         self.try_create_mentor(user_data)
 
+    def generate_friend_request(self):
+        sender = self.users[randint(0, len(self.users) - 1)]
+        receiver = self.users[randint(0, len(self.users) - 1)]
+        sender = {'username': sender.username}
+        receiver = {'username': receiver.username}
+        self.try_create_friend_request({'sender': sender, 'receiver': receiver})
+
     def generate_notification(self):
-        title = self.faker.sentence()
-        description = self.faker.text(max_nb_chars=100)
         user = self.users[randint(0, len(self.users) - 1)]
+        friend_request = None
+        if self.friend_requests.filter(receiver=user) and random.choice([True, False]):
+            friend_request = random.choice(self.friend_requests.filter(receiver=user))
+            title = 'Friend Request'
+        else: 
+            title = self.faker.sentence()
+        description = self.faker.text(max_nb_chars=100)
         user = {'username': user.username}
-        self.try_create_notification({'title': title, 'description': description, 'user': user})
+        self.try_create_notification({'title': title, 'description': description, 'user': user, 'friend_request': friend_request})
 
     def generate_message(self):
         sender = self.users[randint(0, len(self.users) - 1)]
@@ -355,6 +394,12 @@ class Command(BaseCommand):
     def try_create_mentor(self, data):
         try:
             self.create_mentor(data)
+        except:
+            pass
+
+    def try_create_friend_request(self, data):
+        try:
+            self.create_friend_request(data)
         except:
             pass
 
@@ -416,6 +461,11 @@ class Command(BaseCommand):
 
     def create_mentor(self, data):
         self.create_user(Mentor, data)
+
+    def create_friend_request(self, data):
+        sender = self.get_user(data['sender'])
+        receiver = self.get_user(data['receiver'])
+        FriendRequest.objects.create(sender=sender, receiver=receiver)
 
     def create_notification(self, data):
         data['user'] = self.get_user(data['user'])
