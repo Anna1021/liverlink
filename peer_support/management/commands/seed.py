@@ -1,10 +1,11 @@
 from django.core.management.base import BaseCommand
 
-from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Message, Conversation, Question, Response
+from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Message, Conversation, Question, Response, Report
 import uuid
 
 from faker import Faker
 from random import randint
+from django.contrib.contenttypes.models import ContentType
 from peer_support.models.model_choices import *
 from peer_support.forms.form_choices import CONDITION_CHOICES, TRANSPLANT_CHOICES
 
@@ -60,6 +61,12 @@ response_fixtures = [
     {'user': parent_fixtures[0], 'question': question_fixtures[3], 'body': 'I can help you.'},
 ]
 
+report_fixtures = [
+    {'reporter': patient_fixtures[0], 'reason': 'Inappropriate content', 'content_type': 'Notification', 'object_id': 1},
+    {'reporter': parent_fixtures[0], 'reason': 'Inappropriate content', 'content_type': 'Message', 'object_id': 2},
+    {'reporter': patient_fixtures[2], 'reason': 'Spam', 'content_type': 'Notification', 'object_id': 3},
+]
+
 class Command(BaseCommand):
     """Build automation command to seed the database."""
 
@@ -71,6 +78,7 @@ class Command(BaseCommand):
     CONVERSATION_COUNT = 500
     QUESTION_COUNT = 250
     RESPONSE_COUNT = 1000
+    REPORT_COUNT = 250
     DEFAULT_PASSWORD = 'Password123'
     help = 'Seeds the database with sample data'
 
@@ -104,6 +112,9 @@ class Command(BaseCommand):
         self.create_responses()
         self.responses = Response.objects.all()
 
+        self.create_reports()
+        self.reports = Report.objects.all()
+
     def create_patients(self):
         self.generate_patient_fixtures()
         self.generate_random_patients()
@@ -136,6 +147,10 @@ class Command(BaseCommand):
         self.generate_response_fixtures()
         self.generate_random_responses()
 
+    # def create_reports(self):
+    #     self.generate_report_fixtures()
+    #     self.generate_random_reports()
+
     def generate_patient_fixtures(self):
         for data in patient_fixtures:
             self.try_create_patient(data)
@@ -167,6 +182,10 @@ class Command(BaseCommand):
     def generate_response_fixtures(self):
         for data in response_fixtures:
             self.create_response(data)
+
+    # def generate_report_fixtures(self):
+    #     for data in report_fixtures:
+    #         self.create_report(data)
 
     def generate_random_patients(self):
         patient_count = Patient.objects.count()
@@ -232,6 +251,14 @@ class Command(BaseCommand):
             response_count = Response.objects.count()
         print("Response seeding complete.      ")
 
+    # def generate_random_reports(self):
+    #     report_count = Report.objects.count()
+    #     while report_count < self.REPORT_COUNT:
+    #         print(f"Seeding report {report_count}/{self.REPORT_COUNT}", end='\r')
+    #         self.generate_report()
+    #         report_count = Report.objects.count()
+    #     print("Report seeding complete.      ")
+
     def generate_user_data(self):
         first_name = self.faker.first_name()
         last_name = self.faker.last_name()
@@ -244,7 +271,8 @@ class Command(BaseCommand):
         ethnicity = self.faker.random_element(elements=[ethnicity[0] for group in ETHNICITY_CHOICES for ethnicity in group[1]])
         language = self.faker.random_element(elements=(tuple(language[0] for language in LANGUAGE_CHOICES)))
         bio = self.faker.text(max_nb_chars=100)
-        return {'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital, 'ethnicity': ethnicity, 'language': language, 'bio': bio}
+        profile_picture = self.faker.random_element(elements=(tuple(profile_picture for profile_picture in PROFILE_PICTURE_CHOICES)))
+        return {'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name, 'date_of_birth': date_of_birth, 'gender': gender, 'location': location, 'hospital': hospital, 'ethnicity': ethnicity, 'language': language, 'bio': bio, 'profile_picture': profile_picture}
 
     def generate_patient(self):
         user_data = self.generate_user_data()
@@ -303,12 +331,20 @@ class Command(BaseCommand):
         user = {'username': user.username}
         question = {'title': question.title} # Can we create a primary key for response model? such as id 
         self.try_create_response({'user': user, 'question': question, 'body': body})
+
+    # def generate_report(self):
+    #     reporter = self.users[randint(0, len(self.users) - 1)]
+    #     reason = self.faker.random_element(elements=(tuple(report[0] for report in REPORT_CHOICES)))
+    #     content_type = self.faker.random_element(elements=('Notification', 'Message')) # What other content type can we have?
+    #     object_id = self.get_content_type(content_type).model_class().objects.order_by('?').first().pk
+    #     reporter = {'username': reporter.username}
+    #     self.try_create_report({'reporter': reporter, 'reason': reason, 'content_type': content_type, 'object_id': object_id})
         
     def try_create_patient(self, data):
-        try:
-            self.create_patient(data)
-        except:
-            pass
+        # try:
+        self.create_patient(data)
+        # except:
+            # pass
 
     def try_create_parent(self, data):
         try:
@@ -352,16 +388,26 @@ class Command(BaseCommand):
         except:
             pass
 
+    # def try_create_report(self, data):
+    #     try:
+    #         self.create_report(data)
+    #     except:
+    #         pass
+
     def create_user(self, model, data):
-        user = model.objects.create(**data)
-        user.set_password(Command.DEFAULT_PASSWORD)
-        if data['username'] == '@johndoe':
-            user.is_superuser = True
-            user.is_staff = True
-        user.save()
-        if model == Mentor:
-            Referral.objects.create(referrer=user, code=data['referral_code'])
-        return user
+        profile_picture = data.pop('profile_picture', None)
+        if profile_picture:
+            user = model.objects.create(**data)
+            user.set_password(Command.DEFAULT_PASSWORD)
+            user.userprofile.profile_picture = profile_picture
+            user.userprofile.save()
+            if data['username'] == '@johndoe':
+                user.is_superuser = True
+                user.is_staff = True
+            user.save()
+            if model == Mentor:
+                Referral.objects.create(referrer=user, code=data['referral_code'])
+            return user
 
     def create_patient(self, data):
         self.create_user(Patient, data)
@@ -394,8 +440,16 @@ class Command(BaseCommand):
         # Change it to a get
         Response.objects.create(**data)
 
+    # def create_report(self, data):
+    #     data['reporter'] = self.get_user(data['reporter'])
+    #     data['content_type'] = self.get_content_type(data['content_type'].lower())
+    #     Report.objects.create(**data)
+
     def get_user(self, data):
         return User.objects.get(username=data['username'])
+    
+    def get_content_type(self, model):
+        return ContentType.objects.get(model=model)
 
 def create_username(first_name, last_name):
     return '@' + first_name.lower() + last_name.lower()

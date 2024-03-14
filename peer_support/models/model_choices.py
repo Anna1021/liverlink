@@ -1,4 +1,5 @@
 import pycountry
+import os
 
 GENDER_CHOICES = [
     ('M', 'Male'),
@@ -290,3 +291,8 @@ FONT_SIZE_CHOICES = [
 ('LG', 'Large'),
 ('XL', 'Extra large'),
 ]
+
+import os
+import glob
+
+PROFILE_PICTURE_CHOICES = ['profile_pictures/' + os.path.basename(x) for x in glob.glob("static/profile_pictures/*")]
