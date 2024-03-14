@@ -5,10 +5,11 @@
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="message-menu-dropdown">
         <li><form method="post">
             {% csrf_token %}
+            <input type="hidden" name="first_message" value="{{ first_message }}">
             <input type="hidden" name="action" value="{{message.id}}">
             <button class= "dropdown-item" type="submit" name="delete" value="me">Delete for me</button>
             {% if user == message.sender %}
-            <button class= "dropdown-item" type="submit" name="delete" value="all">Delete for everyone</button>
+            <button class= "dropdown-item delete_all" type="submit" name="delete" value="all">Delete for everyone</button>
             {% else %}
                 {% include 'partials/bootstrap_form.html' with form=report_form %}
                 <button type="submit">Report</button>

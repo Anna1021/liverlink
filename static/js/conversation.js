@@ -1,9 +1,17 @@
 $(document).ready(function() {
+    var currentUrl = window.location.href;
+    if (currentUrl.indexOf('?') === -1) {
+        var newUrl = currentUrl + '?first_message='+first_message;
+        window.history.pushState({path: newUrl}, '', newUrl);
+        window.location.reload();
+    }
+    if (document.referrer!=currentUrl){
+        $('#conversation').animate(
+            {scrollTop:$('#conversation').prop('scrollHeight')});
+    }
     let msg = sessionStorage.getItem(storageKey);
     if (msg!=null) $('#id_content').val(msg);
     hideBlockedMessages()
-    $('#conversation').animate(
-        {scrollTop:$('#conversation').prop('scrollHeight')});
     function hideBlockedMessages(){
         var blocked_messages = document.getElementsByName('blocked-message');
         for (var i = 0; i < blocked_messages.length; ++i) {
@@ -21,6 +29,7 @@ $(document).ready(function() {
             sessionStorage.setItem(storageKey,$("#id_content").val())
         }
     },2000)
+
 });
 
 const chatSocket = new WebSocket("ws://" + window.location.host + "/");
@@ -29,6 +38,12 @@ if(conversation_id!=0){
     document.querySelector('#message-form').addEventListener("submit", function(){
         chatSocket.send(JSON.stringify({sender:username,conversation_id:conversation_id}));
         sessionStorage.clear();
+    })
+    let delete_buttons = document.querySelectorAll(".delete_all")
+    delete_buttons.forEach(function(button){
+        button.addEventListener("click",function(){
+            chatSocket.send(JSON.stringify({sender:username,conversation_id:conversation_id}));
+        })
     })
 }
 chatSocket.onmessage = function (e) {

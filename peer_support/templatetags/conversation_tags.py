@@ -24,3 +24,9 @@ def conversation_name(user,conversation):
 @register.filter
 def visible_messages(user,conversation):
     return conversation.messages.filter(visible_to__in=[user])
+
+@register.filter
+def load_messages(messages,number):
+    if messages.count()==0:
+        return messages
+    return messages.filter(id__gte=int(number))

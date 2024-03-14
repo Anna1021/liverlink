@@ -21,35 +21,55 @@ class ConversationView(LoginRequiredMixin, FormView):
         message_form = MessageForm(conversation,user=request.user)
         report_form = ReportForm()
         blocked_dm = check_blocked_dm(request.user, conversation)
+        message_id = request.GET.get('first_message')
+        first_message_id = self.first_message(request,conversation,message_id)
+        next_message_id = self.next_message(request,conversation,first_message_id)
         context = { 
             'blocked_dm':blocked_dm,
             'message_form':message_form, 
             'report_form':report_form , 
             'conversation':conversation,
             'user_conversations':request.user.sort_conversations(),
-            'loaded_messages':self.load_messages(request,conversation)
+            'first_message':first_message_id,
+            'next_message':next_message_id
             }
         return render(request,self.template_name,context)
 
     def post(self, request, conversation_id):
+        first_message_id = request.POST.get('first_message') or ''
         delete=request.POST.get('delete')
         action=request.POST.get('action')
         if delete:
-            return self.handle_delete_message(request,conversation_id,action,delete)
+            self.handle_delete_message(request,conversation_id,action,delete)
         elif action:
-            return self.handle_report_message(request,conversation_id,action)
+            self.handle_report_message(request,conversation_id,action)
         else:
-            return self.handle_post_message(request,conversation_id)
+            self.handle_post_message(request,conversation_id)
+        return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id})+"?first_message="+first_message_id)
 
-    def load_messages(self,request,conversation):
-        message_id = request.GET.get('first_message')
-        if not messages_to_load:
+    def get_visible_messages(self,user,conversation):
+        return conversation.messages.filter(visible_to__in=[user]).order_by('-id')
+
+    def first_message(self,request,conversation,message_id):
+        if not message_id or message_id=="0":
+            return self.next_message(request,conversation,message_id)
+        if conversation.messages.filter(id=message_id).count()==0:
+            visible_messages = list(self.get_visible_messages(request.user,conversation).filter(id__gte=message_id))
+            return visible_messages[-1].id
+        return message_id
+
+    def next_message(self,request,conversation,message_id):
+        visible_messages = list(self.get_visible_messages(request.user,conversation))
+        if len(visible_messages)==0:
+            return 0
+        if not message_id:
             message_index = 0
         else:
-            message = essage =get_object_or_404(Message, id=message_id)
-            message_index = list(conversation.messages.order_by("-id").filter(visible_to__in=[request.user])).index(message)
-        message_index += 20
-        return list(conversation.messages.filter(visible_to__in=[request.user]))[-message_index:]
+            message = get_object_or_404(Message, id=message_id)
+            message_index = visible_messages.index(message)
+        message_index = min(message_index+10,len(visible_messages))
+        first_message_id = visible_messages[::-1][-message_index].id
+        return first_message_id
 
     def handle_delete_message(self,request,conversation_id,message_id,delete):
         conversation = get_object_or_404(Conversation,id=conversation_id)
@@ -59,22 +79,17 @@ class ConversationView(LoginRequiredMixin, FormView):
         else:
             users = conversation.users.filter(username=request.user.username)
         message.delete(users)
-        return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
 
     def handle_post_message(self,request,conversation_id):
         conversation = get_object_or_404(Conversation,id=conversation_id)
         message_form = MessageForm(conversation,data=request.POST,user=request.user)
         blocked_dm = check_blocked_dm(request.user, conversation)
-        messages_to_load = int(request.POST.get('current_messages'))
-        messages_to_load -= 20
         if message_form.is_valid() and request.user in conversation.users.all() and not blocked_dm:
-            messages_to_load += 1
             message_form.save()
         elif blocked_dm:
             messages.error(request,"You cannot message this user.")
         else:
             messages.error(request,"This message is not valid")
-        return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
         
     def handle_report_message(self,request,conversation_id,message_id):
         message =get_object_or_404(Message, id=message_id)
@@ -86,4 +101,3 @@ class ConversationView(LoginRequiredMixin, FormView):
             messages.success(request,"Message reported successfully.")
         else:
             messages.error(request,"There was an issue with the report.")
-        return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id}))
