@@ -5,6 +5,7 @@ from django.views.generic.edit import FormView
 from .helpers import check_blocked_dm, conversation_does_not_exist, no_conversation_url, conversation_does_not_exist
 from peer_support.models import Conversation, Message
 from peer_support.forms import MessageForm, ReportForm
+from django.core.paginator import Paginator
 
 class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
@@ -20,7 +21,7 @@ class ConversationView(LoginRequiredMixin, FormView):
         message_form = MessageForm(conversation,user=request.user)
         report_form = ReportForm()
         blocked_dm = check_blocked_dm(request.user, conversation)
-        context = { 'blocked_dm':blocked_dm,'message_form':message_form, 'report_form':report_form , 'conversation':conversation,'user_conversations':request.user.sort_conversations()}
+        context = { 'blocked_dm':blocked_dm,'message_form':message_form, 'report_form':report_form , 'conversation':conversation,'user_conversations':request.user.sort_conversations(),}
         return render(request,self.template_name,context)
 
     def post(self, request, conversation_id):
@@ -29,6 +30,12 @@ class ConversationView(LoginRequiredMixin, FormView):
             return self.handle_report_message(request,conversation_id,action)
         else:
             return self.handle_post_message(request,conversation_id)
+
+    def load_messages(self,request,conversation):
+        messages = conversation.messages.order_by('-send_time')
+        p = Paginator(messages,20)
+        loaded_messages = p.page(1).object_list()
+        return loaded_messages
 
     def handle_post_message(self,request,conversation_id):
         conversation = get_object_or_404(Conversation,id=conversation_id)
