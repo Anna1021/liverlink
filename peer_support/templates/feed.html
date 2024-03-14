@@ -11,8 +11,7 @@
     </div>
     <!-- Button to switch between global feed and friends-only feed -->
     <div class="col-md-4">
-      <form id="feedForm" method="GET" action="{% url 'feed' %}">
-        {% csrf_token %}
+      <form id="feedForm" method="GET">
         <input type="hidden" name="feed_type" id="feedType" value="{{feed_type}}">
         <button type="button" id="toggleFeedButton" class="btn btn-outline-primary">
           <div class="row">
