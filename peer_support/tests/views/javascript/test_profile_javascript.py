@@ -18,18 +18,19 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/other_parents.json',
+        'peer_support/tests/fixtures/other_user_profiles.json'
     ]
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.add_argument("--headless") 
+        #options.add_argument("--headless") 
         options.add_argument("--window-size=1920,1080")
         cls.selenium = WebDriver(service=Service(), options=options)
         cls.selenium.maximize_window()
         cls.selenium.implicitly_wait(40)
-        cls.wait = WebDriverWait(cls.selenium, 40)
+        cls.wait = WebDriverWait(cls.selenium, 50)
         
     @classmethod
     def tearDownClass(cls):

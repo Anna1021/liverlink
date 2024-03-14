@@ -86,3 +86,6 @@ def get_post(request,post_id):
         return None
     return Post.objects.get(id=post_id)
 
+def user_exists(username):
+    return User.objects.filter(username=username).exists()
+

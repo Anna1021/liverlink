@@ -43,9 +43,8 @@
                     <div class="col-md-6 my-2">
                         <div id="friend-inner-card"class="card">
                             <div class="friend-card-body">
-                                <div class="media align-items-center"><span
-                                        style="background-image: url(https://media1.tenor.com/m/jntELgCIwQYAAAAC/kermit-lipton.gif)"
-                                        class="avatar mr-3"></span>
+                                <div class="media align-items-center">
+                                    <img src="{% static user.userprofile.profile_picture %}" alt="Profile Picture" class="rounded-circle friend-profile-picture">
                                     <div class="media-body overflow-hidden">
                                         <h5 class="card-text mb-0 notranslate">{{ user.username }}</h5>
                                         <p class="card-text text-uppercase subtext mb-0">{{ user.full_name }}</p>

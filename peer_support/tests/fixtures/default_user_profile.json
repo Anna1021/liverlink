@@ -4,6 +4,7 @@
         "pk": 1,
         "fields": {
             "user": 1,
+            "profile_picture": "profile_pictures/Firefly Create a social media avatar of a rabbit 47608.jpg",
             "theme": "DF",
             "font": "DF",
             "font_size": "DF"
