@@ -21,7 +21,13 @@ class ConversationView(LoginRequiredMixin, FormView):
         message_form = MessageForm(conversation,user=request.user)
         report_form = ReportForm()
         blocked_dm = check_blocked_dm(request.user, conversation)
-        context = { 'blocked_dm':blocked_dm,'message_form':message_form, 'report_form':report_form , 'conversation':conversation,'user_conversations':request.user.sort_conversations(),}
+        context = { 
+            'blocked_dm':blocked_dm,
+            'message_form':message_form, 
+            'report_form':report_form , 
+            'conversation':conversation,
+            'user_conversations':request.user.sort_conversations(),
+            'loaded_messages':self.load_messages(conversation)}
         return render(request,self.template_name,context)
 
     def post(self, request, conversation_id):
@@ -31,11 +37,8 @@ class ConversationView(LoginRequiredMixin, FormView):
         else:
             return self.handle_post_message(request,conversation_id)
 
-    def load_messages(self,request,conversation):
-        messages = conversation.messages.order_by('-send_time')
-        p = Paginator(messages,20)
-        loaded_messages = p.page(1).object_list()
-        return loaded_messages
+    def load_messages(self,conversation):
+        return conversation.messages.all()[-20:]
 
     def handle_post_message(self,request,conversation_id):
         conversation = get_object_or_404(Conversation,id=conversation_id)
