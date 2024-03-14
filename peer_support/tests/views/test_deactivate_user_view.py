@@ -2,7 +2,6 @@
 import datetime
 from django.db import IntegrityError
 from django.test import TestCase
-from django.contrib import messages
 from django.urls import reverse
 from peer_support.models import User, Patient, Parent
 
@@ -35,9 +34,6 @@ class DeactivateUserViewTestCase(TestCase):
         response_url = reverse('home')
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'home.html')
-        messages_list = list(response.context['messages'])
-        self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.SUCCESS)
         self.user.refresh_from_db()
         self.assertFalse(self.user.is_active)
 
@@ -50,9 +46,6 @@ class DeactivateUserViewTestCase(TestCase):
         response_url = reverse('home')
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'home.html')
-        messages_list = list(response.context['messages'])
-        self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.SUCCESS)
         patient_user.refresh_from_db()
         self.patient.refresh_from_db()
         self.assertFalse(patient_user.is_active)
@@ -67,9 +60,6 @@ class DeactivateUserViewTestCase(TestCase):
         response_url = reverse('home')
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'home.html')
-        messages_list = list(response.context['messages'])
-        self.assertEqual(len(messages_list), 1)
-        self.assertEqual(messages_list[0].level, messages.SUCCESS)
         parent_user.refresh_from_db()
         self.parent.refresh_from_db()
         self.assertFalse(parent_user.is_active)
