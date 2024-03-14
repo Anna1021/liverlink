@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import Question, Response
 from peer_support.forms import NewReplyForm
 
 class ReplyPageView(LoginRequiredMixin, View):
-    """reply to the question"""
+    """Allows users to reply to a question"""
     
     template_name = 'resources.html'
     form_class = NewReplyForm

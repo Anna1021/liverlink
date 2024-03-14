@@ -1,10 +1,10 @@
-"""Unit test of SearchPeerForm """
+"""Unit test of search peer form"""
 from django.test import TestCase
 from peer_support.forms import SearchPeerForm
 from peer_support.models import User
 
 class SearchPeerFormTestCase(TestCase):
-    """Unit test of SearchPeerForm """
+    """Unit test of search peer form"""
     
     fixtures = [
         'peer_support/tests/fixtures/other_users.json',

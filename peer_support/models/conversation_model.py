@@ -6,7 +6,7 @@ class Conversation(models.Model):
     """Model used for direct conversations between two users"""
 
     users = models.ManyToManyField(User)
-    messages = models.ManyToManyField(Message,blank=True)
+    messages = models.ManyToManyField(Message, blank=True)
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):

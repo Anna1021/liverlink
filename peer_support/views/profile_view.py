@@ -1,4 +1,4 @@
-from django.shortcuts import render,reverse,redirect,get_object_or_404
+from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import User, FriendRequest
@@ -23,8 +23,8 @@ class ProfileView(LoginRequiredMixin, View):
 
         user = User.objects.get(username=username)
         context = {
-            'user': user, 'current_user': request.user,'blocklist': request.user.blocked_users.all() | user.blocked_users.all(),
-            'is_friend': request.user in user.friends.all(),'report_form': ReportForm(), 'request_sent': FriendRequest.objects.filter(sender=request.user, receiver=user).exists(),
+            'user': user, 'current_user': request.user, 'blocklist': request.user.blocked_users.all() | user.blocked_users.all(),
+            'is_friend': request.user in user.friends.all(), 'report_form': ReportForm(), 'request_sent': FriendRequest.objects.filter(sender=request.user, receiver=user).exists(),
         }
         if hasattr(user, 'parent'):
             context['user_type'] = "PARENT"
@@ -40,17 +40,16 @@ class ProfileView(LoginRequiredMixin, View):
         """Handle POST requests for the ReportForm and ConversationForm."""
 
         if 'message' in request.POST:
-            return self._handle_conversation_submission(request, username)
+            return self._handle_conversation_submission(request)
         elif 'report' in request.POST:
             return self._handle_report_submission(request, username)
         else:
             messages.error(request, "There was an issue with the report.")
         return redirect(reverse('profile', kwargs={'username': username}))
 
-    def _handle_conversation_submission(self, request, username):
+    def _handle_conversation_submission(self, request):
         """Handle conversation form submission."""
 
-        user = User.objects.get(username=username)
         conversation_form = ConversationForm(request.user, data=request.POST)
         conversation_form.fields['users'].queryset = User.objects.all()
         conversation = conversation_form.save(request.user)

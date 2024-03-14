@@ -89,6 +89,8 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
         return Mentor.objects.create_user(**user_data)
     
     def validate_referral_code(self, referral_code, user_type):
+        """Check mentors use an existing referral code."""
+
         if user_type == 'MT':
             try:
                 Referral.objects.get(code=referral_code)
@@ -96,6 +98,8 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
                 self.add_error('referral_code', "Please enter a valid referral code.")
 
     def validate_dob(self, dob):
+        """Check user is over 13 years old."""
+
         today = date.today()
         if dob and (dob.year + 13, dob.month, dob.day) > (today.year, today.month, today.day):
             self.add_error('date_of_birth', 'You must be 13 years old to register.')

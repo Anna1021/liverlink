@@ -11,6 +11,7 @@ from peer_support.models import User
 
 class ThemeSwitcherTest(StaticLiveServerTestCase):
     """Unit test of javascript in theme switcher"""
+    
     fixtures = ['peer_support/tests/fixtures/default_user.json']
 
     @classmethod

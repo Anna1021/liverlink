@@ -1,3 +1,4 @@
+"""Unit test of javascript which translates all views which contain navbar"""
 from selenium.common.exceptions import NoSuchElementException
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver

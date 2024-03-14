@@ -111,6 +111,8 @@ class FilterPeerForm(forms.Form):
         return users
     
     def filter_by_patient_attributes(self):
+        """Filters users based on patient attributes."""
+
         filter_criteria = {
             'age_of_diagnosis_min': 'patient__age_of_diagnosis__gte',
             'age_of_diagnosis_max': 'patient__age_of_diagnosis__lte',
@@ -121,6 +123,8 @@ class FilterPeerForm(forms.Form):
         return self.filter_by(patients,filter_criteria)
     
     def filter_by_parent_attributes(self):
+        """Filters users based on parent attributes."""
+
         filter_criteria = {
             'child_age_of_diagnosis_min': 'parent__child_age_of_diagnosis__gte',
             'child_age_of_diagnosis_max': 'parent__child_age_of_diagnosis__lte',
@@ -130,6 +134,8 @@ class FilterPeerForm(forms.Form):
         return self.filter_by(parents,filter_criteria)
         
     def filter_by_mentor_attributes(self):
+        """Filters users based on mentor attributes."""
+
         filter_criteria = {
             'mentor_age_of_diagnosis_min': 'mentor__age_of_diagnosis__gte',
             'mentor_age_of_diagnosis_max': 'mentor__age_of_diagnosis__lte',
@@ -139,6 +145,8 @@ class FilterPeerForm(forms.Form):
         return self.filter_by(mentors,filter_criteria)
     
     def filter_by(self,users,criteria):
+        """Filters users based on given criteria."""
+
         for criteria, query_filter in criteria.items():
             value = self.cleaned_data.get(criteria)
             if value and value != "any":

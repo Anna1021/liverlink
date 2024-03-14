@@ -5,12 +5,12 @@ from peer_support.models import User
 class Message(models.Model):
     """Model used for messages in a conversation"""
 
-    sender = models.ForeignKey(User,null=True,on_delete=models.SET_NULL,unique=False)
+    sender = models.ForeignKey(User,null=True, on_delete=models.SET_NULL, unique=False)
     content = models.CharField(max_length=100)
     send_time = models.DateTimeField(default=timezone.now)
-    visible_to = models.ManyToManyField(User, blank=True,related_name='visible_to')
-    read_by = models.ManyToManyField(User, blank=True,related_name = 'read_by')
-    previous_message = models.ForeignKey('self',null=True,on_delete=models.SET_NULL)
+    visible_to = models.ManyToManyField(User, blank=True, related_name='visible_to')
+    read_by = models.ManyToManyField(User, blank=True, related_name = 'read_by')
+    previous_message = models.ForeignKey('self', null=True, on_delete=models.SET_NULL)
 
     def delete(self,users):
         """Delete message"""

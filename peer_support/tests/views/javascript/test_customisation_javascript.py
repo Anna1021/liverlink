@@ -17,6 +17,7 @@ class CustomisationJavascriptTest(StaticLiveServerTestCase):
         'peer_support/tests/fixtures/default_patient.json',
         'peer_support/tests/fixtures/default_user_profile.json'
     ]
+    
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

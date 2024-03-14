@@ -1,5 +1,4 @@
 from django import forms
-from django.db.models import Case, When, Value, IntegerField
 from .form_choices import SORT_USER_CHOICES
 
 class SortPeerForm(forms.Form):

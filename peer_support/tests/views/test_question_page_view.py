@@ -1,3 +1,4 @@
+"""Tests of the Question Page view."""
 from django.test import TestCase, Client
 from peer_support.models import Question, Response, User
 from peer_support.forms import NewResponseForm
@@ -20,7 +21,7 @@ class QuestionPageTestCase(TestCase):
 
     def test_question_page_GET(self):
         self.client.login(username=self.user.username, password='Password123')
-        response = self.client.get(self.url)  # Use the URL from setUp
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'question.html')
         self.assertIsInstance(response.context['response_form'], NewResponseForm)

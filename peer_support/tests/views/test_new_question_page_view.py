@@ -1,3 +1,4 @@
+"""Test of the new question page view."""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.models import User

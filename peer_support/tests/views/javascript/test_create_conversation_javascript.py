@@ -10,6 +10,7 @@ from selenium.common.exceptions import TimeoutException
 
 class CreateConversationJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in peer_select view"""
+    
     fixtures = ['peer_support/tests/fixtures/default_user.json',
                 'peer_support/tests/fixtures/other_users.json',
                 'peer_support/tests/fixtures/default_conversation.json',

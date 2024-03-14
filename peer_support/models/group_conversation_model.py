@@ -4,7 +4,7 @@ from peer_support.models import Conversation
 class GroupConversation(Conversation):
     """Model used for group conversations between 2+ users"""
 
-    name = models.CharField(max_length=20,null=True)
+    name = models.CharField(max_length=20, null=True)
 
     def remove_user(self,user):
         """Remove user from group and delete self if no users in group"""

@@ -1,7 +1,8 @@
+"""Tests of the profile view"""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.models import Report, User, Conversation, GroupConversation, FriendRequest
-from peer_support.forms import ConversationForm, ReportForm
+from peer_support.forms import ReportForm
 from django.contrib.contenttypes.models import ContentType
 from peer_support.tests.helpers import reverse_with_next
 from django.contrib import messages

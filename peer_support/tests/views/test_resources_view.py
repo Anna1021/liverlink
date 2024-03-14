@@ -1,7 +1,6 @@
+"""Tests of the Resources view."""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.models import Question
-from django.utils import timezone
 from peer_support.models import User
 from peer_support.tests.helpers import reverse_with_next
 

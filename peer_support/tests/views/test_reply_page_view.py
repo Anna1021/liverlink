@@ -1,9 +1,11 @@
+"""Tests of the Reply Page view."""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.models import Question, Response, User
 
 class ReplyPageTestCase(TestCase):
     """Tests of the Reply Page view."""
+
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json'

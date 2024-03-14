@@ -5,6 +5,8 @@ from peer_support.forms import NewReplyForm, NewResponseForm
 
 @login_required
 def question_page(request, id):
+    """Display question page and replies."""
+    
     response_form = NewResponseForm()
     reply_form = NewReplyForm()
     if request.method == 'POST':

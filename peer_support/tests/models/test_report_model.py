@@ -1,9 +1,10 @@
+"""Unit test of Report model."""
 from django.test import TestCase
 from peer_support.models import Report, Message, User
 from django.contrib.contenttypes.models import ContentType
 
 class ReportModelTestCase(TestCase):
-    """Unit test of report model"""
+    """Unit test of Report model."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',

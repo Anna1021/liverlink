@@ -1,3 +1,4 @@
+"""Tests of the accept report view"""
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.messages import get_messages

@@ -58,7 +58,7 @@ class FriendsListViewTestCase(TestCase):
         sorted_usernames = [user.username for user in sorted_friends]
         manual_sorted_friends = sorted_friends.order_by('username')
         manual_sorted_usernames = [user.username for user in manual_sorted_friends]
-        self.assertEqual(sorted_usernames,manual_sorted_usernames)
+        self.assertEqual(sorted_usernames, manual_sorted_usernames)
 
     def test_search_functionality(self):
         sort_params = {'search': 'peter'}

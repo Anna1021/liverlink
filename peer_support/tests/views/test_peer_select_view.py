@@ -1,3 +1,4 @@
+"""Tests of the Peer Select view."""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.forms import FilterPeerForm, SortPeerForm, SearchPeerForm
@@ -63,7 +64,7 @@ class PeerSelectViewTestCase(TestCase):
         sorted_usernames = [user.username for user in sorted_users]
         manual_sorted_users = sorted_users.order_by('username')
         manual_sorted_usernames = [user.username for user in manual_sorted_users]
-        self.assertEqual(sorted_usernames,manual_sorted_usernames)
+        self.assertEqual(sorted_usernames, manual_sorted_usernames)
 
     def test_search_functionality(self):
         sort_params = {'search': 'jane'}

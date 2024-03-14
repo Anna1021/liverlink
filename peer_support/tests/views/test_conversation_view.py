@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.forms import MessageForm, ReportForm
-from peer_support.models import User, Conversation,Message, Report
+from peer_support.models import User, Conversation, Message, Report
 from django.contrib import messages
 
 class ConversationViewTestCase(TestCase):
@@ -18,8 +18,8 @@ class ConversationViewTestCase(TestCase):
 
     def setUp(self):
         self.conversation = Conversation.objects.get(pk=1)
-        self.url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
-        self.no_conversation_url = reverse('conversation',kwargs={'conversation_id':0})
+        self.url = reverse('conversation', kwargs={'conversation_id':self.conversation.id})
+        self.no_conversation_url = reverse('conversation', kwargs={'conversation_id':0})
         self.form_input = {
             'content':'Ploof'
         }
@@ -97,7 +97,7 @@ class ConversationViewTestCase(TestCase):
     def test_unsuccessful_message_send(self):
         self.form_input['content'] = ''
         before_count = Message.objects.count()
-        response = self.client.post(self.url,data=self.form_input)
+        response = self.client.post(self.url, data=self.form_input)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
@@ -111,7 +111,7 @@ class ConversationViewTestCase(TestCase):
         blocked_user = User.objects.get(username='@johndoe')
         self.user.blocked_users.add(blocked_user)
         before_count = Message.objects.count()
-        response = self.client.post(self.url,data=self.form_input)
+        response = self.client.post(self.url, data=self.form_input)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 302)

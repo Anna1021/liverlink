@@ -1,3 +1,4 @@
+"""Unit tests for the Question model."""
 from django.test import TestCase
 from peer_support.models import Question, Response, User
 from django.core.exceptions import ValidationError

@@ -14,6 +14,6 @@ class Question(models.Model):
         return self.title
 
     def get_responses(self):
-        """return the response that is directly replying the question, will not return the reply of another response"""
+        """Return direct responses to the question"""
 
         return self.responses.filter(parent=None)

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from peer_support.forms import SortPeerForm, FilterPeerForm,SearchPeerForm
+from peer_support.forms import SortPeerForm, FilterPeerForm, SearchPeerForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View

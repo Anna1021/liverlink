@@ -1,11 +1,11 @@
-"""Unit test of SortPeerForm"""
+"""Unit test of sort peer form"""
 import datetime
 from django.test import TestCase
 from peer_support.forms import SortPeerForm 
 from peer_support.models import User, Patient, Parent, Mentor
 
 class SortPeerFormTestCase(TestCase):
-    """Unit test of SortPeerForm"""
+    """Unit test of sort peer form"""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',

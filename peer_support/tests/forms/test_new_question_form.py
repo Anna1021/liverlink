@@ -1,8 +1,9 @@
+"""Unit tests of the question form."""
 from django.test import TestCase
 from peer_support.forms import NewQuestionForm
 
 class QuestionFormTestCase(TestCase):
-    """Unit tests of the Question form."""
+    """Unit tests of the question form."""
 
     def setUp(self):
         self.form_input = {

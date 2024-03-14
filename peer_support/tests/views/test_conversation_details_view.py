@@ -57,9 +57,9 @@ class ConversationDetailsViewTestCase(TestCase):
 
     def test_cannot_get_conversation_user_is_not_in(self):
         self.client.logout()
-        self.client.login(username='@janedoe',password='Password123')
-        invalid_url = reverse('conversation_details',kwargs={'conversation_id':2})
-        response = self.client.get(invalid_url,follow=True)
+        self.client.login(username='@janedoe', password='Password123')
+        invalid_url = reverse('conversation_details', kwargs={'conversation_id':2})
+        response = self.client.get(invalid_url, follow=True)
         self.assertRedirects(response, self.no_conversation_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'conversation.html')
         messages_list = list(response.context['messages'])
@@ -68,7 +68,7 @@ class ConversationDetailsViewTestCase(TestCase):
 
     def test_cannot_get_conversation_that_does_not_exist(self):
         invalid_url = reverse('conversation_details',kwargs={'conversation_id':3})
-        response = self.client.get(invalid_url,follow=True)
+        response = self.client.get(invalid_url, follow=True)
         self.assertRedirects(response, self.no_conversation_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'conversation.html')
         messages_list = list(response.context['messages'])
@@ -78,7 +78,7 @@ class ConversationDetailsViewTestCase(TestCase):
     def test_unsuccessful_add_user(self):
         self.form_input['users'] = []
         before_count = self.conversation.users.count()
-        response = self.client.post(self.url,data=self.form_input)
+        response = self.client.post(self.url, data=self.form_input)
         after_count = self.conversation.users.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
@@ -89,10 +89,10 @@ class ConversationDetailsViewTestCase(TestCase):
 
     def test_successful_add_user(self):
         before_count = self.conversation.users.count()
-        self.assertNotIn(self.user_to_add[0],self.conversation.users.all())
-        response = self.client.post(self.url,data=self.form_input)
+        self.assertNotIn(self.user_to_add[0], self.conversation.users.all())
+        response = self.client.post(self.url, data=self.form_input)
         after_count = self.conversation.users.count()
-        self.assertIn(self.user_to_add[0],self.conversation.users.all())
+        self.assertIn(self.user_to_add[0], self.conversation.users.all())
         self.assertEqual(after_count, before_count+1)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'conversation_details.html')
@@ -101,10 +101,10 @@ class ConversationDetailsViewTestCase(TestCase):
         self.assertFalse(form.is_bound)
 
     def test_successful_rename_conversation(self):
-        self.assertEqual(self.conversation.as_group().name,None)
-        response = self.client.post(self.url,data=self.rename_input)
+        self.assertEqual(self.conversation.as_group().name, None)
+        response = self.client.post(self.url, data=self.rename_input)
         renamed = Conversation.objects.get(pk=2)
-        self.assertEqual(renamed.as_group().name,'test')
+        self.assertEqual(renamed.as_group().name, 'test')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'conversation_details.html')
         form = response.context['form']
