@@ -27,13 +27,13 @@ class ProfileView(LoginRequiredMixin, View):
             'is_friend': request.user in user.friends.all(),'report_form': ReportForm(), 'request_sent': FriendRequest.objects.filter(sender=request.user, receiver=user).exists(),
         }
         if hasattr(user, 'parent'):
-            context['parent'] = user.parent
+            context['user_type'] = "PARENT"
         elif hasattr(user, 'patient'):
-            context['patient'] = user.patient
+            context['user_type'] = "PATIENT"
         elif hasattr(user, 'mentor'):
-            context['mentor'] = user.mentor
+            context['user_type'] = "MENTOR"
         else:
-            context['admin'] = user
+            context['user_type'] = "ADMIN"
         return context
     
     def post(self, request, username):

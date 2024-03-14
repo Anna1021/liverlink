@@ -13,15 +13,7 @@
                 <div class="profile-head">
                     <h5>{{ user.full_name }}</h5>
                     <h6>{{ user.username }}</h6>
-                    {% if patient %}
-                    <h7>PATIENT</h7>
-                    {% elif mentor %}
-                    <h7>MENTOR</h7>
-                    {% elif parent %}
-                    <h7>PARENT</h7>
-                    {% elif admin %}
-                    <h7>ADMIN</h7>
-                    {% endif %}
+                    <h7>{{ user_type }}</h7>
                 </div>
             </div>
             <div class="col-md-2">
