@@ -6,11 +6,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-img">
-                    {% if mentor %}
-                        <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" style="border: 7px solid rgb(101, 209, 101);"/>
-                    {% else %}
-                        <img src="https://cdn.dribbble.com/users/1859117/screenshots/4398104/liver.gif" alt="" />
-                    {% endif %}
+                    <img src="{% static user.userprofile.profile_picture %}" alt="User Profile Picture" />
                 </div>
             </div>
             <div class="col-md-6">
@@ -42,13 +38,14 @@
                         <span class="bi bi-gear-fill"></span>
                     </a>
                 </div>
+                
                 {% else %}
                 <div id="user-actions-dropdown" style="float: right;">
                     <a class="actions-icon" href="#" id="actionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="user-actions-dropdown">
                         <span class="bi bi-three-dots-vertical"></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="actionsDropdown" data-popper-placement="bottom-end">
-                      {% if not current_user in blocklist and not user in blocklist %}
+                        {% if not current_user in blocklist and not user in blocklist %}
                         {% if is_friend %}
                         <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}" data-action="remove-friend">Remove friend</a>
                         {% elif request_sent %}
@@ -56,14 +53,19 @@
                         {% else %}
                         <a class="dropdown-item" href="#" id="friend-link" data-user-id="{{user.id}}" data-action="add-friend">Add friend</a>
                         {% endif%}
-                      <a class="dropdown-item" href="{% url 'get_conversation' user.id %}" id="message-link" data-action="message">Send message</a> 
-                      {% endif %}
-                      {% if user in blocklist %}
-                      <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="unblock-user">Unblock this user</a>
-                      {% else %}
-                      <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="block-user">Block this user</a>
-                      {% endif %}
-                      <a class="dropdown-item" href="#" id="report-link" data-action="report-user">Report this user</a>
+                        <a class="dropdown-item" href="{% url 'get_conversation' user.id %}" id="message-link" data-action="message">Send message</a>
+                        {% endif %}
+                        {% if user in blocklist %}
+                        <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="unblock-user">Unblock this user</a>
+                        {% else %}
+                        <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}" data-action="block-user">Block this user</a>
+                        {% endif %}
+                        <a class="dropdown-item" href="#" id="report-link" data-action="report-user"><form method="post">
+                            {% csrf_token %}
+                                        {% include 'partials/bootstrap_form.html' with form=report_form %}
+                            <input type="hidden" name="action" value="{{message.id}}">
+                            <button type="submit">Report</button>
+                        </form></a>
                     </div>
                   </div>
                 {% endif %}
@@ -77,7 +79,9 @@
                 </div>
             </div>
             <div class="col-md-7">
-                {% if current_user in blocklist %}
+                {% if not user.is_active %}
+                <div class="profile-subheading" id="current-user-is-inactive">This user is inactive.</div>
+                {% elif current_user in blocklist %}
                 <div class="profile-subheading" id="current-user-is-blocked">You cannot view this user's profile.</div>
                 {% elif user in blocklist %}
                 <div class="profile-subheading" id="user-is-blocked">You have blocked this user.</div>

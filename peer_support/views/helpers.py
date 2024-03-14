@@ -123,4 +123,6 @@ def get_locations():
     location = User.objects.values_list('location', flat=True)
     return Counter(location) 
 
+def user_exists(username):
+    return User.objects.filter(username=username).exists()
 

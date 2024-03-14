@@ -130,6 +130,16 @@ class UserProfileModelTestCase(TestCase):
         self.user_profile.user = second_user
         self._assert_user_profile_is_invalid()
 
+    
+    def test_profile_picture_can_be_blank(self):
+        self.user_profile.profile_picture = ''
+        self._assert_user_profile_is_valid()
+
+    def test_profile_picture_need_not_be_unique(self):
+        second_profile_picture = UserProfile.objects.get(id=2).profile_picture
+        self.user_profile.profile_picture = second_profile_picture
+        self._assert_user_profile_is_valid()
+
 
     def test_theme_cannot_be_blank(self):
         self.user_profile.theme = ''

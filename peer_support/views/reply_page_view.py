@@ -9,7 +9,7 @@ from peer_support.models import Question, Response
 from peer_support.forms import NewReplyForm
 
 @login_required(login_url='log_in')
-def replyPage(request):
+def reply_page(request):
     """reply to the question"""
     if request.method == 'POST':
         form = NewReplyForm(request.POST)

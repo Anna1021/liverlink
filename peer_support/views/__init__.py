@@ -6,6 +6,8 @@ from .log_in_view import LogInView
 from .log_out_view import log_out
 from .password_view import PasswordView
 from .profile_update_view import ProfileUpdateView
+from .customisation_view import CustomisationView
+from .update_profile_picture_view import update_profile_picture
 from .sign_up_view import SignUpView
 from .view_mixins import LoginProhibitedMixin
 from .profile_deactivate_view import deactivate_user
@@ -14,9 +16,9 @@ from .peer_select_view import PeerView
 from .create_conversation_view import CreateConversationView
 from .delete_message_view import DeleteMessageView
 from .new_question_page_view import newQuestionPage
-from .reply_page_view import replyPage
+from .reply_page_view import reply_page
 from .resources_view import resources
-from .question_page_view import questionPage
+from .question_page_view import question_page
 from .send_friend_request_view import SendFriendRequestView
 from .accept_friend_request_view import AcceptFriendRequestView
 from .friends_list_view import friends_list

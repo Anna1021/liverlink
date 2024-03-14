@@ -13,8 +13,6 @@ def demographic_information(request):
     genders = get_genders()
     locations = get_locations()
     mentor_conditions = get_mentor_conditions()
-    print (list(mentor_conditions)),
-    print (list(patient_conditions.values())),
     context = {
         'num_patients': num_patients,
         'num_parents': num_parents,
@@ -31,8 +29,8 @@ def demographic_information(request):
         'parent_child_condition_count' :list(parent_child_conditions.values()),
         'location_labels': list(locations.keys()), 
         'location_count' :list(locations.values()),
-        'mentor_condition_labels' : list(patient_conditions.keys()),
-        'mentor_condition_count' : list(patient_conditions.values()),
+        'mentor_condition_labels' : list(mentor_conditions.keys()),
+        'mentor_condition_count' : list(mentor_conditions.values()),
     }
     return render(request, 'demographic_information.html', context)
 

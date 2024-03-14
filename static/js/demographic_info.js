@@ -39,6 +39,15 @@ let patient_condition_data = {
     title: "Liver Disease among Users"
 };
 
+let mentor_condition_data = {
+    labels: mentor_condition_labels, 
+    datasets: [{
+        label: "Liver Disease Distribution",
+        backgroundColor: colours,
+        data: mentor_condition_count 
+    }],
+    title: "Liver Disease among Users"
+};
 
 let parent_child_condition_data = {
     labels: parent_child_condition_labels, 
@@ -112,20 +121,7 @@ document.getElementById("barChartDataSelect").addEventListener("change", functio
             update_bar_chart_data(user_location_data);
             break;
         case "mentor_condition":
-            console.log("Mentor Condition Labels: 2")
-            console.log("Mentor Condition Labels:", mentor_condition_labels); // Debugging: Print labels
-            console.log("Mentor Condition Count:", mentor_condition_count); // Debugging: Print counts
-            
-            let mentorConditionData = {
-                labels: mentor_condition_labels,
-                datasets: [{
-                    label: "Mentor Conditions",
-                    backgroundColor: colours,
-                    data: mentor_condition_count
-                }],
-                title: "Mentor Condition Distribution"
-            };
-            update_bar_chart_data(mentorConditionData);
+            update_bar_chart_data(mentor_condition_data);
             break;
         default:
             update_bar_chart_data(user_type_data);
@@ -170,14 +166,7 @@ document.getElementById("pieChartDataSelect").addEventListener("change", functio
             update_pie_chart_data(user_location_data);
             break;
         case "mentor_condition":
-            update_pie_chart_data({
-                labels: mentor_condition_labels,
-                datasets: [{
-                    backgroundColor: colours.slice(0, mentor_condition_labels.length), // Ensure there are enough colors
-                    data: mentor_condition_count
-                }],
-                title: "Mentor Condition Distribution"
-            });
+            update_pie_chart_data(mentor_condition_data);
             break;
         default:
             update_pie_chart_data(patient_condition_data);
