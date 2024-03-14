@@ -16,6 +16,6 @@ class DeletePostView(LoginRequiredMixin,View):
         if post.author == request.user:
             post.delete()
         else:
-            messages.error(request, "You are not authorized to delete this post.")
+            messages.error(request, "You are not authorised to delete this post.")
         return redirect('feed')
     
