@@ -112,8 +112,8 @@ class Command(BaseCommand):
         self.create_responses()
         self.responses = Response.objects.all()
 
-        self.create_reports()
-        self.reports = Report.objects.all()
+        # self.create_reports()
+        # self.reports = Report.objects.all()
 
     def create_patients(self):
         self.generate_patient_fixtures()
@@ -341,10 +341,10 @@ class Command(BaseCommand):
     #     self.try_create_report({'reporter': reporter, 'reason': reason, 'content_type': content_type, 'object_id': object_id})
         
     def try_create_patient(self, data):
-        # try:
-        self.create_patient(data)
-        # except:
-            # pass
+        try:
+            self.create_patient(data)
+        except:
+            pass
 
     def try_create_parent(self, data):
         try:
@@ -396,18 +396,17 @@ class Command(BaseCommand):
 
     def create_user(self, model, data):
         profile_picture = data.pop('profile_picture', None)
+        user = model.objects.create(**data)
         if profile_picture:
-            user = model.objects.create(**data)
-            user.set_password(Command.DEFAULT_PASSWORD)
             user.userprofile.profile_picture = profile_picture
             user.userprofile.save()
-            if data['username'] == '@johndoe':
-                user.is_superuser = True
-                user.is_staff = True
-            user.save()
-            if model == Mentor:
-                Referral.objects.create(referrer=user, code=data['referral_code'])
-            return user
+        user.set_password(Command.DEFAULT_PASSWORD)
+        if data['username'] == '@johndoe':
+            user.is_superuser = user.is_staff = True
+        user.save()
+        if model == Mentor:
+            Referral.objects.create(referrer=user, code=data['referral_code'])
+        return user
 
     def create_patient(self, data):
         self.create_user(Patient, data)
