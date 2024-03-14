@@ -14,7 +14,7 @@ class SubmitFeedbackViewTestCase(TestCase):
 
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
-        self.url = reverse('feedback')
+        self.url = reverse('submit_feedback')
         self.form_input = {
             'title': 'Test feedback',
             'content': 'This is test feedback.'
