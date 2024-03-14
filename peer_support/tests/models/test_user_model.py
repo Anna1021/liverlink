@@ -123,13 +123,18 @@ class UserModelTestCase(TestCase):
         self._assert_user_is_invalid()
 
 
-    def test_date_of_birth_may_be_blank(self):
-        self.user.date_of_birth = None
-        self._assert_user_is_valid()
 
     def test_date_of_birth_need_not_be_unique(self):
         second_user = User.objects.get(username='@janedoe')
         self.user.date_of_birth = second_user.date_of_birth
+        self._assert_user_is_valid()
+
+    def test_date_of_birth_must_not_be_blank(self):
+        self.user.date_of_birth = None
+        self._assert_user_is_invalid()
+
+    def test_date_of_birth_must_be_13_years_ago(self):
+        self.user.date_of_birth = '2008-01-01'
         self._assert_user_is_valid()
 
 

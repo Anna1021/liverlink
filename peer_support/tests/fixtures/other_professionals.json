@@ -1,0 +1,42 @@
+[
+    {
+      "model": "peer_support.professional",
+      "pk": 2,
+      "fields": {
+        "user_ptr": 2,
+        "expertise": "Biliary atresia",
+        "referral_code": "9C274FF391",
+        "is_active": true
+      }
+    },
+    {
+      "model": "peer_support.professional",
+      "pk": 3,
+      "fields": {
+        "user_ptr": 3,
+        "expertise": "Cirrhosis",
+        "referral_code": "9C274FF391",
+        "is_active": true
+      }
+    },
+    {
+      "model": "peer_support.professional",
+      "pk": 4,
+      "fields": {
+        "user_ptr": 4,
+        "expertise": "Haemochromatosis",
+        "referral_code": "9C274FF391",
+        "is_active": true
+      }
+    },
+    {
+      "model": "peer_support.professional",
+      "pk": 5,
+      "fields": {
+        "user_ptr": 5,
+        "expertise": "Cancer",
+        "referral_code": "9C274FF391",
+        "is_active": true
+      }
+    }
+  ]
