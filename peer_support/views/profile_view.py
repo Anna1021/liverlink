@@ -14,7 +14,7 @@ class ProfileView(LoginRequiredMixin, View):
 
         if not user_exists(username):
             messages.error(request, "The profile you tried to access does not exist.")
-            return redirect(reverse('dashboard'))
+            return redirect(reverse('feed'))
         user = User.objects.get(username=username)
         context = {
             'user': user, 'current_user': request.user,'blocklist': request.user.blocked_users.all() | user.blocked_users.all(),

@@ -205,6 +205,6 @@ class ProfileViewTestCase(TestCase):
         non_existent_username = 'noonehere'
         url = reverse('profile', kwargs={'username': non_existent_username})
         response = self.client.get(url)
-        self.assertRedirects(response, reverse('dashboard'))
+        self.assertRedirects(response, reverse('feed'))
         messages = list(get_messages(response.wsgi_request))
         self.assertTrue(any(["does not exist" in str(message) for message in messages]))
