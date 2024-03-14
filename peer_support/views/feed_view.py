@@ -21,14 +21,13 @@ class FeedView(LoginRequiredMixin, FormView):
 
     def post(self,request):
         """Submit post"""
-
-        feed_type = request.GET.get('feed_type')  
-        user_posts = self.retrieve_posts(request)
-        form = PostForm(request.user,data=request.POST)
         if form.is_valid():
             post = form.save()
             return redirect(reverse('feed'), post_id=post.id)
         else:
+            feed_type = request.GET.get('feed_type')
+            user_posts = self.retrieve_posts(request)
+            form = PostForm(request.user)
             return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
 
     def retrieve_posts(self,request):
