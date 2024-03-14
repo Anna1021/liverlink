@@ -1,0 +1,19 @@
+{% load static %}
+<div class="col-md-6 my-2">
+    <div id="friend-inner-card"class="card">
+        <div class="friend-card-body">
+            <div class="media align-items-center">
+                <img src="{% static user.userprofile.profile_picture %}" alt="Profile Picture" class="rounded-circle friend-profile-picture">
+                <div class="media-body overflow-hidden">
+                    <h5 class="card-text mb-0 notranslate">{{ user.username }}</h5>
+                    <p class="card-text text-uppercase subtext mb-0">{{ user.full_name }}</p>
+                    <p class="card-text subtext">{{ user.country_name }}</p>
+                </div>
+            </div><a href="{% url 'profile' username=user.username %}" class="tile-link"></a>
+            <div class=" add-friend text-center mt-4">
+                <a class="btn btn-sm add-friend-btn" data-user-id="{{ user.id }}">Add
+                    friend</a>
+            </div>
+        </div>
+    </div>
+</div>
