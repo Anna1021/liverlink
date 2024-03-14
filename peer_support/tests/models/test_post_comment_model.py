@@ -8,7 +8,8 @@ class PostCommentModelTestCase(TestCase):
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/default_post.json',
-        'peer_support/tests/fixtures/default_post_comment.json'
+        'peer_support/tests/fixtures/default_post_comment.json',
+        'peer_support/tests/fixtures/other_comments.json',
     ]
 
     def setUp(self):
@@ -49,8 +50,17 @@ class PostCommentModelTestCase(TestCase):
         expected_str = f'Comment by {self.user.username} on {self.post.text}'
         self.assertEqual(str(self.comment), expected_str)
 
-    def test_get_delete_str_method(self):
-        self.assertEqual(self.comment.get_delete_str(), str(self.comment))
+    def test_delete_post_deletes_comment(self):
+        self.post.delete()
+        with self.assertRaises(PostComment.DoesNotExist):
+            PostComment.objects.get(pk=self.comment.pk)
+
+    def test_delete_parent_comments_sets_to_null(self):
+        child_comment = PostComment.objects.get(pk=2)
+        self.assertEqual(child_comment.parent,self.comment)
+        self.comment.delete()
+        child_comment = PostComment.objects.get(pk=2)
+        self.assertIsNone(child_comment.parent)
         
     """
     def test_delete_comment(self):
@@ -67,5 +77,6 @@ class PostCommentModelTestCase(TestCase):
     def _assert_comment_is_invalid(self):
         with self.assertRaises(ValidationError):
             self.comment.full_clean()
+
 
 
