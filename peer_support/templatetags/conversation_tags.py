@@ -20,3 +20,7 @@ def conversation_name(user,conversation):
         return str(conversation.as_group())
     other_user = conversation.users.exclude(pk=user.pk)[0]
     return other_user.username
+
+@register.filter
+def visible_messages(user,conversation):
+    return conversation.messages.filter(visible_to__in=[user])

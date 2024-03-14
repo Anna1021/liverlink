@@ -18,6 +18,7 @@ class ConversationViewTestCase(TestCase):
 
     def setUp(self):
         self.conversation = Conversation.objects.get(pk=1)
+        self.message = Message.objects.get(pk=1)
         self.url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
         self.no_conversation_url = reverse('conversation',kwargs={'conversation_id':0})
         self.form_input = {
@@ -122,7 +123,7 @@ class ConversationViewTestCase(TestCase):
         self.assertFalse(form.is_bound)
 
     def test_successful_report(self):
-        message_id_to_report = 1
+        message_id_to_report = self.message.id
         report_data = {
             'action': message_id_to_report,
             'reason': 'abuse'
@@ -140,7 +141,7 @@ class ConversationViewTestCase(TestCase):
         self.assertIn("Message reported successfully.", str(messages_list[0]))
 
     def test_unsuccessful_report (self):
-        valid_message_id = 1  
+        valid_message_id = self.message.id 
         report_data = {
             'action': valid_message_id,
             'reason': 'dfdsdf'
@@ -150,3 +151,55 @@ class ConversationViewTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertIn("There was an issue with the report.", str(messages_list[0]))
+
+    def test_successful_delete_message_for_self(self):
+        delete_data = {
+            'action': self.message.id,
+            'delete': 'me'
+        }
+        visible_to_before = self.message.visible_to.count()
+        messages_before = Message.objects.count()
+        response = self.client.post(self.url,data=delete_data,follow=True)
+        visible_to_after = self.message.visible_to.count()
+        messages_after = Message.objects.count()
+        self.assertEqual(visible_to_after,visible_to_before-1)
+        self.assertEqual(messages_after,messages_before)
+        redirect_url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')
+
+    def test_successful_delete_message_for_all_individually(self):
+        delete_data = {
+            'action': self.message.id,
+            'delete': 'me'
+        }
+        visible_to_before = self.message.visible_to.count()
+        messages_before = Message.objects.count()
+        response = self.client.post(self.url,data=delete_data,follow=True)
+        self.client.logout()
+        other_user = User.objects.get(username='@johndoe')
+        self.client.login(username=other_user.username, password="Password123")
+        response = self.client.post(self.url,data=delete_data,follow=True)
+        visible_to_after = self.message.visible_to.count()
+        messages_after = Message.objects.count()
+        self.assertEqual(visible_to_after,visible_to_before-2)
+        self.assertEqual(messages_after,messages_before-1)
+        redirect_url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')
+
+    def test_successful_delete_message_for_all_at_once(self):
+        delete_data = {
+            'action': self.message.id,
+            'delete': 'all'
+        }
+        visible_to_before = self.message.visible_to.count()
+        messages_before = Message.objects.count()
+        response = self.client.post(self.url,data=delete_data,follow=True)
+        visible_to_after = self.message.visible_to.count()
+        messages_after = Message.objects.count()
+        self.assertEqual(visible_to_after,visible_to_before-2)
+        self.assertEqual(messages_after,messages_before-1)
+        redirect_url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')

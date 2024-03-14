@@ -33,9 +33,14 @@
 </div>
 <div>
     <div id="conversation">
-    {% if conversation.messages.count > loaded_messages|length %}
-    <a href="{% url 'conversation' conversation.id %}" name="current_messages_get" value="{{ loaded_messages|length }}">load previous messages</a>
+    {% with user|visible_messages:conversation as user_messages%}
+    {% if user_messages.count > loaded_messages|length %}
+    <form method="get">
+        {% csrf_token %}
+        <button class="btn btn-link" type="submit" name="current_messages" value="{{ loaded_messages|length }}">load previous messages</button>
+    </form>
     {% endif %}
+    {% endwith %}
     {% for message in loaded_messages %}
         {% if user in message.visible_to.all %}
             {% if message.sender == user %} 
@@ -60,7 +65,7 @@
         {% endif %}
         {% csrf_token %}
         {{ message_form.content }}
-        <input type="hidden" name="current_messages_post" value="{{ loaded_messages|length }}">
+        <input type="hidden" name="current_messages" value="{{ loaded_messages|length }}">
         <button type="submit" id="send-message"><i class="bi bi-arrow-right-square-fill"></i></button>
     </form>
     {% else %}
