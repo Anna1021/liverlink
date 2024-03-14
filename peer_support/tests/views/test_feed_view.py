@@ -1,3 +1,4 @@
+"""Tests of the feed view."""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.forms import PostForm
@@ -15,21 +16,21 @@ class FeedViewTestCase(TestCase):
     def setUp(self):
         self.url = reverse('feed')
         self.user = User.objects.get(pk=1)
-        self.user.friends.add(User.objects.get(pk=2))
         self.user2 = User.objects.get(pk=2)
         self.user3 = User.objects.get(pk=3)
         
         self.user.friends.add(self.user2)
-        self.user2.friends.add(self.user) 
         
         self.post = Post.objects.get(pk=1)
         self.friend_post = Post.objects.get(pk=2)
-        self.friend_post.author = self.user2
-        self.friend_post.save()
-
         self.stranger_post = Post.objects.get(pk=3)
 
         self.client.login(username=self.user.username, password="Password123")
+
+        self.form_input={
+            'visibility':'G',
+            'text':'Test post'
+        }
     
     def test_create_post_url(self):
         self.assertEqual(self.url,'/feed/')
@@ -48,11 +49,9 @@ class FeedViewTestCase(TestCase):
         self.assertFalse(form.is_bound)
     
     def test_post_text_must_not_be_empty(self):
-        form_input = {
-            'text':''
-        }
+        self.form_input['text'] = ''
         before_count = Post.objects.count()
-        response = self.client.post(self.url,data=form_input)
+        response = self.client.post(self.url,data=self.form_input)
         after_count = Post.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
@@ -62,11 +61,9 @@ class FeedViewTestCase(TestCase):
         self.assertTrue(form.is_bound)
 
     def test_post_text_must_not_exceed_maximum_280_characters(self):
-        form_input = {
-            'text': 'A' * 281
-        }
+        self.form_input['text'] = 'A' * 281
         before_count = Post.objects.count()
-        response = self.client.post(self.url,data=form_input)
+        response = self.client.post(self.url,data=self.form_input)
         after_count = Post.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
@@ -76,30 +73,19 @@ class FeedViewTestCase(TestCase):
         self.assertTrue(form.is_bound)
     
     def test_post_valid_data(self):
-        self.client.login(username=self.user.username, password='Password123')
-        form_data = {
-            'text': 'User post'
-        }
-        response = self.client.post(self.url, form_data)
-        self.assertRedirects(response, reverse('feed'))
+        response = self.client.post(self.url, self.form_input)
+        self.assertRedirects(response, reverse('feed'))    
 
-    def test_post_invalid_data(self):
-        self.client.login(username=self.user.username, password='Password123')
-        form_data = {
-            'text': ''
-        }
-        response = self.client.post(self.url, form_data)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'feed.html')
-        
-
-    def test_global_feed_contains_all_posts(self):
+    def test_global_feed_contains_global_and_friends_posts(self):
         response = self.client.get(self.url + '?feed_type=global')
         self.assertContains(response, "User post")
         self.assertContains(response, "Friend post")
+        self.assertContains(response, "Stranger post global")
+        self.assertNotContains(response,"Stranger post friends")
     
     def test_friends_feed_contains_friend_and_user_posts_only(self):
         response = self.client.get(self.url + '?feed_type=friends')
         self.assertContains(response, "User post")
         self.assertContains(response, "Friend post")
-        self.assertNotContains(response, "Stranger post")    
+        self.assertNotContains(response, "Stranger post global")    
+        self.assertNotContains(response, "Stranger post friends")  

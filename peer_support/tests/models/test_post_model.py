@@ -1,3 +1,4 @@
+"""Unit tests for the post model"""
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from peer_support.models import Post, PostComment, User

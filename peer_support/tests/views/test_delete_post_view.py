@@ -1,3 +1,4 @@
+"""Tests of the post deletion view"""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.models import Post,User
@@ -34,6 +35,18 @@ class DeletePostViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'feed.html')
 
+    def test_cannot_delete_nonexistent_post(self):
+        invalid_url = reverse('delete_post',kwargs={'post_id':2})
+        posts_before = Post.objects.count()
+        response = self.client.get(invalid_url, follow=True)
+        posts_after = Post.objects.count()
+        self.assertEqual(posts_after, posts_before)
+        redirect_url = reverse('feed')
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'feed.html')
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
 
     def test_unauthorized_delete_post(self):
         self.client.logout()

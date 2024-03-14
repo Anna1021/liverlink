@@ -31,22 +31,13 @@ class FeedView(LoginRequiredMixin, FormView):
         else:
             return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
 
-    # def retrieve_friend_posts(self,request):
-    #     user_friends = request.user.friends.all()
-    #     # Retrieve the user's posts and friends' posts
-    #     return Post.objects.filter(Q(author__in=user_friends) | Q(author=request.user)).order_by("-created_at")
-
     def retrieve_posts(self,request):
         """Retrieve posts and display them in chronological order."""
 
         feed_type = request.GET.get('feed_type') 
         user_posts = retrieve_friend_posts(request)
-        if feed_type == 'global':
+        if feed_type != 'friends':
             user_posts = user_posts|Post.objects.filter(visibility='G')
         user_posts = user_posts.order_by("-created_at")
-        # else:
-        #     user_friends = request.user.friends.all()
-        #     # Retrieve the user's posts and friends' posts
-        #     user_posts = Post.objects.filter(Q(author__in=user_friends) | Q(author=request.user)).order_by("-created_at")
         return user_posts
         

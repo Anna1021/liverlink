@@ -82,6 +82,7 @@ def retrieve_friend_posts(request):
 def get_post(request,post_id):
     posts = (retrieve_friend_posts(request)|Post.objects.filter(visibility='G')).filter(id=post_id)
     if posts.count()==0:
+        messages.error(request,"This post does not exist")
         return None
     return Post.objects.get(id=post_id)
 
