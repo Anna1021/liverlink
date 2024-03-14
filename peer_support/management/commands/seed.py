@@ -69,9 +69,9 @@ response_fixtures = [
 ]
 
 report_fixtures = [
-    {'reporter': patient_fixtures[0], 'reason': 'Inappropriate content', 'content_type': 'Notification', 'object_id': 1},
-    {'reporter': parent_fixtures[0], 'reason': 'Inappropriate content', 'content_type': 'Message', 'object_id': 2},
-    {'reporter': patient_fixtures[2], 'reason': 'Spam', 'content_type': 'Notification', 'object_id': 3},
+    {'reporter': patient_fixtures[0], 'reason': 'abuse', 'content_type': 'User', 'object_id': message_fixtures[0]},
+    {'reporter': parent_fixtures[0], 'reason': 'other', 'content_type': 'Message', 'object_id': patient_fixtures[1]},
+    {'reporter': patient_fixtures[2], 'reason': 'spam', 'content_type': 'User', 'object_id': parent_fixtures[0]},
 ]
 
 class Command(BaseCommand):
@@ -123,8 +123,8 @@ class Command(BaseCommand):
         self.create_responses()
         self.responses = Response.objects.all()
 
-        # self.create_reports()
-        # self.reports = Report.objects.all()
+        self.create_reports()
+        self.reports = Report.objects.all()
 
     def create_patients(self):
         self.generate_patient_fixtures()
@@ -162,8 +162,8 @@ class Command(BaseCommand):
         self.generate_response_fixtures()
         self.generate_random_responses()
 
-    # def create_reports(self):
-    #     self.generate_report_fixtures()
+    def create_reports(self):
+         self.generate_report_fixtures()
     #     self.generate_random_reports()
 
     def generate_patient_fixtures(self):
@@ -202,9 +202,9 @@ class Command(BaseCommand):
         for data in response_fixtures:
             self.create_response(data)
 
-    # def generate_report_fixtures(self):
-    #     for data in report_fixtures:
-    #         self.create_report(data)
+    def generate_report_fixtures(self):
+        for data in report_fixtures:
+            self.create_report(data)
 
     def generate_random_patients(self):
         patient_count = Patient.objects.count()
@@ -434,11 +434,11 @@ class Command(BaseCommand):
         except:
             pass
 
-    # def try_create_report(self, data):
-    #     try:
-    #         self.create_report(data)
-    #     except:
-    #         pass
+    def try_create_report(self, data):
+        try:
+            self.create_report(data)
+        except:
+            pass
 
     def create_user(self, model, data):
         profile_picture = data.pop('profile_picture', None)
@@ -490,16 +490,17 @@ class Command(BaseCommand):
         # Change it to a get
         Response.objects.create(**data)
 
-    # def create_report(self, data):
-    #     data['reporter'] = self.get_user(data['reporter'])
-    #     data['content_type'] = self.get_content_type(data['content_type'].lower())
-    #     Report.objects.create(**data)
+    def create_report(self, data):
+        data['reporter'] = self.get_user(data['reporter'])
+        data['content_type'] = self.get_content_type(data['content_type'].lower())
+        Report.objects.create(**data)
 
     def get_user(self, data):
         return User.objects.get(username=data['username'])
     
-    def get_content_type(self, model):
-        return ContentType.objects.get(model=model)
+    def get_content_type(self, model_name):
+        return ContentType.objects.get(model=model_name)
+
 
 def create_username(first_name, last_name):
     return '@' + first_name.lower() + last_name.lower()
