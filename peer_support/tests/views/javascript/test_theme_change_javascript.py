@@ -71,7 +71,7 @@ class ThemeSwitcherTest(StaticLiveServerTestCase):
         self.wait.until(
             lambda driver: 'light-theme' in main_div.get_attribute('class')
         )
-        self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/LiverLink-logo_black.png')
+        self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/Liver_Link_logo_black.png')
         self.assertEqual(theme_logo_image.get_attribute('class'), 'bi bi-moon-fill')
         # toggle back to the dark theme and verify changes
         theme_logo_image.click()

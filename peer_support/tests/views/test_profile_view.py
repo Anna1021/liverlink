@@ -248,8 +248,8 @@ class ProfileViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profile.html')
-        parent = response.context['parent']
-        self.assertEqual(parent, self.user.parent)
+        parent = response.context['user_type']
+        self.assertEqual(parent, "PARENT")
 
     def test_get_profile_admin(self):
         user = User.objects.get(username='@admin')
@@ -257,8 +257,8 @@ class ProfileViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profile.html')
-        admin = response.context['admin']
-        self.assertEqual(admin, user)
+        admin = response.context['user_type']
+        self.assertEqual(admin, "ADMIN")
 
     def test_get_profile_patient(self):
         user = User.objects.get(username='@janedoe')
@@ -266,8 +266,8 @@ class ProfileViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profile.html')
-        patient = response.context['patient']
-        self.assertEqual(patient, user.patient)
+        patient = response.context['user_type']
+        self.assertEqual(patient, "PATIENT")
 
     def test_get_profile_mentor(self):
         user = User.objects.get(username='@alexsmith')
@@ -275,8 +275,8 @@ class ProfileViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profile.html')
-        mentor = response.context['mentor']
-        self.assertEqual(mentor, user.mentor)
+        mentor = response.context['user_type']
+        self.assertEqual(mentor, "MENTOR")
 
     def test_get_profile_not_logged_in(self):
         self.client.logout()
