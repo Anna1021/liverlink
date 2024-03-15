@@ -31,12 +31,11 @@ $(document).ready(function() {
         if (navigationEntries.length > 0) {
             var navigationType = navigationEntries[0].type;
             if (navigationType === "reload" && sessionStorage.getItem(scrollKey)>600) {
-                console.log("jcwoeij")
                 scrollPos = sessionStorage.getItem(scrollKey);
-                console.log(scrollPos)
             } else if (previousUrl.split("?")[0]==currentUrl.split("?")[0] && previousUrl.split("?")[1]!=currentUrl.split("?")[1]){
-                console.log("uvbhcidn")
-                scrollPos = sessionStorage.getItem(scrollKey)
+                scrollPos = sessionStorage.getItem(scrollKey);
+            } else if (previousUrl==currentUrl && sessionStorage.getItem(scrollKey)!==null){
+                scrollPos = sessionStorage.getItem(scrollKey);
             }
         }  
         scrollPos = $('#conversation').prop('scrollHeight')-scrollPos
