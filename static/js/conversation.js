@@ -22,36 +22,38 @@ $(document).ready(function() {
         }
     }
     function setScroll(){
-        let scrollPos = -1
+        let scrollPos = $('#conversation').prop('scrollHeight');
         let previousUrl = document.referrer
-        console.log(previousUrl)
-        console.log(currentUrl)
+        // console.log(previousUrl)
+        // console.log(currentUrl)
         var navigationEntries = performance.getEntriesByType("navigation");
         if (navigationEntries.length > 0) {
             var navigationType = navigationEntries[0].type;
-            if (navigationType === "reload") {
-                console.log(sessionStorage.getItem(scrollKey))
+            if (navigationType === "reload" && sessionStorage.getItem(scrollKey)<$('#conversation').prop('scrollHeight')-600) {
+                // console.log('one')
                 scrollPos = sessionStorage.getItem(scrollKey)
-            } else if (previousUrl.split("?")[0]==currentUrl.split("?")[0] && previousUrl.split("?")[1]!==currentUrl.split("?")[1]){
+            } else if (previousUrl.split("?")[0]==currentUrl.split("?")[0] && previousUrl.split("?")[1]>currentUrl.split("?")[1]){
+                // console.log('two')
                 scrollPos = sessionStorage.getItem(scrollKey)+$('#conversation').prop('clientHeight')
-            } else {
-                scrollPos=$('#conversation').prop('scrollHeight');
             }
         }
             
-        console.log(scrollPos)
-        $('#conversation').animate(
-            {scrollTop:scrollPos}
-        )
-        console.log($('#conversation').scrollTop())
+        // console.log(scrollPos)
+        $('#conversation').scrollTop(scrollPos);
+        // console.log($('#conversation').scrollTop())
     }
     setInterval(function(){
         if (conversation_id!="0"){
             sessionStorage.setItem(storageKey,$("#id_content").val())
         }
     },2000)
-
 });
+
+function scrollDown(){
+    $('#conversation').animate(
+        {scrollTop:$('#conversation').prop('scrollHeight')}
+    )
+}
 
 let posting = false;
 const chatSocket = new WebSocket("ws://" + window.location.host + "/");
@@ -81,7 +83,6 @@ window.addEventListener('beforeunload', function(e){
     if (!posting){
         sessionStorage.setItem(storageKey,$("#id_content").val());
         sessionStorage.setItem(scrollKey,$('#conversation').scrollTop())
-    
     }else{
         sessionStorage.clear()
     }

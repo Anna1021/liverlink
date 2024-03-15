@@ -58,6 +58,9 @@
     {% endwith %}
     {% endwith %}
     </div>
+    <div class="floating-btn">
+        <button onclick="scrollDown()"><i class="bi-arrow-down"></i></button>
+    </div>
     <form method="post" id="message-form" {% if blocked_dm %} inert style="opacity: 50%;" {% endif %}>
         {% if blocked_dm %}
         <div style="opacity: 50%;">You can no longer send messages to this user.</div>
