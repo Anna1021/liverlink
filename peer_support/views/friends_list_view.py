@@ -9,13 +9,13 @@ def friends_list(request):
     
     user = request.user
     friends = user.friends.all()
-    formSearch=SearchPeerForm(data=request.GET)
+    formSearch= SearchPeerForm(data=request.GET)
     formSort = SortPeerForm( data=request.GET)
     formFilter = FilterPeerForm( data=request.GET)
     if formSearch.is_valid():
-        friends =formSearch.search_users(friends)
+        friends = formSearch.search_users(friends)
     if formFilter.is_valid():
-        friends =formFilter.filter_users(friends)
+        friends = formFilter.filter_users(friends)
     else:
         messages.add_message(request, messages.ERROR, "Age invalid")
     if formSort.is_valid():

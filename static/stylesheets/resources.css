@@ -46,12 +46,6 @@ blockquote {
   border-bottom: 1px solid lightgray;
 }
 
-.user-menu ul li a,
-.main-menu ul li a {
-  color: white;
-  font-weight: 700;
-}
-
 .user-menu ul li a:hover,
 .main-menu ul li a:hover {
   text-decoration: underline;
@@ -61,7 +55,7 @@ blockquote {
   color: white;
   display: inline;
   margin-left: 12px;
-}
+} 
 
 .page {
   display: flex;
@@ -88,13 +82,6 @@ blockquote {
 .question-list-item a:hover {
   text-decoration: underline;
   color: black;
-}
-
-.question-list-item-title {
-  color: white;
-  font-size: 18px;
-  font-weight: 900;
-  margin: 0
 }
 
 .question-list-item-author {
@@ -148,6 +135,7 @@ blockquote {
   color: white;
   margin: 0 auto;
   cursor: pointer;
+  margin-bottom: 25px;
 }
 
 .question-title {
@@ -169,21 +157,12 @@ blockquote {
   margin-top: 30px;
 }
 
-.responses-container-heading {
-  color: #1B1F3B;
-}
-
 .no-responses-text {
   color: #1B1F3B;
 }
 
 .response-body {
   margin: 0;
-}
-
-.response-author {
-  color: blue;
-  font-style: italic;
 }
 
 .reply-button {
@@ -204,6 +183,7 @@ blockquote {
 .reply-form-container {
   display: none;
 }
+
 
 .reply-form-container.enabled {
   display: block;
@@ -230,6 +210,11 @@ blockquote {
   padding: 4px 12px;
   border-radius: 4px;
   cursor: pointer;
+}
+
+a.username {
+  color: inherit;
+  text-decoration: none;
 }
 
 .question-body,.question-title,.responses-container{

@@ -123,6 +123,9 @@ class UserModelTestCase(TestCase):
         self._assert_user_is_invalid()
 
 
+    def test_date_of_birth_may_not_be_blank(self):
+        self.user.date_of_birth = None
+        self._assert_user_is_invalid()
 
     def test_date_of_birth_need_not_be_unique(self):
         second_user = User.objects.get(username='@janedoe')
@@ -245,6 +248,17 @@ class UserModelTestCase(TestCase):
     def test_friends_may_be_blank(self):
         self.user.friends.clear()
         self._assert_user_is_valid()
+
+    
+    def test_blocked_users_may_be_blank(self):
+        self.user.friends.clear()
+        self._assert_user_is_valid()
+
+    def test_blocked_users_is_asymmetric(self):
+        second_user = User.objects.get(username='@janedoe')
+        second_user.blocked_users.add(self.user)
+        self.assertIn(self.user, second_user.blocked_users.all())
+        self.assertNotIn(second_user, self.user.blocked_users.all())
 
     
     def test_conversations_may_be_blank(self):

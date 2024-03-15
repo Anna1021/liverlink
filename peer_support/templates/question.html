@@ -1,12 +1,12 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 {% block page %}
-<div class="card bg-dark shadow box-area my-2">
+<div class="card shadow box-area my-2">
     {% include 'partials/resources-navbar.html' %}
     <div class="page question-page">
         <h2 class="question-title">{{ question.title }}</h2>
-        <p class="question-body">{{ question.body }}</p>
-        <span class="question-author">author : {{ question.author.username }}</span>
+        <p {% if question.author in current_user.blocked_users.all %} data-text="{{question.body}}" id="blocked-question" class="question-body text-muted" {% endif %} class="question-body">{{ question.body }}</p>
+        <span class="question-author">author : <a href="{% url 'profile' question.author.username %}" class="username">{{ question.author.username }}</a></span>
 
         <div class="responses-container">
             <h4 class="responses-container-heading">Responses</h4>
@@ -30,5 +30,7 @@
             </form>
         {% endif %}
     </div>
-</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'js/question_page.js' %}"></script>
 {% endblock %}

@@ -15,6 +15,7 @@
       "ethnicity": "BR",
       "language": "en",
       "bio": "Hi, I'm Jane Doe",
+      "blocked_users": [4],
       "is_active": true
     }
   },
@@ -83,6 +84,7 @@
       "username": "@sambennet",
       "email": "sambennet@example.com",
       "password": "pbkdf2_sha256$260000$4BNvFuAWoTT1XVU8D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
+      "date_of_birth": "1998-03-12",
       "gender": "F",
       "location": "CA",
       "ethnicity": "BR",

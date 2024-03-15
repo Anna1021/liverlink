@@ -1,0 +1,28 @@
+.picture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 10px;
+}
+
+.picture-container {
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+.picture-container img {
+    object-fit: cover;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.picture-container img:hover {
+    cursor: pointer;
+}
+
+.picture-selected {
+    border: 7px solid white;
+    border-radius: 15px;
+}
