@@ -69,8 +69,8 @@ response_fixtures = [
 ]
 
 report_fixtures = [
-    {'reporter': patient_fixtures[0], 'reason': 'abuse', 'content_type': 'User', 'object_id': message_fixtures[0]},
-    {'reporter': parent_fixtures[0], 'reason': 'other', 'content_type': 'Message', 'object_id': patient_fixtures[1]},
+    {'reporter': patient_fixtures[0], 'reason': 'abuse', 'content_type': 'User', 'object_id': patient_fixtures[1]},
+    {'reporter': parent_fixtures[0], 'reason': 'other', 'content_type': 'Message', 'object_id': message_fixtures[0]},
     {'reporter': patient_fixtures[2], 'reason': 'spam', 'content_type': 'User', 'object_id': parent_fixtures[0]},
 ]
 
@@ -164,7 +164,7 @@ class Command(BaseCommand):
 
     def create_reports(self):
          self.generate_report_fixtures()
-    #     self.generate_random_reports()
+         self.generate_random_reports()
 
     def generate_patient_fixtures(self):
         for data in patient_fixtures:
@@ -278,13 +278,13 @@ class Command(BaseCommand):
             response_count = Response.objects.count()
         print("Response seeding complete.      ")
 
-    # def generate_random_reports(self):
-    #     report_count = Report.objects.count()
-    #     while report_count < self.REPORT_COUNT:
-    #         print(f"Seeding report {report_count}/{self.REPORT_COUNT}", end='\r')
-    #         self.generate_report()
-    #         report_count = Report.objects.count()
-    #     print("Report seeding complete.      ")
+    def generate_random_reports(self):
+        report_count = Report.objects.count()
+        while report_count < self.REPORT_COUNT:
+            print(f"Seeding report {report_count}/{self.REPORT_COUNT}", end='\r')
+            self.generate_report()
+            report_count = Report.objects.count()
+        print("Report seeding complete.      ")
 
     def generate_user_data(self):
         first_name = self.faker.first_name()
@@ -371,14 +371,14 @@ class Command(BaseCommand):
         question = {'title': question.title} # Can we create a primary key for response model? such as id 
         self.try_create_response({'user': user, 'question': question, 'body': body})
 
-    # def generate_report(self):
-    #     reporter = self.users[randint(0, len(self.users) - 1)]
-    #     reason = self.faker.random_element(elements=(tuple(report[0] for report in REPORT_CHOICES)))
-    #     content_type = self.faker.random_element(elements=('Notification', 'Message')) # What other content type can we have?
-    #     # content_type can be any object in the database
-    #     object_id = self.get_content_type(content_type).model_class().objects.order_by('?').first().pk
-    #     reporter = {'username': reporter.username}
-    #     self.try_create_report({'reporter': reporter, 'reason': reason, 'content_type': content_type, 'object_id': object_id})
+    def generate_report(self):
+        reporter = self.users[randint(0, len(self.users) - 1)]
+        reason = self.faker.random_element(elements=(tuple(report[0] for report in REPORT_CHOICES)))
+        content_type = self.faker.random_element(elements=('user', 'message')) # What other content type can we have?
+        # content_type can be any object in the database
+        object_id = self.get_content_type(content_type).model_class().objects.order_by('?').first().pk
+        reporter = {'username': reporter.username}
+        self.try_create_report({'reporter': reporter, 'reason': reason, 'content_type': content_type, 'object_id': object_id})
         
     def try_create_patient(self, data):
         try:
@@ -492,15 +492,21 @@ class Command(BaseCommand):
 
     def create_report(self, data):
         data['reporter'] = self.get_user(data['reporter'])
+        if data['content_type'] == 'User':
+            data['object_id'] = self.get_user(data['object_id']).pk
+        elif data['content_type'] == 'Message':
+            data['object_id'] = self.get_message(data['object_id']).pk
         data['content_type'] = self.get_content_type(data['content_type'].lower())
         Report.objects.create(**data)
-
+    
+    def get_message(self, data):
+        return Message.objects.filter(sender=self.get_user(data['sender']).pk).first()
+    
     def get_user(self, data):
         return User.objects.get(username=data['username'])
     
     def get_content_type(self, model_name):
         return ContentType.objects.get(model=model_name)
-
 
 def create_username(first_name, last_name):
     return '@' + first_name.lower() + last_name.lower()
