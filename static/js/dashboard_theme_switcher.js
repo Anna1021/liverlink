@@ -15,7 +15,6 @@ $(document).ready(function () {
     console.log('current class name:', className);
     $('body').css('background-image', 'url(' + backgroundImageSrc + ')'); // Set the background image
     localStorage.setItem("currentLogo", logoImageSrc);
-    localStorage.setItem("currentThemeLogo", themeImageSrc);
     localStorage.setItem("currentBackground", backgroundImageSrc); 
   }
 
