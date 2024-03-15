@@ -12,8 +12,7 @@ class AcceptFriendRequestView(LoginRequiredMixin, View):
         friend_request.is_accepted = True
         friend_request.save()
         self.send_notification(request, friend_request)
-        user = request.user
-        user.friends.add(friend_request.sender)
+        request.user.friends.add(friend_request.sender)
         messages.add_message(request, messages.SUCCESS, f"You are now friends with {friend_request.sender}!")
         return redirect('delete_notification', notification_id=notification_id)
 

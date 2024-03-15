@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from peer_support.forms import  NewQuestionForm 
+from peer_support.forms import NewQuestionForm 
 
 @login_required
 def new_question_page(request):

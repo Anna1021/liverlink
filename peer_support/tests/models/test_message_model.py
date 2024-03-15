@@ -1,7 +1,7 @@
 """Unit tests for the Message model."""
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from peer_support.models import User,Message, Conversation
+from peer_support.models import User, Message, Conversation
 
 class MessageModelTestCase(TestCase):
     """Unit tests for the Message model."""

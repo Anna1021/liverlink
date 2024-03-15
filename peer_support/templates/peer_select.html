@@ -16,8 +16,12 @@
             <div class="container my-2">
                 <div class="row">
                     {% for user in users %}
-                        {% include "partials/peer_selection_user.html" %}
+                        {% include "partials/user_card.html" %}
                     {% endfor %}
+                    <div class=" add-friend text-center mt-4">
+                        <a class="btn btn-sm add-friend-btn" data-user-id="{{ user.id }}">Add
+                            friend</a>
+                    </div>
                 </div>
             </div>
             {% endif %}

@@ -6,23 +6,37 @@ class SortPeerForm(forms.Form):
 
     sort_by = forms.ChoiceField(choices=SORT_USER_CHOICES,required=False,label="Sort by")
     
+    def sort_by_username(self, users, order):
+        return users.order_by(order + 'username')
+
+    def sort_by_age(self, users, order):
+        return users.order_by(order + 'date_of_birth')
+
+    def sort_by_match_score(self, users, current_user):
+        user_scores = [(user, self.calculate_match_score(current_user, user)) for user in users]
+        sorted_users = sorted(user_scores, key=lambda x: x[1], reverse=True)
+        return [user_score[0] for user_score in sorted_users]
+
+    def get_sort_option(self, sort_by):
+        sort_options = {
+            'username_asc': lambda users: self.sort_by_username(users, ''),
+            'username_desc': lambda users: self.sort_by_username(users, '-'),
+            'age_asc': lambda users: self.sort_by_age(users, '-'),
+            'age_desc': lambda users: self.sort_by_age(users, ''),
+        }
+        return sort_options.get(sort_by)
+
     def sort_users(self, users, current_user):
         """Sorts users based on the selected criterion."""
         
         cleaned_data = self.cleaned_data
         sort_by = cleaned_data.get('sort_by')
-        sort_options = {
-            'username_asc': lambda qs: qs.order_by('username'),
-            'username_desc': lambda qs: qs.order_by('-username'),
-            'age_asc': lambda qs: qs.order_by('-date_of_birth'),
-            'age_desc': lambda qs: qs.order_by('date_of_birth'),
-        }
-        if sort_by in sort_options:
-            users = sort_options[sort_by](users)
+        sort_option = self.get_sort_option(sort_by)
+        
+        if sort_option:
+            users = sort_option(users)
         elif sort_by == '' and current_user:
-            user_scores = [(user, self.calculate_match_score(current_user, user)) for user in users]
-            sorted_users = sorted(user_scores, key=lambda x: x[1], reverse=True)
-            users = [user_score[0] for user_score in sorted_users]
+            users = self.sort_by_match_score(users, current_user)
         return users
     
     def calculate_match_score(self, current_user, other_user):

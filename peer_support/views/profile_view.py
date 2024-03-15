@@ -18,22 +18,31 @@ class ProfileView(LoginRequiredMixin, View):
         context = self.set_context(request, username)
         return render(request, 'profile.html', context)
     
+    def get_user_type(self, user):
+        if hasattr(user, 'parent'):
+            return "PARENT"
+        elif hasattr(user, 'patient'):
+            return "PATIENT"
+        elif hasattr(user, 'mentor'):
+            return "MENTOR"
+        else:
+            return "ADMIN"
+
+    def get_context(self, user, request):
+        return {
+            'user': user, 
+            'current_user': request.user, 
+            'blocklist': request.user.blocked_users.all() | user.blocked_users.all(),
+            'is_friend': request.user in user.friends.all(), 
+            'report_form': ReportForm(), 
+            'request_sent': FriendRequest.objects.filter(sender=request.user, receiver=user).exists(),
+            'user_type': self.get_user_type(user)
+        }
+
     def set_context(self, request, username):
         """Classify the user and set context for the profile view"""
-
         user = User.objects.get(username=username)
-        context = {
-            'user': user, 'current_user': request.user, 'blocklist': request.user.blocked_users.all() | user.blocked_users.all(),
-            'is_friend': request.user in user.friends.all(), 'report_form': ReportForm(), 'request_sent': FriendRequest.objects.filter(sender=request.user, receiver=user).exists(),
-        }
-        if hasattr(user, 'parent'):
-            context['user_type'] = "PARENT"
-        elif hasattr(user, 'patient'):
-            context['user_type'] = "PATIENT"
-        elif hasattr(user, 'mentor'):
-            context['user_type'] = "MENTOR"
-        else:
-            context['user_type'] = "ADMIN"
+        context = self.get_context(user, request)
         return context
     
     def post(self, request, username):

@@ -7,16 +7,32 @@ from django.views import View
 class FriendsListView(LoginRequiredMixin, View):
     """Display the list of friends."""
 
-    def get(self, request):
-        user = request.user
-        friends = user.friends.all()
+    def get_forms(self, request):
+        """Return the search, sort, and filter forms."""
+        
         form_search = SearchPeerForm(data=request.GET)
         form_sort = SortPeerForm(data=request.GET)
         form_filter = FilterPeerForm(data=request.GET)
+        return form_search, form_sort, form_filter
+
+    def process_forms(self, friends, form_search, form_sort, form_filter, user):
+        """Process forms and return the filtered, sorted, and searched friends."""
+
         friends = self.process_search(friends, form_search)
         friends = self.process_filter(friends, form_filter)
-        friends = self.process_sort(friends, form_sort, request.user)
-        context = {'friends': friends, 'formSort': form_sort, 'formFilter': form_filter, 'formSearch': form_search}
+        friends = self.process_sort(friends, form_sort, user)
+        return friends
+
+    def get_context(self, friends, form_sort, form_filter, form_search):
+        return {'friends': friends, 'formSort': form_sort, 'formFilter': form_filter, 'formSearch': form_search}
+
+    def get(self, request):
+        """Display the list of friends."""
+
+        friends = request.user.friends.all()
+        form_search, form_sort, form_filter = self.get_forms(request)
+        friends = self.process_forms(friends, form_search, form_sort, form_filter, request.user)
+        context = self.get_context(friends, form_sort, form_filter, form_search)
         return render(request, 'friends_list.html', context)
 
     def process_search(self, users, form_search):
