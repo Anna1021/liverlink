@@ -25,17 +25,21 @@ $(document).ready(function() {
         }
     }
     function setScroll(){
-        let scrollPos = $('#conversation').prop('scrollHeight');
+        let scrollPos = 0;
         let previousUrl = document.referrer;
         var navigationEntries = performance.getEntriesByType("navigation");
         if (navigationEntries.length > 0) {
             var navigationType = navigationEntries[0].type;
-            if (navigationType === "reload" && sessionStorage.getItem(scrollKey)<$('#conversation').prop('scrollHeight')-600) {
+            if (navigationType === "reload" && sessionStorage.getItem(scrollKey)>600) {
+                console.log("jcwoeij")
                 scrollPos = sessionStorage.getItem(scrollKey);
+                console.log(scrollPos)
             } else if (previousUrl.split("?")[0]==currentUrl.split("?")[0] && previousUrl.split("?")[1]!=currentUrl.split("?")[1]){
-                scrollPos = sessionStorage.getItem(scrollKey)+580;
+                console.log("uvbhcidn")
+                scrollPos = sessionStorage.getItem(scrollKey)
             }
-        }   
+        }  
+        scrollPos = $('#conversation').prop('scrollHeight')-scrollPos
         $('#conversation').scrollTop(scrollPos);
     }
     setInterval(function(){
@@ -49,9 +53,7 @@ $(document).ready(function() {
         }else{
             $('#scroll-down').hide();
         }
-    }
-        
-    )
+    })
 
 });
 
@@ -88,7 +90,7 @@ chatSocket.onmessage = function (e) {
 window.addEventListener('beforeunload', function(e){
     if (!posting){
         sessionStorage.setItem(storageKey,$("#id_content").val());
-        sessionStorage.setItem(scrollKey,$('#conversation').scrollTop());
+        sessionStorage.setItem(scrollKey,$('#conversation').prop('scrollHeight')-$('#conversation').scrollTop());
     }else{
         sessionStorage.clear();
     }
