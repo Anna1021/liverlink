@@ -84,7 +84,21 @@ class FilterPeerFormTestCase(TestCase):
         for user in results:
             try:
                 patient_exists = user.patient
-                self.fail("Found a user marked as a patient in patient-only filter.") 
+                self.fail("Found a user marked as a patient in parent-only filter.") 
+            except user._meta.model.patient.RelatedObjectDoesNotExist:
+                pass 
+
+    def test_filter_by_user_type_professional(self):
+        form_data = self.showAll
+        form_data['user_type'] = ['PF']
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        self.assertTrue(all(user.professional for user in results))
+        for user in results:
+            try:
+                patient_exists = user.patient
+                self.fail("Found a user marked as a patient in professional-only filter.") 
             except user._meta.model.patient.RelatedObjectDoesNotExist:
                 pass 
 
@@ -241,6 +255,17 @@ class FilterPeerFormTestCase(TestCase):
         results = form.filter_users(self.users)
         for user in results:
             self.assertEqual(user.parent.child_condition, child_condition)
+
+    def test_professional_expertise(self):
+        expertise = "Cirrhosis"
+        form_data = self.showAll
+        form_data['user_type'] = ['PF']
+        form_data['expertise'] = expertise
+        form = FilterPeerForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        for user in results:
+            self.assertEqual(user.professional.expertise, expertise)
 
     def test_child_transplant_status(self):
         child_transplant = "Y"

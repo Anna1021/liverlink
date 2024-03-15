@@ -2,7 +2,7 @@ import uuid
 import datetime
 from django.test import TestCase
 from peer_support.models import Mentor, Referral, User, Conversation, GroupConversation
-from peer_support.views.helpers import create_referral, get_referral_code, get_addable_peers, check_blocked_dm
+from peer_support.views.helpers import create_referral, get_referral_code, get_addable_peers, check_blocked_dm, user_exists
 
 class HelpersViewTestCase(TestCase):
     """Unit tests for the helpers view."""
@@ -87,3 +87,6 @@ class HelpersViewTestCase(TestCase):
     def tearDown(self):
         Mentor.objects.all().delete()
         Referral.objects.all().delete()
+
+    def test_user_exists(self):
+        self.assertTrue(user_exists('@petrapickles'))
