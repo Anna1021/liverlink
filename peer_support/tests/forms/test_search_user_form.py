@@ -1,6 +1,6 @@
 """Unit test of search peer form"""
 from django.test import TestCase
-from peer_support.forms import SearchPeerForm
+from peer_support.forms import SearchUserForm
 from peer_support.models import User
 
 class SearchPeerFormTestCase(TestCase):
@@ -15,13 +15,13 @@ class SearchPeerFormTestCase(TestCase):
         self.users = User.objects.all()
 
     def test_form_initialization(self):
-        form = SearchPeerForm()
+        form = SearchUserForm()
         self.assertFalse(form.is_bound)
         self.assertIn('search', form.fields)
 
     def test_search(self):
         form_data = {'search': 'Jane'}
-        form = SearchPeerForm(data=form_data)
+        form = SearchUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         search_results = form.search_users(self.users)
         self.assertTrue(search_results.exists())
@@ -31,21 +31,21 @@ class SearchPeerFormTestCase(TestCase):
 
     def test_search_no_results(self):
         form_data = {'search': 'NonexistentUser'}
-        form = SearchPeerForm(data=form_data)
+        form = SearchUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         search_results = form.search_users(self.users)
         self.assertFalse(search_results.exists())
 
     def test_search_blank(self):
         form_data = {'search': ''}
-        form = SearchPeerForm(data=form_data)
+        form = SearchUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         search_results = form.search_users(self.users)
         self.assertEqual(search_results.count(), self.users.count())
     
     def test_search_name(self):
         form_data = {'search': 'rsi'}
-        form = SearchPeerForm(data=form_data)
+        form = SearchUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         search_results = form.search_users(self.users)
         self.assertTrue(search_results.exists())

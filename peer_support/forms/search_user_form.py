@@ -1,7 +1,7 @@
 from django import forms
 from django.db.models import Q
 
-class SearchPeerForm(forms.Form):
+class SearchUserForm(forms.Form):
     """Form enabling the searching of users"""
 
     search = forms.CharField(max_length=255, required=False)

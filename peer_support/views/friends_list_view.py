@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from peer_support.forms import SortPeerForm, FilterPeerForm, SearchPeerForm
+from peer_support.forms import SortUserForm, FilterUserForm, SearchUserForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
@@ -10,9 +10,9 @@ class FriendsListView(LoginRequiredMixin, View):
     def get_forms(self, request):
         """Return the search, sort, and filter forms."""
         
-        form_search = SearchPeerForm(data=request.GET)
-        form_sort = SortPeerForm(data=request.GET)
-        form_filter = FilterPeerForm(data=request.GET)
+        form_search = SearchUserForm(data=request.GET)
+        form_sort = SortUserForm(data=request.GET)
+        form_filter = FilterUserForm(data=request.GET)
         return form_search, form_sort, form_filter
 
     def process_forms(self, friends, form_search, form_sort, form_filter, user):
@@ -24,7 +24,7 @@ class FriendsListView(LoginRequiredMixin, View):
         return friends
 
     def get_context(self, friends, form_sort, form_filter, form_search):
-        return {'friends': friends, 'formSort': form_sort, 'formFilter': form_filter, 'formSearch': form_search}
+        return {'friends': friends, 'form_sort': form_sort, 'form_filter': form_filter, 'form_search': form_search}
 
     def get(self, request):
         """Display the list of friends."""

@@ -1,7 +1,7 @@
 """Unit test of sort peer form"""
 import datetime
 from django.test import TestCase
-from peer_support.forms import SortPeerForm 
+from peer_support.forms import SortUserForm 
 from peer_support.models import User, Patient, Parent, Mentor
 
 class SortPeerFormTestCase(TestCase):
@@ -23,17 +23,17 @@ class SortPeerFormTestCase(TestCase):
         self.users = User.objects.all()
 
     def test_form_has_necessary_fields(self):
-        form = SortPeerForm()
+        form = SortUserForm()
         self.assertIn('sort_by', form.fields)
 
     def test_form_accepts_valid_input(self):
         form_data = {'sort_by': 'username_asc'}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         
     def test_sort_users_by_username_ascending(self):
         form_data = {'sort_by': 'username_asc'}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_patient)
         expected_order = self.username_asc_order
@@ -42,7 +42,7 @@ class SortPeerFormTestCase(TestCase):
 
     def test_sort_users_by_username_descending(self):
         form_data = {'sort_by': 'username_desc'}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_patient)
         expected_order = self.username_asc_order[::-1]
@@ -51,7 +51,7 @@ class SortPeerFormTestCase(TestCase):
 
     def test_sort_users_by_age_ascending(self):
         form_data = {'sort_by': 'age_asc'}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_patient)
         expected_order = self.age_asc_order
@@ -60,7 +60,7 @@ class SortPeerFormTestCase(TestCase):
 
     def test_sort_users_by_age_descending(self):
         form_data = {'sort_by': 'age_desc'}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_patient)
         expected_order = self.age_asc_order[::-1]
@@ -69,7 +69,7 @@ class SortPeerFormTestCase(TestCase):
         
     def test_sort_users_by_best_match_patient(self):
         form_data = {'sort_by': ''}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_patient)
         expected_order = ['@janedoe','@johndoe', '@petrapickles', '@peterpickles', '@sambennet','@mohamedalf','@alexsmith']
@@ -78,7 +78,7 @@ class SortPeerFormTestCase(TestCase):
 
     def test_sort_users_by_best_match_parent(self):
         form_data = {'sort_by': ''}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_parent)        
         expected_order = ['@mohamedalf','@alexsmith', '@sambennet','@peterpickles','@johndoe' ,'@janedoe','@petrapickles']
@@ -87,7 +87,7 @@ class SortPeerFormTestCase(TestCase):
 
     def test_invalid_user_form(self):
         form_data = {'sort_by': ''}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, None)
         self.assertGreater(len(sorted_users), 0, "The sorted users list should not be empty.")
@@ -101,7 +101,7 @@ class SortPeerFormTestCase(TestCase):
             last_name="User",
             password="testpassword123")
         form_data = {'sort_by': ''}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         users = User.objects.all()
         sorted_users = form.sort_users(users, new_user)
@@ -117,7 +117,7 @@ class SortPeerFormTestCase(TestCase):
             password="testpassword123"
             )
         form_data = {'sort_by': ''}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         users = User.objects.all()
         sorted_users = form.sort_users(users, new_user)
@@ -133,7 +133,7 @@ class SortPeerFormTestCase(TestCase):
             password="testpassword123"
             )
         form_data = {'sort_by': ''}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         users = User.objects.all()
         sorted_users = form.sort_users(users, new_user)
@@ -149,7 +149,7 @@ class SortPeerFormTestCase(TestCase):
             password="testpassword123"
             )
         form_data = {'sort_by': ''}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         users = User.objects.all()
         sorted_users = form.sort_users(users, new_user)
@@ -158,7 +158,7 @@ class SortPeerFormTestCase(TestCase):
     def test_mentor_sort_filter(self):
         current_mentor =  Mentor.objects.get(username='@johndoe')
         form_data = {'sort_by': ''}
-        form = SortPeerForm(data=form_data)
+        form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, current_mentor)
         expected_order = ['@johndoe','@petrapickles', '@janedoe', '@peterpickles', '@alexsmith', '@mohamedalf', '@sambennet']

@@ -6,7 +6,7 @@ from peer_support.models.model_choices import GENDER_CHOICES, ETHNICITY_CHOICES,
 from peer_support.forms.form_choices import CONDITION_CHOICES, USER_TYPE_CHOICES, TRANSPLANT_CHOICES
 from .helpers import apply_filter_if_needed
 
-class FilterPeerForm(forms.Form):
+class FilterUserForm(forms.Form):
     """Form enabling the filtering of users"""
 
     USER_TYPE_CHOICES = USER_TYPE_CHOICES[1:]
@@ -34,7 +34,7 @@ class FilterPeerForm(forms.Form):
     def __init__(self, *args, **kwargs):
         """Initialise query set with users tasks"""
 
-        super(FilterPeerForm, self).__init__(*args, **kwargs)
+        super(FilterUserForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         """Validation of age fields"""

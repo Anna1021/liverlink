@@ -1,7 +1,7 @@
 from django import forms
 from .form_choices import SORT_USER_CHOICES
 
-class SortPeerForm(forms.Form):
+class SortUserForm(forms.Form):
     """Form enabling the sorting of users"""
 
     sort_by = forms.ChoiceField(choices=SORT_USER_CHOICES,required=False,label="Sort by")

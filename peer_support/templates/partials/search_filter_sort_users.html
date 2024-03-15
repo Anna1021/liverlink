@@ -1,7 +1,7 @@
 <div class="row">
     <form method="get" class="px-4 py-3" novalidate>
         {% csrf_token %}
-        {% include 'partials/bootstrap_form.html' with form=formSearch %}
+        {% include 'partials/bootstrap_form.html' with form=form_search %}
         <div class="SortFilter">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-bs-toggle="dropdown">
@@ -9,7 +9,7 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdown-style">
                 {% csrf_token %}
-                {{formFilter.as_p}}
+                {{form_filter.as_p}}
             </div>
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-bs-toggle="dropdown">
@@ -17,7 +17,7 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdown-style">
                 {% csrf_token %}
-                {% include 'partials/bootstrap_form.html' with form=formSort %}
+                {% include 'partials/bootstrap_form.html' with form=form_sort %}
             </div>
         </div>
         <div>
