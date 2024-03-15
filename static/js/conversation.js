@@ -9,6 +9,9 @@ $(document).ready(function() {
         window.location.reload();
     }
     hideBlockedMessages()
+    if ($('#conversation').scrollTop()<$('#conversation').prop('scrollHeight')-600){
+        $('#scroll-down').show();
+    }
     function hideBlockedMessages(){
         var blocked_messages = document.getElementsByName('blocked-message');
         for (var i = 0; i < blocked_messages.length; ++i) {
@@ -23,30 +26,33 @@ $(document).ready(function() {
     }
     function setScroll(){
         let scrollPos = $('#conversation').prop('scrollHeight');
-        let previousUrl = document.referrer
-        // console.log(previousUrl)
-        // console.log(currentUrl)
+        let previousUrl = document.referrer;
         var navigationEntries = performance.getEntriesByType("navigation");
         if (navigationEntries.length > 0) {
             var navigationType = navigationEntries[0].type;
             if (navigationType === "reload" && sessionStorage.getItem(scrollKey)<$('#conversation').prop('scrollHeight')-600) {
-                // console.log('one')
-                scrollPos = sessionStorage.getItem(scrollKey)
-            } else if (previousUrl.split("?")[0]==currentUrl.split("?")[0] && previousUrl.split("?")[1]>currentUrl.split("?")[1]){
-                // console.log('two')
-                scrollPos = sessionStorage.getItem(scrollKey)+$('#conversation').prop('clientHeight')
+                scrollPos = sessionStorage.getItem(scrollKey);
+            } else if (previousUrl.split("?")[0]==currentUrl.split("?")[0] && previousUrl.split("?")[1]!=currentUrl.split("?")[1]){
+                scrollPos = sessionStorage.getItem(scrollKey)+580;
             }
-        }
-            
-        // console.log(scrollPos)
+        }   
         $('#conversation').scrollTop(scrollPos);
-        // console.log($('#conversation').scrollTop())
     }
     setInterval(function(){
         if (conversation_id!="0"){
-            sessionStorage.setItem(storageKey,$("#id_content").val())
+            sessionStorage.setItem(storageKey,$("#id_content").val());
         }
     },2000)
+    $('#conversation').scroll(function(){
+        if ($(this).scrollTop()<$(this).prop('scrollHeight')-600){
+            $('#scroll-down').show();
+        }else{
+            $('#scroll-down').hide();
+        }
+    }
+        
+    )
+
 });
 
 function scrollDown(){
@@ -82,9 +88,9 @@ chatSocket.onmessage = function (e) {
 window.addEventListener('beforeunload', function(e){
     if (!posting){
         sessionStorage.setItem(storageKey,$("#id_content").val());
-        sessionStorage.setItem(scrollKey,$('#conversation').scrollTop())
+        sessionStorage.setItem(scrollKey,$('#conversation').scrollTop());
     }else{
-        sessionStorage.clear()
+        sessionStorage.clear();
     }
-    return ''
+    return '';
 })
