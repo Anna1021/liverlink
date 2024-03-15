@@ -21,7 +21,7 @@ class FeedView(LoginRequiredMixin, FormView):
 
     def post(self,request):
         """Submit post"""
-        form = PostForm(request.user)
+        form = PostForm(request.user,data=request.POST)
         if form.is_valid():
             post = form.save()
             return redirect(reverse('feed'), post_id=post.id)
