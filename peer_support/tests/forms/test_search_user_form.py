@@ -3,7 +3,7 @@ from django.test import TestCase
 from peer_support.forms import SearchUserForm
 from peer_support.models import User
 
-class SearchPeerFormTestCase(TestCase):
+class SearchUserFormTestCase(TestCase):
     """Unit test of search peer form"""
     
     fixtures = [

@@ -4,7 +4,7 @@ from django.test import TestCase
 from peer_support.forms import SortUserForm 
 from peer_support.models import User, Patient, Parent, Mentor
 
-class SortPeerFormTestCase(TestCase):
+class SortUserFormTestCase(TestCase):
     """Unit test of sort peer form"""
 
     fixtures = [
