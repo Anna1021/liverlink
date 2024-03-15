@@ -18,22 +18,20 @@ class QuestionPageTestCase(TestCase):
         self.response = Response.objects.create(body='Test Response', user=self.user, question=self.question)
         self.client = Client()
         self.url = reverse('question', args=(self.question.id,))
+        self.client.login(username=self.user.username, password='Password123')
 
     def test_question_page_GET(self):
-        self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'question.html')
         self.assertIsInstance(response.context['response_form'], NewResponseForm)
 
     def test_question_page_invalid_POST(self):
-        self.client.login(username=self.user.username, password='Password123')
         response = self.client.post(self.url, {})
         self.assertEqual(response.status_code, 200)
         self.assertTrue('response_form' in response.context and response.context['response_form'].errors)
 
     def test_question_page_valid_POST(self):
-        self.client.login(username=self.user.username, password='Password123')
         form_data = {'body': 'This is a test response.'}
         response = self.client.post(self.url, form_data)
         self.assertEqual(response.status_code, 302)

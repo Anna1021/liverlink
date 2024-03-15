@@ -18,7 +18,7 @@ from .delete_message_view import DeleteMessageView
 from .new_question_page_view import new_question_page
 from .reply_page_view import ReplyPageView
 from .resources_view import resources
-from .question_page_view import question_page
+from .question_page_view import QuestionPageView
 from .send_friend_request_view import SendFriendRequestView
 from .accept_friend_request_view import AcceptFriendRequestView
 from .friends_list_view import FriendsListView
