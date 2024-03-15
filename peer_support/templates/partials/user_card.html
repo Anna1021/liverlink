@@ -10,6 +10,11 @@
                     <p class="card-text subtext">{{ user.country_name }}</p>
                 </div>
             </div><a href="{% url 'profile' username=user.username %}" class="tile-link"></a>
+            {% if parent_template == 'find_friends' %}
+                <div class=" add-friend text-center mt-4">
+                    <a class="btn btn-sm add-friend-btn" data-user-id="{{ user.id }}">Add friend</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

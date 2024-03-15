@@ -41,6 +41,7 @@ class ProfileView(LoginRequiredMixin, View):
 
     def set_context(self, request, username):
         """Classify the user and set context for the profile view"""
+        
         user = User.objects.get(username=username)
         context = self.get_context(user, request)
         return context

@@ -16,12 +16,8 @@
             <div class="container my-2">
                 <div class="row">
                     {% for user in users %}
-                        {% include "partials/user_card.html" %}
+                        {% include "partials/user_card.html" with parent_template="find_friends" %}
                     {% endfor %}
-                    <div class=" add-friend text-center mt-4">
-                        <a class="btn btn-sm add-friend-btn" data-user-id="{{ user.id }}">Add
-                            friend</a>
-                    </div>
                 </div>
             </div>
             {% endif %}
