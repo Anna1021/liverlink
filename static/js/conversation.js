@@ -1,12 +1,13 @@
 $(document).ready(function() {
+    let msg = sessionStorage.getItem(storageKey);
+    if (msg!=null) $('#id_content').val(msg);
     var currentUrl = window.location.href;
+    setScroll();
     if (currentUrl.indexOf('?') === -1) {
         var newUrl = currentUrl + '?first_message='+first_message;
         window.history.pushState({path: newUrl}, '', newUrl);
         window.location.reload();
     }
-    let msg = sessionStorage.getItem(storageKey);
-    if (msg!=null) $('#id_content').val(msg);
     hideBlockedMessages()
     function hideBlockedMessages(){
         var blocked_messages = document.getElementsByName('blocked-message');
@@ -20,29 +21,45 @@ $(document).ready(function() {
             }.bind(this, message))
         }
     }
+    function setScroll(){
+        let scrollPos = -1
+        let previousUrl = document.referrer
+        console.log(previousUrl)
+        console.log(currentUrl)
+        var navigationEntries = performance.getEntriesByType("navigation");
+        if (navigationEntries.length > 0) {
+            var navigationType = navigationEntries[0].type;
+            if (navigationType === "reload") {
+                console.log(sessionStorage.getItem(scrollKey))
+                scrollPos = sessionStorage.getItem(scrollKey)
+            } else if (previousUrl.split("?")[0]==currentUrl.split("?")[0] && previousUrl.split("?")[1]!==currentUrl.split("?")[1]){
+                scrollPos = sessionStorage.getItem(scrollKey)+$('#conversation').prop('clientHeight')
+            } else {
+                scrollPos=$('#conversation').prop('scrollHeight');
+            }
+        }
+            
+        console.log(scrollPos)
+        $('#conversation').animate(
+            {scrollTop:scrollPos}
+        )
+        console.log($('#conversation').scrollTop())
+    }
     setInterval(function(){
         if (conversation_id!="0"){
             sessionStorage.setItem(storageKey,$("#id_content").val())
         }
     },2000)
-    window.addEventListener('beforeunload', function() {
-        sessionStorage.setItem('scrollPosition', window.scrollY);
-    });
-    window.addEventListener('load', function() {
-        var scrollPosition = sessionStorage.getItem('scrollPosition');
-        if (scrollPosition !== null && currentUrl !== this.document.referrer) {
-            window.scrollTo(0, parseInt(scrollPosition));
-            sessionStorage.removeItem('scrollPosition');
-        }
-    });
+
 });
 
+let posting = false;
 const chatSocket = new WebSocket("ws://" + window.location.host + "/");
 if(conversation_id!=0){
     document.querySelector("#id_content").focus();
     document.querySelector('#message-form').addEventListener("submit", function(){
+        posting=true;
         chatSocket.send(JSON.stringify({sender:username,conversation_id:conversation_id}));
-        sessionStorage.clear();
     })
     let delete_buttons = document.querySelectorAll(".delete_all")
     delete_buttons.forEach(function(button){
@@ -55,12 +72,18 @@ chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     let usernames = data.users.split("', '");
     if (usernames.includes(username) && username != data.sender){
-        reloadPage();
+        window.location.reload();
     }
 };
 
-function reloadPage(){
-    sessionStorage.setItem(storageKey,$("#id_content").val());
-    sessionStorage.setItem('noScroll',true);
-    window.location.reload();
-}
+
+window.addEventListener('beforeunload', function(e){
+    if (!posting){
+        sessionStorage.setItem(storageKey,$("#id_content").val());
+        sessionStorage.setItem(scrollKey,$('#conversation').scrollTop())
+    
+    }else{
+        sessionStorage.clear()
+    }
+    return ''
+})
