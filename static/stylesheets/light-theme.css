@@ -1,9 +1,9 @@
 :root {
   --main-bg-color: #E4FBFF;
-  --filter-btn-color: #E5D1FA; 
+  --filter-btn-color: #B4E9EB; 
   --submit-btn-color: #7868E6;
   --btn-text-color: #161D6F;
-  --friend-inner-card-color: #E3DFFD;
+  --friend-inner-card-color: #B4E9EB;
 }
 .light-theme .img-fluid{
   max-width: 100%;
@@ -50,7 +50,7 @@
 * success add friend button
 */
 .light-theme .success_button{
-  background-color: rgb(13, 160, 13) !important;
+  background-color: rgb(68, 187, 68) !important;
   color: rgb(255, 255, 255) !important;
   border: 1px solid transparent!important;
 }
@@ -83,7 +83,7 @@
 .light-theme .SortFilter .btn {
     background-color: var(--filter-btn-color);
     color: var(--btn-text-color);
-    border-color: #d4aeff;
+    border-color: transparent;
     box-shadow: #d4aeff;
 }
 
@@ -101,7 +101,7 @@
   font-weight: 700;
 }
 
-.light-theme #friend-inner-card {
+.light-theme .friend-inner-card {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 20px;

@@ -71,11 +71,11 @@
   font-weight: 700;
 }
 
-.dark-theme #friend-inner-card {
+.dark-theme .friend-inner-card {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 20px;
-  background-color:rgb(46, 45, 56);
+  background-color: #2E2D38;
   color: white;
   padding-right: 30px;
   padding-top: 20px;
