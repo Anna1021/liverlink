@@ -5,10 +5,6 @@ $(document).ready(function() {
         window.history.pushState({path: newUrl}, '', newUrl);
         window.location.reload();
     }
-    if (document.referrer!=currentUrl){
-        $('#conversation').animate(
-            {scrollTop:$('#conversation').prop('scrollHeight')});
-    }
     let msg = sessionStorage.getItem(storageKey);
     if (msg!=null) $('#id_content').val(msg);
     hideBlockedMessages()
@@ -29,7 +25,16 @@ $(document).ready(function() {
             sessionStorage.setItem(storageKey,$("#id_content").val())
         }
     },2000)
-
+    window.addEventListener('beforeunload', function() {
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+    });
+    window.addEventListener('load', function() {
+        var scrollPosition = sessionStorage.getItem('scrollPosition');
+        if (scrollPosition !== null && currentUrl !== this.document.referrer) {
+            window.scrollTo(0, parseInt(scrollPosition));
+            sessionStorage.removeItem('scrollPosition');
+        }
+    });
 });
 
 const chatSocket = new WebSocket("ws://" + window.location.host + "/");
@@ -56,5 +61,6 @@ chatSocket.onmessage = function (e) {
 
 function reloadPage(){
     sessionStorage.setItem(storageKey,$("#id_content").val());
+    sessionStorage.setItem('noScroll',true);
     window.location.reload();
 }
