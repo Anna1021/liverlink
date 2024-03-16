@@ -21,7 +21,7 @@ class PasswordViewTestCase(TestCase):
             'new_password': 'NewPassword123',
             'password_confirmation': 'NewPassword123',
         }
-        self.client.login(username=self.user.username, password='Password123')
+        self.client.force_login(self.user)
 
     def test_password_url(self):
         self.assertEqual(self.url, '/settings/password/')

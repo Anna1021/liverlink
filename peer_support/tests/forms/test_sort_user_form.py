@@ -18,8 +18,8 @@ class SortUserFormTestCase(TestCase):
     def setUp(self):
         self.current_user_patient = Patient.objects.get(username='@janedoe')
         self.current_user_parent =  Parent.objects.get(username='@mohamedalf')
-        self.username_asc_order= ['@alexsmith', '@janedoe', '@johndoe', '@mohamedalf', '@peterpickles', '@petrapickles', '@sambennet']
-        self.age_asc_order=['@janedoe', '@petrapickles', '@sambennet', '@johndoe', '@alexsmith', '@mohamedalf', '@peterpickles']
+        self.username_asc_order= ['@alexsmith', '@carlosmartinez', '@janedoe', '@johndoe', '@lindajohnson', '@mohamedalf', '@peterpickles', '@petrapickles', '@rajpatel', '@sambennet']
+        self.age_asc_order=['@janedoe', '@petrapickles', '@sambennet', '@rajpatel', '@lindajohnson', '@johndoe', '@alexsmith', '@carlosmartinez', '@mohamedalf', '@peterpickles']
         self.users = User.objects.all()
 
     def test_form_has_necessary_fields(self):
@@ -72,7 +72,7 @@ class SortUserFormTestCase(TestCase):
         form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_patient)
-        expected_order = ['@janedoe','@johndoe', '@petrapickles', '@peterpickles', '@sambennet','@mohamedalf','@alexsmith']
+        expected_order = ['@janedoe','@johndoe', '@petrapickles', '@peterpickles', '@sambennet','@lindajohnson','@mohamedalf','@carlosmartinez', '@rajpatel','@alexsmith']
         sorted_usernames = [user.username for user in sorted_users]
         self.assertEqual(sorted_usernames, expected_order)
 
@@ -81,7 +81,7 @@ class SortUserFormTestCase(TestCase):
         form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_parent)        
-        expected_order = ['@mohamedalf','@alexsmith', '@sambennet','@peterpickles','@johndoe' ,'@janedoe','@petrapickles']
+        expected_order = ['@mohamedalf','@alexsmith', '@sambennet','@carlosmartinez', '@rajpatel', '@lindajohnson','@peterpickles','@johndoe' ,'@janedoe','@petrapickles']
         sorted_usernames = [user.username for user in sorted_users]
         self.assertEqual(sorted_usernames, expected_order)   
 
@@ -155,13 +155,13 @@ class SortUserFormTestCase(TestCase):
         sorted_users = form.sort_users(users, new_user)
         self.assertTrue(sorted_users, "Sorted users should not be empty.")
     
-    def test_mentor_sort_filter(self):
+    def test_sort_users_by_best_match_mentor(self):
         current_mentor =  Mentor.objects.get(username='@johndoe')
         form_data = {'sort_by': ''}
         form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, current_mentor)
-        expected_order = ['@johndoe','@petrapickles', '@janedoe', '@peterpickles', '@alexsmith', '@mohamedalf', '@sambennet']
+        expected_order = ['@johndoe','@petrapickles', '@janedoe', '@peterpickles', '@carlosmartinez', '@alexsmith', '@lindajohnson', '@mohamedalf', '@sambennet', '@rajpatel']
         sorted_usernames = [user.username for user in sorted_users]
         self.assertEqual(sorted_usernames, expected_order)   
     

@@ -363,7 +363,7 @@ class SettingsViewTestCase(TestCase):
         self.assertEqual(self.mentor.transplant, 'N')
 
     def test_successful_profile_update_for_mentor(self):
-        self.client.login(username=self.mentor.username, password='Password123')
+        self.client.force_login(self.mentor)
         before_count = Mentor.objects.count()
         response = self.client.post(self.url, self.mentor_form_input, follow=True)
         after_count = Mentor.objects.count()

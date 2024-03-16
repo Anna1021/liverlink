@@ -15,7 +15,7 @@ class ModerationViewTestCase(TestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/default_message.json',
-        'peer_support/tests/fixtures/other_reports_message.json',
+        'peer_support/tests/fixtures/default_report_message.json',
     ]
 
     def setUp(self):

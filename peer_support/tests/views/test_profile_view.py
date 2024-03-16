@@ -17,7 +17,7 @@ class ProfileViewTest(TestCase):
                 'peer_support/tests/fixtures/default_parent.json',
                 'peer_support/tests/fixtures/other_patients.json',
                 'peer_support/tests/fixtures/other_mentors.json',
-                'peer_support/tests/fixtures/other_reports_user.json',
+                'peer_support/tests/fixtures/default_report_user.json',
             ]
 
     def setUp(self):

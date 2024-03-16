@@ -14,7 +14,7 @@ class BlockUserViewTestCase(TestCase):
         self.user = User.objects.get(username='@johndoe')
         self.second_user = User.objects.get(username='@janedoe')
         self.url = reverse('block_user', args=[self.second_user.id])
-        self.client.login(username=self.user.username, password='Password123')
+        self.client.force_login(self.user)
 
     def test_block_user_url(self):
         self.assertEqual(self.url, '/block_user/2')
@@ -71,7 +71,7 @@ class BlockUserViewTestCase(TestCase):
 
     def test_block_user_successfully_deletes_associated_notifications_from_blocked_user(self):
         self.client.logout()
-        self.client.login(username=self.second_user.username, password='Password123')
+        self.client.force_login(self.second_user)
         url = reverse('send_friend_request', args=[self.user.id])
         self.assertEqual(url, '/send_friend_request/1')
         response = self.client.get(url, follow=True)
@@ -87,7 +87,7 @@ class BlockUserViewTestCase(TestCase):
         self.assertEqual(notification.user, User.objects.get(username=self.user.username))
         self.assertEqual(notification.friend_request, friend_request)
         self.client.logout()
-        self.client.login(username=self.user.username, password='Password123')
+        self.client.force_login(self.user)
         self.test_block_user()
         self.assertEqual(FriendRequest.objects.count(), 0)
         self.assertEqual(Notification.objects.count(), 0)

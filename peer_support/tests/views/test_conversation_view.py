@@ -25,7 +25,7 @@ class ConversationViewTestCase(TestCase):
         }
         self.user = User.objects.get(username='@janedoe')
         self.user.conversations.set([1])
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
 
     def test_conversation_url(self):
         self.assertEqual(self.url,'/conversation/1')

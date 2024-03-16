@@ -19,7 +19,7 @@ class LeaveConversationViewTestCase(TestCase):
         self.conversation = Conversation.objects.get(pk=2)
         self.user = User.objects.get(username='@johndoe')
         self.user.conversations.set([1,2])
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
         self.url = reverse('leave_conversation', kwargs={'conversation_id':self.conversation.id})
 
     def test_leave_conversation_url(self):
@@ -68,7 +68,7 @@ class LeaveConversationViewTestCase(TestCase):
     def test_unsuccessful_leave_conversation_user_is_not_in(self):
         self.client.logout()
         self.user = User.objects.get(username='@janedoe')
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
         invalid_url = reverse('leave_conversation', kwargs={'conversation_id':2})
         response = self.client.get(invalid_url, follow=True)
         redirect_url = reverse('conversation', kwargs={'conversation_id':0})

@@ -19,7 +19,7 @@ class DeleteConversationViewTestCase(TestCase):
         self.conversation = Conversation.objects.get(pk=1)
         self.user = User.objects.get(username='@janedoe')
         self.user.conversations.set([1])
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
         self.url = reverse('delete_conversation', kwargs={'conversation_id':self.conversation.id})
         self.redirect_url = reverse('conversation', kwargs={'conversation_id':0})
 

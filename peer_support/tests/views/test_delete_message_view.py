@@ -20,7 +20,7 @@ class DeleteMessageViewTestCase(TestCase):
         self.conversation = Conversation.objects.get(pk=1)
         self.user = User.objects.get(username='@johndoe')
         self.user.conversations.set([1,2])
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
         self.url = reverse('delete_message', kwargs={'conversation_id':self.conversation.id,'message_id':self.message.id})
 
     def test_delete_message_url(self):
@@ -45,7 +45,7 @@ class DeleteMessageViewTestCase(TestCase):
         self.client.logout()
         other_user = User.objects.get(username='@janedoe')
         other_user.conversations.set([1])
-        self.client.login(username=other_user.username, password="Password123")
+        self.client.force_login(other_user)
         response = self.client.get(self.url, follow=True)
         visible_to_after = self.message.visible_to.count()
         messages_after = Message.objects.count()
@@ -85,7 +85,7 @@ class DeleteMessageViewTestCase(TestCase):
 
     def test_unsuccessful_delete_message_in_conversation_user_is_not_in(self):
         other_user = self.user = User.objects.get(username='@janedoe')
-        self.client.login(username=other_user.username, password="Password123")
+        self.client.force_login(other_user)
         invalid_url = reverse('delete_message', kwargs={'conversation_id':2, 'message_id':self.message.id})
         visible_to_before = self.message.visible_to.count()
         messages_before = Message.objects.count()

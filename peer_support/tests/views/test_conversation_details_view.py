@@ -22,7 +22,7 @@ class ConversationDetailsViewTestCase(TestCase):
         self.url = reverse('conversation_details',kwargs={'conversation_id':self.conversation.id})
         self.no_conversation_url = reverse('conversation',kwargs={'conversation_id':0})
         self.user = User.objects.get(username='@johndoe')
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
         self.user_to_add = User.objects.filter(pk=self.other_user_id)
         self.user.friends.set(self.user_to_add)
         self.user.conversations.set([1,2])
@@ -57,7 +57,8 @@ class ConversationDetailsViewTestCase(TestCase):
 
     def test_cannot_get_conversation_user_is_not_in(self):
         self.client.logout()
-        self.client.login(username='@janedoe', password='Password123')
+        user_not_in_conversation = User.objects.get(username = '@janedoe')
+        self.client.force_login(user_not_in_conversation)
         invalid_url = reverse('conversation_details', kwargs={'conversation_id':2})
         response = self.client.get(invalid_url, follow=True)
         self.assertRedirects(response, self.no_conversation_url, status_code=302, target_status_code=200)

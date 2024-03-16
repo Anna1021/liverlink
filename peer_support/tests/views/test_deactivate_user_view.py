@@ -19,8 +19,8 @@ class DeactivateUserViewTestCase(TestCase):
         self.user = User.objects.get(username='@johndoe')
         self.patient = Patient.objects.get(username='@janedoe')
         self.parent = Parent.objects.get(username='@alexsmith')
-        self.mentor = Mentor.objects.get(username='@peterpickles')
-        self.client.login(username=self.user.username, password="Password123")
+        self.mentor = Mentor.objects.get(username='@lindajohnson')
+        self.client.force_login(self.user)
 
     def test_deactivate_user_url(self):
         self.assertEqual(self.url,'/deactivate_user/')
@@ -41,7 +41,7 @@ class DeactivateUserViewTestCase(TestCase):
     def test_patient_deactivation_deactivates_user_and_patient_objects(self):
         self.client.logout()
         patient_user = User.objects.get(id=self.patient.id)
-        self.client.login(username=self.patient.username, password='Password123')
+        self.client.force_login(self.patient)
         self.assertTrue(patient_user.is_active)
         self.assertTrue(self.patient.is_active)
         response = self.client.post(self.url, follow=True)
@@ -56,7 +56,7 @@ class DeactivateUserViewTestCase(TestCase):
     def test_parent_deactivation_deactivates_user_and_parent_objects(self):
         self.client.logout()
         parent_user = User.objects.get(id=self.parent.id)
-        self.client.login(username=self.parent.username, password='Password123')
+        self.client.force_login(self.parent)
         self.assertTrue(parent_user.is_active)
         self.assertTrue(self.parent.is_active)
         response = self.client.post(self.url, follow=True)
@@ -71,7 +71,7 @@ class DeactivateUserViewTestCase(TestCase):
     def test_mentor_deactivation_deactivates_user_and_mentor_objects(self):
         self.client.logout()
         mentor_user = User.objects.get(id=self.mentor.id)
-        self.client.login(username=self.mentor.username, password='Password123')
+        self.client.force_login(mentor_user)
         self.assertTrue(mentor_user.is_active)
         self.assertTrue(self.mentor.is_active)
         response = self.client.post(self.url, follow=True)
@@ -116,5 +116,5 @@ class DeactivateUserViewTestCase(TestCase):
         self.client.post(self.url, follow=True)
         self.user.refresh_from_db()
         self.assertFalse(self.user.is_active)
-        login = self.client.login(username=self.user.username, password='Password123')
+        login = self.client.force_login(self.user)
         self.assertFalse(login)
