@@ -4,7 +4,7 @@
 
 <div class="conversation-details">
     <div id="name-form">
-        <h3 id="conversation-name">{{conversation}}</h3>
+        <h3 id="conversation-name" class="conversation-name">{{conversation}}</h3>
         <div id="conversation-name-input">
             <form method="post" action="{% url 'conversation_details' conversation.id %}">
                 {% csrf_token %}

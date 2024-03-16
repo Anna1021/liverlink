@@ -1,13 +1,3 @@
-/* conversation name cards */
-.conversation-card {
-    width :max-content;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin:0;
-    width:calc(100%);
-}
-
 .conversation-card:hover {
     background-color: gainsboro;
 }
@@ -106,8 +96,12 @@
     margin: 0;
 }
 
-#conversation-name{
-    display: block;
+.conversation-name{
+    width :max-content;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width:calc(100%);
 }
 
 #conversation-name-input{
