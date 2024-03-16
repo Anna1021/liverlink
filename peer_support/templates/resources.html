@@ -1,23 +1,33 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 {% block page %}
-  <div class="main">
-    <div id="resources-card" class="card shadow box-area my-2">
-  {% include 'partials/resources-navbar.html' %}
-  <div class="page">
-    <div class="section">
-      <h1 class="title">All questions</h1>
-      <div class="scrollable-container">
-        {% for question in questions %}
-        <div class="question-list-item">
-          <a href="{% url 'question' question.id %}">
-            <p class="question-list-item-title">{{question.title}}</p>
-            <p class="question-list-item-author">
-              by {{question.author.username}}
-            </p>
-          </a>
+<div class="main">
+  <div id="resources-card" class="card shadow box-area my-2">
+    {% include 'partials/resources-navbar.html' %}
+    <div class="page">
+      <div class="section">
+        <h1 class="title">All questions</h1>
+        <div class="scrollable-container">
+          {% for question in questions %}
+          <div class="question-list-item">
+            <a href="{% url 'question' question.id %}">
+              <p class="question-list-item-title">{{ question.title }}</p>
+              <p class="question-list-item-author">
+                by {{ question.author.username }}
+              </p>
+            </a>
+            <form method="post" action="{% url 'delete_question' id=question.id %}" onsubmit="return confirmDelete()">
+              {% csrf_token %}
+              <button type="submit" class="btn delete-btn btn-lg btn-outline-danger">Delete</button>
+          </form> 
+          <script>
+              function confirmDelete() {
+                  return confirm('Are you sure you want to delete this question?');
+              }
+          </script>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       </div>
       <hr>
       {% include 'partials/resource_table.html' %}

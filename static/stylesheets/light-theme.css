@@ -309,16 +309,14 @@
 .light-theme .delete-response-button {
   background-color: var(--filter-btn-color);
   color: var(--btn-text-color);
-  border-color: #d4aeff;
-  box-shadow: #d4aeff;
+  border-color: #9ad4d6; 
   border-radius: 0.25rem;
 }
 
 .light-theme .delete-btn {
   background-color: var(--filter-btn-color);
   color: black;
-  border-color: #d4aeff;
-  box-shadow: #d4aeff;
+  border-color: #9ad4d6; 
   font-size: 12px;
   padding: 5px 10px;
   cursor: pointer;
