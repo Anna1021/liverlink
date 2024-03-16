@@ -271,7 +271,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(patient, "PATIENT")
 
     def test_get_profile_mentor(self):
-        user = User.objects.get(username='@alexsmith')
+        user = User.objects.get(username='@lindajohnson')
         url = reverse('profile', kwargs={'username': user.username})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
