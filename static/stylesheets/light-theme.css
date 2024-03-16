@@ -210,9 +210,10 @@
   color: rgba(0, 0, 0);
 
 }
-.light-theme #Apply-btn{
+.light-theme .apply-btn{
   background-color: #720fe3;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  border-color: #720fe3;
  
 }
 
@@ -237,8 +238,7 @@
 .light-theme .tutorial .btn{
   background-color: var(--filter-btn-color);
   color: var(--btn-text-color);
-  border-color: #d4aeff;
-  box-shadow: #d4aeff;
+  border-color: #b7ecff;
 
 }
 
@@ -296,4 +296,9 @@
 .light-theme .question-author {
   font-size: 14px;
   color: rgb(255, 107, 132);
+}
+
+.light-theme .self-bubble{
+  float: right;
+  background-color: rgb(169, 221, 221);
 }
