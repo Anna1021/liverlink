@@ -203,7 +203,7 @@
 
 .light-theme .subtext {
   --bs-text-opacity: 1;
-  color: rgb(145, 142, 142);
+  color: #395362;
 }
 
 .light-theme #theme {
@@ -261,7 +261,39 @@
 .light-theme .responses-container-heading {
   color: #1B1F3B;
 }
+
 .light-theme .response-author {
   color: blue;
   font-style: italic;
+}
+
+.light-theme #dropdown-style {
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+  background-color: var(--main-bg-color);
+  color: rgb(0, 0, 0);
+}
+.light-theme .profile-head h7 {
+  font-size: 15px;
+  color: #6490a9;
+}
+ .light-theme .profile-tab p {
+  font-weight: 600;
+  color: #6490a9;
+}
+
+.light-theme .profile-head h6 {
+    font-size: 20px;
+    color: #6490a9;
+}
+
+.light-theme .question-list-item-author {
+  color: rgb(255, 107, 132);
+  margin: 0;
+}
+
+.light-theme .question-author {
+  font-size: 14px;
+  color: rgb(255, 107, 132);
 }
