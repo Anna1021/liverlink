@@ -74,13 +74,11 @@ class ConversationView(LoginRequiredMixin, FormView):
     def handle_delete_message(self,request,conversation_id,message_id,delete):
         conversation = get_object_or_404(Conversation,id=conversation_id)
         message =get_object_or_404(Message, id=message_id)
-        print("ufhciojwdvei")
         if delete == 'all':
             users = conversation.users.all()
         else:
             users = conversation.users.filter(username=request.user.username)
         message.delete(users)
-        print(users)
 
     def handle_post_message(self,request,conversation_id):
         conversation = get_object_or_404(Conversation,id=conversation_id)
