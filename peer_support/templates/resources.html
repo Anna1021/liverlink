@@ -1,26 +1,24 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 {% block page %}
-  <div class="main">
-    <div id="resources-card" class="card shadow box-area my-2">
-  {% include 'partials/resources-navbar.html' %}
-    <div class="page">
-      <!-- Questions Section -->
-      <div class="section">
-        <h1 class="title">All questions</h1>
-        <div class="scrollable-container">
-          {% for question in questions %}
-          <div class="question-list-item">
-            <a href="{% url 'question' question.id %}">
-              <p class="question-list-item-title">{{question.title}}</p>
-              <p class="question-list-item-author">
-                by {{question.author.username}}
-              </p>
-            </a>
-          </div>
-          {% endfor %}
-        </div>
+{% include 'partials/resources-navbar.html' %}
+<div class="page">
+  <!-- Questions Section -->
+  <div class="section">
+    <h1 class="title">All questions</h1>
+    <div class="scrollable-container">
+      {% for question in questions %}
+      <div class="question-list-item">
+        <a href="{% url 'question' question.id %}">
+          <p class="question-list-item-title">{{question.title}}</p>
+          <p class="question-list-item-author">
+            by {{question.author.username}}
+          </p>
+        </a>
       </div>
-      <hr>
-      {% include 'partials/resource_table.html' %}
+      {% endfor %}
+    </div>
+  </div>
+  {% include 'partials/resource_table.html' %}
+</div>
 {% endblock %}
