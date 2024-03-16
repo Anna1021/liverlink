@@ -9,16 +9,6 @@
     border-radius: 50%;
 }
 
-.profile-head h6 {
-    font-size: 20px;
-    color: #91BBD3;
-}
-
-.profile-head h7 {
-    font-size: 15px;
-    color: #91BBD3;
-}
-
 .profile-head .nav-tabs {
     margin-top: 5%;
     margin-bottom: 7%;
@@ -33,14 +23,23 @@
     font-weight: 600;
 }
 
-.profile-tab p {
-    font-weight: 600;
-    color: #91BBD3;
-}
-
 /*
  * User actions menu styling
  */
+
+.profile-icon {
+    float: right;
+}
+
+a.dropdown-item-form {
+    padding: 0px;
+    text-decoration: none;
+    display: block;
+}
+
+a.dropdown-item-form:hover {
+    background-color: #e9ecef;
+}
 
 .actions-icon, .actions-icon:hover {
     background-color: transparent;

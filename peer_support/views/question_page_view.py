@@ -1,25 +1,39 @@
+from django.views import View
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import Question
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
 from peer_support.forms import NewReplyForm, NewResponseForm
 
-@login_required
-def question_page(request, id):
-    response_form = NewResponseForm()
-    reply_form = NewReplyForm()
-    if request.method == 'POST':
-            response_form = NewResponseForm(request.POST)
-            if response_form.is_valid():
-                response = response_form.save(commit=False)
-                response.user = request.user
-                response.question = Question(id=id)
-                response.save()
-                return redirect('/question/'+str(id)+'#'+str(response.id))
-    question = Question.objects.get(id=id)
-    context = {
-        'question': question,
-        'response_form': response_form,
-        'reply_form': reply_form,
-        'current_user': request.user,
-    }
-    return render(request, 'question.html', context)
+class QuestionPageView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
+    def get(self, request, id, *args, **kwargs):
+        question = get_object_or_404(Question, id=id)
+        response_form = NewResponseForm()
+        reply_form = NewReplyForm()
+        context = {
+            'question': question,
+            'response_form': response_form,
+            'reply_form': reply_form,
+            'current_user': request.user,
+        }
+        return render(request, 'question.html', context)
+
+    def post(self, request, id, *args, **kwargs):
+        response_form = NewResponseForm(request.POST)
+        if response_form.is_valid():
+            response = response_form.save(commit=False)
+            response.user = request.user
+            response.question = get_object_or_404(Question, id=id)
+            response.save()
+            return redirect(f'/question/{id}#{response.id}')
+        question = get_object_or_404(Question, id=id)
+        reply_form = NewReplyForm() 
+        context = {
+            'question': question,
+            'response_form': response_form,
+            'reply_form': reply_form,
+            'current_user': request.user,
+        }
+        return render(request, 'question.html', context)

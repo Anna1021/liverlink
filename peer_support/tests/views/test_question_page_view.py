@@ -1,13 +1,12 @@
-from django.contrib.auth import get_user_model
+"""Tests of the Question Page view."""
 from django.test import TestCase, Client
-from peer_support.models import Question, Response
+from peer_support.models import Question, Response, User
 from peer_support.forms import NewResponseForm
 from django.urls import reverse
 
-User = get_user_model()
-
-class QuestionPageTest(TestCase):
+class QuestionPageTestCase(TestCase):
     """Tests of the Question Page view."""
+
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json'
@@ -19,22 +18,20 @@ class QuestionPageTest(TestCase):
         self.response = Response.objects.create(body='Test Response', user=self.user, question=self.question)
         self.client = Client()
         self.url = reverse('question', args=(self.question.id,))
+        self.client.login(username=self.user.username, password='Password123')
 
     def test_question_page_GET(self):
-        self.client.login(username=self.user.username, password='Password123')
-        response = self.client.get(self.url)  # Use the URL from setUp
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'question.html')
         self.assertIsInstance(response.context['response_form'], NewResponseForm)
 
     def test_question_page_invalid_POST(self):
-        self.client.login(username=self.user.username, password='Password123')
         response = self.client.post(self.url, {})
         self.assertEqual(response.status_code, 200)
         self.assertTrue('response_form' in response.context and response.context['response_form'].errors)
 
     def test_question_page_valid_POST(self):
-        self.client.login(username=self.user.username, password='Password123')
         form_data = {'body': 'This is a test response.'}
         response = self.client.post(self.url, form_data)
         self.assertEqual(response.status_code, 302)

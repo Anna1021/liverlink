@@ -1,8 +1,6 @@
 from django.core.management.base import BaseCommand
-
 from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Conversation
 import uuid
-
 from faker import Faker
 from random import randint
 from peer_support.models.model_choices import *
@@ -159,7 +157,7 @@ class Command(BaseCommand):
         age_of_diagnosis = randint(0, 30)
         referral_code = uuid.uuid4().hex[:10].upper()
         transplant = self.faker.random_element(elements=(tuple(transplant[0] for transplant in TRANSPLANT_CHOICES)))
-        user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'referral_code': referral_code, 'transplant': transplant})
+        user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'referral_code': referral_code, 'transplant': transplant})
         self.try_create_mentor(user_data)
 
     def generate_notification(self):
@@ -188,7 +186,7 @@ class Command(BaseCommand):
 
     def try_create_notification(self, data):
         try:
-          self.create_notification(data)
+            self.create_notification(data)
         except:
             pass
 

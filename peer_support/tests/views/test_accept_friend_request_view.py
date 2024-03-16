@@ -4,7 +4,7 @@ from django.urls import reverse
 from peer_support.tests.helpers import reverse_with_next
 from peer_support.models import User, FriendRequest, Notification
 
-class AcceptFriendRequestView(TestCase):
+class AcceptFriendRequestViewTestCase(TestCase):
     """Tests of the accept friend request view."""
     
     fixtures = ['peer_support/tests/fixtures/default_user.json',

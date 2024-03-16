@@ -67,8 +67,6 @@ class SignUpViewTestCase(TestCase, LogInTester):
         before_users = User.objects.all()
         before_count = before_users.count()
         response = self.client.post(self.url, self.form_input, follow=True)
-        if response.context and 'form' in response.context:
-            form = response.context['form']
         after_users = User.objects.all()
         after_count = after_users.count()
         self.assertEqual(after_count, before_count+1)

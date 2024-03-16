@@ -4,7 +4,7 @@ from django.urls import reverse
 from peer_support.forms import ConversationForm, MessageForm
 from peer_support.models import User, Conversation
                   
-class ConversationViewTestCase(TestCase):
+class CreateConversationViewTestCase(TestCase):
     """Tests of the conversation creation view."""
 
     fixtures = ['peer_support/tests/fixtures/default_user.json',
@@ -20,6 +20,7 @@ class ConversationViewTestCase(TestCase):
         self.url = reverse('create_conversation')
         self.user = User.objects.get(username='@johndoe')
         self.client.login(username=self.user.username, password="Password123")
+        self.user.conversations.set([1,2])
         self.user.friends.set(User.objects.exclude(pk=1))
         self.other_users = [2]
 

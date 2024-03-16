@@ -1,3 +1,4 @@
+"""Unit test for password form"""
 from django.contrib.auth.hashers import check_password
 from django.test import TestCase
 from peer_support.models import User

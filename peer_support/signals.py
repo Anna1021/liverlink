@@ -4,8 +4,7 @@ from .models import User, UserProfile
 
 def create_user_profile(sender, instance, created, **kwargs):
     """Automatically create a UserProfile when a User is created."""
-    
-    # Do not run signal during test fixtures
+
     if created and not UserProfile.objects.filter(user=instance).exists() and not kwargs.get('raw', False):
         UserProfile.objects.create(user=instance)
 

@@ -1,14 +1,7 @@
-.avatar {
-    width: 5rem;
-    height: 5rem;
-    line-height: 2rem;
-    border-radius: 50%;
-    display: inline-block;
-    background: #ced4da no-repeat center/cover;
-    position: relative;
-    text-align: center;
-    font-weight: 600;
-    vertical-align: bottom;
+.friend-profile-picture {
+    width: 100px; 
+    height: 100px;
+    margin-right: 15px;
 }
 
 .friend-card-body {
@@ -26,12 +19,4 @@
     left: 0;
     top: 0;
     z-index: 30;
-}
-
-#dropdown-style {
-    padding: 10px;
-    margin: 0;
-    list-style: none;
-    background-color:#2E2D38; 
-    color:white;
 }
