@@ -3,19 +3,15 @@
 {% block convo %}
 <div class="container conversation-details">
     <div class="row mb-3 h-25" id="name-form">
-        <div class="col-md-10">
-            <h3 id="conversation-name" class="pb-3">{{conversation}}</h3>
+        <h3 id="conversation-name" class="pb-3">{{conversation}}</h3>
+        <div id="conversation-name-input">
+            <form method="post" action="{% url 'conversation_details' conversation.id %}">
+                {% csrf_token %}
+                <input type="text" name="new_name" value="{{ conversation.display_name }}">
+                <input class="btn btn-primary" type="submit" name="rename_conversation" value="Save">
+            </form>
         </div>
-        <div class="col-md-2">
-            <div id="conversation-name-input">
-                <form method="post" action="{% url 'conversation_details' conversation.id %}">
-                    {% csrf_token %}
-                    <input type="text" name="new_name" value="{{ conversation.display_name }}">
-                    <input class="btn btn-primary" type="submit" name="rename_conversation" value="Save">
-                </form>
-            </div>
-            <button onclick="toggle(this)" id="rename-button" class="btn btn-primary">Rename</button>
-        </div>    
+        <button onclick="toggle(this)" id="rename-button" class="btn btn-primary">Rename</button>   
     </div>
     <div class="row user-list-header mt-3">
         <div class="col-md-7">
