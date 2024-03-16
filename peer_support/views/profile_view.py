@@ -1,7 +1,7 @@
 from django.shortcuts import render,reverse,redirect,get_object_or_404
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from peer_support.models import User, FriendRequest
+from peer_support.models import User, FriendRequest,Post
 from peer_support.forms import ReportForm
 from django.contrib import messages
 from .helpers import user_exists
@@ -16,8 +16,11 @@ class ProfileView(LoginRequiredMixin, View):
             messages.error(request, "The profile you tried to access does not exist.")
             return redirect(reverse('feed'))
         user = User.objects.get(username=username)
+        posts = Post.objects.filter(author=user)
+        if user not in request.user.friends.all() and user != request.user:
+            posts = posts.filter(visibility='G')
         context = {
-            'user': user, 'current_user': request.user,'blocklist': request.user.blocked_users.all() | user.blocked_users.all(),
+            'user': user, 'current_user': request.user,'blocklist': request.user.blocked_users.all() | user.blocked_users.all(),'posts':posts,
             'is_friend': request.user in user.friends.all(),'report_form': ReportForm(), 'request_sent': FriendRequest.objects.filter(sender=request.user, receiver=user).exists(),
         }
         if hasattr(user, 'parent'):

@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.tests.helpers import reverse_with_next
-from peer_support.models import User, FriendRequest, Report
+from peer_support.models import User, FriendRequest, Report, Post
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.contrib import messages
@@ -17,6 +17,8 @@ class ProfileViewTestCase(TestCase):
                 'peer_support/tests/fixtures/default_parent.json',
                 'peer_support/tests/fixtures/other_patients.json',
                 'peer_support/tests/fixtures/other_mentors.json',
+                'peer_support/tests/fixtures/default_post.json',
+                'peer_support/tests/fixtures/other_posts.json',
             ]
 
     def setUp(self):
@@ -208,3 +210,29 @@ class ProfileViewTestCase(TestCase):
         self.assertRedirects(response, reverse('feed'))
         messages = list(get_messages(response.wsgi_request))
         self.assertTrue(any(["does not exist" in str(message) for message in messages]))
+
+    def test_timeline_for_self(self):
+        response = self.client.get(self.url)
+        posts = response.context['posts']
+        self.assertEqual(posts.count(),1)
+
+    def test_timeline_for_friends(self):
+        other_user = User.objects.get(username='@janedoe')
+        post_to_edit = Post.objects.get(pk=3)
+        post_to_edit.author = other_user
+        post_to_edit.save()
+        self.user.friends.add(other_user)
+        url = reverse('profile', kwargs={'username': other_user.username})
+        response = self.client.get(url)
+        posts = response.context['posts']
+        self.assertEqual(posts.count(),2)
+
+    def test_timeline_for_non_friends(self):
+        other_user = User.objects.get(username='@janedoe')
+        post_to_edit = Post.objects.get(pk=3)
+        post_to_edit.author = other_user
+        post_to_edit.save()
+        url = reverse('profile', kwargs={'username': other_user.username})
+        response = self.client.get(url)
+        posts = response.context['posts']
+        self.assertEqual(posts.count(),1)
