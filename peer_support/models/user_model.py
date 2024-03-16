@@ -11,6 +11,7 @@ class User(AbstractUser):
     username = models.CharField(
         max_length=30,
         unique=True,
+        default='@',
         validators=[RegexValidator(
             regex=r'^@\w{3,}$',
             message='Username must consist of @ followed by at least three alphanumericals'
