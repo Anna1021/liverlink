@@ -31,8 +31,7 @@
     </div>
 
 </div>
-<div>
-    <div id="conversation">
+<div id="conversation">
     {% for message in conversation.messages.all %}
         {% if user in message.visible_to.all %}
             {% if message.sender == user %} 
@@ -50,14 +49,13 @@
     {% empty %}
         Type out your first message in the box below!
     {% endfor %}
-    </div>
     <form method="post" {% if blocked_dm %} inert style="opacity: 50%;" {% endif %}>
         {% if blocked_dm %}
         <div style="opacity: 50%;">You can no longer send messages to this user.</div>
         {% endif %}
         {% csrf_token %}
         {{ message_form.content }}
-        <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
+        <button type="submit" class="btn btn-primary my-2"><i class="bi bi-arrow-right-square-fill"></i></button>
     </form>
     {% else %}
         Pick a conversation or start a new conversation!
