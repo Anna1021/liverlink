@@ -149,3 +149,18 @@ body {
   padding-left: 6px;
   cursor: pointer;
 }
+
+.navbar {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+}
+
+.navbar-item {
+  flex: 1; 
+  max-width: 200px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+  margin: 0 5px; 
+}
