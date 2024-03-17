@@ -1,7 +1,7 @@
 import uuid
 from peer_support.models import Referral, Mentor, User
 from django.conf import settings
-from django.shortcuts import redirect,reverse
+from django.shortcuts import redirect, reverse
 from peer_support.models import Notification
 from django.contrib import messages
 
@@ -84,3 +84,13 @@ def no_conversation_url(request):
 
 def user_exists(username):
     return User.objects.filter(username=username).exists()
+
+def get_user_type(user):
+    if hasattr(user, 'parent'):
+        return "PARENT"
+    elif hasattr(user, 'patient'):
+        return "PATIENT"
+    elif hasattr(user, 'mentor'):
+        return "MENTOR"
+    else:
+        return "ADMIN"

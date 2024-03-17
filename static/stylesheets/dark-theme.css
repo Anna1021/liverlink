@@ -1,7 +1,7 @@
 :root {
   --dark-main-bg-color: #212529;
   --dark-filter-btn-color: #F4F9F9; 
-  --dark-submit-btn-color: #7868E6;
+  --dark-submit-btn-color: #6A94AE;
   --dark-btn-text-color: #161D6F;
 }
 
@@ -178,7 +178,6 @@
 .dark-theme .add-friend .btn,
 .dark-theme .btn-submit  {
 background-color: var(--dark-submit-btn-color);
-border: 1px solid #720fe3;
 }
 
 /*
