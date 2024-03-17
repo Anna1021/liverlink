@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import User, FriendRequest, Post
 from peer_support.forms import ReportForm, ConversationForm
 from django.contrib import messages
-from .helpers import user_exists
+from .helpers import user_exists, get_user_type
 
 class ProfileView(LoginRequiredMixin, View):
     """Displays user's profile"""
@@ -19,16 +19,6 @@ class ProfileView(LoginRequiredMixin, View):
         context = self.set_context(request, username)
         return render(request, 'profile.html', context)
 
-    def get_user_type(self, user):
-        if hasattr(user, 'parent'):
-            return "PARENT"
-        elif hasattr(user, 'patient'):
-            return "PATIENT"
-        elif hasattr(user, 'mentor'):
-            return "MENTOR"
-        else:
-            return "ADMIN"
-
     def get_context(self, user, posts, request):
         return {
             'user': user, 
@@ -38,7 +28,7 @@ class ProfileView(LoginRequiredMixin, View):
             'is_friend': request.user in user.friends.all(), 
             'report_form': ReportForm(), 
             'request_sent': FriendRequest.objects.filter(sender=request.user, receiver=user).exists(),
-            'user_type': self.get_user_type(user)
+            'user_type': get_user_type(user)
         }
 
     def set_context(self, request, username):

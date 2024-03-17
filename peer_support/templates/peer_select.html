@@ -15,8 +15,8 @@
             {% else %}
             <div class="container my-2">
                 <div class="row">
-                    {% for user in users %}
-                        {% include "partials/user_card.html" with parent_template="find_friends" %}
+                    {% for friend in users %}
+                        {% include "partials/user_card.html" with parent_template="find_friends" user=friend.user %}
                     {% endfor %}
                 </div>
             </div>
