@@ -7,32 +7,20 @@
       <h2>Profile settings</h2>
       <div class="col-2 ps-col">
         <div style="padding: 10px"></div>
-        <img src="{% static user.userprofile.profile_picture %}" alt="Profile Picture" class="ps-gravatar">
-        <div style="padding: 10px"></div>
+        <img src="{% static user.userprofile.profile_picture %}" class="ps-profile-picture" alt="Your profile picture"> </img>
         <div class="divider"></div>
-        <div style="padding: 5px"></div>
-        <ul class="ps-list">
-          <li class="ps-list-item"><a class="ps-link" href="{% url 'settings' %}"><i class="bi bi-gear ps-icons"> </i>Personal information</a></li>
-          <li class="ps-list-item"><a class="ps-link" href="{% url 'password' %}"><i class="bi bi-lock ps-icons"> </i>Password & security</a></li>
-          <li class="ps-list-item"><a class="ps-link" href="{% url 'customisation' %}"><i class="bi bi-brush ps-icons"> </i>Customisation</a></li>
-          <li class="ps-list-item"><a class="ps-link" href="{% url 'other_user_settings' %}"><i class="bi bi-person ps-icons"> </i>Other users</a></li>
-          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-bell ps-icons"> </i>Notifications</a></li>
-          <li class="ps-list-item"><a class="ps-link" href=""><i class="bi bi-brightness-low ps-icons"> </i>Accessibility</a></li>
-          <li class="ps-list-item"><a class="ps-link" href="{% url 'information' %}"><i class="bi bi-info ps-icons"> </i>Information</a></li>
-        </ul>
+        {% include 'partials/profile-settings/settings_sidebar.html' %}
       </div>
       <div class="col-8 ps-col">
         {% block title %}{% endblock %}
-        <div style="padding: 5px"></div>
-        <div class="divider"></div>
-        <div style="padding: 5px"></div>
+        <div class="divider-large"></div>
         {% block page %}
         {% endblock %}
       </div>
       <div class="col-2 ps-col"></div>
     </div>
   </div>
-  <row> <!-- footer -->
+  <row>
     <div style="padding: 40px;"></div>
   </row>
 </div>

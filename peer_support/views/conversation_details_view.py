@@ -5,10 +5,11 @@ from django.shortcuts import redirect,render
 from django.urls import reverse
 from peer_support.models import Conversation
 from peer_support.forms import AddUsersForm
-from .helpers import conversation_does_not_exist, conversation_is_direct, no_conversation_url
+from .helpers import get_conversation, conversation_is_direct, no_conversation_url
 
 class ConversationDetailsView(LoginRequiredMixin,FormView):
     """View group conversation details"""
+
     model = Conversation
     template_name = 'conversation_details.html' 
 
@@ -20,10 +21,9 @@ class ConversationDetailsView(LoginRequiredMixin,FormView):
         }
 
     def get(self,request, conversation_id):
-        conversations = Conversation.objects.filter(id=conversation_id)
-        if conversation_does_not_exist(request,conversations):
+        conversation = get_conversation(request,conversation_id)
+        if not conversation:
             return no_conversation_url(request)
-        conversation = conversations[0]
         if conversation_is_direct(request,conversation):
             return redirect(reverse('conversation',kwargs={'conversation_id':conversation.id}),{'user_conversations':request.user.sort_conversations()})
         return render(request,self.template_name,self.get_context_data(request.user,conversation))
@@ -45,4 +45,3 @@ class ConversationDetailsView(LoginRequiredMixin,FormView):
             return render(request,self.template_name,self.get_context_data(request.user,conversation))
         else:
             return self.add_users(request,conversation)
-            

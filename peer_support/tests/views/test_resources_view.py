@@ -1,30 +1,22 @@
+"""Tests of the Resources view."""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.models import Question
-from django.utils import timezone
 from peer_support.models import User
 from peer_support.tests.helpers import reverse_with_next
 
-
-class ResourcesViewTest(TestCase):
+class ResourcesViewTestCase(TestCase):
     """Tests of the Resources view."""
+
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
-        'peer_support/tests/fixtures/other_users.json'
+        'peer_support/tests/fixtures/other_users.json',
+        'peer_support/tests/fixtures/other_questions.json'
     ]
 
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
         self.client.force_login(self.user)
         self.url = reverse('resources')
-        number_of_questions = 5
-        for question_num in range(number_of_questions):
-            Question.objects.create(
-                title=f'Question {question_num}',
-                body='This is a test question body.',
-                created_at=timezone.now() - timezone.timedelta(days=question_num),
-                author=self.user
-            )
 
     def test_resources_redirects_when_not_logged_in(self):
         self.client.logout()

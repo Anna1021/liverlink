@@ -13,8 +13,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
         ('contenttypes', '0002_remove_content_type_name'),
+        ('auth', '0012_alter_user_first_name_max_length'),
     ]
 
     operations = [
@@ -189,7 +189,6 @@ class Migration(migrations.Migration):
                 ('content', models.CharField(max_length=100)),
                 ('send_time', models.DateTimeField(default=django.utils.timezone.now)),
                 ('previous_message', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='peer_support.message')),
-                ('read_by', models.ManyToManyField(blank=True, related_name='read_by', to=settings.AUTH_USER_MODEL)),
                 ('sender', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
                 ('visible_to', models.ManyToManyField(blank=True, related_name='visible_to', to=settings.AUTH_USER_MODEL)),
             ],

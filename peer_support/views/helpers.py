@@ -9,6 +9,7 @@ from datetime import date
 
 def login_prohibited(view_function):
     """Decorator for view functions that redirect users away if they are logged in."""
+
     def modified_view_function(request):
         if request.user.is_authenticated:
             return redirect(settings.REDIRECT_URL_WHEN_LOGGED_IN)
@@ -17,6 +18,8 @@ def login_prohibited(view_function):
     return modified_view_function
 
 def notifications(request):
+    """Returns whether notifications have been viewed for the current user."""
+
     if request.user.is_authenticated:
         has_unviewed_notifications = Notification.objects.filter(user=request.user, viewed=False).exists()
         return {'has_unviewed_notifications': has_unviewed_notifications}
@@ -25,12 +28,15 @@ def notifications(request):
     
 def create_referral(user):
     """ Only creates referrals if the user is a mentor. """
+
     if isinstance(user, Mentor): 
         code = uuid.uuid4().hex[:10].upper()
         referral = Referral.objects.create(referrer=user, code=code)
         return referral
 
 def get_referral_code(user):
+    """Gets the referral code for a user, if it exists."""
+
     referral = Referral.objects.filter(referrer=user).first()
     if referral:
         return referral.code
@@ -38,6 +44,7 @@ def get_referral_code(user):
 
 def get_addable_peers(current_user):
     """Gets users who are not admin, friends, blocked or user"""
+
     friends_ids = current_user.friends.values_list('id', flat=True)
     blocked_users_ids = current_user.blocked_users.values_list('id', flat=True)
     blocked_by_ids = current_user.blocked_by.values_list('id', flat=True)
@@ -46,18 +53,19 @@ def get_addable_peers(current_user):
 
 def check_blocked_dm(current_user, conversation):
     """Check if the conversation is a DM and, if so, whether there is a block between the 2 users."""
-    blocked_dm = False
+    
     if conversation.as_group() is None:
-        for user in conversation.users.all(): 
-            if current_user in user.blocked_users.all() or user in current_user.blocked_users.all():
-                blocked_dm = True
-    return blocked_dm
-
-def conversation_does_not_exist(request,conversations):
-    if conversations.count() == 0 or request.user not in conversations[0].users.all():
-        messages.error(request,"This conversation does not exist.")
-        return True
+        user = conversation.users.exclude(id=current_user.id).get()
+        if current_user in user.blocked_users.all() or user in current_user.blocked_users.all():
+            return True
     return False
+
+def get_conversation(request,conversation_id):
+    conversations = request.user.conversations.filter(id=conversation_id)
+    if conversations.count() == 0:
+        messages.error(request,"This conversation does not exist.")
+        return None
+    return conversations.get(id=conversation_id)
 
 def conversation_is_direct(request,conversation):
     if conversation.as_group() is None:
@@ -65,11 +73,12 @@ def conversation_is_direct(request,conversation):
         return True
     return False
 
-def message_does_not_exist(request,conversation_messages):
+def get_message(request,conversation,message_id):
+    conversation_messages = conversation.messages.filter(id=message_id)
     if conversation_messages.count() == 0 or request.user not in conversation_messages[0].visible_to.all():
         messages.error(request,"This message does not exist.")
-        return True
-    return False
+        return None
+    return conversation_messages.get(id=message_id)
 
 def no_conversation_url(request):
     context = {'user_conversations':request.user.sort_conversations()}

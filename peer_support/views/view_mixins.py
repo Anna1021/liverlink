@@ -8,6 +8,7 @@ class LoginProhibitedMixin:
 
     def dispatch(self, *args, **kwargs):
         """Redirect when logged in, or dispatch as normal otherwise."""
+
         if self.request.user.is_authenticated:
             return self.handle_already_logged_in(*args, **kwargs)
         return super().dispatch(*args, **kwargs)
@@ -18,6 +19,7 @@ class LoginProhibitedMixin:
 
     def get_redirect_when_logged_in_url(self):
         """Returns the url to redirect to when not logged in."""
+        
         if self.redirect_when_logged_in_url is None:
             raise ImproperlyConfigured(
                 "LoginProhibitedMixin requires either a value for "

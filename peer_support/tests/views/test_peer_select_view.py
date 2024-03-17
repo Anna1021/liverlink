@@ -1,6 +1,7 @@
+"""Tests of the Peer Select view."""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.forms import FilterPeerForm, SortPeerForm, SearchPeerForm
+from peer_support.forms import FilterUserForm, SortUserForm, SearchUserForm
 from peer_support.models import User
 from peer_support.tests.helpers import reverse_with_next
 from django.utils.http import urlencode
@@ -28,9 +29,9 @@ class PeerSelectViewTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'peer_select.html')
-        self.assertIsInstance(response.context['formSort'], SortPeerForm)
-        self.assertIsInstance(response.context['formFilter'], FilterPeerForm)
-        self.assertIsInstance(response.context['formSearch'], SearchPeerForm)
+        self.assertIsInstance(response.context['form_sort'], SortUserForm)
+        self.assertIsInstance(response.context['form_filter'], FilterUserForm)
+        self.assertIsInstance(response.context['form_search'], SearchUserForm)
 
     def test_all_forms_shown(self):
         response = self.client.get(self.url)
@@ -63,7 +64,7 @@ class PeerSelectViewTestCase(TestCase):
         sorted_usernames = [user.username for user in sorted_users]
         manual_sorted_users = sorted_users.order_by('username')
         manual_sorted_usernames = [user.username for user in manual_sorted_users]
-        self.assertEqual(sorted_usernames,manual_sorted_usernames)
+        self.assertEqual(sorted_usernames, manual_sorted_usernames)
 
     def test_search_functionality(self):
         sort_params = {'search': 'jane'}
@@ -76,18 +77,18 @@ class PeerSelectViewTestCase(TestCase):
     def test_invalid_filter_form_submission(self):
         invalid_filter_params = {'gender': 'InvalidGender', 'language': 'xx'}
         response = self.client.get(self.url, invalid_filter_params)
-        self.assertFalse(response.context['formFilter'].is_valid())
+        self.assertFalse(response.context['form_filter'].is_valid())
 
     def test_invalid_sort_form_submission(self):
         invalid_sort_params = {'sort_by': 'InvalidSort'} 
         response = self.client.get(self.url, invalid_sort_params)
-        self.assertFalse(response.context['formSort'].is_valid(), "Form was expected to be invalid but was valid")
+        self.assertFalse(response.context['form_sort'].is_valid(), "Form was expected to be invalid but was valid")
 
     def test_search_max_length_exceeded(self):
         search_term = 'a' * 256  
         invalid_sort_params = {'search': search_term}
         response = self.client.get(self.url, invalid_sort_params)
-        self.assertFalse(response.context['formSearch'].is_valid())
+        self.assertFalse(response.context['form_search'].is_valid())
     
     def test_exclude_user(self):
         response = self.client.get(self.url)
@@ -126,9 +127,3 @@ class PeerSelectViewTestCase(TestCase):
         users = response.context['users']
         for user in users:
             self.assertNotIn(user, self.user.blocked_by.all())
-
-    def test_send_friend_request(self):
-        pass
-
-    def test_card_click_redirects_to_profile(self):
-        pass

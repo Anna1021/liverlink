@@ -15,7 +15,7 @@ class UnblockUserViewTestCase(TestCase):
         self.second_user = User.objects.get(username='@janedoe')
         self.user.blocked_users.add(self.second_user)
         self.url = reverse('unblock_user', args=[self.second_user.id])
-        self.client.login(username=self.user.username, password='Password123')
+        self.client.force_login(self.user)
 
     def test_unblock_user_url(self):
         self.assertEqual(self.url, '/unblock_user/2')

@@ -1,3 +1,4 @@
+"""Unit tests for the helpers view."""
 import uuid
 import datetime
 from django.test import TestCase

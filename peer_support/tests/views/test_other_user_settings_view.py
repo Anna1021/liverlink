@@ -13,7 +13,7 @@ class OtherUserSettingsViewTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
         self.url = reverse('other_user_settings')
-        self.client.login(username=self.user.username, password='Password123')
+        self.client.force_login(self.user)
 
     def test_other_user_settings_url(self):
         self.assertEqual(self.url, '/settings/other_users/')
