@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.alert import Alert
+from peer_support.models import User
 
 class ReplyPageTest(StaticLiveServerTestCase):
     """Unit test of javascript in reply_page view"""
@@ -30,6 +31,11 @@ class ReplyPageTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_reply_form_toggle(self):
+        user = User.objects.get(username='@johndoe')
+        user.friends.set(User.objects.exclude(username='@johndoe'))
+        user.first_login = False
+        user.save()
+        self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         try:
             self.selenium.get(f'{self.live_server_url}/log_in/')
             username_input =self.wait.until(EC.visibility_of_element_located((By.NAME, "username")))
@@ -57,10 +63,7 @@ class ReplyPageTest(StaticLiveServerTestCase):
             self.wait.until(EC.alert_is_present())
             self.selenium.switch_to.alert.accept()
 
-            # # Assert that the response is deleted
-            # my_element_list = self.selenium.find_elements(By.XPATH, "//p[@class='response-body' and contains(text(), 'This is a sample response body.')]")
-            # self.assertFalse(my_element_list, "The response was not deleted as expected.")
+            page_source = self.selenium.page_source
+            self.assertNotIn("This is a sample response body", page_source)
         except TimeoutException as e:
-            self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
-
-            
+            self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
