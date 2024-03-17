@@ -1,12 +1,13 @@
 [
   {
+    "//": "Containts content_type id of message",
     "model": "peer_support.report",
     "pk": 1,
     "fields": {
       "reporter": 8,
       "reason": "spam",
       "reported_at": "2024-03-07T12:00:00Z",
-      "content_type": 18,
+      "content_type": 19,
       "object_id": 1
     }
   }

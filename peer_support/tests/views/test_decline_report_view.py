@@ -4,6 +4,8 @@ from django.urls import reverse
 from django.contrib.messages import get_messages
 from peer_support.models import Report, Message, User
 
+from django.contrib.contenttypes.models import ContentType
+
 class DeclineReportViewTestCase(TestCase):
     """Tests of the decline report view"""
 
