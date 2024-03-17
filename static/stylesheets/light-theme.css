@@ -213,8 +213,7 @@
 .light-theme .apply-btn{
   background-color: #720fe3;
   color: rgb(255, 255, 255);
-  border-color: #720fe3;
- 
+  border-color: #720fe3; 
 }
 
 /*
@@ -301,4 +300,10 @@
 .light-theme .self-bubble{
   float: right;
   background-color: rgb(169, 221, 221);
+}
+
+.light-theme .selected-feed {
+  background-color: rgb(228, 171, 249);
+  border-radius: 5px;
+  color: purple;
 }

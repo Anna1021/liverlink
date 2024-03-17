@@ -225,3 +225,15 @@ border: 1px solid #720fe3;
     font-size: 20px;
     color: #91BBD3;
 }
+
+.dark-theme .apply-btn{
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.dark-theme .selected-feed {
+  background-color: rgb(194, 192, 195);
+  border-radius: 5px;
+  color: #000000;
+}
