@@ -1,23 +1,25 @@
 <li>
-    <p>{{ comment.author }}</p>
-    <p>{{ comment.content }}</p>
+    <div class="card-body post-card">
+        <p>{{ comment.author }}</p>
+        <p>{{ comment.content }}</p>
 
-    <!-- Reply form for each comment -->
-    <form method="post" action="{% url 'post_detail' post_id=post.id %}">
-        {% csrf_token %}
-        <input type="hidden" name="parent_id" value="{{ comment.id }}">
-        {{ comment_form.as_p }}
-        <button type="submit">Reply</button>
-    </form>
+        <!-- Reply form for each comment -->
+        <form method="post" action="{% url 'post_detail' post_id=post.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+            {{ comment_form.as_p }}
+            <button class="btn btn-primary" type="submit">Reply</button>
+        </form>
 
-    <!-- Display replies to the comment -->
-    <blockquote class="post-comment-container">
-        <ul>
-            {% for reply in comment.get_replies %}
-                <li>
-                    {% include 'components/reply.html' with comment=reply %}
-                </li>
-            {% endfor %}
-        </ul>
-    </blockquote>
+        <!-- Display replies to the comment -->
+        <blockquote class="post-comment-container">
+            <ul>
+                {% for reply in comment.get_replies %}
+                    <li>
+                        {% include 'components/reply.html' with comment=reply %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </blockquote>
+    </div>
 </li>

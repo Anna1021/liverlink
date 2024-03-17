@@ -7,11 +7,11 @@
 }
 
 .post-card{
-    background-color: rgb(139, 181, 218);
+    background-color: #2E2D38;
     border-radius: 10px;
-    color:black;
+    color:white;
     margin: 5px;
-    padding: 5px;
+    padding: 10px;
 }
 
 
