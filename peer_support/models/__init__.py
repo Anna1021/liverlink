@@ -4,6 +4,8 @@ from .user_model import User
 from .parent_model import Parent
 from .patient_model import Patient
 from .message_model import Message
+from .post_model import Post
+from .post_comment_model import PostComment
 from .conversation_model import Conversation
 from .user_profile_model import UserProfile
 from .notification_model import Notification

@@ -35,4 +35,3 @@ class LogInView(LoginProhibitedMixin, View):
 
         form = LogInForm()
         return render(self.request, 'log_in.html', {'form': form, 'next': self.next})
-

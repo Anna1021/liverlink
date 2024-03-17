@@ -1,17 +1,18 @@
 <div class="modal fade" id="deactivate_user" tabindex="-1" aria-labelledby="deactivate_user" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-        <form action="{% url 'deactivate_user' %}" method="post">
-        {% csrf_token %}
-        <div class="modal-header">
-            <h1 class="modal-title fs-5" id="deactivate_user">Do you really want to deactivate your profile?</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content">
+            <form action="{% url 'deactivate_user' %}" method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deactivate_user">Do you really want to deactivate your profile?
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" value="Deactivate" class="btn btn-danger"></input>
+                </div>
+            </form>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <input type="submit" value="Deactivate" class="btn btn-danger"></input>
-        </div>
-        </form>
     </div>
-    </div>
-  </div>
+</div>

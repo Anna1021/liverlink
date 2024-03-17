@@ -18,7 +18,7 @@
   </blockquote>
 
   {% for children in response.get_responses %}
-  {% include 'components/response.html' with response=children %}
+  {% include 'partials/response.html' with response=children %}
   {% endfor %}
 
 </blockquote>

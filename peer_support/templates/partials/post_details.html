@@ -1,0 +1,15 @@
+<div class="card-header">
+    <a href="{% url 'profile' post.author.username %}">
+        <h4 style="color:white" class="font-weight-bold">{{ post.author }}</h3>
+    </a>
+</div>
+<div class="card-body">
+    <p>{{ post.text }}</p>
+    <p>{{ post.created_at }}</p>
+    {% if post.author == request.user %}
+        <a href="{% url 'delete_post' post_id=post.id %}" class="btn btn-danger">Delete</a>
+    {% endif %}
+    {% if from_feed %}
+        <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info">View Post</a>
+    {% endif %}
+</div>

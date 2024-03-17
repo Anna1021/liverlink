@@ -10,60 +10,68 @@
         </h3>
     </div>
     <div class="col-md-3">
-        <a class="nav-link" href="#" id="conversation-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link" href="#" id="conversation-dropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
             <span class="bi-info-circle"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-account-dropdown">
             {% if conversation.as_group != None %}
-                <li><a class="dropdown-item" href="{% url 'conversation_details' conversation.id %}">View group details</a></li>
+            <li><a class="dropdown-item" href="{% url 'conversation_details' conversation.id %}">View group details</a>
+            </li>
             {% else %}
-                <li>
+            <li>
                 {% if user == conversation.get_first_member %}
-                    <a class="dropdown-item" href="{% url 'profile' conversation.get_second_member.username %}">
-                {% else %}
+                <a class="dropdown-item" href="{% url 'profile' conversation.get_second_member.username %}">
+                    {% else %}
                     <a class="dropdown-item" href="{% url 'profile' conversation.get_first_member.username %}">
-                {% endif %}
-                View user details</a></li>
+                        {% endif %}
+                        View user details</a>
+            </li>
             {% endif %}
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'delete_conversation' conversation.id %}">Delete conversation</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="{% url 'delete_conversation' conversation.id %}">Delete conversation</a>
+            </li>
         </ul>
     </div>
 
 </div>
 <div>
     <div id="conversation">
-    {% for message in conversation.messages.all %}
+        {% for message in conversation.messages.all %}
         {% if user in message.visible_to.all %}
-            {% if message.sender == user %} 
-                <div class="row message-bubble self-bubble"> 
+        {% if message.sender == user %}
+        <div class="row message-bubble self-bubble">
             {% else %}
-                <div class="row message-bubble other-bubble">
-                    <a href="{% url 'profile' message.sender.username %}" class="notranslate self-sender">{% sender_if_applicable message user conversation %}</a>
-            {% endif %}
+            <div class="row message-bubble other-bubble">
+                <a href="{% url 'profile' message.sender.username %}" class="notranslate self-sender">
+                    {%sender_if_applicable message user conversation %}</a>
+                {% endif %}
                 <div class="col-md-10">
-                    <div {% if message.sender in user.blocked_users.all %} data-text="{{message.content}}" name="blocked-message" class="text-muted" {% endif %}>{{ message.content }}</div>
+                    <div {% if message.sender in user.blocked_users.all %} data-text="{{message.content}}"
+                        name="blocked-message" class="text-muted" {% endif %}>{{ message.content }}</div>
                 </div>
                 {% include 'partials/message_menu.html' %}
             </div>
-        {% endif %}
-    {% empty %}
-        Type out your first message in the box below!
-    {% endfor %}
-    </div>
-    <form method="post" {% if blocked_dm %} inert style="opacity: 50%;" {% endif %}>
-        {% if blocked_dm %}
-        <div style="opacity: 50%;">You can no longer send messages to this user.</div>
-        {% endif %}
-        {% csrf_token %}
-        {{ message_form.content }}
-        <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
-    </form>
-    {% else %}
+            {% endif %}
+            {% empty %}
+            Type out your first message in the box below!
+            {% endfor %}
+        </div>
+        <form method="post" {% if blocked_dm %} inert class="inactive-form" {% endif %}>
+            {% if blocked_dm %}
+            <div class="inactive-form">You can no longer send messages to this user.</div>
+            {% endif %}
+            {% csrf_token %}
+            {{ message_form.content }}
+            <button type="submit"><i class="bi bi-arrow-right-square-fill"></i></button>
+        </form>
+        {% else %}
         Pick a conversation or start a new conversation!
-    {% endif %}
-</div>
+        {% endif %}
+    </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="{% static 'js/conversation.js' %}"></script>
-{% endblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'js/conversation.js' %}"></script>
+  {% endblock %}

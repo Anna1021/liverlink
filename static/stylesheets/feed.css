@@ -1,0 +1,17 @@
+#feed-container{
+    width: 600px;
+}
+
+.selected-feed{
+    background-color: rgb(246, 229, 252);
+}
+
+.post-card{
+    background-color: #2E2D38;
+    border-radius: 10px;
+    color:white;
+    margin: 5px;
+    padding: 10px;
+}
+
+

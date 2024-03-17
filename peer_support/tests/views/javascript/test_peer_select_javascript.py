@@ -6,9 +6,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from peer_support.models import User
 
 class PeerSelectJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in peer_select view"""
+
     fixtures = ['peer_support/tests/fixtures/default_user.json']
 
     @classmethod
@@ -28,7 +30,9 @@ class PeerSelectJavascriptTest(StaticLiveServerTestCase):
 
     def test_dynamic_form_peer_select(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        
+        user = User.objects.get(username='@johndoe')
+        user.first_login = False
+        user.save()
         try:
             username_input = self.wait.until(EC.element_to_be_clickable((By.NAME, "username")))
             username_input.send_keys('@johndoe')
@@ -36,9 +40,7 @@ class PeerSelectJavascriptTest(StaticLiveServerTestCase):
             password_input.send_keys('Password123')
             self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
             self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]"))).click()
-    
-            dropdown_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@id='dropdownMenuButton']")))
-            dropdown_button.click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@id='dropdownMenuButton']"))).click()
 
             patient_checkbox = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@type="checkbox" and @value="PT"]')))
             if not patient_checkbox.is_selected():

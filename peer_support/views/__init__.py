@@ -1,6 +1,5 @@
 """Views for the tasks app."""
 
-from .dashboard_view import dashboard
 from .home_view import home
 from .log_in_view import LogInView
 from .log_out_view import log_out
@@ -12,16 +11,16 @@ from .sign_up_view import SignUpView
 from .view_mixins import LoginProhibitedMixin
 from .profile_deactivate_view import deactivate_user
 from .conversation_view import ConversationView
-from .peer_select_view import PeerView
+from .peer_select_view import PeerSelectView
 from .create_conversation_view import CreateConversationView
 from .delete_message_view import DeleteMessageView
-from .new_question_page_view import newQuestionPage
-from .reply_page_view import reply_page
+from .new_question_page_view import new_question_page
+from .reply_page_view import ReplyPageView
 from .resources_view import resources
-from .question_page_view import question_page
+from .question_page_view import QuestionPageView
 from .send_friend_request_view import SendFriendRequestView
 from .accept_friend_request_view import AcceptFriendRequestView
-from .friends_list_view import friends_list
+from .friends_list_view import FriendsListView
 from .other_user_settings_view import OtherUserSettingsView
 from .block_user_view import BlockUserView
 from .unblock_user_view import UnblockUserView
@@ -29,13 +28,16 @@ from .profile_view import ProfileView
 from .inbox_view import InboxView
 from .delete_notification_view import delete_notification
 from .clear_notifications_view import clear_notifications
+
+from .post_view import PostView
+from .delete_post_view import DeletePostView
+from .feed_view import FeedView
 from .conversation_details_view import ConversationDetailsView
 from .remove_friend_view import remove_friend
 from .moderation_view import ModerationView
-from .accept_report_view import accept_report
-from .decline_report_view import decline_report
+from .accept_report_view import AcceptReportView
+from .decline_report_view import DeclineReportView
 from .leave_conversation_view import LeaveConversationView
-from .get_conversation_view import GetConversationView
 from .information_view import InformationView
 from .delete_conversation_view import DeleteConversationView
 from .submit_feedback_view import SubmitFeedbackView
