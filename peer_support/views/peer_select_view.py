@@ -12,13 +12,13 @@ class PeerSelectView(LoginRequiredMixin, View):
 
     def get(self, request):
         users = get_addable_peers(request.user)
-        users_with_types = [{'user': user, 'user_type': get_user_type(user)} for user in users]
         form_search = SearchUserForm(data=request.GET)
         form_sort = SortUserForm(data=request.GET)
         form_filter = FilterUserForm(data=request.GET)
         users = self.process_search(users, form_search)
         users = self.process_filter(users, form_filter)
         users = self.process_sort(users, form_sort, request.user)
+        users_with_types = [{'user': user, 'user_type': get_user_type(user)} for user in users]
         context = {'users': users_with_types, 'form_sort': form_sort, 'form_filter': form_filter, 'form_search': form_search}
         return render(request, self.template_name, context)
         

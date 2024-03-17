@@ -12,9 +12,9 @@ class FriendsListView(LoginRequiredMixin, View):
         """Display the list of friends."""
 
         friends = request.user.friends.all()
-        friends_with_types = [{'friend': friend, 'user_type': get_user_type(friend)} for friend in friends]
         form_search, form_sort, form_filter = self.get_forms(request)
         friends = self.process_forms(friends, form_search, form_sort, form_filter, request.user)
+        friends_with_types = [{'friend': friend, 'user_type': get_user_type(friend)} for friend in friends]
         context = {'friends': friends_with_types, 'form_sort': form_sort, 'form_filter': form_filter, 'form_search': form_search}
         return render(request, 'friends_list.html', context)
         
