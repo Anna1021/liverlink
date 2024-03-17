@@ -1,8 +1,10 @@
+"""Unit tests of the question form."""
 from django.test import TestCase
 from peer_support.forms import NewQuestionForm
 
-class QuestionFormTest(TestCase):
-    """Unit tests of the Question form."""
+class QuestionFormTestCase(TestCase):
+    """Unit tests of the question form."""
+
     def setUp(self):
         self.form_input = {
             'title': 'Test Question',
@@ -12,6 +14,7 @@ class QuestionFormTest(TestCase):
     def test_valid_sign_up_form(self):
         form = NewQuestionForm(data=self.form_input)
         self.assertTrue(form.is_valid())
+        
     def test_new_question_form_no_data(self):
         form = NewQuestionForm(data={})
         self.assertFalse(form.is_valid())

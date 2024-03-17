@@ -49,24 +49,15 @@ class ConversationJavascriptTest(StaticLiveServerTestCase):
         try:
             username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
             username_input.send_keys('@janedoe')
-
             password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "password")))
             password_input.send_keys('Password123')
-            
-            login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
-            login_button.click()
-
-            messages_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Messages')]")))
-            messages_button.click()
-
-            user_link = self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "@petrapickles")))
-            user_link.click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Messages')]"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "@petrapickles"))).click()
 
             hidden_message = self.wait.until(EC.presence_of_element_located((By.NAME, "blocked-message")))
-
             self.assertEqual("You have blocked this user. Click to reveal text.", hidden_message.get_attribute("innerHTML"))
             self.assertEqual("text-muted", hidden_message.get_attribute("class"))
-
             hidden_message.click()
 
             self.assertEqual(hidden_message.get_attribute("data-text"), hidden_message.get_attribute("innerHTML"))

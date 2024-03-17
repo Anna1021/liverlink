@@ -1,5 +1,6 @@
 [
   {
+    "//": "This is a patient",
     "model": "peer_support.user",
     "pk": 2,
     "fields": {
@@ -20,6 +21,7 @@
     }
   },
   {
+    "//": "This is a patient",
     "model": "peer_support.user",
     "pk": 3,
     "fields": {
@@ -40,6 +42,7 @@
     }
   },
   {
+    "//": "This is a patient",
     "model": "peer_support.user",
     "pk": 4,
     "fields": {
@@ -59,6 +62,7 @@
     }
   },
   {
+    "//": "This is a parent",
     "model": "peer_support.user",
     "pk": 5,
     "fields": {
@@ -76,6 +80,7 @@
     }
   },
   {
+    "//": "This is a parent",
     "model": "peer_support.user",
     "pk": 6,
     "fields": {
@@ -93,6 +98,7 @@
     }
   },
   {
+    "//": "This is a parent",
     "model": "peer_support.user",
     "pk": 7,
     "fields": {
@@ -106,6 +112,60 @@
       "location": "EG",
       "ethnicity": "AR",
       "bio": "Entrepreneur and public speaker. Passionate about innovation in finance.",
+      "is_active": true
+    }
+  },
+  {
+    "//": "This is a mentor",
+    "model": "peer_support.user",
+    "pk": 8,
+    "fields": {
+      "first_name": "Linda",
+      "last_name": "Johnson",
+      "username": "@lindajohnson",
+      "email": "lindajohnson@example.com",
+      "password": "pbkdf2_sha256$260000$HJk5pE3XQ8D7FusvEjxZsZ$MnT6vcKdZ6Hzgj8e7bHgPOmZhEgH8Kbnm5sE2YPQlci=",
+      "date_of_birth": "1992-07-18",
+      "gender": "F",
+      "location": "NZ",
+      "ethnicity": "OW",
+      "bio": "Nature enthusiast and professional photographer based in Wellington.",
+      "is_active": true
+    }
+  },
+  {
+    "//": "This is a mentor",
+    "model": "peer_support.user",
+    "pk": 9,
+    "fields": {
+      "first_name": "Carlos",
+      "last_name": "Martinez",
+      "username": "@carlosmartinez",
+      "email": "carlosmartinez@example.com",
+      "password": "pbkdf2_sha256$260000$XMj8PSOmJvD9kQERjBl1Pd$eKQk0iNl3Fw4OxGdG3zBwQi4KQiE4C5N3ThPnZ8Mjl4=",
+      "date_of_birth": "1985-04-23",
+      "gender": "M",
+      "location": "MX",
+      "ethnicity": "LA",
+      "bio": "Digital marketing expert and part-time blogger.",
+      "is_active": true
+    }
+  },
+  {
+    "//": "This is a mentor",
+    "model": "peer_support.user",
+    "pk": 10,
+    "fields": {
+      "first_name": "Raj",
+      "last_name": "Patel",
+      "username": "@rajpatel",
+      "email": "rajpatel@example.com",
+      "password": "pbkdf2_sha256$260000$2gkLPX3uW6D8KBRFpZj3He$AdW1o5y2Kz8VIHn9hWQ4aGVZjH8v5VZUOILJSBXkIc4=",
+      "date_of_birth": "1996-11-30",
+      "gender": "M",
+      "location": "IN",
+      "ethnicity": "AS",
+      "bio": "Tech enthusiast and startup founder. Loves to talk about AI and ML.",
       "is_active": true
     }
   }

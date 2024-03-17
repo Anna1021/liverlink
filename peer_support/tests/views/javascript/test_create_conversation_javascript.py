@@ -10,6 +10,7 @@ from selenium.common.exceptions import TimeoutException
 
 class CreateConversationJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in peer_select view"""
+    
     fixtures = ['peer_support/tests/fixtures/default_user.json',
                 'peer_support/tests/fixtures/other_users.json',
                 'peer_support/tests/fixtures/default_conversation.json',
@@ -36,24 +37,19 @@ class CreateConversationJavascriptTest(StaticLiveServerTestCase):
     def test_dynamic_button_disabling(self):
         user = User.objects.get(username='@johndoe')
         user.friends.set(User.objects.exclude(username='@johndoe'))
+        user.first_login = False
+        user.save()
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         try:
             username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
             username_input.send_keys('@johndoe')
             password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "password")))
             password_input.send_keys('Password123')
-            login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
-            login_button.click()
-
-            messages_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Messages')]")))
-            messages_button.click()
-
-            create_conversation_link = self.wait.until(
-                EC.element_to_be_clickable((By.XPATH, "//a[@href='/create_conversation/']")))
-            create_conversation_link.click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Messages')]"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/create_conversation/']"))).click()
 
             direct_button = self.wait.until(EC.presence_of_element_located((By.XPATH, '//button[@id="direct"]')))
-
             group_button = self.wait.until(EC.presence_of_element_located((By.XPATH, '//button[@id="group"]')))
 
             self.assertFalse(direct_button.is_enabled())

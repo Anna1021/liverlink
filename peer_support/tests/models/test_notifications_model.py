@@ -43,6 +43,7 @@ class NotificationModelTestCase(TestCase):
         self.notification.description = 'x' * 1001
         self._assert_notification_is_invalid()
 
+
     def test_created_defaults_to_now(self):
         self.notification.save()
         self.assertIsNotNone(self.notification.created)
@@ -60,6 +61,7 @@ class NotificationModelTestCase(TestCase):
     def test_friend_request_can_be_blank(self):
         self.notification.friend_request = None
         self._assert_notification_is_valid()
+        
 
     def _assert_notification_is_valid(self):
         self.notification.full_clean()

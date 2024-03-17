@@ -6,23 +6,28 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from peer_support.models import User
+from selenium.webdriver.chrome.service import Service
 
 class CustomisationJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in customisation view"""
+
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/default_patient.json',
         'peer_support/tests/fixtures/default_user_profile.json'
     ]
+    
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
         options.add_argument("--headless") 
-        options.add_argument("--window-size=1920,1080") 
-        cls.selenium = WebDriver(options=options)
+        options.add_argument("--window-size=1920,1080")
+        cls.selenium = WebDriver(service=Service(), options=options)
+        cls.selenium.maximize_window()
         cls.selenium.implicitly_wait(40)
-        cls.wait = WebDriverWait(cls.selenium, 40)
+        cls.wait=WebDriverWait(cls.selenium, 20)
         
     @classmethod
     def tearDownClass(cls):
@@ -31,25 +36,24 @@ class CustomisationJavascriptTest(StaticLiveServerTestCase):
 
     def test_dynamic_button_disabling(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
+        user = User.objects.get(username='@johndoe')
+        user.first_login = False
+        user.save()
         try:
-            username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
-            username_input.send_keys('@johndoe')
-            password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "password")))
-            password_input.send_keys('Password123')
-            login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
-            login_button.click()
+            self.wait.until(EC.element_to_be_clickable((By.NAME, "username"))).send_keys('@johndoe')
+            self.wait.until(EC.element_to_be_clickable((By.NAME, "password"))).send_keys('Password123')
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
             self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@id='user-account-dropdown']/span"))).click()
             self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Settings"))).click()
             self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Customisation"))).click()
-            selected_picture = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//div[5]/div/img")))
+            selected_picture = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//img[@alt='Profile Picture']")))
             selected_picture.click()
             
             selected_picture_parent = selected_picture.find_element(By.XPATH, "..") 
             self.assertTrue("picture-selected" in selected_picture_parent.get_attribute("class"), "Selected picture does not have the expected 'picture-selected' class.")
             update_button = self.wait.until(EC.element_to_be_clickable((By.ID, "update-button")))
             self.selenium.execute_script("arguments[0].click();", update_button)
-            WebDriverWait(self.selenium, 10).until(EC.alert_is_present(),
-                                                    "Timed out waiting for profile picture update confirmation alert.")
+            self.wait.until(EC.alert_is_present(),"Timed out waiting for profile picture update confirmation alert.")
             alert = self.selenium.switch_to.alert
             self.assertEqual("Profile picture updated successfully!", alert.text)
         except TimeoutException as e:

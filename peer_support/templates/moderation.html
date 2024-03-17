@@ -1,30 +1,10 @@
 {% extends 'dashboard.html' %}
 {% block page %}
 {% load static %}
-<h1>Reports</h1>
-{% for report in reports %}
-<div class="notification-list d-flex justify-content-between">
-    <div class="notification-list_content">
-        <div class="notification-list_detail">
-            <p>Reason: {{ report.reason }}</p>
-            <p>Reported At: {{ report.reported_at }}</p>
-            <p>Content Type: {{ report.content_type }}</p>
-            {% if report.content_type.model == "message" %}
-                <p>Reported Content: {{ report.content_object.content }}</p>
-            {% elif report.content_type.model == "user" %}
-                <p>Reported User: <a href="{% url 'profile' report.content_object.username %}">{{ report.content_object.username }}</a></p>
-            {% else %}
-                <p>Reported Content: Special case not handled.</p>
-            {% endif %}
-        </div>
-    </div>
-    <div class="d-flex align-items-center">
-        <button class="btn btn-success accept-request" onclick="window.location.href='/accept_report/{{report.id}}';"><i class="bi bi-check"></i></button>
-            &nbsp;
-        <button class="btn btn-danger decline" onclick="window.location.href='/decline_report/{{ report.id }}';"><i class="bi bi-x"></i></button>
-    </div>
-</div>
-{% empty %}
-    <p>No reports found.</p>
-{% endfor %}
+    <h1>Reports</h1>
+    {% for report in reports %}
+        {% include "partials/report.html" %}
+    {% empty %}
+        <p>No reports found.</p>
+    {% endfor %}
 {% endblock %}

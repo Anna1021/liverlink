@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from peer_support.models import *
+from peer_support.models import Conversation, FriendRequest, Message, Notification, Question, Response, User
 
 class Command(BaseCommand):
     """Build automation command to unseed the database."""

@@ -277,21 +277,21 @@ HOSPITAL_CHOICES = [
 ]
 
 THEME_CHOICES = [
-('DF', 'Default theme'),
-('LM', 'Light mode'),
-('DM', 'Dark mode'),
+    ('DF', 'Default theme'),
+    ('LM', 'Light mode'),
+    ('DM', 'Dark mode'),
 ]
 
 FONT_CHOICES = [
-('DF', 'Default font'),
-('AR', 'Arial'),
-('CA', 'Calibri'),
+    ('DF', 'Default font'),
+    ('AR', 'Arial'),
+    ('CA', 'Calibri'),
 ]
 
 FONT_SIZE_CHOICES = [
-('DF', 'Default size'),
-('LG', 'Large'),
-('XL', 'Extra large'),
+    ('DF', 'Default size'),
+    ('LG', 'Large'),
+    ('XL', 'Extra large'),
 ]
 
 PROFILE_PICTURE_CHOICES = ['profile_pictures/' + os.path.basename(x) for x in glob.glob("static/profile_pictures/*")]

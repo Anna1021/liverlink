@@ -11,8 +11,6 @@ class UserModelTestCase(TestCase):
         'peer_support/tests/fixtures/other_users.json',
     ]
 
-    GRAVATAR_URL = "https://www.gravatar.com/avatar/363c1b0cd64dadffb867236a00e62986"
-
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
 
@@ -257,6 +255,10 @@ class UserModelTestCase(TestCase):
         self.user.conversations.clear()
         self._assert_user_is_valid()
 
+
+    def test_first_login_defaults_to_true(self):
+        self.assertTrue(self.user.first_login)
+
     
     def test_full_name_must_be_correct(self):
         full_name = self.user.full_name()
@@ -307,27 +309,6 @@ class UserModelTestCase(TestCase):
         self.user.language = None
         language_name = self.user.language_name()
         self.assertEqual(language_name, "")
-
-
-    def test_default_gravatar(self):
-        actual_gravatar_url = self.user.gravatar()
-        expected_gravatar_url = self._gravatar_url(size=120)
-        self.assertEqual(actual_gravatar_url, expected_gravatar_url)
-
-    def test_custom_gravatar(self):
-        actual_gravatar_url = self.user.gravatar(size=100)
-        expected_gravatar_url = self._gravatar_url(size=100)
-        self.assertEqual(actual_gravatar_url, expected_gravatar_url)
-
-    def test_mini_gravatar(self):
-        actual_gravatar_url = self.user.mini_gravatar()
-        expected_gravatar_url = self._gravatar_url(size=60)
-        self.assertEqual(actual_gravatar_url, expected_gravatar_url)
-
-    def _gravatar_url(self, size):
-        gravatar_url = f"{UserModelTestCase.GRAVATAR_URL}?size={size}&default=mp"
-        return gravatar_url
-
 
     def _assert_user_is_valid(self):
         try:
