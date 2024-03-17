@@ -4,7 +4,7 @@ from .form_choices import SORT_USER_CHOICES
 class SortUserForm(forms.Form):
     """Form enabling the sorting of users"""
 
-    sort_by = forms.ChoiceField(choices=SORT_USER_CHOICES,required=False,label="Sort by")
+    sort_by = forms.ChoiceField(choices=SORT_USER_CHOICES, required=False,label="Sort by")
     
     def sort_by_username(self, users, order):
         return users.order_by(order + 'username')
@@ -45,8 +45,8 @@ class SortUserForm(forms.Form):
         score = 0
         weighting_types = {"user_type":1,"age":0.4,"hospital":1,"age_of_diagnosis":0.2,"condition":1,
                      "child_age_of_diagnosis":0.2,"child_condition":1}
-        score = self.calculate_user_type_score(current_user,other_user,weighting_types,score)
-        score = self.calculate_age_score(current_user,other_user,weighting_types,score)
+        score = self.calculate_user_type_score(current_user, other_user, weighting_types,score)
+        score = self.calculate_age_score(current_user, other_user, weighting_types,score)
         weighting_user = {"gender": 0.2, "language": 0.9, "ethnicity": 0.2, "location": 1, "hospital": 1,}
         matches = {
             attribute: getattr(current_user, attribute, None) == getattr(other_user, attribute, None)
@@ -54,7 +54,7 @@ class SortUserForm(forms.Form):
         score += sum(weight for attribute, weight in weighting_user.items() if matches[attribute])
         return score
 
-    def calculate_age_score(self,current_user,other_user,weighting,score):
+    def calculate_age_score(self, current_user, other_user, weighting, score):
         """Calclates score based on age proximity"""
 
         age_difference = abs(current_user.date_of_birth.year - other_user.date_of_birth.year)

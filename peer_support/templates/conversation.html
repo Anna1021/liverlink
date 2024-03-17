@@ -59,9 +59,9 @@
             Type out your first message in the box below!
             {% endfor %}
         </div>
-        <form method="post" {% if blocked_dm %} inert style="opacity: 50%;" {% endif %}>
+        <form method="post" {% if blocked_dm %} inert class="inactive-form" {% endif %}>
             {% if blocked_dm %}
-            <div style="opacity: 50%;">You can no longer send messages to this user.</div>
+            <div class="inactive-form">You can no longer send messages to this user.</div>
             {% endif %}
             {% csrf_token %}
             {{ message_form.content }}
