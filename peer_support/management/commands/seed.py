@@ -1,10 +1,6 @@
 from django.core.management.base import BaseCommand
-
-import time
-
 from peer_support.models import *
 import uuid
-
 from faker import Faker
 from random import randint
 import random
@@ -84,7 +80,6 @@ class Command(BaseCommand):
     MENTOR_COUNT = 100
     FRIEND_REQUEST_COUNT = 100
     NOTIFICATION_COUNT = 500
-    MESSAGE_COUNT = 1000
     CONVERSATION_COUNT = 500
     QUESTION_COUNT = 250
     RESPONSE_COUNT = 1000
@@ -151,7 +146,6 @@ class Command(BaseCommand):
 
     def create_messages(self):
         self.generate_message_fixtures()
-        # self.generate_random_messages()
 
     def create_conversations(self):
         self.generate_conversation_fixtures()
@@ -249,16 +243,6 @@ class Command(BaseCommand):
             notification_count = Notification.objects.count()
         print("Notification seeding complete.      ")
 
-    # Can probably be deleted
-    # Left it for now just in case
-    def generate_random_messages(self):
-        message_count = Message.objects.count()
-        while message_count < self.MESSAGE_COUNT:
-            print(f"Seeding message {message_count}/{self.MESSAGE_COUNT}", end='\r')
-            self.generate_message()
-            message_count = Message.objects.count()
-        print("Message seeding complete.      ")
-
     def generate_random_conversations(self):
         conversation_count = Conversation.objects.count()
         while conversation_count < self.CONVERSATION_COUNT:
@@ -352,14 +336,7 @@ class Command(BaseCommand):
         user = {'username': user.username}
         self.try_create_notification({'title': title, 'description': description, 'user': user, 'friend_request': friend_request})
 
-    def generate_message(self):
-        sender = self.users[randint(0, len(self.users) - 1)]
-        content = self.faker.text(max_nb_chars=100)
-        self.try_create_message({'sender': sender, 'content': content})
-
     def generate_conversation(self):
-        # Seems to generate conversation data just fine
-        # But breaks when trying to create a message
         users = [self.users[randint(0, len(self.users) - 1)], self.users[randint(0, len(self.users) - 1)]]
         users = {'usernames': [user.username for user in users]}
         messages = []
@@ -388,8 +365,7 @@ class Command(BaseCommand):
     def generate_report(self):
         reporter = self.users[randint(0, len(self.users) - 1)]
         reason = self.faker.random_element(elements=(tuple(report[0] for report in REPORT_CHOICES)))
-        content_type = self.faker.random_element(elements=('user', 'message')) # What other content type can we have?
-        # content_type can be any object in the database
+        content_type = self.faker.random_element(elements=('user', 'message'))
         object_id = self.get_content_type(content_type).model_class().objects.order_by('?').first().pk
         reporter = {'username': reporter.username}
         self.try_create_report({'reporter': reporter, 'reason': reason, 'content_type': content_type, 'object_id': object_id})
