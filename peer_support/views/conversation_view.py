@@ -56,8 +56,8 @@ class ConversationView(LoginRequiredMixin, FormView):
         if not message_id or message_id=="0":
             return self.next_message(request,conversation,message_id)
         if conversation.messages.filter(id=message_id).count()==0:
-            visible_messages = list(self.get_visible_messages(request.user,conversation).filter(id__gte=message_id))
-            return visible_messages[-1].id
+            visible_messages = self.get_visible_messages(request.user,conversation).filter(id__gte=message_id)
+            return visible_messages.last() or 0
         return message_id
 
     def next_message(self,request,conversation,message_id):
