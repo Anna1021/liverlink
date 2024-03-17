@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
 
+import time
+
 from peer_support.models import *
 import uuid
 
@@ -361,7 +363,7 @@ class Command(BaseCommand):
         users = [self.users[randint(0, len(self.users) - 1)], self.users[randint(0, len(self.users) - 1)]]
         users = {'usernames': [user.username for user in users]}
         messages = []
-        for _ in range(randint(1, 10)):
+        for _ in range(randint(1, 15)):
             sender = users['usernames'][randint(0, len(users['usernames']) - 1)]
             content = self.faker.text(max_nb_chars=100)
             message = {'sender': sender, 'content': content}
@@ -485,19 +487,21 @@ class Command(BaseCommand):
         Notification.objects.create(**data)
 
     def create_message(self, data):
-        data['sender'] = self.get_user(data['sender'])
+        data['sender'] = self.get_user({'username':data['sender']})
         message = Message.objects.create(**data)
         return message
 
     def create_conversation(self, data):
         users = [self.get_user({'username': username}) for username in data['users']['usernames']]
         conversation = Conversation.objects.create()
-        for message in data['messages']:
-            message['sender'] = self.get_user(message['sender']) # BREAKS HERE I THINK
         message_objects = [self.create_message(message) for message in data['messages']]
+        for message_object in message_objects:
+            message_object.visible_to.set(users)
         conversation.users.set(users)
         conversation.messages.set(message_objects)
         conversation.save()
+        for user in users:
+            user.conversations.add(conversation)
 
     def create_question(self, data):
         data['author'] = self.get_user(data['author'])
