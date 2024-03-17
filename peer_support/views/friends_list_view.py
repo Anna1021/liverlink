@@ -7,6 +7,26 @@ from django.views import View
 class FriendsListView(LoginRequiredMixin, View):
     """Display the list of friends."""
 
+    def get(self, request):
+        """Display the list of friends."""
+
+        friends = request.user.friends.all()
+        friends_with_types = [{'friend': friend, 'user_type': self.get_user_type(friend)} for friend in friends]
+        form_search, form_sort, form_filter = self.get_forms(request)
+        friends = self.process_forms(friends, form_search, form_sort, form_filter, request.user)
+        context = {'friends': friends_with_types, 'form_sort': form_sort, 'form_filter': form_filter, 'form_search': form_search}
+        return render(request, 'friends_list.html', context)
+
+    def get_user_type(self, user):
+        if hasattr(user, 'parent'):
+            return "PARENT"
+        elif hasattr(user, 'patient'):
+            return "PATIENT"
+        elif hasattr(user, 'mentor'):
+            return "MENTOR"
+        else:
+            return "ADMIN"
+        
     def get_forms(self, request):
         """Return the search, sort, and filter forms."""
         
@@ -22,18 +42,6 @@ class FriendsListView(LoginRequiredMixin, View):
         friends = self.process_filter(friends, form_filter)
         friends = self.process_sort(friends, form_sort, user)
         return friends
-
-    def get_context(self, friends, form_sort, form_filter, form_search):
-        return {'friends': friends, 'form_sort': form_sort, 'form_filter': form_filter, 'form_search': form_search}
-
-    def get(self, request):
-        """Display the list of friends."""
-
-        friends = request.user.friends.all()
-        form_search, form_sort, form_filter = self.get_forms(request)
-        friends = self.process_forms(friends, form_search, form_sort, form_filter, request.user)
-        context = self.get_context(friends, form_sort, form_filter, form_search)
-        return render(request, 'friends_list.html', context)
 
     def process_search(self, users, form_search):
         """Process search form."""

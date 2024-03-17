@@ -1,6 +1,10 @@
 {% load static %}
 <div class="col-md-6 my-2">
-    <div class="friend-inner-card">
+    {% if friend.user_type == 'MENTOR' %}
+        <div class="mentor-friend-inner-card">
+    {% else %}
+        <div class="friend-inner-card">
+    {% endif %}
         <div class="friend-card-body">
             <div class="media align-items-center">
                 <img src="{% static user.userprofile.profile_picture %}" alt="Profile Picture" class="rounded-circle friend-profile-picture">
