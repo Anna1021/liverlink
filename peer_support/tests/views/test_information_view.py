@@ -4,7 +4,7 @@ from django.urls import reverse
 from peer_support.models import User
 from peer_support.tests.helpers import reverse_with_next
 
-class InformationViewTest(TestCase):
+class InformationViewTestCase(TestCase):
     """Test suite for the information view."""
 
     fixtures = ['peer_support/tests/fixtures/default_user.json']
@@ -22,16 +22,8 @@ class InformationViewTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_get_request_returns_correct_template(self):
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
         response = self.client.get(self.url)
-
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'information.html')
     
-
-    # def test_get_information_redirects_when_logged_in(self):
-    #     self.client.login(username=self.user.username, password="Password123")
-    #     response = self.client.get(self.url)
-    #     redirect_url = reverse('/information/')
-    #     self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-    #     self.assertTemplateUsed(response, 'information.html')

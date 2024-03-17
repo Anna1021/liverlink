@@ -1,11 +1,10 @@
-import datetime
+"""Unit test of report form"""
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 from peer_support.models import Report, Message, User
 from peer_support.forms import ReportForm
 from django.contrib.contenttypes.models import ContentType
 
-class ReportFormTest(TestCase):
+class ReportFormTestCase(TestCase):
     """Unit test of report form"""
 
     fixtures = [
@@ -16,7 +15,7 @@ class ReportFormTest(TestCase):
     ]
 
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='12345', date_of_birth=datetime.date(1990,1,1))
+        self.user = User.objects.get(username="@johndoe")
         self.object_to_report = Message.objects.first()
         self.form_data = {'reason': 'spam'} 
 

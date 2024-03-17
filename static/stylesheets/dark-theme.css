@@ -60,16 +60,6 @@
     color: white; 
   }
 
-.dark-theme #resources-card, .dark-theme #friend-card {
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  transition: 0.3s;
-  border-radius: 20px; 
-  background-color:var(--dark-main-bg-color);
-  color: white;
-  padding-right: 30px;
-  padding-top: 20px;
-  padding-left: 30px;
-}
 .dark-theme.resources-ul a {
   text-decoration: none;
   color: #ffffff ;
@@ -81,11 +71,11 @@
   font-weight: 700;
 }
 
-.dark-theme #friend-inner-card {
+.dark-theme .friend-inner-card {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 20px;
-  background-color:rgb(46, 45, 56);
+  background-color: #2E2D38;
   color: white;
   padding-right: 30px;
   padding-top: 20px;
@@ -152,7 +142,7 @@
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     border-radius: 20px;
-    background-color: #2e2d38;
+    background-color: var(--dark-main-bg-color);
     color: white;
     padding-right: 30px;
     padding-top: 20px;
@@ -212,4 +202,26 @@ border: 1px solid #720fe3;
 .dark-theme .response-author {
   color: rgb(185, 185, 255);
   font-style: italic;
+}
+
+.dark-theme #dropdown-style {
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+  background-color: var(--dark-main-bg-color);
+  color: white;
+}
+.dark-theme .profile-head h7 {
+  font-size: 15px;
+  color: #91BBD3;
+}
+
+.dark-theme .profile-tab p {
+  font-weight: 600;
+  color: #91BBD3;
+}
+
+.dark-theme .profile-head h6 {
+    font-size: 20px;
+    color: #91BBD3;
 }

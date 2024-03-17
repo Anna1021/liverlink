@@ -64,5 +64,38 @@
             "font": "DF",
             "font_size": "DF"
             }
+    },
+    {
+        "model": "peer_support.userprofile",
+        "pk": 8,
+        "fields": {
+            "user": 8,
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
+            "theme": "DM",
+            "font": "CA",
+            "font_size": "LG"
+        }
+    },
+    {
+        "model": "peer_support.userprofile",
+        "pk": 9,
+        "fields": {
+            "user": 9,
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
+            "theme": "LM",
+            "font": "AR",
+            "font_size": "MD"
+        }
+    },
+    {
+        "model": "peer_support.userprofile",
+        "pk": 10,
+        "fields": {
+            "user": 10,
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
+            "theme": "DF",
+            "font": "DF",
+            "font_size": "SM"
+        }
     }
 ]
