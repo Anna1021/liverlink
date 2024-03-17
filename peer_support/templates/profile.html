@@ -5,9 +5,15 @@
     <form method="post">
         <div class="row">
             <div class="col-md-4">
-                <div class="profile-img">
-                    <img src="{% static user.userprofile.profile_picture %}" alt="User Profile Picture" />
-                </div>
+                {% if user_type == 'MENTOR' %}
+                    <div class="profile-img">
+                        <img src="{% static user.userprofile.profile_picture %}" alt="User Profile Picture" style="border: 7px solid #9656ce;" />
+                    </div>
+                {% else %}
+                    <div class="profile-img">
+                        <img src="{% static user.userprofile.profile_picture %}" alt="User Profile Picture" />
+                    </div>
+                {% endif %}
             </div>
             <div class="col-md-6">
                 <div class="profile-head">
