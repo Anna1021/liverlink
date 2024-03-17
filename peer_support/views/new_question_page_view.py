@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from peer_support.forms import  NewQuestionForm 
+from peer_support.forms import NewQuestionForm 
 
 @login_required
-def newQuestionPage(request):
+def new_question_page(request):
+    """Displays the new question page"""
+    
     form = NewQuestionForm()
     if request.method == 'POST':
         form = NewQuestionForm(request.POST)

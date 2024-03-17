@@ -1,28 +1,21 @@
- {% extends 'base_content.html' %}
+{% extends 'base_content.html' %}
 {% load static %}
-  {% block content %}
-  
-    <div class="container pl-0">
-      <div class="row">
-        <!-- left row -->
-        <div class="col-md-3 mt-2">
-          {%include "partials/left_navbar.html" %}
-        </div>
-        <!-- right row -->
-        <div class="col-md-9 mt-2">
-          <div>
-            {% block page %}
-            {% endblock %}
-          </div>
-        </div>
-      </div>
-    <!-- Modal -->
-    {% if first %} <!-- this needs to go into a different file but I don't know how to do it-->
-      {% include "tutorial.html" %}
-        <script>
-          var myModal = new bootstrap.Modal(document.getElementById('tutorialModal'), {})
-          myModal.show()
-          </script>
-    {% endif %}
+{% block content %}
+<div class="container pl-0">
+  <div class="row">
+    <div class="col-md-3 mt-2">
+      {%include "partials/left_navbar.html" %}
     </div>
-  {% endblock %}
+    <div class="col-md-9 mt-2">
+      <div>
+        {% block page %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+  {% if first %}
+  {% include "tutorial.html" %}
+  <script src="{% static 'js/dashboard.js' %}"></script>
+  {% endif %}
+</div>
+{% endblock %}

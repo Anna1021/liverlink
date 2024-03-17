@@ -1,8 +1,6 @@
 from django.core.management.base import BaseCommand
-
 from peer_support.models import User, Parent, Patient, Mentor, Referral, Notification, Professional
 import uuid
-
 from faker import Faker
 from random import randint
 from peer_support.models.model_choices import *
