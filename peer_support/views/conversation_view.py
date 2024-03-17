@@ -44,7 +44,9 @@ class ConversationView(LoginRequiredMixin, FormView):
         elif action:
             self.handle_report_message(request,conversation_id,action)
         else:
-            self.handle_post_message(request,conversation_id)
+            new_message = self.handle_post_message(request,conversation_id)
+        if new_message and first_message_id=='0':
+            first_message_id = str(new_message.id)
         return redirect(reverse('conversation',kwargs={'conversation_id': conversation_id})+"?first_message="+first_message_id)
 
     def get_visible_messages(self,user,conversation):
@@ -85,7 +87,7 @@ class ConversationView(LoginRequiredMixin, FormView):
         message_form = MessageForm(conversation,data=request.POST,user=request.user)
         blocked_dm = check_blocked_dm(request.user, conversation)
         if message_form.is_valid() and request.user in conversation.users.all() and not blocked_dm:
-            message_form.save()
+            return message_form.save()
         elif blocked_dm:
             messages.error(request,"You cannot message this user.")
         else:
