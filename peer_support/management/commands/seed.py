@@ -1,7 +1,8 @@
 from django.core.management.base import BaseCommand
 
-from peer_support.models import User, Parent, Patient, Mentor, Referral, FriendRequest, Notification, Message, Conversation, Question, Response, Report
+from peer_support.models import *
 import uuid
+
 from faker import Faker
 from random import randint
 import random
@@ -113,8 +114,8 @@ class Command(BaseCommand):
         self.create_messages()
         self.messages = Message.objects.all()
 
-        # self.create_conversations()
-        # self.conversations = Conversation.objects.all()
+        self.create_conversations()
+        self.conversations = Conversation.objects.all()
 
         self.create_questions()
         self.questions = Question.objects.all()
@@ -122,8 +123,8 @@ class Command(BaseCommand):
         self.create_responses()
         self.responses = Response.objects.all()
 
-        self.create_reports()
-        self.reports = Report.objects.all()
+        # self.create_reports()
+        # self.reports = Report.objects.all()
 
     def create_patients(self):
         self.generate_patient_fixtures()
@@ -147,11 +148,11 @@ class Command(BaseCommand):
 
     def create_messages(self):
         self.generate_message_fixtures()
-        self.generate_random_messages()
+        # self.generate_random_messages()
 
-    # def create_conversations(self):
-    #     self.generate_conversation_fixtures()
-    #     self.generate_random_conversations()
+    def create_conversations(self):
+        self.generate_conversation_fixtures()
+        self.generate_random_conversations()
 
     def create_questions(self):
         self.generate_question_fixtures()
@@ -189,9 +190,9 @@ class Command(BaseCommand):
         for data in message_fixtures:
             self.try_create_message(data)
 
-    # def generate_conversation_fixtures(self):
-    #     for data in conversation_fixtures:
-    #         self.try_create_conversation(data)
+    def generate_conversation_fixtures(self):
+        for data in conversation_fixtures:
+            self.try_create_conversation(data)
 
     def generate_question_fixtures(self):
         for data in question_fixtures:
@@ -245,6 +246,7 @@ class Command(BaseCommand):
             notification_count = Notification.objects.count()
         print("Notification seeding complete.      ")
 
+    # Can probably be deleted
     def generate_random_messages(self):
         message_count = Message.objects.count()
         while message_count < self.MESSAGE_COUNT:
@@ -253,13 +255,13 @@ class Command(BaseCommand):
             message_count = Message.objects.count()
         print("Message seeding complete.      ")
 
-    # def generate_random_conversations(self):
-    #     conversation_count = Conversation.objects.count()
-    #     while conversation_count < self.CONVERSATION_COUNT:
-    #         print(f"Seeding conversation {conversation_count}/{self.CONVERSATION_COUNT}", end='\r')
-    #         self.generate_conversation()
-    #         conversation_count = Conversation.objects.count()
-    #     print("Conversation seeding complete.      ")
+    def generate_random_conversations(self):
+        conversation_count = Conversation.objects.count()
+        while conversation_count < self.CONVERSATION_COUNT:
+            print(f"Seeding conversation {conversation_count}/{self.CONVERSATION_COUNT}", end='\r')
+            self.generate_conversation()
+            conversation_count = Conversation.objects.count()
+        print("Conversation seeding complete.      ")
 
     def generate_random_questions(self):
         question_count = Question.objects.count()
@@ -293,7 +295,9 @@ class Command(BaseCommand):
         date_of_birth = self.faker.date_of_birth(minimum_age=16, maximum_age=100)
         gender = self.faker.random_element(elements=(tuple(gender[0] for gender in GENDER_CHOICES)))
         location = self.faker.random_element(elements=(tuple(country[0] for country in COUNTRY_CHOICES)))
-        hospital = self.faker.random_element(elements=(tuple(hospital[0] for hospital in HOSPITAL_CHOICES)))
+        hospital = ""
+        if location == 'GB':
+            hospital = self.faker.random_element(elements=(tuple(hospital[0] for hospital in HOSPITAL_CHOICES)))
         ethnicity = self.faker.random_element(elements=[ethnicity[0] for group in ETHNICITY_CHOICES for ethnicity in group[1]])
         language = self.faker.random_element(elements=(tuple(language[0] for language in LANGUAGE_CHOICES)))
         bio = self.faker.text(max_nb_chars=100)
@@ -322,7 +326,7 @@ class Command(BaseCommand):
         age_of_diagnosis = randint(0, 30)
         referral_code = uuid.uuid4().hex[:10].upper()
         transplant = self.faker.random_element(elements=(tuple(transplant[0] for transplant in TRANSPLANT_CHOICES)))
-        user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'referral_code': referral_code, 'transplant': transplant})
+        user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'referral_code': referral_code, 'transplant': transplant})
         self.try_create_mentor(user_data)
 
     def generate_friend_request(self):
@@ -349,11 +353,17 @@ class Command(BaseCommand):
         content = self.faker.text(max_nb_chars=100)
         self.try_create_message({'sender': sender, 'content': content})
 
-    # def generate_conversation(self):
-    #     users = [self.users[randint(0, len(self.users) - 1)], self.users[randint(0, len(self.users) - 1)]]
-    #     messages = [self.messages[randint(0, len(self.messages) - 1)], self.messages[randint(0, len(self.messages) - 1)]]
-    #     users = {'usernames': [user.username for user in users]}
-    #     self.try_create_conversation({'users': users, 'messages': messages})
+    def generate_conversation(self):
+        users = [self.users[randint(0, len(self.users) - 1)], self.users[randint(0, len(self.users) - 1)]]
+        users = {'usernames': [user.username for user in users]}
+        messages = []
+        for _ in range(randint(1, 10)):
+            sender = users['usernames'][randint(0, len(users['usernames']) - 1)]
+            content = self.faker.text(max_nb_chars=100)
+            sender = {'username': sender}
+            message = {'sender': sender, 'content': content}
+            messages.append(message)
+        self.try_create_conversation({'users': users, 'messages': messages})
 
     def generate_question(self):
         author = self.users[randint(0, len(self.users) - 1)]
@@ -411,15 +421,19 @@ class Command(BaseCommand):
 
     def try_create_message(self, data):
         try:
-            self.create_message(data)
-        except:
-            pass
+            return self.create_message(data)
+        except Exception as e:
+            print(e)
+            # pass
+            
 
-    # def try_create_conversation(self, data):
-    #     # try:
-    #     self.create_conversation(data)
-    #     # except:
-    #     #     pass
+    def try_create_conversation(self, data):
+        try:
+            self.create_conversation(data)
+        except Exception as e:
+            # print(e)
+            # print(data)
+            pass
 
     def try_create_question(self, data):
         try:
@@ -472,12 +486,19 @@ class Command(BaseCommand):
         Notification.objects.create(**data)
 
     def create_message(self, data):
+        data['sender'] = self.get_user(data['sender'])
         message = Message.objects.create(**data)
-        message.save()
+        return message
 
-    # def create_conversation(self, data):
-    #     data['users'] = [self.get_user(user) for user in data['users']]
-    #     Conversation.objects.create()
+    def create_conversation(self, data):
+        users = [self.get_user({'username': username}) for username in data['users']['usernames']]
+        conversation = Conversation.objects.create()
+        conversation.users.set(users)
+        for message in data['messages']:
+            message['sender'] = self.get_user(message['sender'])
+        message_objects = [self.create_message(message) for message in data['messages']]
+        conversation.messages.set(message_objects)
+        conversation.save()
 
     def create_question(self, data):
         data['author'] = self.get_user(data['author'])
@@ -503,6 +524,7 @@ class Command(BaseCommand):
     
     def get_user(self, data):
         return User.objects.get(username=data['username'])
+
     
     def get_content_type(self, model_name):
         return ContentType.objects.get(model=model_name)
