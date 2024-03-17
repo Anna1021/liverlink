@@ -1,0 +1,58 @@
+{% extends 'dashboard.html' %}
+<!-- {% load static %} -->
+{% block page %}
+
+<title>Feed</title>
+
+<div class="row">
+  <div class="col-md-8">
+    <h1 class="card-header">Your feed</h1>
+  </div>
+  <!-- Button to switch between global feed and friends-only feed -->
+  <div class="col-md-4">
+    <form id="feedForm" method="GET">
+      <input type="hidden" name="feed_type" id="feedType" value="{{feed_type}}">
+      <button type="button" id="toggleFeedButton" class="btn btn-primary">
+        <div class="row">
+          <div class="col-md-6 {% if feed_type == 'global' %}selected-feed{% endif %}">Global</div>
+          <div class="col-md-6 {% if feed_type == 'friends' %}selected-feed{% endif %}">Friends</div>
+        </div>
+      </button>
+    </form>
+  </div>
+
+</div>
+
+<button type="button" class="btn btn-light mt-2" id="create-post" data-bs-toggle="modal" data-bs-target="#create_post">Create post</button>
+<div class="modal fade" id="create_post" tabindex="-1" aria-labelledby="create_post" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content card">
+        <div class="modal-header">
+          <h5 class="modal-title">Create a new post</h5>
+          <button type="button" class="btn-close btn-outline-light" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" class="px-4 py-3" novalidate>
+            {% csrf_token %}
+            {% include 'partials/bootstrap_form.html' with form=form %}
+            <button class="btn btn-primary" type="submit">Add</button>
+          </form>
+        </div>
+      </div>
+  </div>
+</div>
+
+<div class="scrollable-feed"> 
+  {% for post in posts %}
+  <div class="post-card scrollable-container pb-2">
+    {% include 'partials/post_details.html' with post=post from_feed=True %}
+  </div>
+  {% empty %}
+  <p>No posts available.</p>
+  {% endfor %}
+</div>
+
+
+<script src="{% static 'js/feed.js' %}"></script>
+
+{% endblock %}
