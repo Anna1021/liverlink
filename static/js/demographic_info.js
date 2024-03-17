@@ -153,7 +153,7 @@ document.getElementById("pieChartDataSelect").addEventListener("change", functio
             update_pie_chart_data(user_location_data);
             break;
         case "ethnicity":
-            update_bar_chart_data(ethnicity_data);
+            update_pie_chart_data(ethnicity_data);
             break;
         default:
             update_pie_chart_data(patient_condition_data);

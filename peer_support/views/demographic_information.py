@@ -12,7 +12,6 @@ def demographic_information(request):
     age_ranges = get_age_ranges()
     genders = get_genders()
     locations = get_locations()
-    mentor_conditions = get_mentor_conditions()
     context = {
         'num_patients': num_patients,
         'num_parents': num_parents,
