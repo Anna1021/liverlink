@@ -4,33 +4,7 @@
 <div class="container">
     <h2>Add friend</h2>
     <hr>
-    <div class="row">
-        <form method="get" class="px-4 py-3" novalidate>
-            {% csrf_token %}
-            {% include 'partials/bootstrap_form.html' with form=formSearch %}
-            <div class="SortFilter">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
-                    data-bs-toggle="dropdown">
-                    Filter Options
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    {% csrf_token %}
-                    {{formFilter.as_p}}
-                </div>
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
-                    data-bs-toggle="dropdown">
-                    Sort Options
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    {% csrf_token %}
-                    {% include 'partials/bootstrap_form.html' with form=formSort %}
-                </div>
-            </div>
-            <div>
-                <button id="Apply-btn" type="submit" class="btn btn-sm my-3" style="margin-bottom: 0;">Apply</button>
-            </div>
-        </form>
-    </div>
+    {% include 'partials/search_filter_sort_users.html' %}
     <div style="overflow-y:auto;">
         <hr style="margin-top: 0;">
         {% if users|length == 0 %}
