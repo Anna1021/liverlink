@@ -15,7 +15,7 @@ class RemoveFriendViewTestCase(TestCase):
         self.user = User.objects.get(username='@johndoe')
         self.friend_user = User.objects.get(username='@janedoe')
         self.url = reverse('remove_friend', args=[self.friend_user.id])
-        self.client.login(username=self.user.username, password='Password123')
+        self.client.force_login(self.user)
 
     def test_remove_friend_url(self):
         self.assertEqual(self.url, '/remove_friend/2')

@@ -1,3 +1,4 @@
+"""Tests for the customisation view."""
 import os
 from django.test import TestCase
 from django.urls import reverse

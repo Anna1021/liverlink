@@ -15,6 +15,24 @@
 
 .divider {
     border-top: 1px solid #DADADA;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.divider-large {
+    border-top: 1px solid #DADADA;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.divider-xl {
+    border-top: 1px solid #DADADA;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.ps-footer {
+    padding: 40px;
 }
 
 /*
@@ -46,10 +64,12 @@ a.ps-link {
  * Asset styling
  */
 
-img.ps-gravatar {
+img.ps-profile-picture {
+    margin-top: 10px;
     border-radius: 50%;
     width: 190px;
     height: 190px;
+    margin-bottom: 10px;
 }
 
 i.ps-icons {
@@ -71,6 +91,14 @@ i.ps-icons {
  * Blocklist modal styling
  */ 
 
+.bl-table {
+    table-layout: fixed;
+}
+
+.bl-header {
+    text-align: center; 
+    padding-top: 10px;
+}
  
 .table-hover tbody tr:hover th, .table-hover tbody tr:hover td {
     background-color: #FAFAFA;
@@ -82,7 +110,7 @@ a.bl-username {
     text-decoration: none;
 }
 
-img.bl-gravatar {
+img.bl-profile-picture{
     border-radius: 50%;
     width: 45px;
     height: 45px;

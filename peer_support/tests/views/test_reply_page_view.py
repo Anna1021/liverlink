@@ -1,13 +1,11 @@
-from django.contrib.auth import get_user_model
+"""Tests of the Reply Page view."""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.models import Question, Response
-from peer_support.forms import NewReplyForm
-from peer_support.tests.helpers import reverse_with_next
+from peer_support.models import Question, Response, User
 
-User = get_user_model()
-class ReplyPageTest(TestCase):
+class ReplyPageTestCase(TestCase):
     """Tests of the Reply Page view."""
+
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json'
@@ -25,22 +23,20 @@ class ReplyPageTest(TestCase):
             'question': self.question.id,
             'parent': self.response_id  
         }
+        self.client.force_login(self.user)
 
-    def test_access_page_logged_in(self):
-        self.client.login(username=self.user.username, password='Password123')
+    def test_access_page_logged_in(self): 
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'resources.html')
 
 
     def test_get_reply(self):
-        self.client.login(username=self.user.username, password='Password123')
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
 
 
     def test_valid_reply_creation(self):
-        self.client.login(username=self.user.username, password='Password123')
         response_count_before = Response.objects.count()
         response = self.client.post(self.url, self.reply_form_data)
         response_count_after = Response.objects.count()
@@ -55,7 +51,6 @@ class ReplyPageTest(TestCase):
         self.assertEqual(new_reply.question, self.question)
 
     def test_invalid_reply_creation(self):
-        self.client.login(username=self.user.username, password='Password123')
         response_count_before = Response.objects.count()
         invalid_reply_form_data = {
             'body': '', 
@@ -74,7 +69,6 @@ class ReplyPageTest(TestCase):
         self.assertEqual(form.errors['body'], ['This field is required.'])
 
     def test_reply_creation_with_parent(self):
-        self.client.login(username=self.user.username, password='Password123')
         reply_form_data_with_parent = self.reply_form_data.copy()
         reply_form_data_with_parent['parent'] = self.response_id  
         response = self.client.post(self.url, reply_form_data_with_parent)
@@ -85,7 +79,6 @@ class ReplyPageTest(TestCase):
         self.assertRedirects(response, expected_redirect_url, status_code=302, target_status_code=200)
 
     def test_reply_creation_without_parent(self):
-        self.client.login(username=self.user.username, password='Password123')
         reply_form_data_without_parent = self.reply_form_data.copy()
         reply_form_data_without_parent['parent'] = ''  
         response = self.client.post(self.url, reply_form_data_without_parent)

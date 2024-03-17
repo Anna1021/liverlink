@@ -31,16 +31,13 @@ class QuestionPageJavascriptTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_hide_questions_and_responses_from_blocked_users(self):
-
         user = User.objects.get(username='@janedoe')
         blocked_user = User.objects.get(username='@peterpickles')
         user.blocked_users.add(blocked_user)
         user.first_login = False
         user.save()
-
         question = Question.objects.create(author=blocked_user, title="Test title", body="This is the question body.")
         response = Response.objects.create(user=blocked_user, question=question, body="This is the response body.")
-
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         try:
             self.wait.until(EC.element_to_be_clickable((By.NAME, "username"))).send_keys('@janedoe')

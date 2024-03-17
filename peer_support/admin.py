@@ -1,8 +1,5 @@
 from django.contrib import admin
-from . import models
-from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest,Question,Response
-
-from .models import Report, Message
+from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Question, Response, Report, Message
 # Register your models here.
 
 class UserProfileInline(admin.StackedInline):

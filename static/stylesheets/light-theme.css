@@ -1,9 +1,9 @@
 :root {
   --main-bg-color: #E4FBFF;
-  --filter-btn-color: #E5D1FA; 
+  --filter-btn-color: #B4E9EB; 
   --submit-btn-color: #7868E6;
   --btn-text-color: #161D6F;
-  --friend-inner-card-color: #E3DFFD;
+  --friend-inner-card-color: #B4E9EB;
 }
 .light-theme .img-fluid{
   max-width: 100%;
@@ -23,16 +23,7 @@
   padding-top: 20px;
   padding-left: 30px;
 }
-.light-theme #resources-card, .light-theme #friend-card {
-  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2);
-  transition: 0.3s;
-  border-radius: 20px; 
-  background-color: var(--main-bg-color);
-  color: black;
-  padding-right: 30px;
-  padding-top: 20px;
-  padding-left: 30px;
-}
+
 /*
 * top main nav bar
 */
@@ -59,7 +50,7 @@
 * success add friend button
 */
 .light-theme .success_button{
-  background-color: rgb(13, 160, 13) !important;
+  background-color: rgb(68, 187, 68) !important;
   color: rgb(255, 255, 255) !important;
   border: 1px solid transparent!important;
 }
@@ -92,7 +83,7 @@
 .light-theme .SortFilter .btn {
     background-color: var(--filter-btn-color);
     color: var(--btn-text-color);
-    border-color: #d4aeff;
+    border-color: transparent;
     box-shadow: #d4aeff;
 }
 
@@ -110,7 +101,7 @@
   font-weight: 700;
 }
 
-.light-theme #friend-inner-card {
+.light-theme .friend-inner-card {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 20px;
@@ -212,16 +203,17 @@
 
 .light-theme .subtext {
   --bs-text-opacity: 1;
-  color: rgb(145, 142, 142);
+  color: #395362;
 }
 
 .light-theme #theme {
   color: rgba(0, 0, 0);
 
 }
-.light-theme #Apply-btn{
+.light-theme .apply-btn{
   background-color: #720fe3;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  border-color: #720fe3;
  
 }
 
@@ -235,7 +227,7 @@
 
 .light-theme .conversation-list {
   border-radius: 8px;
-  background-color: rgb(204, 243, 249);
+  background-color: rgb(159, 215, 222);
   overflow-x: hidden;
   overflow-y: scroll;
   height: 90%;
@@ -246,8 +238,7 @@
 .light-theme .tutorial .btn{
   background-color: var(--filter-btn-color);
   color: var(--btn-text-color);
-  border-color: #d4aeff;
-  box-shadow: #d4aeff;
+  border-color: #b7ecff;
 
 }
 
@@ -270,7 +261,44 @@
 .light-theme .responses-container-heading {
   color: #1B1F3B;
 }
+
 .light-theme .response-author {
   color: blue;
   font-style: italic;
+}
+
+.light-theme #dropdown-style {
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+  background-color: var(--main-bg-color);
+  color: rgb(0, 0, 0);
+}
+.light-theme .profile-head h7 {
+  font-size: 15px;
+  color: #6490a9;
+}
+ .light-theme .profile-tab p {
+  font-weight: 600;
+  color: #6490a9;
+}
+
+.light-theme .profile-head h6 {
+    font-size: 20px;
+    color: #6490a9;
+}
+
+.light-theme .question-list-item-author {
+  color: rgb(255, 107, 132);
+  margin: 0;
+}
+
+.light-theme .question-author {
+  font-size: 14px;
+  color: rgb(255, 107, 132);
+}
+
+.light-theme .self-bubble{
+  float: right;
+  background-color: rgb(169, 221, 221);
 }
