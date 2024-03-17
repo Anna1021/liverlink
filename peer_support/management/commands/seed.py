@@ -123,6 +123,7 @@ class Command(BaseCommand):
         self.create_responses()
         self.responses = Response.objects.all()
 
+        # Commented out report seeding for now as it doesn't work on my end
         # self.create_reports()
         # self.reports = Report.objects.all()
 
@@ -247,6 +248,7 @@ class Command(BaseCommand):
         print("Notification seeding complete.      ")
 
     # Can probably be deleted
+    # Left it for now just in case
     def generate_random_messages(self):
         message_count = Message.objects.count()
         while message_count < self.MESSAGE_COUNT:
@@ -354,13 +356,14 @@ class Command(BaseCommand):
         self.try_create_message({'sender': sender, 'content': content})
 
     def generate_conversation(self):
+        # Seems to generate conversation data just fine
+        # But breaks when trying to create a message
         users = [self.users[randint(0, len(self.users) - 1)], self.users[randint(0, len(self.users) - 1)]]
         users = {'usernames': [user.username for user in users]}
         messages = []
         for _ in range(randint(1, 10)):
             sender = users['usernames'][randint(0, len(users['usernames']) - 1)]
             content = self.faker.text(max_nb_chars=100)
-            sender = {'username': sender}
             message = {'sender': sender, 'content': content}
             messages.append(message)
         self.try_create_conversation({'users': users, 'messages': messages})
@@ -422,17 +425,13 @@ class Command(BaseCommand):
     def try_create_message(self, data):
         try:
             return self.create_message(data)
-        except Exception as e:
-            print(e)
-            # pass
-            
+        except:
+            pass
 
     def try_create_conversation(self, data):
         try:
             self.create_conversation(data)
-        except Exception as e:
-            # print(e)
-            # print(data)
+        except:
             pass
 
     def try_create_question(self, data):
@@ -493,10 +492,10 @@ class Command(BaseCommand):
     def create_conversation(self, data):
         users = [self.get_user({'username': username}) for username in data['users']['usernames']]
         conversation = Conversation.objects.create()
-        conversation.users.set(users)
         for message in data['messages']:
-            message['sender'] = self.get_user(message['sender'])
+            message['sender'] = self.get_user(message['sender']) # BREAKS HERE I THINK
         message_objects = [self.create_message(message) for message in data['messages']]
+        conversation.users.set(users)
         conversation.messages.set(message_objects)
         conversation.save()
 
@@ -524,7 +523,6 @@ class Command(BaseCommand):
     
     def get_user(self, data):
         return User.objects.get(username=data['username'])
-
     
     def get_content_type(self, model_name):
         return ContentType.objects.get(model=model_name)

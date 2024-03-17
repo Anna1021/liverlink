@@ -10,12 +10,12 @@ class Command(BaseCommand):
         """Unseed the database."""
 
         Conversation.objects.all().delete()
-        # FriendRequest.objects.all().delete()
-        # GroupConversation.objects.all().delete()
+        FriendRequest.objects.all().delete()
+        GroupConversation.objects.all().delete()
         Message.objects.all().delete()
-        # Notification.objects.all().delete()
-        # Question.objects.all().delete()
-        # Report.objects.all().delete()
-        # Response.objects.all().delete()
-        # User.objects.filter(is_staff=False).delete()
+        Notification.objects.all().delete()
+        Question.objects.all().delete()
+        Report.objects.all().delete()
+        Response.objects.all().delete()
+        User.objects.filter(is_staff=False).delete()
         
