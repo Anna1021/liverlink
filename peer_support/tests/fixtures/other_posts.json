@@ -1,0 +1,32 @@
+[
+    {
+      "model": "peer_support.post",
+      "pk": 2,
+      "fields": {
+        "author": 2,
+        "text":"Friend post",
+        "created_at": "2024-03-07T21:21:05+00:00",
+        "visibility":"F"
+      }
+    },
+    {
+        "model": "peer_support.post",
+        "pk": 3,
+        "fields": {
+            "author": 3,
+            "text":"Stranger post global",
+            "created_at": "2024-03-10T10:46:05+00:00",
+            "visibility":"G"
+        }
+    },
+    {
+      "model": "peer_support.post",
+      "pk": 4,
+      "fields": {
+          "author": 3,
+          "text":"Stranger post friends",
+          "created_at": "2024-03-10T10:46:05+00:00",
+          "visibility":"F"
+      }
+  }
+]
