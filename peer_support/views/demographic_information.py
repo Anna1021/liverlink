@@ -1,8 +1,17 @@
-from django.shortcuts import render
 from peer_support.models import Mentor,Parent,Patient
 from .helpers import get_user_ethnicities, get_age_ranges, get_patient_conditions, get_genders, get_locations, get_parent_child_conditions, get_mentor_conditions
+from django.contrib import messages
+from django.shortcuts import render, reverse, redirect
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def demographic_information(request):
+    """Displays demographic inforamtion for all users to staff"""
+
+    current_user = request.user
+    if not current_user.is_staff:
+        messages.error(request, "You do not have access to this view.")
+        return redirect(reverse('dashboard'))
     num_patients = Patient.objects.count()
     num_parents = Parent.objects.count()
     num_mentors = Mentor.objects.count()

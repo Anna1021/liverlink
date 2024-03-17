@@ -3,15 +3,7 @@
 {% load static %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
 <div class="card shadow box-area my-2">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link" id="reportContent" data-toggle="tab" href="{% url 'moderation' %}" role="tab">Reports</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" id="timeline-tab" data-toggle="tab" href="{% url 'demographic-information' %}"
-                role="tab">User information</a>
-        </li>
-    </ul>
+    {% include 'partials/administrative_navbar.html' %}    
     <div class="container my-2">
         <select id="barChartDataSelect">
             {%include "partials/demographic_options.html" %}

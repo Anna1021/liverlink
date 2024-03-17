@@ -19,7 +19,7 @@ class ModerationViewTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.url = reverse('moderation')
+        self.url = reverse('demographic-information')
         self.admin_user = User.objects.get(username='@admin')
         self.report_message = Report.objects.get(pk=1)
         self.client.force_login(self.admin_user)
@@ -43,9 +43,8 @@ class ModerationViewTestCase(TestCase):
     def test_access_control_staff(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'moderation.html')
+        self.assertTemplateUsed(response, 'demographic_information.html')
 
-    def test_reports_listing(self):
+    def test_demographic_information_content(self):
         response = self.client.get(self.url)
-        self.assertTrue('reports' in response.context)
-        self.assertEqual(len(response.context['reports']), 1)
+        self.assertIn('num_patients', response.context)

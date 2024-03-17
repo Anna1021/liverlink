@@ -2,28 +2,20 @@
 {% block page %}
 {% load static %}
 <div class="card shadow box-area my-2">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="reportContent" data-toggle="tab" href="{% url 'moderation' %}" role="tab">Reports</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="timeline-tab" data-toggle="tab" href="{% url 'demographic-information' %}"
-                role="tab">User information</a>
-        </li>
-    </ul>
-        <h1>Reports</h1>
-        {% for report in reports %}
-            <div>
-                <p>Reason: {{ report.reason }}</p>
-                <p>Reported At: {{ report.reported_at }}</p>
-                <p>Content Type: {{ report.content_type }}</p>
-                <p>Reported Content: {{ report.content_object.content }}</p>
-                <button class="btn btn-success accept-request" onclick="window.location.href='/accept_report/{{report.id}}';"><i class="bi bi-check"></i></button>
-                &nbsp;
-                <button class="btn btn-danger decline" onclick="window.location.href='/decline_report/{{ report.id }}';"><i class="bi bi-x"></i></button>
-            </div>
-        {% empty %}
-            <p>No reports found.</p>
-        {% endfor %}
+    {% include 'partials/administrative_navbar.html' %}    
+    <h1>Reports</h1>
+    {% for report in reports %}
+        <div>
+            <p>Reason: {{ report.reason }}</p>
+            <p>Reported At: {{ report.reported_at }}</p>
+            <p>Content Type: {{ report.content_type }}</p>
+            <p>Reported Content: {{ report.content_object.content }}</p>
+            <button class="btn btn-success accept-request" onclick="window.location.href='/accept_report/{{report.id}}';"><i class="bi bi-check"></i></button>
+            &nbsp;
+            <button class="btn btn-danger decline" onclick="window.location.href='/decline_report/{{ report.id }}';"><i class="bi bi-x"></i></button>
+        </div>
+    {% empty %}
+        <p>No reports found.</p>
+    {% endfor %}
 </div>
 {% endblock %}
