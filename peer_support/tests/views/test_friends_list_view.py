@@ -48,17 +48,17 @@ class FriendsListViewTestCase(TestCase):
         response = self.client.get(self.url, filter_params)
         self.assertEqual(response.status_code, 200)
         filtered_friends = list(response.context['friends'])
-        for user in filtered_friends:
-            self.assertEqual(user.gender, 'N')
+        for user_dict in filtered_friends:
+            self.assertEqual(user_dict['friend'].gender, 'N')
 
     def test_form_sort_functionality(self):
         sort_data = {'sort_by': 'username_asc'}
         response = self.client.get(self.url, sort_data)
         self.assertEqual(response.status_code, 200)
         sorted_friends = response.context['friends']
-        sorted_usernames = [user.username for user in sorted_friends]
-        manual_sorted_friends = sorted_friends.order_by('username')
-        manual_sorted_usernames = [user.username for user in manual_sorted_friends]
+        sorted_usernames = [user_dict['friend'].username for user_dict in sorted_friends]
+        manual_sorted_friends = sorted(sorted_friends, key=lambda x: x['friend'].username)
+        manual_sorted_usernames = [user_dict['friend'].username for user_dict in manual_sorted_friends]
         self.assertEqual(sorted_usernames, manual_sorted_usernames)
 
     def test_search_functionality(self):
@@ -66,7 +66,7 @@ class FriendsListViewTestCase(TestCase):
         response = self.client.get(f"{self.url}?{urlencode(sort_params)}")
         self.assertEqual(response.status_code, 200)    
         search_friends = response.context['friends']
-        self.assertTrue(any(user.username == '@peterpickles' for user in search_friends))
+        self.assertTrue(any(user_dict['friend'].username == '@peterpickles' for user_dict in search_friends))
         self.assertEqual(len(search_friends), 1, "Should only find one user matching 'jane'")
 
     def test_invalid_filter_form_submission(self):
