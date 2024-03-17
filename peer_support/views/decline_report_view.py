@@ -10,7 +10,7 @@ class DeclineReportView(LoginRequiredMixin, View):
     def get(self, request, report_id):
         if not request.user.is_staff:
             messages.error(request, "You do not have access to this view.")
-            return redirect(reverse('dashboard'))
+            return redirect(reverse('feed'))
         report = get_object_or_404(Report, id=report_id)
         success = self.process_reported_object(report)
         if success:

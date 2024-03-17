@@ -29,7 +29,7 @@ class ProfileView(LoginRequiredMixin, View):
         else:
             return "ADMIN"
 
-    def get_context(self, user, request):
+    def get_context(self, user, posts, request):
         return {
             'user': user, 
             'current_user': request.user, 
@@ -48,7 +48,7 @@ class ProfileView(LoginRequiredMixin, View):
         posts = Post.objects.filter(author=user)
         if user not in request.user.friends.all() and user != request.user:
             posts = posts.filter(visibility='G')
-        context = self.get_context(user, request)
+        context = self.get_context(user, posts, request)
         return context
     
     def post(self, request, username):
