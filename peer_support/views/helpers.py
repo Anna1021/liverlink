@@ -1,9 +1,10 @@
 import uuid
-from peer_support.models import Referral, Mentor, User
+from peer_support.models import Referral, Mentor, User, Post
 from django.conf import settings
 from django.shortcuts import redirect,reverse
 from peer_support.models import Notification
 from django.contrib import messages
+from django.db.models import Q
 
 def login_prohibited(view_function):
     """Decorator for view functions that redirect users away if they are logged in."""
@@ -81,6 +82,18 @@ def get_message(request,conversation,message_id):
 def no_conversation_url(request):
     context = {'user_conversations':request.user.sort_conversations()}
     return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
+
+def retrieve_friend_posts(request):
+    user_friends = request.user.friends.all()
+    # Retrieve the user's posts and friends' posts
+    return Post.objects.filter(Q(author__in=user_friends) | Q(author=request.user)).order_by("-created_at")
+
+def get_post(request,post_id):
+    posts = (retrieve_friend_posts(request)|Post.objects.filter(visibility='G')).filter(id=post_id)
+    if posts.count()==0:
+        messages.error(request,"This post does not exist")
+        return None
+    return Post.objects.get(id=post_id)
 
 def user_exists(username):
     return User.objects.filter(username=username).exists()

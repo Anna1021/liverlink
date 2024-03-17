@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from peer_support.models import User, FriendRequest
+from peer_support.models import User, FriendRequest, Post
 from peer_support.forms import ReportForm, ConversationForm
 from django.contrib import messages
 from .helpers import user_exists
@@ -14,10 +14,11 @@ class ProfileView(LoginRequiredMixin, View):
 
         if not user_exists(username):
             messages.error(request, "The profile you tried to access does not exist.")
-            return redirect(reverse('dashboard'))
+            return redirect(reverse('feed'))
+          
         context = self.set_context(request, username)
         return render(request, 'profile.html', context)
-    
+
     def get_user_type(self, user):
         if hasattr(user, 'parent'):
             return "PARENT"
@@ -28,11 +29,12 @@ class ProfileView(LoginRequiredMixin, View):
         else:
             return "ADMIN"
 
-    def get_context(self, user, request):
+    def get_context(self, user, posts, request):
         return {
             'user': user, 
             'current_user': request.user, 
             'blocklist': request.user.blocked_users.all() | user.blocked_users.all(),
+            'posts': posts,
             'is_friend': request.user in user.friends.all(), 
             'report_form': ReportForm(), 
             'request_sent': FriendRequest.objects.filter(sender=request.user, receiver=user).exists(),
@@ -43,7 +45,10 @@ class ProfileView(LoginRequiredMixin, View):
         """Classify the user and set context for the profile view"""
         
         user = User.objects.get(username=username)
-        context = self.get_context(user, request)
+        posts = Post.objects.filter(author=user)
+        if user not in request.user.friends.all() and user != request.user:
+            posts = posts.filter(visibility='G')
+        context = self.get_context(user, posts, request)
         return context
     
     def post(self, request, username):
