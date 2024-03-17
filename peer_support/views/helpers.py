@@ -84,6 +84,9 @@ def no_conversation_url(request):
     context = {'user_conversations':request.user.sort_conversations()}
     return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
 
+def user_exists(username):
+    return User.objects.filter(username=username).exists()
+
 def calculate_age(born):
     today = date.today()
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
@@ -114,14 +117,10 @@ def get_user_ethnicities():
 
 def get_patient_conditions():
     patient_conditions = Patient.objects.values_list('condition', flat=True)
-    mentor_conditions = Mentor.objects.values_list('condition', flat=True)
-    print(mentor_conditions)
-    print(patient_conditions)
     return Counter(patient_conditions) 
 
 def get_mentor_conditions():
     mentor_conditions = Mentor.objects.values_list('condition', flat=True)
-    print(mentor_conditions)
     return Counter(mentor_conditions) 
 
 def get_parent_child_conditions():
@@ -135,7 +134,4 @@ def get_genders():
 def get_locations():
     location = User.objects.values_list('location', flat=True)
     return Counter(location) 
-
-def user_exists(username):
-    return User.objects.filter(username=username).exists()
 
