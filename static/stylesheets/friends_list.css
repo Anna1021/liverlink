@@ -20,11 +20,3 @@
     top: 0;
     z-index: 30;
 }
-
-#dropdown-style {
-    padding: 10px;
-    margin: 0;
-    list-style: none;
-    background-color:#2E2D38; 
-    color:white;
-}

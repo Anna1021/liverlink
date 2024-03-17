@@ -1,6 +1,6 @@
 $(document).ready(function () {
-  var lightThemeLogo = '/static/images/Pulse-logo_black.png';
-  var darkThemeLogo = '/static/images/pulseLogoCropped.png';
+  var lightThemeLogo = '/static/images/Liver_Link_logo_black.png';
+  var darkThemeLogo = '/static/images/LiverLinkLogoCropped.png';
   var darkBackground = '/static/images/background2.jpg';
   var lightBackground = '/static/images/background_light.jpg';
 
@@ -15,7 +15,6 @@ $(document).ready(function () {
     console.log('current class name:', className);
     $('body').css('background-image', 'url(' + backgroundImageSrc + ')'); // Set the background image
     localStorage.setItem("currentLogo", logoImageSrc);
-    localStorage.setItem("currentThemeLogo", themeImageSrc);
     localStorage.setItem("currentBackground", backgroundImageSrc); 
   }
 

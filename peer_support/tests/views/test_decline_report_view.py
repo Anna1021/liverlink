@@ -1,11 +1,10 @@
+"""Tests of the decline report view"""
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.messages import get_messages
 from peer_support.models import Report, Message, User
-from django.contrib.contenttypes.models import ContentType
-from django.utils import timezone
 
-class DeclineReportViewTest(TestCase):
+class DeclineReportViewTestCase(TestCase):
     """Tests of the decline report view"""
 
     fixtures = [
@@ -14,31 +13,17 @@ class DeclineReportViewTest(TestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/default_message.json',
+        'peer_support/tests/fixtures/default_report_message.json',
+        'peer_support/tests/fixtures/default_report_user.json',
     ]
 
     def setUp(self):
         self.admin_user = User.objects.get(username='@admin')
         self.message_to_report = Message.objects.first() 
-        self.user_to_report = User.objects.get(username='@janedoe')
-        self.user_to_report.is_active = True
-        self.user_to_report.save()
-        message_content_type = ContentType.objects.get_for_model(self.message_to_report)
-        user_content_type = ContentType.objects.get_for_model(self.message_to_report)
-        self.report_message = Report.objects.create(
-            reporter=self.admin_user,  
-            reason='spam',  
-            reported_at=timezone.now(),
-            content_type=message_content_type,
-            object_id=self.message_to_report.pk,
-        )
-        self.report_user = Report.objects.create(
-            reporter=self.admin_user,  
-            reason='spam',  
-            reported_at=timezone.now(),
-            content_type=user_content_type,
-            object_id=self.user_to_report.pk,
-            content_object=self.user_to_report,
-        )
+        self.report_message = Report.objects.get(pk=1)
+        self.report_user = Report.objects.get(pk=2)
+        self.message_to_report = Message.objects.get(pk=self.report_message.object_id)
+        self.user_to_report = User.objects.get(pk=self.report_user.object_id)
         self.url_message = reverse('decline_report', kwargs={'report_id':self.report_message.id})
         self.url_user = reverse('decline_report', kwargs={'report_id':self.report_user.id})
         self.client.force_login(self.admin_user)

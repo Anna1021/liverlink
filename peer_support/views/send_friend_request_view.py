@@ -8,6 +8,7 @@ class SendFriendRequestView(LoginRequiredMixin, View):
 
     def get(self, request, user_id):
         """Send a friend request."""
+
         receiver = User.objects.get(id=user_id)
         FriendRequest.objects.create(sender=request.user, receiver=receiver)
         self.send_notification(request, receiver)
@@ -15,6 +16,7 @@ class SendFriendRequestView(LoginRequiredMixin, View):
 
     def send_notification(self, request, receiver):
         """Send a notification."""
+        
         Notification.objects.create(
             title='Friend Request',
             description=f'{request.user.username} sent you a friend request.',

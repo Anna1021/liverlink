@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.forms import MessageForm, ReportForm
-from peer_support.models import User, Conversation,Message, Report
+from peer_support.models import User, Conversation, Message, Report
 from django.contrib import messages
 
 class ConversationViewTestCase(TestCase):
@@ -18,13 +18,14 @@ class ConversationViewTestCase(TestCase):
 
     def setUp(self):
         self.conversation = Conversation.objects.get(pk=1)
-        self.url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
-        self.no_conversation_url = reverse('conversation',kwargs={'conversation_id':0})
+        self.url = reverse('conversation', kwargs={'conversation_id':self.conversation.id})
+        self.no_conversation_url = reverse('conversation', kwargs={'conversation_id':0})
         self.form_input = {
             'content':'Ploof'
         }
         self.user = User.objects.get(username='@janedoe')
-        self.client.login(username=self.user.username, password="Password123")
+        self.user.conversations.set([1])
+        self.client.force_login(self.user)
 
     def test_conversation_url(self):
         self.assertEqual(self.url,'/conversation/1')
@@ -70,6 +71,15 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
+    def test_cannot_get_deleted_conversation(self):
+        self.conversation.delete(User.objects.filter(username=self.user.username))
+        response = self.client.get(self.url,follow=True)
+        self.assertRedirects(response, self.no_conversation_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+
     def test_cannot_get_conversation_that_does_not_exist(self):
         invalid_url = reverse('conversation',kwargs={'conversation_id':3})
         response = self.client.get(invalid_url,follow=True)
@@ -87,7 +97,7 @@ class ConversationViewTestCase(TestCase):
     def test_unsuccessful_message_send(self):
         self.form_input['content'] = ''
         before_count = Message.objects.count()
-        response = self.client.post(self.url,data=self.form_input)
+        response = self.client.post(self.url, data=self.form_input)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 200)
@@ -101,17 +111,17 @@ class ConversationViewTestCase(TestCase):
         blocked_user = User.objects.get(username='@johndoe')
         self.user.blocked_users.add(blocked_user)
         before_count = Message.objects.count()
-        response = self.client.post(self.url,data=self.form_input)
+        response = self.client.post(self.url, data=self.form_input)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(response.status_code, 302)
 
     def test_successful_message_send(self):
         before_count = Message.objects.count()
-        response = self.client.post(self.url, data=self.form_input)
+        response = self.client.post(self.url, data=self.form_input,follow=True)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count+1)
-        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, self.url, status_code=302, target_status_code=200)
         self.assertRedirects(response, reverse('conversation', kwargs={'conversation_id': self.conversation.id}))
         message = self.conversation.messages.last()
         self.assertEqual(message.sender, self.user)

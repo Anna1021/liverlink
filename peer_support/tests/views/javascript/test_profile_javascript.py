@@ -46,21 +46,13 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         try:
             username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
             username_input.send_keys('@janedoe')
-
             password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "password")))
             password_input.send_keys('Password123')
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/profile/@petrapickles/']"))).click()
 
-            login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
-            login_button.click()
-
-            find_friends_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]")))
-            find_friends_button.click()
-
-            second_user_profile_link = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/profile/@petrapickles/']")))
-            second_user_profile_link.click()
-
-            user_actions_dropdown = self.wait.until(EC.visibility_of_element_located((By.ID, "user-actions-dropdown")))
-            user_actions_dropdown.click()
+            user_actions_dropdown = self.wait.until(EC.visibility_of_element_located((By.ID, "user-actions-dropdown"))).click()
 
             friend_link = self.wait.until(EC.element_to_be_clickable((By.ID, "friend-link")))
             self.assertEqual("Add friend", friend_link.text)
@@ -173,12 +165,10 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
             self.wait.until(EC.element_to_be_clickable((By.NAME, "username"))).send_keys('@janedoe')
             self.wait.until(EC.element_to_be_clickable((By.NAME, "password"))).send_keys('Password123')
             self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
-
             self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@id='user-account-dropdown']/span"))).click()
-
+            
             self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Settings"))).click()
             self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Other users"))).click()
-
             self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@id='display-blocklist']"))).click()
             self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/profile/@petrapickles/']"))).click()
 

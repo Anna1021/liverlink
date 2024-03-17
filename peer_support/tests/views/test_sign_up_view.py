@@ -44,7 +44,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
         self.assertFalse(form.is_bound)
 
     def test_get_sign_up_redirects_when_logged_in(self):
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
         response = self.client.get(self.url, follow=True)
         redirect_url = reverse('feed')
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
@@ -67,8 +67,6 @@ class SignUpViewTestCase(TestCase, LogInTester):
         before_users = User.objects.all()
         before_count = before_users.count()
         response = self.client.post(self.url, self.form_input, follow=True)
-        if response.context and 'form' in response.context:
-            form = response.context['form']
         after_users = User.objects.all()
         after_count = after_users.count()
         self.assertEqual(after_count, before_count+1)
@@ -91,7 +89,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
         self.assertTrue(self._is_logged_in())
 
     def test_post_sign_up_redirects_when_logged_in(self):
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
         before_count = User.objects.count()
         response = self.client.post(self.url, self.form_input, follow=True)
         after_count = User.objects.count()

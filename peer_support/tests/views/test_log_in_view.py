@@ -46,7 +46,7 @@ class LogInViewTestCase(TestCase, LogInTester, MenuTesterMixin):
         self.assertEqual(len(messages_list), 0)
 
     def test_get_log_in_redirects_when_logged_in(self):
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
         response = self.client.get(self.url, follow=True)
         redirect_url = reverse('feed')
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
@@ -113,7 +113,7 @@ class LogInViewTestCase(TestCase, LogInTester, MenuTesterMixin):
         self.assertEqual(len(messages_list), 0)
 
     def test_post_log_in_redirects_when_logged_in(self):
-        self.client.login(username=self.user.username, password="Password123")
+        self.client.force_login(self.user)
         form_input = { 'username': '@wronguser', 'password': 'WrongPassword123' }
         response = self.client.post(self.url, form_input, follow=True)
         redirect_url = reverse('feed')

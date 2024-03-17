@@ -12,6 +12,7 @@ class SignUpView(LoginProhibitedMixin, FormView):
     form_class = SignUpForm
     template_name = "sign_up.html"
     redirect_when_logged_in_url = settings.REDIRECT_URL_WHEN_LOGGED_IN
+    
     def form_valid(self, form):
         self.object = form.save()
         create_referral(self.object)

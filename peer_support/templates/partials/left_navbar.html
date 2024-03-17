@@ -1,27 +1,25 @@
 {% block body %}
-{% block content %}
-{% endblock %}
 {%load static%}
 <div id="left-nav" class="card shadow box-area my-2">
     <nav class="nav flex-column py-2 px-2 mx-2">
         <div class="card-header">
-            <h4 class="card-title pt-2"><b>Welcome  <span class="notranslate">{{user.username}}</span></b></h4>
+            <h4 class="card-title pt-2"><b>Welcome <span class="notranslate">{{user.username}}</span></b></h4>
         </div>
         <div class="card-body text-center">
             <a href="{% url 'feed' %}" name="feed_type" value="global">
                 <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item" >Home</button>
             </a>
             <a href="{% url 'resources' %}">
-                <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item" >Resources</button>
+                <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item">Resources</button>
             </a>
             <a href="{% url 'conversation' 0 %}">
-                <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item" >Messages</button>
+                <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item">Messages</button>
             </a>
             <a href="{% url 'peer_select' %}">
-                <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item" >Find Friends</button>
+                <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item">Find Friends</button>
             </a>
             <a href="{% url 'friends_list' %}">
-                <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item" >Friends list</button>
+                <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item">Friends list</button>
             </a>
             {% if user.is_staff %}
                 <a href="{% url 'moderation' %}">
