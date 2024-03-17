@@ -81,13 +81,10 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             'referral_code': self.cleaned_data.get('referral_code'),
         })
         return Mentor.objects.create_user(**user_data)
+    
+    def validate_referral_code(self, referral_code, user_type):
+        """Check mentors use an existing referral code."""
 
-    def clean(self):
-        """Validation of referral code and DOB."""
-        
-        cleaned_data = super().clean()
-        user_type = cleaned_data.get('user_type')
-        referral_code = cleaned_data.get('referral_code')
         if user_type == 'MT':
             try:
                 Referral.objects.get(code=referral_code)
