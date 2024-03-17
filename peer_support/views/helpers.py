@@ -105,10 +105,14 @@ def get_user_ethnicities():
 
 def get_patient_conditions():
     patient_conditions = Patient.objects.values_list('condition', flat=True)
+    mentor_conditions = Mentor.objects.values_list('condition', flat=True)
+    print(mentor_conditions)
+    print(patient_conditions)
     return Counter(patient_conditions) 
 
 def get_mentor_conditions():
     mentor_conditions = Mentor.objects.values_list('condition', flat=True)
+    print(mentor_conditions)
     return Counter(mentor_conditions) 
 
 def get_parent_child_conditions():
