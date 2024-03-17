@@ -37,6 +37,7 @@ class ConversationView(LoginRequiredMixin, FormView):
 
     def post(self, request, conversation_id):
         first_message_id = request.POST.get('first_message') or ''
+        new_message = None
         delete=request.POST.get('delete')
         action=request.POST.get('action')
         if delete:
