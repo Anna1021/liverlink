@@ -18,4 +18,4 @@ class SubmitFeedbackView(LoginRequiredMixin, FormView):
         """Redirect the user after successful feedback submission."""
 
         messages.add_message(self.request, messages.SUCCESS, "Feedback has been successfully submitted.")
-        return reverse('dashboard')
+        return reverse('feed')

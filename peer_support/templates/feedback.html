@@ -1,10 +1,20 @@
 {% extends 'dashboard.html' %}
 {% block page %}
 {% load static %}
-    <h1>Feedback</h1>
-    {% for fb in feedback %}
-        {% include 'partials/feedback_card.html' with feedback=fb %}
-    {% empty %}
-        <p>No feedback found.</p>
-    {% endfor %}
+<div class="card shadow box-area my-2">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" id="reportContent" data-toggle="tab" href="{% url 'moderation' %}" role="tab">Reports</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" id="reportContent" data-toggle="tab" href="{% url 'feedback' %}" role="tab">Feedback</a>
+        </li>
+    </ul>
+        <h1>Feedback</h1>
+        {% for fb in feedback %}
+            {% include 'partials/feedback_card.html' with feedback=fb %}
+        {% empty %}
+            <p>No feedback found.</p>
+        {% endfor %}
+</div>
 {% endblock %}

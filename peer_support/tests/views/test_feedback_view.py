@@ -21,6 +21,9 @@ class FeedbackViewTestCase(TestCase):
         self.admin_user = User.objects.get(username='@admin')
         self.client.force_login(self.admin_user)
 
+    def test_feedback_url(self):
+        self.assertEqual(self.url,'/feedback/')
+
     def test_get_feedback_redirects_when_not_logged_in(self):
         self.client.logout()
         redirect_url = reverse_with_next('log_in', self.url)
@@ -32,7 +35,7 @@ class FeedbackViewTestCase(TestCase):
         self.client.force_login(User.objects.get(username='@johndoe'))
         response = self.client.get(self.url)
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, reverse('dashboard'))  
+        self.assertRedirects(response, reverse('feed'))  
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), "You do not have access to this view.")
