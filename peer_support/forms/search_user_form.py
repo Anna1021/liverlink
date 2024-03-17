@@ -14,5 +14,5 @@ class SearchUserForm(forms.Form):
         
         search_term = self.cleaned_data.get('search', '').strip()
         if search_term:
-            users = users.filter(Q(username__icontains=search_term) | Q(first_name__icontains=search_term)|Q(last_name__icontains=search_term))
+            users = users.filter(Q(username__icontains=search_term) | Q(first_name__icontains=search_term) | Q(last_name__icontains=search_term))
         return users

@@ -26,9 +26,9 @@ class MessageForm(forms.ModelForm):
         """Create the message content, linking it to the previous message if available."""
 
         return Message.objects.create(
-            sender=self.user,
-            content=self.cleaned_data.get('content'),
-            previous_message=previous_message,
+            sender = self.user,
+            content = self.cleaned_data.get('content'),
+            previous_message = previous_message,
         )
 
     def update_message_visibility_and_conversation(self, message):

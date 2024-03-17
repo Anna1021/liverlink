@@ -84,4 +84,3 @@ def no_conversation_url(request):
 
 def user_exists(username):
     return User.objects.filter(username=username).exists()
-
