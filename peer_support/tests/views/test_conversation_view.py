@@ -85,6 +85,38 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'conversation.html')
 
+    def test_get_sets_message_params_to_zero_with_no_messages(self):
+        self.conversation.messages.set(Message.objects.none())
+        response = self.client.get(self.url)
+        first_message = response.context['first_message']
+        next_message = response.context['next_message']
+        self.assertEqual(first_message,0)
+        self.assertEqual(next_message,0)
+
+    def test_first_message_zero_if_specified_but_no_messages_exist(self):
+        self.conversation.messages.set(Message.objects.none())
+        response = self.client.get(self.url+"?first_message=1")
+        first_message = response.context['first_message']
+        next_message = response.context['next_message']
+        self.assertEqual(first_message,0)
+        self.assertEqual(next_message,0)
+
+    def test_first_message_set_to_other_if_specified_but_that_message_does_not_exist(self):
+        response = self.client.get(self.url+"?first_message=2")
+        first_message = response.context['first_message']
+        next_message = response.context['next_message']
+        self.assertEqual(first_message,4)
+        self.assertEqual(next_message,1)
+
+    def test_first_message_specified_after_sending_message_to_empty_conversation(self):
+        self.form_input['first_message'] = '0'
+        self.conversation.messages.set(Message.objects.none())
+        response = self.client.post(self.url, data=self.form_input,follow=True)
+        first_message = response.context['first_message']
+        next_message = response.context['next_message']
+        self.assertEqual(first_message,6)
+        self.assertEqual(next_message,6)
+
     def test_unsuccessful_message_send(self):
         self.form_input['content'] = ''
         before_count = Message.objects.count()

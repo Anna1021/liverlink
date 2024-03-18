@@ -53,26 +53,29 @@ class ConversationView(LoginRequiredMixin, FormView):
     def get_visible_messages(self,user,conversation):
         return conversation.messages.filter(visible_to__in=[user]).order_by('-id')
 
+    def get_index_id(self,messages,index):
+        if messages:
+            return messages[index].id
+        return 0
+
     def first_message(self,request,conversation,message_id):
         if not message_id or message_id=="0":
             return self.next_message(request,conversation,message_id)
-        if conversation.messages.filter(id=message_id).count()==0:
-            visible_messages = self.get_visible_messages(request.user,conversation).filter(id__gte=message_id)
-            return visible_messages.last() or 0
-        return message_id
+        visible_messages = list(self.get_visible_messages(request.user,conversation).filter(id__gte=message_id))
+        return self.get_index_id(visible_messages,-1)
 
     def next_message(self,request,conversation,message_id):
         visible_messages = list(self.get_visible_messages(request.user,conversation))
         if len(visible_messages)==0:
             return 0
-        if not message_id:
-            message_index = 0
+        if not message_id or message_id=='':
+            message_index = min(9,len(visible_messages))
         else:
             message = get_object_or_404(Message, id=message_id)
             message_index = visible_messages.index(message)
         message_index = min(message_index+10,len(visible_messages))
-        first_message_id = visible_messages[::-1][-message_index].id
-        return first_message_id
+        next_message_id = self.get_index_id(visible_messages[::-1],-message_index)
+        return next_message_id
 
     def handle_delete_message(self,request,conversation_id,message_id,delete):
         conversation = get_object_or_404(Conversation,id=conversation_id)
