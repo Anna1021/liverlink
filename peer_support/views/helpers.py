@@ -119,10 +119,6 @@ def get_patient_conditions():
     patient_conditions = Patient.objects.values_list('condition', flat=True)
     return Counter(patient_conditions) 
 
-def get_mentor_conditions():
-    mentor_conditions = Mentor.objects.values_list('condition', flat=True)
-    return Counter(mentor_conditions) 
-
 def get_parent_child_conditions():
     parent_child_conditions = Parent.objects.values_list('child_condition', flat=True)
     return Counter(parent_child_conditions) 
