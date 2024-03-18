@@ -6,8 +6,8 @@
             <h4 class="card-title pt-2"><b>Welcome <span class="notranslate">{{user.username}}</span></b></h4>
         </div>
         <div class="card-body text-center">
-            <a href="{% url 'dashboard' %}">
-                <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item">Home</button>
+            <a href="{% url 'feed' %}" name="feed_type" value="global">
+                <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item" >Home</button>
             </a>
             <a href="{% url 'resources' %}">
                 <button type="button" class="btn btn-lg btn-outline-light mb-3 w-100 navbar-item">Resources</button>
@@ -28,5 +28,6 @@
             {% endif %}
         </div>
     </nav>
-</div>
+  </div>
+
 {% endblock %}

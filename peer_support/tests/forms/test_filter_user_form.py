@@ -52,7 +52,6 @@ class FilterUserFormTestCase(TestCase):
     def test_show_all(self):
         form = FilterUserForm(data=self.showAll)
         self.assertTrue(form.is_valid(), "Form should be valid with 'show all' settings")
-
         results = form.filter_users(self.users)
         expected_user_count = self.users.count()
         self.assertEqual(results.count(), expected_user_count, f"Expected {expected_user_count} users, but got {results.count()}")

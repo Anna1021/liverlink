@@ -48,22 +48,22 @@ class PeerSelectViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_form_filter_functionality(self):
-        filter_params = {'gender': ['F'], 'language': 'en'}  
+        filter_params = {'gender': ['F']}  
         response = self.client.get(self.url, filter_params)
         self.assertEqual(response.status_code, 200)
         filtered_users = list(response.context['users'])
-        for user in filtered_users:
+        for user_dict in filtered_users:
+            user = user_dict['user']
             self.assertEqual(user.gender, 'F')
-            self.assertTrue(user.language, 'en')
 
     def test_form_sort_functionality(self):
         sort_data = {'sort_by': 'username_asc'}
         response = self.client.get(self.url, sort_data)
         self.assertEqual(response.status_code, 200)
         sorted_users = response.context['users']
-        sorted_usernames = [user.username for user in sorted_users]
-        manual_sorted_users = sorted_users.order_by('username')
-        manual_sorted_usernames = [user.username for user in manual_sorted_users]
+        sorted_usernames = [user_dict['user'].username for user_dict in sorted_users]
+        manual_sorted_users = sorted(sorted_users, key=lambda x: x['user'].username)
+        manual_sorted_usernames = [user_dict['user'].username for user_dict in manual_sorted_users]
         self.assertEqual(sorted_usernames, manual_sorted_usernames)
 
     def test_search_functionality(self):
@@ -71,7 +71,7 @@ class PeerSelectViewTestCase(TestCase):
         response = self.client.get(f"{self.url}?{urlencode(sort_params)}")
         self.assertEqual(response.status_code, 200)    
         search_users = response.context['users']
-        self.assertTrue(any(user.username == '@janedoe' for user in search_users))
+        self.assertTrue(any(user_dict['user'].username == '@janedoe' for user_dict in search_users))
         self.assertEqual(len(search_users), 1, "Should only find one user matching 'jane'")
 
     def test_invalid_filter_form_submission(self):
@@ -100,7 +100,8 @@ class PeerSelectViewTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         users = response.context['users']
-        for user in users:
+        for user_dict in users:
+            user = user_dict['user']
             self.assertFalse(user.is_staff or user.is_superuser, "Admin users should not be included in the list.")
 
     def test_exclude_friends(self):

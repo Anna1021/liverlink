@@ -152,7 +152,6 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
         except TimeoutException as e:
             self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
             
-
     def test_unblock_user_reloads_page(self):
 
         user = User.objects.get(username='@janedoe')

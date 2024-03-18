@@ -84,7 +84,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             'condition': self.cleaned_data.get('condition'),
             'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
             'transplant': self.cleaned_data.get('transplant'),
-            'referral_code': self.cleaned_data.get('referral_code')
+            'referral_code': self.cleaned_data.get('referral_code'),
         })
         return Mentor.objects.create_user(**user_data)
     
