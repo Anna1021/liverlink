@@ -5,7 +5,6 @@ from django.views.generic.edit import FormView
 from .helpers import check_blocked_dm, no_conversation_url, get_conversation
 from peer_support.models import Conversation, Message
 from peer_support.forms import MessageForm, ReportForm
-from django.core.paginator import Paginator
 
 class ConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
