@@ -135,9 +135,8 @@ class Command(BaseCommand):
         self.create_responses()
         self.responses = Response.objects.all()
 
-        # Commented out report seeding for now as it doesn't work on my end
-        # self.create_reports()
-        # self.reports = Report.objects.all()
+        self.create_reports()
+        self.reports = Report.objects.all()
 
         self.create_posts()
         self.posts = Post.objects.all()
@@ -412,7 +411,7 @@ class Command(BaseCommand):
         question = self.questions[randint(0, len(self.questions) - 1)]
         body = self.faker.text(max_nb_chars=100)
         user = {'username': user.username}
-        question = {'title': question.title} # Can we create a primary key for response model? such as id 
+        question = {'title': question.title}
         self.try_create_response({'user': user, 'question': question, 'body': body})
 
     def generate_report(self):
@@ -565,8 +564,7 @@ class Command(BaseCommand):
 
     def create_response(self, data):
         data['user'] = self.get_user(data['user'])
-        data['question'] = Question.objects.filter(title=data['question']['title']).first() # Change this when primary key implemented
-        # Change it to a get
+        data['question'] = Question.objects.filter(title=data['question']['title']).first()
         Response.objects.create(**data)
 
     def create_report(self, data):
@@ -583,7 +581,7 @@ class Command(BaseCommand):
         Post.objects.create(**data)
 
     def create_post_comment(self, data):
-        data['post'] = Post.objects.filter(text=data['post']['text']).first()
+        data['post'] = self.get_post(data['post'])
         data['author'] = self.get_user(data['author'])
         PostComment.objects.create(**data)
     
@@ -595,6 +593,9 @@ class Command(BaseCommand):
     
     def get_content_type(self, model_name):
         return ContentType.objects.get(model=model_name)
+
+    def get_post(self, data):
+        return Post.objects.filter(text=data['text']).first()
 
 def create_username(first_name, last_name):
     return '@' + first_name.lower() + last_name.lower()
