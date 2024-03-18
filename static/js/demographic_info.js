@@ -119,12 +119,12 @@ let user_location_africa_data = {
     title: "Users within Africa"
 };
 
-let user_location_australia_data = {
-    labels: australia_labels,
+let user_location_oceania_data = {
+    labels: oceania_labels,
     datasets: [{
         label: "Number of Users",
         backgroundColor: colours,
-        data: australia_count
+        data: oceania_count
     }],
     title: "Users within Australia"
 };
@@ -177,8 +177,8 @@ document.getElementById("continentSelectBar").addEventListener("change", functio
         case "africa":
             update_bar_chart_data(user_location_africa_data);
             break;
-        case "australia":
-            update_bar_chart_data(user_location_australia_data);
+        case "oceania":
+            update_bar_chart_data(user_location_oceania_data);
             break;
         case "antarctica":
             update_bar_chart_data(user_location_antarctica_data);
@@ -251,8 +251,8 @@ document.getElementById("continentSelectPie").addEventListener("change", functio
         case "africa":
             update_pie_chart_data(user_location_africa_data);
             break;
-        case "australia":
-            update_pie_chart_data(user_location_australia_data);
+        case "oceania":
+            update_pie_chart_data(user_location_oceania_data);
             break;
         case "antarctica":
             update_pie_chart_data(user_location_antarctica_data);

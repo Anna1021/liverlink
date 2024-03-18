@@ -6,34 +6,19 @@
     {% include 'partials/administrative_navbar.html' %}    
     <div class="container my-2">
         <select id="barChartDataSelect">
-            {%include "partials/demographic_options.html" %}
+            {%include "partials/user_demographics/demographic_options.html" %}
         </select>
         <select id="continentSelectBar" style="display: none;">
-            <option value="all">Antarctica</option>
-            <option value="europe">Europe</option>
-            <option value="north_america">North America</option>
-            <option value="south_america">South America</option>
-            <option value="asia">Asia</option>
-            <option value="africa">Africa</option>
-            <option value="australia">Australia</option>
-            <option value="antarctica">Antarctica</option>
+            {%include "partials/user_demographics/continent_options.html" %}
         </select>
         <canvas id="barChart"></canvas>
         <select id="pieChartDataSelect">
-            {%include "partials/demographic_options.html" %}
+            {%include "partials/user_demographics/demographic_options.html" %}
         </select>
         <select id="continentSelectPie" style="display: none;">
-            <option value="all">Antarctica</option>
-            <option value="europe">Europe</option>
-            <option value="north_america">North America</option>
-            <option value="south_america">South America</option>
-            <option value="asia">Asia</option>
-            <option value="africa">Africa</option>
-            <option value="australia">Australia</option>
-            <option value="antarctica">Antarctica</option>
+            {%include "partials/user_demographics/continent_options.html" %}
         </select>
         <canvas id="ethnicityChart" style="margin-top: 20px;"></canvas>
-    
     </div>
 </div>
 <script>
@@ -61,8 +46,8 @@
     var asia_count = {{ asia_count|safe }};
     var africa_labels = {{ africa_labels|safe }};
     var africa_count = {{ africa_count|safe }};
-    var australia_labels = {{ australia_labels|safe }};
-    var australia_count = {{ australia_count|safe }};
+    var oceania_labels = {{ oceania_labels|safe }};
+    var oceania_count = {{ oceania_count|safe }};
     var antarctica_labels = {{ antarctica_labels|safe }};
     var antarctica_count = {{ antarctica_count|safe }};
 </script>

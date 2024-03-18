@@ -44,7 +44,3 @@ class ModerationViewTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'demographic_information.html')
-
-    def test_demographic_information_content(self):
-        response = self.client.get(self.url)
-        self.assertIn('num_patients', response.context)

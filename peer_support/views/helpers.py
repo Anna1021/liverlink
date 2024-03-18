@@ -151,7 +151,7 @@ def country_to_continent(country_code):
         continent_name = pc.convert_continent_code_to_continent_name(continent_code)
         return continent_name
     except KeyError:
-        return "Unkown"
+        return "Unknown"
     
 def country_to_continent_two(country_code):
     try:

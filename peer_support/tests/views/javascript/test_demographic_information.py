@@ -36,7 +36,7 @@ class DemographicInformationJavascriptTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_dynamic_form_peer_select(self):
+    def test_charts_visible(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         user = User.objects.get(username='@admin')
         user.first_login = False
@@ -58,5 +58,40 @@ class DemographicInformationJavascriptTest(StaticLiveServerTestCase):
 
             bar_chart_dropdown.select_by_value("user_age")
             pie_chart_dropdown.select_by_value("ethnicity")
+        except TimeoutException as e:
+            self.fail(f"Test failed due to timeout while self.waiting for the question to be visible or interactable: {e}")
+
+    def test_dynamic_locations(self):
+        self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
+        user = User.objects.get(username='@admin')
+        user.first_login = False
+        user.save()
+        try:
+            username_input = self.wait.until(EC.element_to_be_clickable((By.NAME, "username")))
+            username_input.send_keys('@admin')
+            password_input = self.wait.until(EC.element_to_be_clickable((By.NAME, "password")))
+            password_input.send_keys('Password123')
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Admin')]"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.ID, "demographic-information"))).click()
+
+            self.wait.until(EC.presence_of_element_located((By.ID, "barChartDataSelect")))
+            self.wait.until(EC.presence_of_element_located((By.ID, "pieChartDataSelect")))
+
+            bar_chart_dropdown = Select(self.selenium.find_element(By.ID, "barChartDataSelect"))
+            pie_chart_dropdown = Select(self.selenium.find_element(By.ID, "pieChartDataSelect"))
+
+            bar_chart_dropdown.select_by_value("user_location")
+            pie_chart_dropdown.select_by_value("user_location")
+
+            self.wait.until(EC.presence_of_element_located((By.ID, "continentSelectBar")))
+            self.wait.until(EC.presence_of_element_located((By.ID, "continentSelectPie")))
+
+            bar_chart_location_dropdown = Select(self.selenium.find_element(By.ID, "continentSelectBar"))
+            pie_chart_location_dropdown = Select(self.selenium.find_element(By.ID, "continentSelectPie"))
+
+            bar_chart_location_dropdown.select_by_value("europe")
+            pie_chart_location_dropdown.select_by_value("europe")
+
         except TimeoutException as e:
             self.fail(f"Test failed due to timeout while self.waiting for the question to be visible or interactable: {e}")
