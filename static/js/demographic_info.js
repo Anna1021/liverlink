@@ -1,11 +1,11 @@
 var colours = ["#55efc4","#81ecec","#a29bfe","#ffeaa7","#fab1a0","#ff7675","#fd79a8"];
 
 let user_type_data={
-    labels:["Patients", "Parents", "Mentors"],
+    labels:user_types_labels,
     datasets:[{
             label: "User Types",
             backgroundColor: colours,
-            data: [num_patients, num_parents, num_mentors]}],
+            data: user_types_count}],
     title:"Types of users"
 };
 
@@ -69,6 +69,77 @@ let user_location_data={
     title:"Genders among Users"
 };
 
+let user_location_south_america_data={
+    labels:south_america_labels,
+    datasets:[{
+            label: "Number of Users",
+            backgroundColor: colours,
+            data: south_america_count
+        }],
+    title:"Users within South America"
+};
+
+let user_location_europe_data = {
+    labels: europe_labels,
+    datasets: [{
+        label: "Number of Users",
+        backgroundColor: colours,
+        data: europe_count
+    }],
+    title: "Users within Europe"
+};
+
+let user_location_north_america_data = {
+    labels: north_america_labels,
+    datasets: [{
+        label: "Number of Users",
+        backgroundColor: colours,
+        data: north_america_count
+    }],
+    title: "Users within North America"
+};
+
+let user_location_asia_data = {
+    labels: asia_labels,
+    datasets: [{
+        label: "Number of Users",
+        backgroundColor: colours,
+        data: asia_count
+    }],
+    title: "Users within Asia"
+};
+
+let user_location_africa_data = {
+    labels: africa_labels,
+    datasets: [{
+        label: "Number of Users",
+        backgroundColor: colours,
+        data: africa_count
+    }],
+    title: "Users within Africa"
+};
+
+let user_location_australia_data = {
+    labels: australia_labels,
+    datasets: [{
+        label: "Number of Users",
+        backgroundColor: colours,
+        data: australia_count
+    }],
+    title: "Users within Australia"
+};
+
+let user_location_antarctica_data = {
+    labels: antarctica_labels,
+    datasets: [{
+        label: "Number of Users",
+        backgroundColor: colours,
+        data: antarctica_count
+    }],
+    title: "Users within Antarctica"
+};
+
+
 let bar_chart_id = document.getElementById("barChart").getContext("2d");
 
 let bar_chart = new Chart(bar_chart_id, {
@@ -88,9 +159,37 @@ function update_bar_chart_data(selectedData) {
     bar_chart.update();
 }
 
+document.getElementById("continentSelectBar").addEventListener("change", function() {
+    let selectedValue = this.value; 
+    switch(selectedValue) {
+        case "europe":
+            update_bar_chart_data(user_location_europe_data);
+            break;
+        case "north_america":
+            update_bar_chart_data(user_location_north_america_data);
+            break;
+        case "south_america":
+            update_bar_chart_data(user_location_south_america_data);
+            break;
+        case "asia":
+            update_bar_chart_data(user_location_asia_data);
+            break;
+        case "africa":
+            update_bar_chart_data(user_location_africa_data);
+            break;
+        case "australia":
+            update_bar_chart_data(user_location_australia_data);
+            break;
+        case "antarctica":
+            update_bar_chart_data(user_location_antarctica_data);
+            break;
+        default:
+            update_bar_chart_data(user_location_data);
+    }
+})
+
 document.getElementById("barChartDataSelect").addEventListener("change", function() {
     let selectedValue = this.value; 
-    console.log("Mentor Condition Labels: 1")
     switch(selectedValue) {
         case "user_age":
             update_bar_chart_data(user_ages_data);
@@ -134,6 +233,36 @@ function update_pie_chart_data(selectedData) {
     pieChart.update();
 }
 
+document.getElementById("continentSelectPie").addEventListener("change", function() {
+    let selectedValue = this.value; 
+    switch(selectedValue) {
+        case "europe":
+            update_pie_chart_data(user_location_europe_data);
+            break;
+        case "north_america":
+            update_pie_chart_data(user_location_north_america_data);
+            break;
+        case "south_america":
+            update_pie_chart_data(user_location_south_america_data);
+            break;
+        case "asia":
+            update_pie_chart_data(user_location_asia_data);
+            break;
+        case "africa":
+            update_pie_chart_data(user_location_africa_data);
+            break;
+        case "australia":
+            update_pie_chart_data(user_location_australia_data);
+            break;
+        case "antarctica":
+            update_pie_chart_data(user_location_antarctica_data);
+            break;
+        default:
+            update_pie_chart_data(user_location_data);
+    }
+})
+
+
 document.getElementById("pieChartDataSelect").addEventListener("change", function() {
     let selectedValue = this.value;
     switch(selectedValue) {
@@ -161,5 +290,34 @@ document.getElementById("pieChartDataSelect").addEventListener("change", functio
 });
 
 update_pie_chart_data(ethnicity_data);
+
+document.addEventListener('DOMContentLoaded', function () {
+    var dataSelect = document.getElementById('barChartDataSelect');
+    var continentSelect = document.getElementById('continentSelectBar');
+    function toggleContinentDropdown() {
+        if (dataSelect.value === "user_location") {
+            continentSelect.style.display = 'block'; 
+        } else {
+            continentSelect.style.display = 'none'; 
+        }
+    }
+    toggleContinentDropdown();
+    dataSelect.addEventListener('change', toggleContinentDropdown);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    var dataSelect = document.getElementById('pieChartDataSelect');
+    var continentSelect = document.getElementById('continentSelectPie');
+    function toggleContinentDropdown() {
+        if (dataSelect.value === "user_location") {
+            continentSelect.style.display = 'block'; 
+        } else {
+            continentSelect.style.display = 'none'; 
+        }
+    }
+    toggleContinentDropdown();
+    dataSelect.addEventListener('change', toggleContinentDropdown);
+});
+
 
 

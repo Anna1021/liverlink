@@ -6,6 +6,9 @@ from peer_support.models import Notification
 from django.contrib import messages
 from collections import Counter
 from datetime import date
+import pycountry
+import pycountry_convert as pc
+from collections import defaultdict
 
 def login_prohibited(view_function):
     """Decorator for view functions that redirect users away if they are logged in."""
@@ -111,6 +114,15 @@ def get_age_ranges():
             age_ranges["71+"]+=1
     return age_ranges
 
+def get_user_types():
+    num_patients = Patient.objects.count()
+    num_parents = Parent.objects.count()
+    num_mentors = Mentor.objects.count()
+    return {'patients': num_patients,
+        'parents': num_parents,
+        'mentors': num_mentors,}
+
+
 def get_user_ethnicities():
     users_ethnicities = User.objects.values_list('ethnicity', flat=True)
     return Counter(users_ethnicities) 
@@ -128,6 +140,34 @@ def get_genders():
     return Counter(genders) 
 
 def get_locations():
-    location = User.objects.values_list('location', flat=True)
-    return Counter(location) 
+    country_codes = User.objects.values_list('location', flat=True)
+    continents = [country_to_continent(code) for code in country_codes if country_to_continent(code) is not None]
+    continent_counts = Counter(continents)
+    return Counter(continent_counts) 
 
+def country_to_continent(country_code):
+    try:
+        continent_code = pc.country_alpha2_to_continent_code(country_code)
+        continent_name = pc.convert_continent_code_to_continent_name(continent_code)
+        return continent_name
+    except KeyError:
+        return "Unkown"
+    
+def country_to_continent_two(country_code):
+    try:
+        country = pycountry.countries.get(alpha_2=country_code)
+        country_name = country.name if country else "Unknown"
+        continent_code = pc.country_alpha2_to_continent_code(country_code)
+        continent_name = pc.convert_continent_code_to_continent_name(continent_code)
+        return continent_name, country_name
+    except KeyError:
+        return "Unknown", "Unknown"
+    
+def get_locations_specific():
+    country_codes = User.objects.values_list('location', flat=True)
+    continent_to_countries = defaultdict(list)
+    for code in country_codes:
+        continent, country = country_to_continent_two(code)
+        continent_to_countries[continent].append(country)
+    continent_counts = {continent: Counter(countries) for continent, countries in continent_to_countries.items()}
+    return(continent_counts)

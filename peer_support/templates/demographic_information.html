@@ -8,18 +8,37 @@
         <select id="barChartDataSelect">
             {%include "partials/demographic_options.html" %}
         </select>
+        <select id="continentSelectBar" style="display: none;">
+            <option value="all">Antarctica</option>
+            <option value="europe">Europe</option>
+            <option value="north_america">North America</option>
+            <option value="south_america">South America</option>
+            <option value="asia">Asia</option>
+            <option value="africa">Africa</option>
+            <option value="australia">Australia</option>
+            <option value="antarctica">Antarctica</option>
+        </select>
         <canvas id="barChart"></canvas>
         <select id="pieChartDataSelect">
             {%include "partials/demographic_options.html" %}
+        </select>
+        <select id="continentSelectPie" style="display: none;">
+            <option value="all">Antarctica</option>
+            <option value="europe">Europe</option>
+            <option value="north_america">North America</option>
+            <option value="south_america">South America</option>
+            <option value="asia">Asia</option>
+            <option value="africa">Africa</option>
+            <option value="australia">Australia</option>
+            <option value="antarctica">Antarctica</option>
         </select>
         <canvas id="ethnicityChart" style="margin-top: 20px;"></canvas>
     
     </div>
 </div>
 <script>
-    var num_patients={{num_patients}};
-    var num_parents={{num_parents}};
-    var num_mentors={{num_mentors}};
+    var user_types_labels={{user_types_labels|safe}};
+    var user_types_count={{user_types_count|safe}};
     var age_range_labels={{age_range_labels|safe}};
     var age_range_counts={{age_range_counts|safe}};
     var ethnicities={{ethnicities|safe}};
@@ -32,7 +51,20 @@
     var gender_count={{gender_count|safe}};
     var location_labels={{location_labels|safe}};
     var location_count={{location_count|safe}};
+    var europe_labels = {{ europe_labels|safe }};
+    var europe_count = {{ europe_count|safe }};
+    var north_america_labels = {{ north_america_labels|safe }};
+    var north_america_count = {{ north_america_count|safe }};
+    var south_america_labels = {{ south_america_labels|safe }};
+    var south_america_count = {{ south_america_count|safe }};
+    var asia_labels = {{ asia_labels|safe }};
+    var asia_count = {{ asia_count|safe }};
+    var africa_labels = {{ africa_labels|safe }};
+    var africa_count = {{ africa_count|safe }};
+    var australia_labels = {{ australia_labels|safe }};
+    var australia_count = {{ australia_count|safe }};
+    var antarctica_labels = {{ antarctica_labels|safe }};
+    var antarctica_count = {{ antarctica_count|safe }};
 </script>
 <script src="{% static 'js/demographic_info.js' %}"></script>
-
 {% endblock %}
