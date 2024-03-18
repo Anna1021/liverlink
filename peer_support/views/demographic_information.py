@@ -10,7 +10,7 @@ def demographic_information(request):
     current_user = request.user
     if not current_user.is_staff:
         messages.error(request, "You do not have access to this view.")
-        return redirect(reverse('dashboard'))
+        return redirect(reverse('feed'))
     context = {
         'user_types_labels': list(get_user_types().keys()),
         'user_types_count': list(get_user_types().values()),
