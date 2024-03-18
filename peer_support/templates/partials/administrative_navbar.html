@@ -1,8 +1,9 @@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
-        <a class="nav-link {% if request.resolver_match.url_name == 'moderation' %}active{% endif %}" id="reportContent-tab" href="{% url 'moderation' %}" role="tab">Reports</a>
+        <a class="nav-link" id="reportContent" data-toggle="tab" href="{% url 'moderation' %}" role="tab">Reports</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {% if request.resolver_match.url_name == 'demographic-information' %}active{% endif %}" id="demographic-information-tab" href="{% url 'demographic-information' %}" role="tab">User Information</a>
+        <a class="nav-link" id="demographic-information" data-toggle="tab" href="{% url 'demographic-information' %}"
+            role="tab">User information</a>
     </li>
 </ul>

@@ -1,5 +1,5 @@
 import uuid
-from peer_support.models import Referral, Mentor, User, Patient, Parent, Post
+from peer_support.models import Referral, Mentor, User, Patient, Parent, Post, FriendRequest
 from django.conf import settings
 from django.shortcuts import redirect, reverse
 from peer_support.models import Notification
@@ -47,12 +47,13 @@ def get_referral_code(user):
     return None
 
 def get_addable_peers(current_user):
-    """Gets users who are not admin, friends, blocked or user"""
+    """Gets users who are not admin, friends, blocked or have been requested"""
 
     friends_ids = current_user.friends.values_list('id', flat=True)
+    requested_users = FriendRequest.objects.filter(sender=current_user).values_list('receiver_id', flat=True)
     blocked_users_ids = current_user.blocked_users.values_list('id', flat=True)
     blocked_by_ids = current_user.blocked_by.values_list('id', flat=True)
-    eligible_users = User.objects.exclude(is_staff=True).exclude(id=current_user.id).exclude(id__in=friends_ids).exclude(id__in=blocked_users_ids).exclude(id__in=blocked_by_ids).distinct()
+    eligible_users = User.objects.exclude(is_staff=True).exclude(id=current_user.id).exclude(id__in=friends_ids).exclude(id__in=blocked_users_ids).exclude(id__in=blocked_by_ids).exclude(is_active=False).exclude(id__in=requested_users).distinct()
     return eligible_users
 
 def check_blocked_dm(current_user, conversation):
@@ -168,7 +169,7 @@ def country_to_continent(country_code):
     except KeyError:
         return "Unknown"
     
-def country_to_continent_two(country_code):
+def country_to_continent_specific(country_code):
     try:
         country = pycountry.countries.get(alpha_2=country_code)
         country_name = country.name if country else "Unknown"
@@ -182,7 +183,7 @@ def get_locations_specific():
     country_codes = User.objects.values_list('location', flat=True)
     continent_to_countries = defaultdict(list)
     for code in country_codes:
-        continent, country = country_to_continent_two(code)
+        continent, country = country_to_continent_specific(code)
         continent_to_countries[continent].append(country)
     continent_counts = {continent: Counter(countries) for continent, countries in continent_to_countries.items()}
     return(continent_counts)

@@ -2,6 +2,7 @@ from django.test import TestCase
 from peer_support.views.helpers import country_to_continent, country_to_continent_two 
 
 class TestCountryToContinent(TestCase):
+    """Unit test of country code converter"""
 
     def test_country_to_continent_known(self):
         self.assertEqual(country_to_continent('US'), 'North America')
