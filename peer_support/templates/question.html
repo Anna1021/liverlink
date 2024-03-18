@@ -4,7 +4,15 @@
 <div class="card shadow box-area my-2">
     {% include 'partials/resources-navbar.html' %}
     <div class="page question-page">
-        <h2 class="question-title">{{ question.title }}</h2>
+        <div class="question-header">
+            <h2 class="question-title">{{ question.title }}</h2>
+            <form method="post" action="{% url 'delete_question' id=question.id %}" class="delete-question-form">
+                {% csrf_token %}
+                <button type="submit" class="delete-icon" aria-label="Delete Question" onclick="return confirm('Are you sure you want to delete this question?');">
+                    <span class="bi bi-three-dots-vertical"></span>
+                </button>
+            </form>
+        </div>
         <p {% if question.author in current_user.blocked_users.all %} data-text="{{question.body}}"
             id="blocked-question" class="question-body text-muted" {% endif %} class="question-body">{{ question.body }}
         </p>

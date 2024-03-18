@@ -249,3 +249,12 @@ border: 1px solid #720fe3;
   background-color: #9da1d3; 
   color: white; 
 }
+
+.dark-theme .actions-icon,
+.dark-theme .delete-icon {
+  color: white;
+}
+
+.dark-theme .actions-icon:hover{
+  color: var(--dark-submit-btn-color);
+}

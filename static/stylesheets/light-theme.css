@@ -328,3 +328,11 @@
   color: white; 
 }
 
+.light-theme .actions-icon,
+.light-theme .delete-icon {
+  color: black;
+}
+
+.light-theme .actions-icon:hover{
+  color: var(--dark-submit-btn-color);
+}

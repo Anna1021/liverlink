@@ -43,7 +43,7 @@ blockquote {
   flex-direction: row;
   justify-content: space-between;
   padding: 0 24px;
-
+  align-items: center;
   border-bottom: 1px solid lightgray;
 }
 
@@ -217,4 +217,16 @@ a.username {
 .question-body,.question-title,.responses-container{
   width: 752px;
   word-wrap: break-word;
+}
+.delete-icon{
+  background-color: transparent;
+  outline: none;
+  min-width: fit-content;
+  border: none;
+  margin-bottom: 10px;
+}
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
