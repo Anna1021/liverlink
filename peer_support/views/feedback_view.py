@@ -18,4 +18,4 @@ class FeedbackView(LoginRequiredMixin, View):
             messages.error(request,"You do not have access to this view.")
             return redirect(reverse('feed'))
         feedback = Feedback.objects.order_by('-submitted_at')
-        return render(request, 'feedback.html',{'feedback': feedback})
+        return render(request, 'feedback.html', {'feedback': feedback})
