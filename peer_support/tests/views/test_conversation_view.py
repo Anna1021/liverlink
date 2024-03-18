@@ -216,14 +216,15 @@ class ConversationViewTestCase(TestCase):
             'delete': 'me'
         }
         visible_to_before = self.message.visible_to.count()
-        messages_before = Message.objects.count()
+        messages_before = self.conversation.messages.count()
         response = self.client.post(self.url,data=delete_data,follow=True)
         self.client.logout()
         other_user = User.objects.get(username='@johndoe')
+        other_user.conversations.add(self.conversation)
         self.client.login(username=other_user.username, password="Password123")
         response = self.client.post(self.url,data=delete_data,follow=True)
         visible_to_after = self.message.visible_to.count()
-        messages_after = Message.objects.count()
+        messages_after = self.conversation.messages.count()
         self.assertEqual(visible_to_after,visible_to_before-2)
         self.assertEqual(messages_after,messages_before-1)
         redirect_url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
