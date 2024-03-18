@@ -221,6 +221,28 @@ background-color: var(--dark-submit-btn-color);
   background-color: var(--dark-main-bg-color);
   color: white;
 }
+
+.dark-theme .profile-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dark-theme .mentor-profile-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 8px solid #436780;
+}
+
 .dark-theme .profile-head h7 {
   font-size: 15px;
   color: #91BBD3;

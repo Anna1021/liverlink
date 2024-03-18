@@ -1,9 +1,9 @@
 :root {
   --main-bg-color: #E4FBFF;
-  --filter-btn-color: #B4E9EB; 
+  --filter-btn-color: #CFF3F5; 
   --submit-btn-color: #7868E6;
   --btn-text-color: #161D6F;
-  --friend-inner-card-color: #B4E9EB;
+  --friend-inner-card-color: #CFF3F5;
 }
 .light-theme .img-fluid{
   max-width: 100%;
@@ -116,7 +116,7 @@
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 20px;
-  background-color: #cab2fb;
+  background-color: #7EBABB;
   color: black;
   padding-right: 30px;
   padding-top: 20px;
@@ -285,6 +285,28 @@
   background-color: var(--main-bg-color);
   color: rgb(0, 0, 0);
 }
+
+.light-theme .profile-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.light-theme .mentor-profile-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 8px solid #7EBABB;
+}
+
 .light-theme .profile-head h7 {
   font-size: 15px;
   color: #6490a9;
