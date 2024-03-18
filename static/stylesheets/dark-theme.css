@@ -138,7 +138,6 @@
 }
 
 .dark-theme .card{
-  
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     border-radius: 20px;
@@ -236,4 +235,22 @@ border: 1px solid #720fe3;
   background-color: rgb(194, 192, 195);
   border-radius: 5px;
   color: #000000;
+}
+
+.dark-theme .post-header h4 {
+  color: #91BBD3;
+}
+
+.dark-theme .post-card{
+  width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.5);
+  transition: 0.3s;
+  border-radius: 20px;
+  background-color: var(--dark-main-bg-color);
+  color: white;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-left: 30px;
+  align-content: center;
+  margin: 10px;
 }
