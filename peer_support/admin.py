@@ -1,8 +1,6 @@
 from django.contrib import admin
 from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest,Question, Response, Report, Message
 
-admin.site.register(Question)
-admin.site.register(Response)
 
 class UserProfileInline(admin.StackedInline):
     """Configuration of the admin interface for user profiles."""
