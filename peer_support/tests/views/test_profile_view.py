@@ -281,7 +281,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(mentor, "MENTOR")
 
     def test_get_profile_professional(self):
-        user = User.objects.get(username='@lindajohnson')
+        user = User.objects.get(username='@craighughes')
         url = reverse('profile', kwargs={'username': user.username})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

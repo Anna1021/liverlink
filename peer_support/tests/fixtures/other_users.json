@@ -168,5 +168,59 @@
       "bio": "Tech enthusiast and startup founder. Loves to talk about AI and ML.",
       "is_active": true
     }
+  },
+  {
+    "//": "This is a professional",
+    "model": "peer_support.user",
+    "pk": 11,
+    "fields": {
+      "first_name": "Hazel",
+      "last_name": "Smith",
+      "username": "@hazelsmith",
+      "email": "hazelsmith@example.com",
+      "password": "pbkdf2_sha256$260000$2gkLPX3uW6D8KBRFpZj3He$AdW1o5y2Kz8VIHn9hWQ4aGVZjH8v5VZUOILJSBXkIc4=",
+      "date_of_birth": "1981-01-03",
+      "gender": "F",
+      "location": "US",
+      "ethnicity": "AS",
+      "bio": "I'm a professional therapist and I'm here to help you.",
+      "is_active": true
+    }
+  },
+  {
+    "//": "This is a professional",
+    "model": "peer_support.user",
+    "pk": 12,
+    "fields": {
+      "first_name": "Craig",
+      "last_name": "Hughes",
+      "username": "@craighughes",
+      "email": "craighughes@example.com",
+      "password": "pbkdf2_sha256$260000$4gkZPU9vS2E3JFTKqWb5De$BdX2n1y8Qx7UHOm6iEQ4cWYTkF7m8WYQHJMKZUYyHd1=",
+      "date_of_birth": "2001-02-28",
+      "gender": "M",
+      "location": "IN",
+      "ethnicity": "AS",
+      "bio": "Passionate about adolescent health and mental well-being.",
+      "is_active": true
+    }
+  },
+  {
+    "//": "This is a professional",
+    "model": "peer_support.user",
+    "pk": 13,
+    "fields": {
+      "first_name": "Anna",
+      "last_name": "Miller",
+      "username": "@annamiller",
+      "email": "annamiller@example.com",
+      "password": "pbkdf2_sha256$260000$8gJEPW6tR1V9XZLMoTc7Gf$CdY9v3x6Jk5KQEa8fET6eFCPhI9o3ECeZTVvYEkWzg2=",
+      "date_of_birth": "1974-06-18",
+      "gender": "F",
+      "location": "IN",
+      "ethnicity": "AS",
+      "bio": "Dedicated adolescent psychiatrist on a mission to break the stigma surrounding mental health.",
+      "is_active": true
+    }
   }
 ]
