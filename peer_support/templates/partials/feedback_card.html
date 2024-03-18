@@ -1,8 +1,12 @@
 <div class="feedback-header">
-<div class="friend-inner-card col-7 mt-2 mb-2 pb-2">
-    <div class="feedback-title">{{ fb.title }}</div>
-    <div class="feedback-date">Submitted at: {{ fb.submitted_at }}</div>
-    <div class="feedback-content">{{ fb.content }}</div>
+<div class="friend-inner-card col-12 row mt-2 mb-2 pb-2 ml-1">
+    <div class="col-11">
+        <div class="feedback-title">{{ fb.title }}</div>
+        <div class="feedback-date">Submitted at: {{ fb.submitted_at }}</div>
+        <div class="feedback-content">{{ fb.content }}</div>
+    </div>
+    <div class="col-1 my-auto">
+        <button class="btn btn-danger decline mr-4 mr-2" onclick="window.location.href='/delete_feedback/{{fb.id}}';" ><i class="bi bi-x"></i></button>
+    </div>
 </div>
-<button class="btn btn-danger decline ml-4 mr-2" onclick="window.location.href='/delete_feedback/{{fb.id}}';" ><i class="bi bi-x"></i></button>
 </div>
