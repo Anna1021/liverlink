@@ -69,12 +69,12 @@ class ConversationView(LoginRequiredMixin, FormView):
         if len(visible_messages)==0:
             return 0
         if not message_id or message_id=='':
-            message_index = min(9,len(visible_messages))
+            message_index = min(10,len(visible_messages))
         else:
             message = get_object_or_404(Message, id=message_id)
             message_index = visible_messages.index(message)
         message_index = min(message_index+10,len(visible_messages))
-        next_message_id = self.get_index_id(visible_messages[::-1],-message_index)
+        next_message_id = self.get_index_id(visible_messages,message_index-1)
         return next_message_id
 
     def handle_delete_message(self,request,conversation_id,message_id,delete):
