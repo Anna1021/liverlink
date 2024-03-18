@@ -8,13 +8,22 @@
         <li><a class="dropdown-item" name="delete_all" value=":3"
                 href="{% url 'delete_message' conversation.id message.id %}">Delete for everyone</a></li>
         {% endif %}
+        {% if message.sender != user %}
         <li>
-            <form method="post">
-                {% csrf_token %}
-                {% include 'partials/bootstrap_form.html' with form=report_form %}
-                <input type="hidden" name="action" value="{{message.id}}">
-                <button type="submit">Report</button>
-            </form>
+            <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
+                Report
+                <ul class="dropdown-menu nested-dropdown">
+                    <li>
+                        <form method="post">
+                        {% csrf_token %}
+                        {% include 'partials/bootstrap_form.html' with form=report_form %}
+                        <input type="hidden" name="action" value="{{message.id}}">
+                        <button type="submit" name="report">Report</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </li>
+        {%endif%}
     </ul>
 </div>
