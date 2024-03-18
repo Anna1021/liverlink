@@ -10,11 +10,13 @@
             <a class="nav-link" id="reportContent" data-toggle="tab" href="{% url 'feedback' %}" role="tab">Feedback</a>
         </li>
     </ul>
-        <h1>Reports</h1>
+    <div class="mb-3">
+        <h1 class="mt-2 mb-3">Reports</h1>
         {% for report in reports %}
             {% include 'partials/report.html' %}
         {% empty %}
             <p>No reports found.</p>
         {% endfor %}
+    </div>
 </div>
 {% endblock %}
