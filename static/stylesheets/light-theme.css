@@ -336,3 +336,10 @@
   align-content: center;
   margin: 10px;
 }
+.light-theme .actions-icon, .actions-icon:hover {
+  color: black;
+}
+
+.light-theme .actions-icon:hover{
+  color: var(--dark-submit-btn-color);
+}
