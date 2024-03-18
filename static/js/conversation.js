@@ -41,11 +41,6 @@ $(document).ready(function() {
         scrollPos = $('#conversation').prop('scrollHeight')-scrollPos
         $('#conversation').scrollTop(scrollPos);
     }
-    setInterval(function(){
-        if (conversation_id!="0"){
-            sessionStorage.setItem(storageKey,$("#id_content").val());
-        }
-    },2000)
     $('#conversation').scroll(function(){
         if ($(this).scrollTop()<$(this).prop('scrollHeight')-600){
             $('#scroll-down').show();
