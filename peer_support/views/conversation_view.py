@@ -68,7 +68,7 @@ class ConversationView(LoginRequiredMixin, FormView):
         visible_messages = list(self.get_visible_messages(request.user,conversation))
         if len(visible_messages)==0:
             return 0
-        if not message_id or message_id=='':
+        if not message_id or message_id=='' or message_id=='0':
             message_index = min(10,len(visible_messages))
         else:
             message = get_object_or_404(Message, id=message_id)
