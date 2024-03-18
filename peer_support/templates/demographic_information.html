@@ -5,17 +5,17 @@
 <div class="card shadow box-area my-2">
     {% include 'partials/administrative_navbar.html' %}    
     <div class="container my-2">
-        <select id="barChartDataSelect">
+        <select class="btn btn-primary dropdown-toggle" id="barChartDataSelect">
             {%include "partials/user_demographics/demographic_options.html" %}
         </select>
-        <select id="continentSelectBar" style="display: none;">
+        <select class="btn btn-primary dropdown-toggle" id="continentSelectBar" style="display: none;">
             {%include "partials/user_demographics/continent_options.html" %}
         </select>
         <canvas id="barChart"></canvas>
-        <select id="pieChartDataSelect">
+        <select class="btn btn-primary dropdown-toggle" id="pieChartDataSelect">
             {%include "partials/user_demographics/demographic_options.html" %}
         </select>
-        <select id="continentSelectPie" style="display: none;">
+        <select class="btn btn-primary dropdown-toggle" id="continentSelectPie" style="display: none;">
             {%include "partials/user_demographics/continent_options.html" %}
         </select>
         <canvas id="ethnicityChart" style="margin-top: 20px;"></canvas>

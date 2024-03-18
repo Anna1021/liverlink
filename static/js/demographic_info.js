@@ -1,5 +1,31 @@
 var colours = ["#55efc4","#81ecec","#a29bfe","#ffeaa7","#fab1a0","#ff7675","#fd79a8"];
 
+//Change the label colouring based on theme
+document.getElementById('theme').addEventListener('click', function() {
+    let label_colour = getThemeColors() === "#ffffff" ? "#000000" : "#ffffff";
+    let ChartOptions = updateChartOptions(label_colour); 
+    bar_chart.options = ChartOptions;
+    bar_chart.update();
+    pieChart.options = ChartOptions;
+    pieChart.update();
+});
+
+function getThemeColors() {
+    let storedTheme = localStorage.getItem("currentTheme"); 
+    return storedTheme === "light-theme" ? "#000000" : "#ffffff"; 
+}
+
+function updateChartOptions(label_colour) {
+    return {scales: {y: {beginAtZero: true,
+                ticks: {color: label_colour, }},
+            x: {ticks: { color: label_colour,},}},
+        plugins: {legend: {labels: {color: label_colour
+                }}, }};}
+                
+let label_colour = getThemeColors();
+let ChartOptions = updateChartOptions(label_colour);
+
+//Charts information
 let user_type_data={
     labels:user_types_labels,
     datasets:[{
@@ -139,15 +165,15 @@ let user_location_antarctica_data = {
     title: "Users within Antarctica"
 };
 
-
+//Charts
 let bar_chart_id = document.getElementById("barChart").getContext("2d");
 
 let bar_chart = new Chart(bar_chart_id, {
     type: "bar",
-    data: {labels: [],datasets: [{label: "",backgroundColor: [],borderColor: [],data: []}]},
-    options: {scales: {y: {beginAtZero: true}},
-        plugins: {title:{display: true,text: ""}}}
+    data: {labels: [], datasets: [{label: "", backgroundColor: [], borderColor: [], data: []}]},
+    options: ChartOptions 
 });
+
 
 function update_bar_chart_data(selectedData) {
     bar_chart.data.labels =selectedData.labels;
@@ -213,16 +239,14 @@ document.getElementById("barChartDataSelect").addEventListener("change", functio
             update_bar_chart_data(user_type_data);
     }
 });
-
-
+ 
 update_bar_chart_data(user_type_data);
 
 let ctxPie = document.getElementById("ethnicityChart").getContext("2d");
 let pieChart = new Chart(ctxPie, {
     type: "pie",
-    data: {labels: [],datasets: [{label: "",backgroundColor: [],borderColor: [],data: []}]},
-    options: {scales: {y: {beginAtZero: true}},
-        plugins: {title:{display: true,text: ""}}}
+    data: {labels: [], datasets: [{label: "", backgroundColor: [], borderColor: [], data: []}]},
+    options: ChartOptions 
 });
 
 function update_pie_chart_data(selectedData) {
@@ -266,14 +290,17 @@ document.getElementById("continentSelectPie").addEventListener("change", functio
 document.getElementById("pieChartDataSelect").addEventListener("change", function() {
     let selectedValue = this.value;
     switch(selectedValue) {
-        case "parent_child_condition":
-            update_pie_chart_data(parent_child_condition_data);
-            break;
-        case "user_type":
-            update_pie_chart_data(user_type_data);
-            break;
         case "user_age":
             update_pie_chart_data(user_ages_data);
+            break;
+        case "ethnicity":
+            update_pie_chart_data(ethnicity_data);
+            break;
+        case "patient_condition":
+            update_pie_chart_data(patient_condition_data);
+            break;
+        case "parent_child_condition":
+            update_pie_chart_data(parent_child_condition_data);
             break;
         case "user_gender":
             update_pie_chart_data(user_gender_data);
@@ -281,16 +308,14 @@ document.getElementById("pieChartDataSelect").addEventListener("change", functio
         case "user_location":
             update_pie_chart_data(user_location_data);
             break;
-        case "ethnicity":
-            update_pie_chart_data(ethnicity_data);
-            break;
         default:
-            update_pie_chart_data(patient_condition_data);
+            update_pie_chart_data(user_type_data);
     }
 });
 
-update_pie_chart_data(ethnicity_data);
+update_pie_chart_data(user_type_data);
 
+//Loading continets
 document.addEventListener('DOMContentLoaded', function () {
     var dataSelect = document.getElementById('barChartDataSelect');
     var continentSelect = document.getElementById('continentSelectBar');

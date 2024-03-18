@@ -137,8 +137,10 @@ def get_user_types():
 
 
 def get_user_ethnicities():
-    users_ethnicities = User.objects.values_list('ethnicity', flat=True)
-    return Counter(users_ethnicities) 
+    users = User.objects.all()
+    ethnicity_names = [user.ethnicity_name() for user in users if user.ethnicity_name()]
+    ethnicity_counts = Counter(ethnicity_names)
+    return ethnicity_counts
 
 def get_patient_conditions():
     patient_conditions = Patient.objects.values_list('condition', flat=True)
