@@ -66,6 +66,19 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Post',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('text', models.CharField(max_length=280)),
+                ('visibility', models.CharField(default='G', max_length=10)),
+                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-created_at'],
+            },
+        ),
+        migrations.CreateModel(
             name='Question',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -171,6 +184,20 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='PostComment',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('content', models.CharField(max_length=255)),
+                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
+                ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ('parent', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.SET_NULL, to='peer_support.postcomment')),
+                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='replies', to='peer_support.post')),
+            ],
+            options={
+                'ordering': ['-created_at'],
+            },
+        ),
+        migrations.CreateModel(
             name='Notification',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -189,7 +216,6 @@ class Migration(migrations.Migration):
                 ('content', models.CharField(max_length=100)),
                 ('send_time', models.DateTimeField(default=django.utils.timezone.now)),
                 ('previous_message', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='peer_support.message')),
-                ('read_by', models.ManyToManyField(blank=True, related_name='read_by', to=settings.AUTH_USER_MODEL)),
                 ('sender', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
                 ('visible_to', models.ManyToManyField(blank=True, related_name='visible_to', to=settings.AUTH_USER_MODEL)),
             ],

@@ -2,7 +2,6 @@ import os
 from django.shortcuts import render
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.conf import settings
 from django.contrib.staticfiles import finders
 
 class CustomisationView(LoginRequiredMixin, View):

@@ -1,25 +1,13 @@
 {% extends 'dashboard.html' %}
 {% block page %}
-{% load static %}
 <div class="card shadow box-area my-2">
     <div class="container my-2">
+    <h2>Friends List</h2>
+    <hr>
     {% include 'partials/search_filter_sort_users.html' %}
         <div class="row">
             {% for friend in friends %}
-            <div class="col-md-6 my-2">
-                <div class="card">
-                    <div class="friend-card-body">
-                        <div class="media align-items-center">
-                            <img src="{% static friend.userprofile.profile_picture %}" alt="Profile Picture" class="rounded-circle friend-profile-picture">
-                            <div class="media-body overflow-hidden">
-                                <h5 class="card-text mb-0"> <span class="notranslate">{{ friend.username }}</span></h5>
-                                <p class="card-text text-uppercase subtext mb-0"> <span class="notranslate">{{ friend.full_name}}</span></p>
-                                <p class="card-text subtext">{{ friend.country_name }}</p>
-                            </div>
-                        </div><a href="{% url 'profile' username=friend.username %}" class="tile-link"></a>
-                    </div>
-                </div>
-            </div>
+                {% include "partials/user_card.html" with user=friend.friend %}
             {% endfor %}
         </div>
     </div>

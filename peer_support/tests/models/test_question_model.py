@@ -1,32 +1,27 @@
+"""Unit tests for the Question model."""
 from django.test import TestCase
 from peer_support.models import Question, Response, User
 from django.core.exceptions import ValidationError
 
-class QuestionModelTest(TestCase):
+class QuestionModelTestCase(TestCase):
     """Unit tests for the Question model."""
+    
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
-        'peer_support/tests/fixtures/other_users.json'
+        'peer_support/tests/fixtures/other_users.json',
+        'peer_support/tests/fixtures/default_question.json',
     ]
-
-    GRAVATAR_URL = "https://www.gravatar.com/avatar/363c1b0cd64dadffb867236a00e62986"
 
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
-        test_question = Question.objects.create(
-            author=self.user,
-            title='Test Question',
-            body='This is a test question.'
-        )
-        test_question.save()
 
     def test_valid_user(self):
             self._assert_user_is_valid()
 
     def test_question_creation(self):
         question = Question.objects.get(id=1)
-        self.assertEqual(question.title, 'Test Question')
-        self.assertEqual(question.body, 'This is a test question.')
+        self.assertEqual(question.title, 'Sample Question Title')
+        self.assertEqual(question.body, 'This is a sample question body.')
 
     def test_get_responses(self):
         question = Question.objects.get(id=1)
@@ -65,7 +60,7 @@ class QuestionModelTest(TestCase):
 
     def test_question_string_representation(self):
         question = Question.objects.get(id=1)
-        self.assertEqual(str(question), 'Test Question')
+        self.assertEqual(str(question), 'Sample Question Title')
 
     def _assert_user_is_valid(self):
         try:

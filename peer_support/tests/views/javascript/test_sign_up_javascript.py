@@ -29,14 +29,13 @@ class SignUpJavascriptTest(StaticLiveServerTestCase):
     def test_dynamic_form_sign_up(self):
         try:
             self.selenium.get(f'{self.live_server_url}/sign_up/')
-
             dropdown_element = self.wait.until(EC.presence_of_element_located((By.ID, 'id_user_type')))
             select = Select(dropdown_element)
 
             select.select_by_visible_text('Patient')
             age_of_diagnosis = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='age_of_diagnosis']")))
             self.assertTrue(age_of_diagnosis.is_displayed(), "Age of diagnosis field is not visible for Patient")
-
+            
             select.select_by_visible_text('Parent')
             child_age_of_diagnosis = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='child_age_of_diagnosis']")))
             self.assertTrue(child_age_of_diagnosis.is_displayed(), "Child age of diagnosis field is not visible for Parent")

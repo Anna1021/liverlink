@@ -4,15 +4,15 @@
 
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="ps-subheading-text" style="text-align: center; padding-top: 10px;">Users you've blocked</div>
+            <div class="ps-subheading-text bl-header">Users you've blocked</div>
 
-            <table class="table table-hover" style="table-layout: fixed;">
+            <table class="table table-hover bl-table">
 
                 <thead>
                     <tr>
-                        <th scope="col" width="10%"></th> <!-- User's gravatar -->
-                        <th scope="col" width="70%"></th> <!-- Username -->
-                        <th scope="col" width="20%"></th> <!-- Block/unblock button-->
+                        <th scope="col" width="10%"></th>
+                        <th scope="col" width="70%"></th>
+                        <th scope="col" width="20%"></th>
                     </tr>
                 </thead>
 
@@ -21,7 +21,7 @@
                     {% for user in block_list %}
 
                     <tr>
-                        <td><a href="{% url 'profile' user.username %}" aria-label="user-profile-hyperlink"><img src="{{ user.mini_gravatar }}" class="bl-gravatar" alt="User's gravatar">   </img></a></td>
+                        <td><a href="{% url 'profile' user.username %}" aria-label="user-profile-hyperlink"><img src="{% static user.userprofile.profile_picture %}" class="bl-profile-picture" alt="User's profile picture">   </img></a></td>
                         <td><a href="{% url 'profile' user.username %}" aria-label="user-profile-hyperlink" class="bl-username">{{ user.username }}</a></td>
                         <td><button type="button" class="btn btn-unblock block-user-toggle-btn" data-user-id="{{user.id}}" data-action="unblock">Unblock</button></td>
                     </tr>
@@ -41,7 +41,7 @@
 
 </div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
   <script>
       var unblockUserUrl = "{% url 'unblock_user' 0 %}";
       var blockUserUrl = "{% url 'block_user' 0 %}";

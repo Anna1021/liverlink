@@ -24,3 +24,9 @@ class NewPasswordMixin(forms.Form):
         if new_password != password_confirmation:
             self.add_error('password_confirmation', 'Confirmation does not match password.')
         return cleaned_data
+    
+def apply_filter_if_needed(queryset, field_name, value):
+    if value and value != "any":
+        filter_kwargs = {field_name: value}
+        return queryset.filter(**filter_kwargs)
+    return queryset

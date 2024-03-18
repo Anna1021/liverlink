@@ -135,3 +135,8 @@
     bottom: 100px;
     display: none;
 }
+/* form styling */
+
+.inactive-form {
+    opacity: 50%;
+}

@@ -10,23 +10,29 @@
         </h3>
     </div>
     <div class="col-md-3">
-        <a class="nav-link" href="#" id="conversation-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link" href="#" id="conversation-dropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
             <span class="bi-info-circle"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-account-dropdown">
             {% if conversation.as_group != None %}
-                <li><a class="dropdown-item" href="{% url 'conversation_details' conversation.id %}">View group details</a></li>
+            <li><a class="dropdown-item" href="{% url 'conversation_details' conversation.id %}">View group details</a>
+            </li>
             {% else %}
-                <li>
+            <li>
                 {% if user == conversation.get_first_member %}
-                    <a class="dropdown-item" href="{% url 'profile' conversation.get_second_member.username %}">
-                {% else %}
+                <a class="dropdown-item" href="{% url 'profile' conversation.get_second_member.username %}">
+                    {% else %}
                     <a class="dropdown-item" href="{% url 'profile' conversation.get_first_member.username %}">
-                {% endif %}
-                View user details</a></li>
+                        {% endif %}
+                        View user details</a>
+            </li>
             {% endif %}
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'delete_conversation' conversation.id %}">Delete conversation</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="{% url 'delete_conversation' conversation.id %}">Delete conversation</a>
+            </li>
         </ul>
     </div>
 
@@ -72,17 +78,9 @@
     </form>
     {% else %}
         Pick a conversation or start a new conversation!
-    {% endif %}
-</div>
+        {% endif %}
+    </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    var first_message = "{{ first_message }}"
-    var username = "{{ user.username }}";
-    var conversation_id = "{{ conversation.id }}";
-    var storageKey = "message"+conversation_id;
-    var scrollKey = "scroll"+conversation_id;
-    
-</script>
 <script src="{% static 'js/conversation.js' %}"></script>
 {% endblock %}
