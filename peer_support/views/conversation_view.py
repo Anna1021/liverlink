@@ -97,7 +97,6 @@ class ConversationView(LoginRequiredMixin, FormView):
             return message_form.save()
         elif blocked_dm:
             messages.error(request,"You cannot message this user.")
-
         else:
             messages.error(request,"This message is not valid")
         
