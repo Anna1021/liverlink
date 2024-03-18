@@ -117,6 +117,10 @@ class Command(BaseCommand):
 
         self.users = User.objects.all()
 
+        self.seed_friends()
+
+        self.seed_blocked_users()
+
         self.create_friend_requests()
         self.friend_requests = FriendRequest.objects.all()
 
@@ -368,6 +372,22 @@ class Command(BaseCommand):
         transplant = self.faker.random_element(elements=(tuple(transplant[0] for transplant in TRANSPLANT_CHOICES)))
         user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'referral_code': referral_code, 'transplant': transplant})
         self.try_create_mentor(user_data)
+
+    def seed_friends(self):
+        print("Seeding friends...", end='\r')
+        for user in self.users:
+            for _ in range(randint(1, 10)):
+                friend = self.users[randint(0, len(self.users) - 1)]
+                if friend != user:
+                    user.friends.add(friend)
+
+    def seed_blocked_users(self):
+        print("Seeding blocked users...", end='\r')
+        for user in self.users:
+            for _ in range(randint(1, 10)):
+                blocked_user = self.users[randint(0, len(self.users) - 1)]
+                if blocked_user != user:
+                    user.blocked_users.add(blocked_user)
 
     def generate_friend_request(self):
         sender = self.users[randint(0, len(self.users) - 1)]
