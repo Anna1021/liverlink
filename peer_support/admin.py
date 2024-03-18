@@ -90,7 +90,7 @@ class MessageAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for friend requests."""
 
     list_display = [
-        'id','sender','content', 'send_time', 'previous_message'
+        'id','sender','content', 'send_time'
     ]
 
 @admin.register(Question)
