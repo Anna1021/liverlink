@@ -72,6 +72,19 @@ report_fixtures = [
     {'reporter': patient_fixtures[2], 'reason': 'spam', 'content_type': 'User', 'object_id': parent_fixtures[0]},
 ]
 
+post_fixtures = [
+    {'author': patient_fixtures[0], 'text': 'This is my post'},
+    {'author': parent_fixtures[0], 'text': 'Hello world!', 'visibility': 'F'},
+    {'author': mentor_fixtures[0], 'text': 'Hello, I am a mentor.'},
+]
+
+post_comment_fixtures = [
+    {'post': post_fixtures[0], 'author': parent_fixtures[0], 'content': 'This is my comment.'},
+    {'post': post_fixtures[1], 'author': patient_fixtures[0], 'content': 'Hello!'},
+    {'post': post_fixtures[2], 'author': mentor_fixtures[0], 'content': 'Hi, I am a mentor.'},
+]
+
+
 class Command(BaseCommand):
     """Build automation command to seed the database."""
 
@@ -84,6 +97,8 @@ class Command(BaseCommand):
     QUESTION_COUNT = 250
     RESPONSE_COUNT = 1000
     REPORT_COUNT = 250
+    POST_COUNT = 500
+    POST_COMMENT_COUNT = 1000
     DEFAULT_PASSWORD = 'Password123'
     help = 'Seeds the database with sample data'
 
@@ -124,6 +139,12 @@ class Command(BaseCommand):
         # self.create_reports()
         # self.reports = Report.objects.all()
 
+        self.create_posts()
+        self.posts = Post.objects.all()
+
+        # self.create_post_comments()
+        # self.post_comments = PostComment.objects.all()
+
     def create_patients(self):
         self.generate_patient_fixtures()
         self.generate_random_patients()
@@ -160,8 +181,12 @@ class Command(BaseCommand):
         self.generate_random_responses()
 
     def create_reports(self):
-         self.generate_report_fixtures()
-         self.generate_random_reports()
+        self.generate_report_fixtures()
+        self.generate_random_reports()
+
+    def create_posts(self):
+        self.generate_post_fixtures()
+        self.generate_random_posts()
 
     def generate_patient_fixtures(self):
         for data in patient_fixtures:
@@ -202,6 +227,10 @@ class Command(BaseCommand):
     def generate_report_fixtures(self):
         for data in report_fixtures:
             self.create_report(data)
+
+    def generate_post_fixtures(self):
+        for data in post_fixtures:
+            self.create_post(data)
 
     def generate_random_patients(self):
         patient_count = Patient.objects.count()
@@ -274,6 +303,14 @@ class Command(BaseCommand):
             self.generate_report()
             report_count = Report.objects.count()
         print("Report seeding complete.      ")
+
+    def generate_random_posts(self):
+        post_count = Post.objects.count()
+        while post_count < self.POST_COUNT:
+            print(f"Seeding post {post_count}/{self.POST_COUNT}", end='\r')
+            self.generate_post()
+            post_count = Post.objects.count()
+        print("Post seeding complete.      ")
 
     def generate_user_data(self):
         first_name = self.faker.first_name()
@@ -369,6 +406,13 @@ class Command(BaseCommand):
         object_id = self.get_content_type(content_type).model_class().objects.order_by('?').first().pk
         reporter = {'username': reporter.username}
         self.try_create_report({'reporter': reporter, 'reason': reason, 'content_type': content_type, 'object_id': object_id})
+
+    def generate_post(self):
+        author = self.users[randint(0, len(self.users) - 1)]
+        text = self.faker.text(max_nb_chars=280)
+        visibility = self.faker.random_element(elements=('G', 'F'))
+        author = {'username': author.username}
+        self.create_post({'author': author, 'text': text, 'visibility': visibility})
         
     def try_create_patient(self, data):
         try:
@@ -497,6 +541,10 @@ class Command(BaseCommand):
             data['object_id'] = self.get_message(data['object_id']).pk
         data['content_type'] = self.get_content_type(data['content_type'].lower())
         Report.objects.create(**data)
+
+    def create_post(self, data):
+        data['author'] = self.get_user(data['author'])
+        Post.objects.create(**data)
     
     def get_message(self, data):
         return Message.objects.filter(sender=self.get_user(data['sender']).pk).first()

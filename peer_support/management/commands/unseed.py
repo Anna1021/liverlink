@@ -14,6 +14,8 @@ class Command(BaseCommand):
         GroupConversation.objects.all().delete()
         Message.objects.all().delete()
         Notification.objects.all().delete()
+        PostComment.objects.all().delete()
+        Post.objects.all().delete()
         Question.objects.all().delete()
         Report.objects.all().delete()
         Response.objects.all().delete()
