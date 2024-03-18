@@ -142,8 +142,8 @@ class Command(BaseCommand):
         self.create_posts()
         self.posts = Post.objects.all()
 
-        # self.create_post_comments()
-        # self.post_comments = PostComment.objects.all()
+        self.create_post_comments()
+        self.post_comments = PostComment.objects.all()
 
     def create_patients(self):
         self.generate_patient_fixtures()
@@ -188,6 +188,10 @@ class Command(BaseCommand):
         self.generate_post_fixtures()
         self.generate_random_posts()
 
+    def create_post_comments(self):
+        self.generate_post_comment_fixtures()
+        self.generate_random_post_comments()
+
     def generate_patient_fixtures(self):
         for data in patient_fixtures:
             self.try_create_patient(data)
@@ -231,6 +235,10 @@ class Command(BaseCommand):
     def generate_post_fixtures(self):
         for data in post_fixtures:
             self.create_post(data)
+
+    def generate_post_comment_fixtures(self):
+        for data in post_comment_fixtures:
+            self.create_post_comment(data)
 
     def generate_random_patients(self):
         patient_count = Patient.objects.count()
@@ -311,6 +319,14 @@ class Command(BaseCommand):
             self.generate_post()
             post_count = Post.objects.count()
         print("Post seeding complete.      ")
+
+    def generate_random_post_comments(self):
+        post_comment_count = PostComment.objects.count()
+        while post_comment_count < self.POST_COMMENT_COUNT:
+            print(f"Seeding post comment {post_comment_count}/{self.POST_COMMENT_COUNT}", end='\r')
+            self.generate_post_comment()
+            post_comment_count = PostComment.objects.count()
+        print("Post comment seeding complete.      ")
 
     def generate_user_data(self):
         first_name = self.faker.first_name()
@@ -412,7 +428,15 @@ class Command(BaseCommand):
         text = self.faker.text(max_nb_chars=280)
         visibility = self.faker.random_element(elements=('G', 'F'))
         author = {'username': author.username}
-        self.create_post({'author': author, 'text': text, 'visibility': visibility})
+        self.try_create_post({'author': author, 'text': text, 'visibility': visibility})
+
+    def generate_post_comment(self):
+        post = self.posts[randint(0, len(self.posts) - 1)]
+        author = self.users[randint(0, len(self.users) - 1)]
+        content = self.faker.text(max_nb_chars=255)
+        post = {'text': post.text}
+        author = {'username': author.username}
+        self.try_create_post_comment({'post': post, 'author': author, 'content': content})
         
     def try_create_patient(self, data):
         try:
@@ -471,6 +495,18 @@ class Command(BaseCommand):
     def try_create_report(self, data):
         try:
             self.create_report(data)
+        except:
+            pass
+
+    def try_create_post(self, data):
+        try:
+            self.create_post(data)
+        except:
+            pass
+
+    def try_create_post_comment(self, data):
+        try:
+            self.create_post_comment(data)
         except:
             pass
 
@@ -545,6 +581,11 @@ class Command(BaseCommand):
     def create_post(self, data):
         data['author'] = self.get_user(data['author'])
         Post.objects.create(**data)
+
+    def create_post_comment(self, data):
+        data['post'] = Post.objects.filter(text=data['post']['text']).first()
+        data['author'] = self.get_user(data['author'])
+        PostComment.objects.create(**data)
     
     def get_message(self, data):
         return Message.objects.filter(sender=self.get_user(data['sender']).pk).first()
