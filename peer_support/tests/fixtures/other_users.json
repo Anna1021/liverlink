@@ -172,7 +172,7 @@
   {
     "//": "This is a professional",
     "model": "peer_support.user",
-    "pk": 11,
+    "pk": 12,
     "fields": {
       "first_name": "Hazel",
       "last_name": "Smith",
@@ -190,7 +190,7 @@
   {
     "//": "This is a professional",
     "model": "peer_support.user",
-    "pk": 12,
+    "pk": 13,
     "fields": {
       "first_name": "Craig",
       "last_name": "Hughes",
@@ -208,7 +208,7 @@
   {
     "//": "This is a professional",
     "model": "peer_support.user",
-    "pk": 13,
+    "pk": 14,
     "fields": {
       "first_name": "Anna",
       "last_name": "Miller",

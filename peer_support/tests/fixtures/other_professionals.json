@@ -3,7 +3,7 @@
       "model": "peer_support.professional",
       "pk": 2,
       "fields": {
-        "user_ptr": 11,
+        "user_ptr": 12,
         "expertise": "Biliary atresia",
         "referral_code": "9C274FF391",
         "is_active": true
@@ -13,7 +13,7 @@
       "model": "peer_support.professional",
       "pk": 3,
       "fields": {
-        "user_ptr": 12,
+        "user_ptr": 13,
         "expertise": "Cirrhosis",
         "referral_code": "9C274FF391",
         "is_active": true
@@ -23,7 +23,7 @@
       "model": "peer_support.professional",
       "pk": 4,
       "fields": {
-        "user_ptr": 13,
+        "user_ptr": 14,
         "expertise": "Haemochromatosis",
         "referral_code": "9C274FF391",
         "is_active": true
