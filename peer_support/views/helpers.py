@@ -183,7 +183,7 @@ def get_locations_specific():
         continent, country = country_to_continent_two(code)
         continent_to_countries[continent].append(country)
     continent_counts = {continent: Counter(countries) for continent, countries in continent_to_countries.items()}
-    return(continent_counts
+    return(continent_counts)
            
 def get_user_type(user):
     if hasattr(user, 'parent'):
