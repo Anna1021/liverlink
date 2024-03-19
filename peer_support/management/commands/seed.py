@@ -386,7 +386,7 @@ class Command(BaseCommand):
         for user in self.users:
             for _ in range(randint(1, 10)):
                 blocked_user = self.users[randint(0, len(self.users) - 1)]
-                if blocked_user != user:
+                if blocked_user != user and blocked_user not in user.friends.all():
                     user.blocked_users.add(blocked_user)
 
     def generate_friend_request(self):
