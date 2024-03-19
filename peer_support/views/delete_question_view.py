@@ -12,5 +12,4 @@ def delete_question(request, id):
         return redirect('resources') 
     question.delete()
     messages.success(request, 'The question has been deleted successfully.')
-    print("deleteddd")
     return redirect('resources')
