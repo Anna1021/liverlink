@@ -32,7 +32,7 @@ class FeedViewTestCase(TestCase):
             'text':'Test post'
         }
     
-    def test_create_post_url(self):
+    def test_feed_url(self):
         self.assertEqual(self.url,'/feed/')
     
     def test_access_page_not_logged_in(self):
@@ -40,13 +40,26 @@ class FeedViewTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, reverse('log_in') + "?next=" + self.url)
 
-    def test_get_create_post(self):
+    def test_get_feed_first_log_in(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'feed.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, PostForm))
         self.assertFalse(form.is_bound)
+        self.assertIn('first',response.context)
+    
+    def test_get_feed_not_first_log_in(self):
+        self.user.first_login = False
+        self.user.save()
+        self.client.login(username=self.user.username, password="Password123")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'feed.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, PostForm))
+        self.assertFalse(form.is_bound)
+        self.assertNotIn('first',response.context)
     
     def test_post_text_must_not_be_empty(self):
         self.form_input['text'] = ''

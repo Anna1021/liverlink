@@ -39,3 +39,4 @@ from .decline_report_view import DeclineReportView
 from .leave_conversation_view import LeaveConversationView
 from .information_view import InformationView
 from .delete_conversation_view import DeleteConversationView
+from .delete_comment_view import DeleteCommentView
