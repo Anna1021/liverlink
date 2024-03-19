@@ -173,13 +173,13 @@ def country_to_continent(country_code):
         continent_name = pc.convert_continent_code_to_continent_name(continent_code)
         return continent_name
     except KeyError:
-        return "Unknown"
+        return ""
     
 def country_to_continent_specific(country_code):
     """gets continent and full country name from code returns both"""
 
     country = pycountry.countries.get(alpha_2=country_code)
-    country_name = country.name if country else "Unknown"
+    country_name = country.name if country else ""
     continent_name = country_to_continent(country_code)
     return continent_name, country_name
     
