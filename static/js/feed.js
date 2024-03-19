@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     $('#post_form').on('shown.bs.modal', function () {
-      $('#myInput').trigger('focus')
+      $('#id_text').trigger('focus')
     })
   });
   

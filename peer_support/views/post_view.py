@@ -4,6 +4,7 @@ from django.views.generic.edit import FormView
 from peer_support.models import Post, PostComment
 from peer_support.forms import CommentForm
 from .helpers import get_post
+from django.contrib import messages
 
 
 class PostView(LoginRequiredMixin,FormView):
@@ -11,6 +12,7 @@ class PostView(LoginRequiredMixin,FormView):
     def get(self, request, post_id):
         post = get_post(request,post_id)
         if not post:
+            messages.error(request,"This post does not exist")
             return redirect('feed')
         comments = PostComment.objects.filter(post=post, parent=None) 
         comment_form = CommentForm(request.user, post)

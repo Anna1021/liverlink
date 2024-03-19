@@ -149,7 +149,6 @@
 }
 
 .dark-theme .card{
-  
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     border-radius: 20px;
@@ -234,4 +233,42 @@ background-color: var(--dark-submit-btn-color);
 .dark-theme .profile-head h6 {
     font-size: 20px;
     color: #91BBD3;
+}
+
+.dark-theme .apply-btn{
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.dark-theme .selected-feed {
+  background-color: rgb(194, 192, 195);
+  border-radius: 5px;
+  color: #000000;
+}
+
+.dark-theme .post-header h4 {
+  color: #91BBD3;
+}
+
+.dark-theme .post-card{
+  width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.5);
+  transition: 0.3s;
+  border-radius: 20px;
+  background-color: var(--dark-main-bg-color);
+  color: white;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-left: 30px;
+  align-content: center;
+  margin: 10px;
+}
+
+.dark-theme .actions-icon {
+  color: white;
+}
+
+.dark-theme .actions-icon:hover{
+  color: var(--dark-submit-btn-color);
 }
