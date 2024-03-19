@@ -24,8 +24,8 @@
                         </ul>
                         </div>
                     </div>
-        <p {% if question.author in current_user.blocked_users.all %} data-text="{{question.body}}"
-            id="blocked-question" class="question-body text-muted" {% endif %} class="question-body">{{ question.body |censor}}
+        <p {% if question.author in current_user.blocked_users.all %} data-text="{{question.body | censor}}"
+            id="blocked-question" class="question-body text-muted" {% endif %} class="question-body">{{ question.body | censor}}
         </p>
         <span class="question-author">author : <a href="{% url 'profile' question.author.username %}"
                 class="username">{{ question.author.username }}</a></span>
