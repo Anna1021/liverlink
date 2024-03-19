@@ -27,4 +27,4 @@ class ReplyPageView(LoginRequiredMixin, View):
             reply.save()
             return redirect(f'/question/{question_id}#{reply.id}')
         else:
-            return render(request, self.template_name, {'form': form})
+            return render(request, 'resources.html', {'form': form})
