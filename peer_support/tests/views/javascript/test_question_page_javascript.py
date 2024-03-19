@@ -18,6 +18,7 @@ class QuestionPageJavascriptTest(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
+        options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
         cls.selenium = WebDriver(options=options)
         cls.selenium.maximize_window()

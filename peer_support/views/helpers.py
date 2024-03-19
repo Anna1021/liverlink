@@ -159,12 +159,16 @@ def get_genders():
     return Counter(genders) 
 
 def get_locations():
+    """Returns set of all continets and number of users in each"""
+
     country_codes = User.objects.values_list('location', flat=True)
     continents = [country_to_continent(code) for code in country_codes if country_to_continent(code) is not None]
     continent_counts = Counter(continents)
     return Counter(continent_counts) 
 
 def country_to_continent(country_code):
+    """Converts a country code to continent name"""
+
     try:
         continent_code = pc.country_alpha2_to_continent_code(country_code)
         continent_name = pc.convert_continent_code_to_continent_name(continent_code)
@@ -173,16 +177,19 @@ def country_to_continent(country_code):
         return "Unknown"
     
 def country_to_continent_specific(country_code):
+    """gets continent and full country name from code returns both"""
+
     try:
         country = pycountry.countries.get(alpha_2=country_code)
         country_name = country.name if country else "Unknown"
-        continent_code = pc.country_alpha2_to_continent_code(country_code)
-        continent_name = pc.convert_continent_code_to_continent_name(continent_code)
+        continent_name = country_to_continent(country_code)
         return continent_name, country_name
     except KeyError:
         return "Unknown", "Unknown"
     
 def get_locations_specific():
+    """Returns set of all countries for each continent and number of users in each"""
+
     country_codes = User.objects.values_list('location', flat=True)
     continent_to_countries = defaultdict(list)
     for code in country_codes:
