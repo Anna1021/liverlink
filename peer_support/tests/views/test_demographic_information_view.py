@@ -1,4 +1,4 @@
-"""Tests of the moderation view."""
+"""Tests of the demographic information view."""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.models import User
@@ -6,8 +6,8 @@ from peer_support.tests.helpers import reverse_with_next
 from django.contrib.messages import get_messages
 from peer_support.models import Report, User
 
-class DemographicViewTestCase(TestCase):
-    """Tests of the moderation view."""
+class DemographicInformationViewTestCase(TestCase):
+    """Tests of the demographic information view."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
