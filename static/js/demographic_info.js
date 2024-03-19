@@ -3,10 +3,11 @@ var colours = ["#55efc4","#81ecec","#a29bfe","#ffeaa7","#fab1a0","#ff7675","#fd7
 //Change the label colouring based on theme
 document.getElementById('theme').addEventListener('click', function() {
     let label_colour = getThemeColors() === "#ffffff" ? "#000000" : "#ffffff";
-    let ChartOptions = updateChartOptions(label_colour); 
-    bar_chart.options = ChartOptions;
+    let bar_chart_options = update_bar_chart_options(label_colour); 
+    bar_chart.options = bar_chart_options;
     bar_chart.update();
-    pieChart.options = ChartOptions;
+    let pie_chart_options = update_pie_chart_options(label_colour); 
+    pieChart.options = pie_chart_options;
     pieChart.update();
 });
 
@@ -15,16 +16,28 @@ function getThemeColors() {
     return storedTheme === "light-theme" ? "#000000" : "#ffffff"; 
 }
 
-function updateChartOptions(label_colour) {
-    return {scales: {y: {beginAtZero: true,
-                ticks: {color: label_colour, }},
-            x: {ticks: { stepSize: 1,color: label_colour,},}},
-        plugins: {legend: {labels: {color: label_colour
-                }}, }};}
+function update_bar_chart_options(label_colour) {
+    return {
+        scales: { 
+            y: { beginAtZero: true,ticks: {color: label_colour,},grid: {color: label_colour, }},
+            x: { display: true, ticks: {stepSize: 1,color: label_colour, }, grid: { color: label_colour,} }
+        },
+        plugins: { legend: { labels: {color: label_colour }}}
+    };
+}
+function update_pie_chart_options(label_colour) {
+    return {
+        plugins: {
+            legend: { labels: {
+                    color: label_colour }
+            }
+        }
+    };
+}
                 
 let label_colour = getThemeColors();
-let ChartOptions = updateChartOptions(label_colour);
-
+let bar_chart_options = update_bar_chart_options(label_colour);
+let pie_chart_options = update_pie_chart_options(label_colour);
 //Charts information
 let user_type_data={
     labels:user_types_labels,
@@ -171,7 +184,7 @@ let bar_chart_id = document.getElementById("barChart").getContext("2d");
 let bar_chart = new Chart(bar_chart_id, {
     type: "bar",
     data: {labels: [], datasets: [{label: "", backgroundColor: [], borderColor: [], data: []}]},
-    options: ChartOptions 
+    options: bar_chart_options 
 });
 
 
@@ -246,7 +259,7 @@ let ctxPie = document.getElementById("ethnicityChart").getContext("2d");
 let pieChart = new Chart(ctxPie, {
     type: "pie",
     data: {labels: [], datasets: [{label: "", backgroundColor: [], borderColor: [], data: []}]},
-    options: ChartOptions 
+    options: pie_chart_options 
 });
 
 function update_pie_chart_data(selectedData) {

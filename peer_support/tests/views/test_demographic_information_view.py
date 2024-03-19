@@ -6,7 +6,7 @@ from peer_support.tests.helpers import reverse_with_next
 from django.contrib.messages import get_messages
 from peer_support.models import Report, User
 
-class ModerationViewTestCase(TestCase):
+class DemographicViewTestCase(TestCase):
     """Tests of the moderation view."""
 
     fixtures = [

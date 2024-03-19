@@ -139,10 +139,9 @@ def get_user_types():
         'parents': num_parents,
         'mentors': num_mentors,}
 
-
 def get_user_ethnicities():
     users = User.objects.all()
-    ethnicity_names = [user.ethnicity_name() for user in users if user.ethnicity_name()]
+    ethnicity_names = [user.ethnicity_name() for user in users]
     ethnicity_counts = Counter(ethnicity_names)
     return ethnicity_counts
 
@@ -179,13 +178,10 @@ def country_to_continent(country_code):
 def country_to_continent_specific(country_code):
     """gets continent and full country name from code returns both"""
 
-    try:
-        country = pycountry.countries.get(alpha_2=country_code)
-        country_name = country.name if country else "Unknown"
-        continent_name = country_to_continent(country_code)
-        return continent_name, country_name
-    except KeyError:
-        return "Unknown", "Unknown"
+    country = pycountry.countries.get(alpha_2=country_code)
+    country_name = country.name if country else "Unknown"
+    continent_name = country_to_continent(country_code)
+    return continent_name, country_name
     
 def get_locations_specific():
     """Returns set of all countries for each continent and number of users in each"""
