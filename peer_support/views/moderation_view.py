@@ -15,4 +15,4 @@ class ModerationView(LoginRequiredMixin, View):
             messages.error(request, "You do not have access to this view.")
             return redirect(reverse('feed'))
         reports = Report.objects.all()
-        return render(request, 'moderation.html', {'reports': reports})
+        return render(request, 'moderation.html', {'reports': reports, 'active_tab': 'reports'})
