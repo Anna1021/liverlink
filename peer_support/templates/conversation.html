@@ -3,6 +3,7 @@
 {% load conversation_tags %}
 {% block convo %}
 {% if conversation %}
+{% load profanity %}
 <div class="row">
     <div class="col-md-9 notranslate">
         <h3 class="conversation-name conversation-header">
@@ -54,7 +55,7 @@
                 <a href="{% url 'profile' message.sender.username %}" class="notranslate self-sender">{% sender_if_applicable message user conversation %}</a>
         {% endif %}
             <div class="col-md-10">
-                <div {% if message.sender in user.blocked_users.all %} data-text="{{message.content}}" name="blocked-message" class="text-muted" {% endif %}>{{ message.content }}</div>
+                <div {% if message.sender in user.blocked_users.all %} data-text="{{message.content}}" name="blocked-message" class="text-muted" {% endif %}>{{ message.content|censor }}</div>
             </div>
             {% include 'partials/message_menu.html' %}
         </div>
