@@ -65,7 +65,6 @@
                             {% include 'partials/profile/user_information.html' %}
                         </div>
                         <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
-                            <p>Timeline</p>
                             {% for post in posts %}
                             {% include 'partials/post_details.html' with from_feed=True post=post %}
                             {% empty %}
