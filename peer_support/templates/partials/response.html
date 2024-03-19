@@ -6,7 +6,6 @@
   {% if user.is_authenticated %}
     <button class="reply-button" onclick="handleReplyButton({{response.id}})">Reply</button>
   {% endif %}
-
   <blockquote id="reply-form-container-{{response.id}}" class="reply-form-container">
     <form method="POST" action="/reply" class="reply-form">
       {% csrf_token %}
@@ -17,7 +16,9 @@
       <input type="submit" class="reply-form-submit-button" value="Reply"/>
     </form>
   </blockquote>
-
+  {% if user.is_authenticated and response.user == user %}
+  <button onclick="confirmDeleteResponse({{ response.id }})" class="delete-response-button">Delete</button>
+  {% endif %}
   {% for children in response.get_responses %}
   {% include 'partials/response.html' with response=children %}
   {% endfor %}

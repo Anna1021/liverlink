@@ -6,6 +6,16 @@
     margin: auto;
 }
 
+.profile-img img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+  
 .mentor-profile-img {
     text-align: center;
     width: 60%;
@@ -13,7 +23,6 @@
     position: relative; 
     margin: auto;
 }
-
 
 .profile-head .nav-tabs {
     margin-top: 5%;

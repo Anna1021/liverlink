@@ -262,7 +262,7 @@
   font-size: calc(1.375rem + 1.5vw);
 }
 
-.light-theme .home-btn{
+.light-theme .home-btn {
     background-color: var(--submit-btn-color) ;
     border: 1px solid #720fe3;
     color: var(--btn-text-color);
@@ -335,6 +335,27 @@
   background-color: rgb(169, 221, 221);
 }
 
+.light-theme .no-responses-text {
+  color: #1B1F3B;
+}
+
+.light-theme .delete-response-button {
+  background-color: var(--filter-btn-color);
+  color: var(--btn-text-color);
+  border-color: #9ad4d6; 
+  border-radius: 0.25rem;
+}
+
+.light-theme .delete-btn {
+  background-color: var(--filter-btn-color);
+  color: black;
+  border-color: #9ad4d6; 
+  font-size: 12px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; 
+}
+
 .light-theme .selected-feed {
   background-color: rgb(228, 171, 249);
   border-radius: 5px;
@@ -369,10 +390,16 @@
   align-content: center;
   margin: 10px;
 }
-.light-theme .actions-icon, .actions-icon:hover {
+
+.light-theme .actions-icon, .light-theme .delete-icon, .actions-icon:hover {
   color: black;
 }
 
-.light-theme .actions-icon:hover{
+.light-theme .actions-icon:hover {
   color: var(--dark-submit-btn-color);
+}
+
+.light-theme .delete-btn:hover {
+  background-color: #d4aeff; 
+  color: white; 
 }
