@@ -20,7 +20,7 @@ class SortUserFormTestCase(TestCase):
         self.current_user_patient = Patient.objects.get(username='@janedoe')
         self.current_user_parent =  Parent.objects.get(username='@mohamedalf')
         self.current_user_professional = Professional.objects.get(username= '@annamiller')
-        self.current_mentor =  Mentor.objects.get(username='@johndoe')
+        self.current_user_mentor =  Mentor.objects.get(username='@johndoe')
         self.username_asc_order= ['@alexsmith', '@annamiller', '@carlosmartinez', '@craighughes','@hazelsmith', '@janedoe', '@johndoe', '@lindajohnson', '@mohamedalf', '@peterpickles', '@petrapickles', '@rajpatel', '@sambennet']
         self.age_asc_order=['@janedoe', '@craighughes', '@petrapickles', '@sambennet', '@rajpatel', '@lindajohnson', '@johndoe', '@alexsmith', '@carlosmartinez', '@hazelsmith', '@mohamedalf', '@annamiller', '@peterpickles']
         self.users = User.objects.all()
@@ -162,8 +162,17 @@ class SortUserFormTestCase(TestCase):
         form_data = {'sort_by': ''}
         form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
+        sorted_users = form.sort_users(self.users, self.current_user_mentor)
+        expected_order = ['@johndoe', '@petrapickles','@janedoe', '@peterpickles', '@carlosmartinez','@alexsmith','@lindajohnson','@mohamedalf', '@sambennet','@craighughes','@rajpatel', '@annamiller','@hazelsmith']
+        sorted_usernames = [user.username for user in sorted_users]
+        self.assertEqual(sorted_usernames, expected_order)   
+    
+    def test_sort_users_by_best_match_professional(self):
+        form_data = {'sort_by': ''}
+        form = SortUserForm(data=form_data)
+        self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_professional)
-        expected_order = ['@annamiller', '@craighughes', '@rajpatel','@mohamedalf', '@hazelsmith', '@sambennet','@lindajohnson', '@peterpickles', '@carlosmartinez','@alexsmith','@janedoe','@petrapickles','@johndoe']
+        expected_order = ['@peterpickles','@annamiller', '@craighughes','@rajpatel','@mohamedalf', '@hazelsmith','@sambennet','@lindajohnson','@carlosmartinez','@alexsmith','@janedoe','@petrapickles','@johndoe']
         sorted_usernames = [user.username for user in sorted_users]
         self.assertEqual(sorted_usernames, expected_order)   
     
