@@ -45,7 +45,7 @@ class DeclineReportViewTestCase(TestCase):
         self.client.force_login(User.objects.get(username='@johndoe'))
         response = self.client.get(self.url_message)
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, reverse('dashboard'))  
+        self.assertRedirects(response, reverse('feed'))  
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), "You do not have access to this view.")

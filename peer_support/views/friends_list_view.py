@@ -3,10 +3,21 @@ from peer_support.forms import SortUserForm, FilterUserForm, SearchUserForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
+from .helpers import get_user_type
 
 class FriendsListView(LoginRequiredMixin, View):
     """Display the list of friends."""
 
+    def get(self, request):
+        """Display the list of friends."""
+
+        friends = request.user.friends.all()
+        form_search, form_sort, form_filter = self.get_forms(request)
+        friends = self.process_forms(friends, form_search, form_sort, form_filter, request.user)
+        friends_with_types = [{'friend': friend, 'user_type': get_user_type(friend)} for friend in friends]
+        context = {'friends': friends_with_types, 'form_sort': form_sort, 'form_filter': form_filter, 'form_search': form_search}
+        return render(request, 'friends_list.html', context)
+        
     def get_forms(self, request):
         """Return the search, sort, and filter forms."""
         
@@ -22,18 +33,6 @@ class FriendsListView(LoginRequiredMixin, View):
         friends = self.process_filter(friends, form_filter)
         friends = self.process_sort(friends, form_sort, user)
         return friends
-
-    def get_context(self, friends, form_sort, form_filter, form_search):
-        return {'friends': friends, 'form_sort': form_sort, 'form_filter': form_filter, 'form_search': form_search}
-
-    def get(self, request):
-        """Display the list of friends."""
-
-        friends = request.user.friends.all()
-        form_search, form_sort, form_filter = self.get_forms(request)
-        friends = self.process_forms(friends, form_search, form_sort, form_filter, request.user)
-        context = self.get_context(friends, form_sort, form_filter, form_search)
-        return render(request, 'friends_list.html', context)
 
     def process_search(self, users, form_search):
         """Process search form."""

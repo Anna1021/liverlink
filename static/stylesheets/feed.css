@@ -1,0 +1,12 @@
+#feed-container{
+    width: 600px;
+}
+
+.scrollable-feed{
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: column;
+    overflow-y: scroll;
+    height: 600px; 
+}
+

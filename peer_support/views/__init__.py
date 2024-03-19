@@ -1,6 +1,5 @@
 """Views for the tasks app."""
 
-from .dashboard_view import dashboard
 from .home_view import home
 from .log_in_view import LogInView
 from .log_out_view import log_out
@@ -29,6 +28,10 @@ from .profile_view import ProfileView
 from .inbox_view import InboxView
 from .delete_notification_view import delete_notification
 from .clear_notifications_view import clear_notifications
+
+from .post_view import PostView
+from .delete_post_view import DeletePostView
+from .feed_view import FeedView
 from .conversation_details_view import ConversationDetailsView
 from .remove_friend_view import remove_friend
 from .moderation_view import ModerationView
@@ -37,3 +40,4 @@ from .decline_report_view import DeclineReportView
 from .leave_conversation_view import LeaveConversationView
 from .information_view import InformationView
 from .delete_conversation_view import DeleteConversationView
+from .delete_comment_view import DeleteCommentView

@@ -5,6 +5,8 @@ from .log_in_form import LogInForm
 from .password_form import PasswordForm
 from .sign_up_form import SignUpForm
 from .user_form import UserForm
+from .post_form import PostForm
+from .post_comment_form import CommentForm
 from .message_form import MessageForm
 from .patient_form import PatientForm
 from .parent_form import ParentForm 
