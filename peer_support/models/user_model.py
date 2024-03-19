@@ -2,6 +2,7 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from .model_choices import GENDER_CHOICES, ETHNICITY_CHOICES, LANGUAGE_CHOICES, COUNTRY_CHOICES, HOSPITAL_CHOICES
+from profanity.validators import validate_is_profane
 
 class User(AbstractUser):
     """Model used for user authentication and related information."""
@@ -13,18 +14,18 @@ class User(AbstractUser):
         validators=[RegexValidator(
             regex=r'^@\w{3,}$',
             message='Username must consist of @ followed by at least three alphanumericals'
-        )]
+        ), validate_is_profane]
     )
-    first_name = models.CharField(max_length=50, blank=False)
-    last_name = models.CharField(max_length=50, blank=False)
-    email = models.EmailField(unique=True, blank=False)
+    first_name = models.CharField(max_length=50, blank=False, validators=[validate_is_profane])
+    last_name = models.CharField(max_length=50, blank=False, validators=[validate_is_profane])
+    email = models.EmailField(unique=True, blank=False, validators=[validate_is_profane])
     date_of_birth = models.DateField(blank=False, null=False)
     gender = models.CharField(max_length=50, choices=GENDER_CHOICES, blank=True)
     location = models.CharField(max_length=50, choices=COUNTRY_CHOICES, blank=True)
     hospital = models.CharField(max_length=500, choices=HOSPITAL_CHOICES, blank=True)
     ethnicity = models.CharField(max_length=50, choices=ETHNICITY_CHOICES, blank=True)
     language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, blank=True)
-    bio = models.CharField(max_length=500, blank=True)
+    bio = models.CharField(max_length=500, blank=True, validators=[validate_is_profane])
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
     blocked_users = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='blocked_by')
     conversations = models.ManyToManyField('Conversation', blank=True)

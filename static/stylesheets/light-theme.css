@@ -112,6 +112,17 @@
   padding-left: 30px;
 }
 
+.light-theme .mentor-friend-inner-card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 20px;
+  background-color: #cab2fb;
+  color: black;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-left: 30px;
+}
+
 .light-theme .question-list-item-title {
   color: rgb(0, 0, 0);
   font-size: 18px;
@@ -213,8 +224,7 @@
 .light-theme .apply-btn{
   background-color: #720fe3;
   color: rgb(255, 255, 255);
-  border-color: #720fe3;
- 
+  border-color: #720fe3; 
 }
 
 /*
@@ -301,4 +311,46 @@
 .light-theme .self-bubble{
   float: right;
   background-color: rgb(169, 221, 221);
+}
+
+.light-theme .selected-feed {
+  background-color: rgb(228, 171, 249);
+  border-radius: 5px;
+  color: purple;
+}
+
+.light-theme .post-header h4 {
+  color: var(--submit-btn-color);
+}
+
+.light-theme .card{
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 20px;
+  background-color:var(--main-bg-color);
+  color: rgb(0, 0, 0);
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-left: 30px;
+}
+
+.light-theme .post-card{
+  width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 20px;
+  background-color:var(--main-bg-color);
+  color: rgb(0, 0, 0);
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-left: 30px;
+  align-content: center;
+  margin: 10px;
+}
+.light-theme .actions-icon, .actions-icon:hover {
+  color: black;
+}
+
+.light-theme .actions-icon:hover{
+  color: var(--dark-submit-btn-color);
 }

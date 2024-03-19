@@ -1,11 +1,12 @@
 {% extends 'dashboard.html' %}
 {% load static %}
+{% load profanity %}
 {% block page %}
 {% include 'partials/resources-navbar.html' %}
 <div class="page question-page">
-    <h2 class="question-title">{{ question.title }}</h2>
+    <h2 class="question-title">{{ question.title |censor}}</h2>
     <p {% if question.author in current_user.blocked_users.all %} data-text="{{question.body}}"
-            id="blocked-question" class="question-body text-muted" {% endif %} class="question-body">{{ question.body }}
+            id="blocked-question" class="question-body text-muted" {% endif %} class="question-body">{{ question.body |censor}}
         </p>
     <span class="question-author">author : <a href="{% url 'profile' question.author.username %}"
                 class="username">{{ question.author.username }}</a></span>
@@ -31,7 +32,6 @@
             <input type="submit" value="Send" class="submit-button"/>
         </form>
     {% endif %}
-
+  
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="{% static 'js/question_page.js' %}"></script>
-    {% endblock %}
+  {% endblock %}

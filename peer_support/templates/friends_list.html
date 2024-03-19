@@ -5,8 +5,8 @@
     <hr>
     {% include 'partials/search_filter_sort_users.html' %}
     <div class="row">
-        {% for user in friends %}
-            {% include "partials/user_card.html" %}
+        {% for friend in friends %}
+            {% include "partials/user_card.html" with user=friend.friend %}
         {% endfor %}
     </div>
 </div>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest,Question, Response, Report, Message
+from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Question, Response, Report, Message, Post
 
 
 class UserProfileInline(admin.StackedInline):
@@ -92,4 +92,16 @@ class MessageAdmin(admin.ModelAdmin):
     list_display = [
         'id','sender','content', 'send_time', 'previous_message'
     ]
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for Post."""
+    
+    date_hierarchy = 'created_at' 
+    list_filter = ('created_at',)
+    ordering = ('-created_at',)
+    list_display = [
+        'text','author', 'created_at'
+    ]
+
     
