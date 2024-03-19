@@ -1,15 +1,6 @@
 $(document).ready(function() {
   // Function to show or hide fields based on user type
-    $('#id_condition').parent().hide();
-    $('#id_age_of_diagnosis').parent().hide();
-    $('#id_child_condition').parent().hide();
-    $('#id_child_age_of_diagnosis').parent().hide();
-    $('#id_condition').parent().hide();
-    $('#id_age_of_diagnosis').parent().hide();
     $('#id_referral_code').parent().hide();
-    $('#id_transplant').parent().hide();
-    $('#id_child_transplant').parent().hide();
-    $('#id_expertise').parent().hide();
   
   function showHideFields(userType) {
     if (userType == 'PF' || userType == 'MT') {

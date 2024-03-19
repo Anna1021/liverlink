@@ -8,14 +8,7 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     """Form enabling unregistered users to sign up."""
     
     user_type = forms.ChoiceField(initial='', choices=USER_TYPE_CHOICES, required=True)
-    condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
-    age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
-    child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
-    child_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
     referral_code = forms.CharField(required=False, max_length=10, initial='')
-    transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
-    child_transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
-    expertise = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
 
     class Meta:
         """Form options."""
@@ -35,8 +28,10 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             user = self.create_patient(user_data)
         elif user_type == 'PR':
             user = self.create_parent(user_data)
-        else:
+        elif user_type == 'MT':
             user = self.create_mentor(user_data)
+        else:
+            user = self.create_professional(user_data)
         return user
 
     def get_user_data(self):
@@ -54,38 +49,35 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     def create_patient(self, user_data):
         """Create a new Patient user."""
 
-        user_data.update({
-            'condition': self.cleaned_data.get('condition'),
-            'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
-            'transplant': self.cleaned_data.get('transplant'),
-        })
         return Patient.objects.create_user(**user_data)
 
     def create_parent(self, user_data):
         """Create a new Parent user."""
 
-        user_data.update({
-            'child_condition': self.cleaned_data.get('child_condition'),
-            'child_age_of_diagnosis': self.cleaned_data.get('child_age_of_diagnosis'),
-            'child_transplant': self.cleaned_data.get('child_transplant'),
-        })
         return Parent.objects.create_user(**user_data)
 
     def create_mentor(self, user_data):
         """Create a new Mentor user."""
 
         user_data.update({
-            'condition': self.cleaned_data.get('condition'),
-            'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
-            'transplant': self.cleaned_data.get('transplant'),
             'referral_code': self.cleaned_data.get('referral_code'),
         })
+
         return Mentor.objects.create_user(**user_data)
+    
+    def create_professional(self, user_data):
+        """Create a new Professional user."""
+
+        user_data.update({
+            'referral_code': self.cleaned_data.get('referral_code'),
+        })
+        
+        return Professional.objects.create_user(**user_data)
     
     def validate_referral_code(self, referral_code, user_type):
         """Check mentors use an existing referral code."""
 
-        if user_type == 'MT':
+        if user_type == 'MT' or user_type == 'PF':
             try:
                 Referral.objects.get(code=referral_code)
             except Referral.DoesNotExist:
