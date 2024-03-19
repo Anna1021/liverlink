@@ -15,4 +15,5 @@ typing_extensions==4.8.0
 pycountry==23.12.11
 selenium==4.16.0
 webdriver-manager==4.0.1
+pycountry-convert==0.7.2
 django-profanity-filter==0.2.1

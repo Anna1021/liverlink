@@ -18,9 +18,9 @@ class ThemeSwitcherTest(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.add_argument("--headless") 
+        options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
-        cls.selenium = WebDriver(service=Service(), options=options)
+        cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(10)
         cls.wait = WebDriverWait(cls.selenium, 50)
     @classmethod

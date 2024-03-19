@@ -6,7 +6,7 @@ from peer_support.tests.helpers import reverse_with_next
 from django.contrib.messages import get_messages
 from peer_support.models import Report, User
 
-class ModerationViewTestCase(TestCase):
+class DemographicViewTestCase(TestCase):
     """Tests of the moderation view."""
 
     fixtures = [
@@ -19,7 +19,7 @@ class ModerationViewTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.url = reverse('moderation')
+        self.url = reverse('demographic-information')
         self.admin_user = User.objects.get(username='@admin')
         self.report_message = Report.objects.get(pk=1)
         self.client.force_login(self.admin_user)
@@ -43,9 +43,4 @@ class ModerationViewTestCase(TestCase):
     def test_access_control_staff(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'moderation.html')
-
-    def test_reports_listing(self):
-        response = self.client.get(self.url)
-        self.assertTrue('reports' in response.context)
-        self.assertEqual(len(response.context['reports']), 1)
+        self.assertTemplateUsed(response, 'demographic_information.html')
