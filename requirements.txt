@@ -1,7 +1,7 @@
 asgiref==3.7.2
 coverage==7.3.2
 cssselect==1.2.0
-Django==4.2.10
+Django==4.2.11
 django-widget-tweaks==1.5.0
 django-with-asserts==0.0.1
 Faker==19.11.0
@@ -16,3 +16,4 @@ pycountry==23.12.11
 selenium==4.16.0
 webdriver-manager==4.0.1
 pycountry-convert==0.7.2
+django-profanity-filter==0.2.1
