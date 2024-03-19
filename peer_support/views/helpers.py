@@ -1,8 +1,8 @@
 import uuid
 from peer_support.models import Referral, Mentor, User, Post
 from django.conf import settings
-from django.shortcuts import redirect,reverse
-from peer_support.models import Notification
+from django.shortcuts import redirect, reverse
+from peer_support.models import Notification, PostComment
 from django.contrib import messages
 from django.db.models import Q
 
@@ -90,10 +90,23 @@ def retrieve_friend_posts(request):
 
 def get_post(request,post_id):
     posts = (retrieve_friend_posts(request)|Post.objects.filter(visibility='G')).filter(id=post_id)
-    if posts.count()==0:
-        messages.error(request,"This post does not exist")
-        return None
-    return Post.objects.get(id=post_id)
+    if posts.exists():
+        return Post.objects.get(id=post_id)
+    
+def get_comment(comment_id):
+    comments = PostComment.objects.filter(id=comment_id)
+    if comments.exists():
+        return comments[0]
 
 def user_exists(username):
     return User.objects.filter(username=username).exists()
+
+def get_user_type(user):
+    if hasattr(user, 'parent'):
+        return "PARENT"
+    elif hasattr(user, 'patient'):
+        return "PATIENT"
+    elif hasattr(user, 'mentor'):
+        return "MENTOR"
+    else:
+        return "ADMIN"
