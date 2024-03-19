@@ -1,6 +1,6 @@
 {% extends 'dashboard.html' %} 
 {% block page %}
-<div class="card shadow box-area my-2" style="background-color: #202428;"> 
+<div class="card shadow box-area my-2"> 
     {% include 'partials/post_details.html' with post=post %}
 
     <hr />
@@ -17,7 +17,7 @@
     <form method="post" action="{% url 'post_detail' post_id=post.id %}">
         {% csrf_token %}
         {% include 'partials/bootstrap_form.html' with form=comment_form %}
-        <button class="btn btn-primary mb-3" type="submit">Submit comment</button>
+        <button class="btn apply-btn mb-3" type="submit">Submit comment</button>
     </form>
 </div>
 {% endblock %}

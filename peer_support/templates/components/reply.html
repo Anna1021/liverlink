@@ -1,9 +1,31 @@
 {% load profanity %}
 <li>
     <div class="card-body post-card">
-        <p>{{ comment.author }}</p>
-        <p>{{ comment.content |censor}}</p>
-
+        <div class="row">
+            <div class="col-md-10">
+                <p>{{ comment.author }}</p>
+                <p>{{ comment.content |censor}}</p>
+            </div>
+            <div class="col-md-2 nav-item dropdown">
+                <a class="nav-link" href="#" id="message-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi-three-dots-vertical"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="message-menu-dropdown">
+                    {% if comment.author == user %}
+                    <li><a class="dropdown-item" href="{% url 'delete_comment' comment.id %}">Delete</a></li>
+                    {% else %}
+                    <li>
+                        <form method="post">
+                            {% csrf_token %}
+                            {% include 'partials/bootstrap_form.html' with form=report_form %}
+                            <input type="hidden" name="action" value="{{comment.id}}">
+                            <button type="submit">Report</button>
+                        </form>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
         <!-- Reply form for each comment -->
         <form method="post" action="{% url 'post_detail' post_id=post.id %}">
             {% csrf_token %}

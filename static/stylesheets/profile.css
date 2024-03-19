@@ -53,8 +53,8 @@ a.dropdown-item-form:hover {
     outline: none;
     min-width: fit-content;
     border: none;
-    color: white;
 }
+
 
 .dropdown-item:hover > .dropdown-menu.nested-dropdown {
     display: block;
