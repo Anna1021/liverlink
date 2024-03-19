@@ -18,7 +18,7 @@ function getThemeColors() {
 function updateChartOptions(label_colour) {
     return {scales: {y: {beginAtZero: true,
                 ticks: {color: label_colour, }},
-            x: {ticks: { color: label_colour,},}},
+            x: {ticks: { stepSize: 1,color: label_colour,},}},
         plugins: {legend: {labels: {color: label_colour
                 }}, }};}
                 
