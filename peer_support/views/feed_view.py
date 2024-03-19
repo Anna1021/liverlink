@@ -16,11 +16,12 @@ class FeedView(LoginRequiredMixin, FormView):
         if current_user.first_login == True:
             current_user.first_login = False
             current_user.save()
-            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form,'first':True})
-        return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
+            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form': form, 'first':True})
+        return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form': form})
 
     def post(self,request):
         """Submit post"""
+        
         form = PostForm(request.user,data=request.POST)
         if form.is_valid():
             post = form.save()
@@ -28,7 +29,7 @@ class FeedView(LoginRequiredMixin, FormView):
         else:
             feed_type = request.GET.get('feed_type')
             user_posts = self.retrieve_posts(request)
-            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
+            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form': form})
 
     def retrieve_posts(self,request):
         """Retrieve posts and display them in chronological order."""

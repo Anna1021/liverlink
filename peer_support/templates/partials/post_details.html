@@ -8,9 +8,43 @@
     <p>{{ post.text |censor}}</p>
     <p>{{ post.created_at }}</p>
     {% if post.author == request.user %}
-        <a href="{% url 'delete_post' post_id=post.id %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'delete_post' post_id=post.id %}" class="btn btn-danger bi bi-trash-can ">Delete</a>
     {% endif %}
     {% if from_feed %}
+        <a href="{% url 'like_post' post_id=post.id %}" class="bi bi-hand-thumbs-up"></a>
         <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info">View Post</a>
     {% endif %}
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<a href="#" class="bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}"></a>
+
+<script>
+$(document).ready(function() {
+    $('.like-post').click(function(e) {
+        e.preventDefault();
+
+        var $this = $(this); // Save reference to the clicked element
+        var postId = $this.data('post-id');
+
+        $.ajax({
+            url: "{% url 'like_post' post_id=post.id %}",
+            data: {
+                'post_id': postId
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.liked) {
+                    console.log('liked');
+                    // Change the thumbs up to fill for the clicked element only
+                    $this.removeClass('bi-hand-thumbs-up').addClass('bi-hand-thumbs-up-fill');
+                } else {
+                    // Change the thumbs up to unfill for the clicked element only
+                    $this.removeClass('bi-hand-thumbs-up-fill').addClass('bi-hand-thumbs-up');
+                }
+            }
+        });
+    });
+});
+</script>
