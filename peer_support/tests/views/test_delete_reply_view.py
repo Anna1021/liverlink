@@ -17,7 +17,7 @@ class DeleteReplyTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         self.question = Question.objects.create(title='Test Question', body='This is a test question.', author=self.user)
         self.response = Response.objects.create(body='Test Response', user=self.user, question=self.question)
-        self.login_url = reverse('log_in')  # Define this here for consistency across tests.
+        self.login_url = reverse('log_in') 
         self.url = reverse('delete_reply', kwargs={'reply_id':self.response.id})
         self.redirect_url = reverse('question', kwargs={'id': self.question.id})
 
@@ -42,4 +42,15 @@ class DeleteReplyTestCase(TestCase):
         messages = [str(message) for message in get_messages(response.wsgi_request)]
         self.assertIn('The reply does not exist.', messages)
         self.assertTemplateUsed(response, 'resources.html') 
+
+    def test_unauthorized_delete_attempt(self):
+        self.client.logout()
+        self.client.login(username='@petrapickles', password='Password123')
+        delete_url = reverse('delete_reply', kwargs={'reply_id': self.response.id})
+        response = self.client.post(delete_url, follow=True)
+        question_redirect_url = reverse('question', kwargs={'id': self.question.id})
+        self.assertRedirects(response, question_redirect_url, status_code=302, target_status_code=200)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(str(messages[0]), 'You are not allowed to delete this reply.')
+        self.assertTrue(Response.objects.filter(id=self.response.id).exists())
 

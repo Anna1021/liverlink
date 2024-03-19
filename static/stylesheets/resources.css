@@ -215,7 +215,7 @@ a.username {
 }
 
 .question-body,.question-title,.responses-container{
-  width: 752px;
+  width: auto;
   word-wrap: break-word;
 }
 .delete-icon{
@@ -226,6 +226,11 @@ a.username {
   margin-bottom: 10px;
 }
 .question-header {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-align{
   display: flex;
   justify-content: space-between;
   align-items: center;
