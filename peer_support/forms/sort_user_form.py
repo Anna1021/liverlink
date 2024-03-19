@@ -32,7 +32,6 @@ class SortUserForm(forms.Form):
         cleaned_data = self.cleaned_data
         sort_by = cleaned_data.get('sort_by')
         sort_option = self.get_sort_option(sort_by)
-        
         if sort_option:
             users = sort_option(users)
         elif sort_by == '' and current_user:
@@ -74,11 +73,15 @@ class SortUserForm(forms.Form):
         elif hasattr(current_user, 'mentor') and hasattr(other_user, 'patient'):
             score += 1 * weighting['user_type']
             score += self.calculate_condition_match(current_user.mentor, other_user.patient, weighting['condition'], weighting['age_of_diagnosis'])
+        elif hasattr(current_user, 'professional') and hasattr(other_user, 'patient'):
+            score += 1 * weighting['user_type']
+            score += self.calculate_condition_match(current_user.professional, other_user.patient, weighting['condition'], weighting['age_of_diagnosis'])
         return score
     
     def calculate_condition_match(self,user_type_1, user_type_2, condition_weight, age_diagnosis_weight):
         score=0
         if getattr(user_type_1, 'condition', None) == getattr(user_type_2, 'condition', None):
+            print("yess")
             score += condition_weight
         age_of_diagnosis_1 = getattr(user_type_1, 'age_of_diagnosis', None)
         age_of_diagnosis_2 = getattr(user_type_2, 'age_of_diagnosis', None)
