@@ -1,7 +1,8 @@
+{% load profanity %}
 <li>
     <div class="card-body post-card">
         <p>{{ comment.author }}</p>
-        <p>{{ comment.content }}</p>
+        <p>{{ comment.content |censor}}</p>
 
         <!-- Reply form for each comment -->
         <form method="post" action="{% url 'post_detail' post_id=post.id %}">
