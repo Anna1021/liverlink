@@ -2,7 +2,6 @@
 {% load static %}
 {% load profanity %}
 {% block page %}
-<div class="card shadow box-area my-2">
     {% include 'partials/resources-navbar.html' %}
         <div class="page question-page">
             <div class="question-header">
@@ -51,7 +50,6 @@
             <input type="submit" value="Send" class="submit-button" />
         </form>
         {% endif %}
-    </div>
   
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'js/question_page.js' %}"></script>
