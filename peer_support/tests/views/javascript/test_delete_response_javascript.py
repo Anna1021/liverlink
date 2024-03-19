@@ -5,11 +5,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.alert import Alert
 from peer_support.models import User
 
-class ReplyPageTest(StaticLiveServerTestCase):
+class DeleteResponseTest(StaticLiveServerTestCase):
     """Unit test of javascript in reply_page view"""
+    
     fixtures = ['peer_support/tests/fixtures/default_user.json',
                 'peer_support/tests/fixtures/default_question.json',
                 'peer_support/tests/fixtures/default_response.json'
@@ -30,7 +30,7 @@ class ReplyPageTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_reply_form_toggle(self):
+    def test_delete_response(self):
         user = User.objects.get(username='@johndoe')
         user.friends.set(User.objects.exclude(username='@johndoe'))
         user.first_login = False

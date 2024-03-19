@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib import messages
-from django.http import Http404
 from peer_support.models import Question
+
 def delete_question(request, id):
     """Delete a question."""
 
