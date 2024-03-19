@@ -12,10 +12,11 @@ class DeletePostView(LoginRequiredMixin,View):
     def get(self,request, post_id):
         post = get_post(request,post_id)
         if not post:
+            messages.error(request,"This post does not exist.")
             return redirect('feed')
-        if post.author == request.user:
-            post.delete()
-        else:
+        if post.author != request.user:
             messages.error(request, "You are not authorised to delete this post.")
+            return redirect('feed')
+        post.delete()
         return redirect('feed')
     
