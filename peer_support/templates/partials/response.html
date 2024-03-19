@@ -13,7 +13,7 @@
       <input type="hidden" name="parent" value="{{response.id}}"/>
       {{reply_form.body}}
       <button type="button" class="reply-form-cancel-button" onclick="handleCancelReply({{response.id}})">Cancel</button>
-      <input type="submit" class="reply-form-submit-button" value="Reply"/>
+      <input type="submit" class="btn btn-primary" value="Reply"/>
     </form>
   </blockquote>
   {% if user.is_authenticated and response.user == user %}
