@@ -14,8 +14,8 @@ class NewQuestionPageTestCase(TestCase):
     def setUp(self):
         self.url = reverse('new-question')
         self.user = User.objects.get(username='@johndoe')
-        self.client.login(username=self.user.username, password='Password123')
-        
+        self.client.force_login(self.user)
+
     def test_access_page_logged_in(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)

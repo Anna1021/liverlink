@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Posts</title>
+</head>
+<body>
+    <h1>My Posts</h1>
+    <ul>
+        {% for post in user_posts %}
+        <li>
+            <strong>Title:</strong> {{ post.title }}
+            <br>
+            <strong>{{ post.text }}</strong> - {{ post.created_at }}
+            <ul>
+                <!-- Display comments for the current post -->
+                {% for comment in post.comments.all %}
+                    <li>
+                        <strong>Comment by:</strong> {{ comment.author }} - {{ comment.created_at }}
+                        <p>{{ comment.content }}</p>
+                    </li>
+                {% empty %}
+                    <li>No comments yet.</li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% empty %}
+        <li>No posts found.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- button to create_posts -->
+    <a href="{% url 'create_post' %}" class="btn btn-primary">Create a new post</a>
+</body>
+</html>

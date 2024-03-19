@@ -21,7 +21,6 @@ from peer_support import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('dashboard/', views.dashboard, name='dashboard'),
     path('log_in/', views.LogInView.as_view(), name='log_in'),
     path('log_out/', views.log_out, name='log_out'),
     path('settings/password/', views.PasswordView.as_view(), name='password'),
@@ -56,6 +55,10 @@ urlpatterns = [
     path('accept_report/<int:report_id>',views.AcceptReportView.as_view(),name="accept_report"),
     path('decline_report/<int:report_id>',views.DeclineReportView.as_view(),name="decline_report"),
     path('leave_conversation/<int:conversation_id>',views.LeaveConversationView.as_view(),name='leave_conversation'),
+    path('post/<int:post_id>/', views.PostView.as_view() , name='post_detail'),
+    path('feed/', views.FeedView.as_view(), name='feed'),
+    path('delete_post/<int:post_id>', views.DeletePostView.as_view(), name='delete_post'),
+    path('delete_comment/<int:comment_id>', views.DeleteCommentView.as_view(), name='delete_comment'),
     path('delete_conversation/<int:conversation_id>',views.DeleteConversationView.as_view(),name='delete_conversation'),
     path('delete_question/<int:id>/', views.delete_question, name='delete_question'),
     path('delete_reply/<int:reply_id>/', views.delete_reply, name='delete_reply'),

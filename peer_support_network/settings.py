@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'widget_tweaks',
     'peer_support',
+    'profanity',
 ]
 
 MIDDLEWARE = [
@@ -143,7 +144,7 @@ AUTH_USER_MODEL = 'peer_support.User'
 LOGIN_URL = 'log_in'
 
 # URL where @login_prohibited redirects to
-REDIRECT_URL_WHEN_LOGGED_IN = 'dashboard'
+REDIRECT_URL_WHEN_LOGGED_IN = 'feed' 
 
 # Convert Django ERROR messages to Bootstrap DANGER messages
 MESSAGE_TAGS = {

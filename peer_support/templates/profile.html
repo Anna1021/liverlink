@@ -5,15 +5,29 @@
     <form method="post">
         <div class="row">
             <div class="col-md-4">
-                <div class="profile-img">
+                {% if user_type == 'MENTOR' %}
+                <div class="mentor-profile-img">
                     <img src="{% static user.userprofile.profile_picture %}" alt="User Profile Picture" />
                 </div>
+                {% else %}
+                    <div class="profile-img">
+                        <img src="{% static user.userprofile.profile_picture %}" alt="User Profile Picture" />
+                    </div>
+                {% endif %}
             </div>
             <div class="col-md-6">
                 <div class="profile-head">
                     <h5>{{ user.full_name }}</h5>
                     <h6>{{ user.username }}</h6>
                     <h7>{{ user_type }}</h7>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="about-tab" data-bs-toggle="tab" href="#about" role="tab">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="timeline-tab" data-bs-toggle="tab" href="#timeline" role="tab">Timeline</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="col-md-2">
@@ -44,7 +58,19 @@
                 <div class="profile-subheading" id="user-is-blocked">You have blocked this user.</div>
                 {% else %}
                 <div id="profile-content">
-                    {% include 'partials/profile/user_information.html' %}
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                            {% include 'partials/profile/user_information.html' %}
+                        </div>
+                        <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
+                            <p>Timeline</p>
+                            {% for post in posts %}
+                            {% include 'partials/post_details.html' with from_feed=True post=post %}
+                            {% empty %}
+                            This user has no posts yet
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
                 {% endif %}
             </div>
@@ -52,7 +78,6 @@
     </form>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     var unblockUserUrl = "{% url 'unblock_user' 0 %}";
     var blockUserUrl = "{% url 'block_user' 0 %}";

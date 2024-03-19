@@ -13,8 +13,8 @@ class AcceptReportViewTestCase(TestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/default_message.json',
-        'peer_support/tests/fixtures/other_reports_message.json',
-        'peer_support/tests/fixtures/other_reports_user.json',
+        'peer_support/tests/fixtures/default_report_message.json',
+        'peer_support/tests/fixtures/default_report_user.json',
     ]
     
     def setUp(self):
@@ -32,7 +32,7 @@ class AcceptReportViewTestCase(TestCase):
         self.client.force_login(User.objects.get(username='@johndoe'))
         response = self.client.get(self.url_message)
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, reverse('dashboard'))  
+        self.assertRedirects(response, reverse('feed'))  
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), "You do not have access to this view.")

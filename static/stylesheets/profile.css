@@ -14,6 +14,13 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
+  
+.mentor-profile-img {
+    text-align: center;
+    width: 60%;
+    padding-top: 60%; 
+    position: relative; 
+    margin: auto;
 }
 
 .profile-head .nav-tabs {
@@ -54,3 +61,4 @@ a.dropdown-item-form:hover {
     min-width: fit-content;
     border: none;
 }
+

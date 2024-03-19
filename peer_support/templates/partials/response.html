@@ -1,6 +1,6 @@
-
+{% load profanity %}
 <blockquote id="{{response.id}}">
-  <p {% if response.user in current_user.blocked_users.all %} data-text="{{response.body}}" name="blocked-response" class="response-body text-muted" {% endif %} class="response-body">{{response.body}}</p>
+  <p {% if response.user in current_user.blocked_users.all %} data-text="{{response.body}}" name="blocked-response" class="response-body text-muted" {% endif %} class="response-body">{{response.body |censor}}</p>
   <small class="response-author">by <a href="{% url 'profile' response.user.username %}" class="username">{{response.user.username}}</a></small>
 
   {% if user.is_authenticated %}

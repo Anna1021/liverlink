@@ -10,7 +10,6 @@ class InboxView(LoginRequiredMixin, View):
         """Display the current user's inbox."""
         
         notifications = Notification.objects.filter(user=request.user)
-        unviewed_notifications = Notification.objects.filter(
-            user=request.user, viewed=False)
+        unviewed_notifications = Notification.objects.filter(user=request.user, viewed=False)
         unviewed_notifications.update(viewed=True)
         return render(request, 'inbox.html', {'notifications': notifications})

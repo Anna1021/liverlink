@@ -1,0 +1,23 @@
+{% extends 'dashboard.html' %} 
+{% block page %}
+<div class="card shadow box-area my-2"> 
+    {% include 'partials/post_details.html' with post=post %}
+
+    <hr />
+    <!-- Display existing comments -->
+    <h4>Comments</h4>
+    <ul>
+        {% for comment in post.get_comments %}
+            {% include 'components/reply.html' with comment=comment %}
+        {% endfor %}
+    </ul>
+
+    <!-- Add Comment -->
+    <h4>Add Comment</h4>
+    <form method="post" action="{% url 'post_detail' post_id=post.id %}">
+        {% csrf_token %}
+        {% include 'partials/bootstrap_form.html' with form=comment_form %}
+        <button class="btn apply-btn mb-3" type="submit">Submit comment</button>
+    </form>
+</div>
+{% endblock %}

@@ -6,7 +6,6 @@
     <div class="col-12">
       <h2>Profile settings</h2>
       <div class="col-2 ps-col">
-        <div style="padding: 10px"></div>
         <img src="{% static user.userprofile.profile_picture %}" class="ps-profile-picture" alt="Your profile picture"> </img>
         <div class="divider"></div>
         {% include 'partials/profile-settings/settings_sidebar.html' %}
@@ -21,7 +20,7 @@
     </div>
   </div>
   <row>
-    <div style="padding: 40px;"></div>
+    <div class="ps-footer"></div>
   </row>
 </div>
 {% endblock %}

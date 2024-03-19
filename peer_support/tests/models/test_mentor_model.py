@@ -14,7 +14,8 @@ class MentorModelTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.mentor = Mentor.objects.get(username='@johndoe')
+        self.mentor = Mentor.objects.get(username='@lindajohnson')
+        self.second_mentor = Mentor.objects.get(username='@carlosmartinez')
 
     def test_valid_mentor(self):
         self._assert_mentor_is_valid()
@@ -24,8 +25,7 @@ class MentorModelTestCase(TestCase):
         self._assert_mentor_is_valid()
 
     def test_condition_need_not_be_unique(self):
-        second_mentor = Mentor.objects.get(username='@janedoe')
-        self.mentor.condition = second_mentor.condition
+        self.mentor.condition = self.second_mentor.condition
         self._assert_mentor_is_valid()
 
     def test_condition_can_be_50_characters_long(self):
@@ -41,8 +41,7 @@ class MentorModelTestCase(TestCase):
         self._assert_mentor_is_valid()
 
     def test_age_of_diagnosis_need_not_be_unique(self):
-        second_mentor = Mentor.objects.get(username='@janedoe')
-        self.mentor.age_of_diagnosis = second_mentor.age_of_diagnosis
+        self.mentor.age_of_diagnosis = self.second_mentor.age_of_diagnosis
         self._assert_mentor_is_valid()
 
     def test_age_of_diagnosis_cannot_be_negative(self):

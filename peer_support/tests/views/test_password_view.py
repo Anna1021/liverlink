@@ -21,7 +21,7 @@ class PasswordViewTestCase(TestCase):
             'new_password': 'NewPassword123',
             'password_confirmation': 'NewPassword123',
         }
-        self.client.login(username=self.user.username, password='Password123')
+        self.client.force_login(self.user)
 
     def test_password_url(self):
         self.assertEqual(self.url, '/settings/password/')
@@ -41,9 +41,9 @@ class PasswordViewTestCase(TestCase):
 
     def test_successful_password_change(self):
         response = self.client.post(self.url, self.form_input, follow=True)
-        response_url = reverse('dashboard')
+        response_url = reverse('feed')
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
-        self.assertTemplateUsed(response, 'dashboard.html')
+        self.assertTemplateUsed(response, 'feed.html')
         self.user.refresh_from_db()
         is_password_correct = check_password('NewPassword123', self.user.password)
         self.assertTrue(is_password_correct)

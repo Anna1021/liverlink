@@ -11,7 +11,7 @@ class FilterUserForm(forms.Form):
 
     USER_TYPE_CHOICES = USER_TYPE_CHOICES[1:]
     ALL_CHOICE = [('any', 'Any')]
-    user_type = forms.MultipleChoiceField(choices = USER_TYPE_CHOICES, widget=forms.CheckboxSelectMultiple,required=False)
+    user_type = forms.MultipleChoiceField(choices = USER_TYPE_CHOICES, widget=forms.CheckboxSelectMultiple, required=False)
     min_age = forms.IntegerField(required = False, min_value=0)
     max_age = forms.IntegerField(required = False, min_value=0)
     gender = forms.MultipleChoiceField(choices = GENDER_CHOICES, widget=forms.CheckboxSelectMultiple, required=False)
@@ -78,13 +78,13 @@ class FilterUserForm(forms.Form):
 
         combined_queryset = User.objects.none()
         if "PT" in user_type:
-            patients=self.filter_by_patient_attributes()
+            patients = self.filter_by_patient_attributes()
             combined_queryset = combined_queryset | patients
         if "PR" in user_type:
-            parents=self.filter_by_parent_attributes()
+            parents = self.filter_by_parent_attributes()
             combined_queryset = combined_queryset | parents
         if "MT" in user_type:
-            mentors=self.filter_by_mentor_attributes()
+            mentors = self.filter_by_mentor_attributes()
             combined_queryset = combined_queryset | mentors
         return combined_queryset
     
@@ -152,7 +152,3 @@ class FilterUserForm(forms.Form):
             if value and value != "any":
                 users = users.filter(**{query_filter: value})
         return users
-
-
-        
-

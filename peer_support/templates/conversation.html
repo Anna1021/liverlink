@@ -3,6 +3,7 @@
 {% load conversation_tags %}
 {% block convo %}
 {% if conversation %}
+{% load profanity %}
 <div class="row">
     <div class="col-md-9 notranslate">
         <h3>
@@ -50,7 +51,7 @@
                 {% endif %}
                 <div class="col-md-10">
                     <div {% if message.sender in user.blocked_users.all %} data-text="{{message.content}}"
-                        name="blocked-message" class="text-muted" {% endif %}>{{ message.content }}</div>
+                        name="blocked-message" class="text-muted" {% endif %}>{{ message.content|censor}}</div>
                 </div>
                 {% include 'partials/message_menu.html' %}
             </div>
@@ -59,9 +60,9 @@
             Type out your first message in the box below!
             {% endfor %}
         </div>
-        <form method="post" {% if blocked_dm %} inert style="opacity: 50%;" {% endif %}>
+        <form method="post" {% if blocked_dm %} inert class="inactive-form" {% endif %}>
             {% if blocked_dm %}
-            <div style="opacity: 50%;">You can no longer send messages to this user.</div>
+            <div class="inactive-form">You can no longer send messages to this user.</div>
             {% endif %}
             {% csrf_token %}
             {{ message_form.content }}
@@ -74,4 +75,4 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'js/conversation.js' %}"></script>
-    {% endblock %}
+  {% endblock %}

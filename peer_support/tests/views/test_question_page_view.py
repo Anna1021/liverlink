@@ -18,7 +18,7 @@ class QuestionPageTestCase(TestCase):
         self.response = Response.objects.create(body='Test Response', user=self.user, question=self.question)
         self.client = Client()
         self.url = reverse('question', args=(self.question.id,))
-        self.client.login(username=self.user.username, password='Password123')
+        self.client.force_login(self.user)
 
     def test_question_page_GET(self):
         response = self.client.get(self.url)

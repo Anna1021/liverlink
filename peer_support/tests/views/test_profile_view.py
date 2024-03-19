@@ -1,7 +1,7 @@
 """Tests of the profile view"""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.models import Report, User, Conversation, GroupConversation, FriendRequest
+from peer_support.models import Report, User, Conversation, GroupConversation, FriendRequest, Post
 from peer_support.forms import ReportForm
 from django.contrib.contenttypes.models import ContentType
 from peer_support.tests.helpers import reverse_with_next
@@ -17,7 +17,9 @@ class ProfileViewTest(TestCase):
                 'peer_support/tests/fixtures/default_parent.json',
                 'peer_support/tests/fixtures/other_patients.json',
                 'peer_support/tests/fixtures/other_mentors.json',
-                'peer_support/tests/fixtures/other_reports_user.json',
+                'peer_support/tests/fixtures/default_post.json',
+                'peer_support/tests/fixtures/other_posts.json',
+                'peer_support/tests/fixtures/default_report_user.json',
             ]
 
     def setUp(self):
@@ -271,7 +273,7 @@ class ProfileViewTest(TestCase):
         self.assertEqual(patient, "PATIENT")
 
     def test_get_profile_mentor(self):
-        user = User.objects.get(username='@alexsmith')
+        user = User.objects.get(username='@lindajohnson')
         url = reverse('profile', kwargs={'username': user.username})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -289,6 +291,32 @@ class ProfileViewTest(TestCase):
         non_existent_username = 'noonehere'
         url = reverse('profile', kwargs={'username': non_existent_username})
         response = self.client.get(url)
-        self.assertRedirects(response, reverse('dashboard'))
+        self.assertRedirects(response, reverse('feed'))
         messages = list(get_messages(response.wsgi_request))
         self.assertTrue(any(["does not exist" in str(message) for message in messages]))
+
+    def test_timeline_for_self(self):
+        response = self.client.get(self.url)
+        posts = response.context['posts']
+        self.assertEqual(posts.count(),1)
+
+    def test_timeline_for_friends(self):
+        other_user = User.objects.get(username='@janedoe')
+        post_to_edit = Post.objects.get(pk=3)
+        post_to_edit.author = other_user
+        post_to_edit.save()
+        self.user.friends.add(other_user)
+        url = reverse('profile', kwargs={'username': other_user.username})
+        response = self.client.get(url)
+        posts = response.context['posts']
+        self.assertEqual(posts.count(),2)
+
+    def test_timeline_for_non_friends(self):
+        other_user = User.objects.get(username='@janedoe')
+        post_to_edit = Post.objects.get(pk=3)
+        post_to_edit.author = other_user
+        post_to_edit.save()
+        url = reverse('profile', kwargs={'username': other_user.username})
+        response = self.client.get(url)
+        posts = response.context['posts']
+        self.assertEqual(posts.count(),1)

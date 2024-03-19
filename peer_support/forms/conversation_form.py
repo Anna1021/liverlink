@@ -48,6 +48,7 @@ class ConversationForm(forms.ModelForm):
         new_users |= User.objects.filter(username=current_user.username)
         if not group:
             conversation = self.get_direct_conversation(new_users)
+            current_user.conversations.add(conversation)
         else:
             conversation = GroupConversation.objects.create()
             conversation.add_users(new_users)

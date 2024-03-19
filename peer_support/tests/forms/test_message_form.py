@@ -32,7 +32,7 @@ class MessageFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_form_uses_model_validation(self):
-        self.form_input['content'] = 'a'*101
+        self.form_input['content'] = 'a' * 101
         form = MessageForm(self.conversation, user=self.sender,data=self.form_input)
         self.assertFalse(form.is_valid())
 
@@ -44,7 +44,7 @@ class MessageFormTestCase(TestCase):
         self.assertEqual(after_count, before_count+1)
         message = Message.objects.last()
         self.assertEqual(message.sender, self.sender)
-        self.assertEqual(message.content,"Ploof")
+        self.assertEqual(message.content, "Ploof")
 
     def test_message_is_sent_to_conversation(self):
         messages_before = self.conversation.messages.count()
@@ -75,5 +75,5 @@ class MessageFormTestCase(TestCase):
         self.assertIn(self.receiver, self.conversation.users.all())
         self.assertNotIn(self.conversation, self.receiver.conversations.all())
         form = MessageForm(self.conversation, user = self.sender, data=self.form_input)
-        message = form.save()
+        form.save()
         self.assertIn(self.conversation, self.receiver.conversations.all())

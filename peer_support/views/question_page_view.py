@@ -20,7 +20,7 @@ class QuestionPageView(LoginRequiredMixin, View):
         }
         return render(request, 'question.html', context)
 
-    def post(self, request, id, *args, **kwargs):
+    def post(self, request, id):
         response_form = NewResponseForm(request.POST)
         if response_form.is_valid():
             response = response_form.save(commit=False)
