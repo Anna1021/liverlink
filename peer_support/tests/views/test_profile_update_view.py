@@ -132,6 +132,13 @@ class SettingsViewTestCase(TestCase):
         form = response.context['form']
         self.assertTrue(isinstance(form, MentorForm))    
 
+    def test_get_professional_form_when_current_user_is_professional(self):
+        self.client.force_login(self.professional)
+        response = self.client.get(self.url)
+        self.assertTemplateUsed(response, 'settings.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, ProfessionalForm))    
+
     def test_get_profile(self):
         self.client.force_login(self.patient)
         response = self.client.get(self.url)
