@@ -51,7 +51,7 @@ class AcceptReportViewTestCase(TestCase):
         self.assertTrue(any(["successfully deleted" in message.message for message in messages]))
 
     def test_reported_object_not_found(self):
-        self.report_message.content_object.delete(User.objects.all())
+        self.message_to_report.delete(User.objects.all())
         response = self.client.get(self.url_message)
         messages = list(get_messages(response.wsgi_request))
         self.assertTrue(any(["could not be found" in message.message for message in messages]))
