@@ -1,5 +1,5 @@
 import uuid
-from peer_support.models import Referral, Mentor, User
+from peer_support.models import Referral, Professional, User
 from django.conf import settings
 from django.shortcuts import redirect,reverse
 from peer_support.models import Notification
@@ -27,7 +27,7 @@ def notifications(request):
 def create_referral(user):
     """ Only creates referrals if the user is a mentor. """
 
-    if isinstance(user, Mentor): 
+    if isinstance(user, Professional): 
         code = uuid.uuid4().hex[:10].upper()
         referral = Referral.objects.create(referrer=user, code=code)
         return referral

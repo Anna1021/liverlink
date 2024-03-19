@@ -24,7 +24,7 @@ class ProfessionalModelTestCase(TestCase):
         self._assert_professional_is_valid()
 
     def test_expertise_need_not_be_unique(self):
-        second_professional = Professional.objects.get(username='@janedoe')
+        second_professional = Professional.objects.get(username='@craighughes')
         self.professional.expertise = second_professional.expertise
         self._assert_professional_is_valid()
 

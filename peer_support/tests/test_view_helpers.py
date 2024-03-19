@@ -2,7 +2,7 @@
 import uuid
 import datetime
 from django.test import TestCase
-from peer_support.models import Mentor, Referral, User, Conversation, GroupConversation
+from peer_support.models import Professional, Referral, User, Conversation, GroupConversation
 from peer_support.views.helpers import create_referral, get_referral_code, get_addable_peers, check_blocked_dm, user_exists
 
 class HelpersViewTestCase(TestCase):
@@ -15,12 +15,12 @@ class HelpersViewTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.mentor = Mentor.objects.create(username='@test_mentor', date_of_birth=datetime.date(1990,1,1),)
+        self.professional = Professional.objects.create(username='@test_professional', date_of_birth=datetime.date(1990,1,1),)
         
     def test_create_referral(self):
-        referral = create_referral(self.mentor)
+        referral = create_referral(self.professional)
         self.assertIsInstance(referral, Referral)
-        self.assertEqual(referral.referrer, self.mentor)
+        self.assertEqual(referral.referrer, self.professional)
     
     def test_create_referral_invalid_user(self):
         invalid_user = 'invalid_user'
@@ -29,12 +29,12 @@ class HelpersViewTestCase(TestCase):
 
     def test_get_referral_code(self):
         code = uuid.uuid4().hex[:10].upper()
-        Referral.objects.create(referrer=self.mentor, code=code)
-        referral_code = get_referral_code(self.mentor)
+        Referral.objects.create(referrer=self.professional, code=code)
+        referral_code = get_referral_code(self.professional)
         self.assertEqual(referral_code, code)
 
     def test_get_referral_code_no_referral(self):
-        referral_code = get_referral_code(self.mentor)
+        referral_code = get_referral_code(self.professional)
         self.assertIsNone(referral_code)
     
     def test_get_addable_peers(self):
@@ -86,7 +86,7 @@ class HelpersViewTestCase(TestCase):
         self.assertFalse(check_blocked_dm(second_user, group_conversation))
 
     def tearDown(self):
-        Mentor.objects.all().delete()
+        Professional.objects.all().delete()
         Referral.objects.all().delete()
 
     def test_user_exists(self):
