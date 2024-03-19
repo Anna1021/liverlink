@@ -17,7 +17,6 @@ class DeleteQuestionTestCase(TestCase):
         self.client.login(username=self.user.username, password="Password123")
         self.question = Question.objects.create(title='Test Question', body='This is a test question.', author=self.user)
         self.response = Response.objects.create(body='Test Response', user=self.user, question=self.question)
-        self.login_url = reverse('log_in')  # Define this here for consistency across tests.
         self.url = reverse('delete_question', kwargs={'id':self.question.id})
         self.redirect_url = reverse('resources')
 
