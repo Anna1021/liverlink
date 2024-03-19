@@ -108,5 +108,7 @@ def get_user_type(user):
         return "PATIENT"
     elif hasattr(user, 'mentor'):
         return "MENTOR"
+    elif hasattr(user, 'professional'):
+        return "PROFESSIONAL"
     else:
         return "ADMIN"
