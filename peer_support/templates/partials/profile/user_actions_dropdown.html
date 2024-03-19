@@ -35,7 +35,7 @@
                 {% csrf_token %}
                 {% include 'partials/bootstrap_form.html' with form=report_form %}
                 <input type="hidden" name="action" value="{{message.id}}">
-                <button type="submit" name="report">Report</button>
+                <button class = "btn btn-primary" type="submit" name="report">Report</button>
             </form>
         </a>
     </div>

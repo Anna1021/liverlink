@@ -58,14 +58,16 @@
         Type out your first message in the box below!
         {% endfor %}
     </div>
-    <form method="post" {% if blocked_dm %} inert class="inactive-form" {% endif %}>
-        {% if blocked_dm %}
-        <div class="inactive-form">You can no longer send messages to this user.</div>
-        {% endif %}
-        {% csrf_token %}
-        {{ message_form.content }}
-        <button type="submit" class="btn btn-primary my-2"><i class="bi bi-arrow-right-square-fill"></i></button>
-    </form>
+    <div class="row align-items-end">
+        <form method="post" {% if blocked_dm %} inert class="inactive-form" {% endif %}>
+            {% if blocked_dm %}
+            <div class="inactive-form">You can no longer send messages to this user.</div>
+            {% endif %}
+            {% csrf_token %}
+            {{ message_form.content }}
+            <button type="submit" class="btn btn-primary my-2"><i class="bi bi-arrow-right-square-fill"></i></button>
+        </form>
+    </div>
     {% else %}
     Pick a conversation or start a new conversation!
     {% endif %}
