@@ -142,19 +142,22 @@ def get_user_types():
 def get_user_ethnicities():
     users = User.objects.all()
     ethnicity_names = [user.ethnicity_name() for user in users]
-    ethnicity_counts = Counter(ethnicity_names)
-    return ethnicity_counts
+    ethnicity_names = [map_blank_key(user.ethnicity_name()) for user in users]
+    return Counter(ethnicity_names)
 
 def get_patient_conditions():
     patient_conditions = Patient.objects.values_list('condition', flat=True)
+    patient_conditions = [map_blank_key(condition) for condition in patient_conditions]
     return Counter(patient_conditions) 
 
 def get_parent_child_conditions():
     parent_child_conditions = Parent.objects.values_list('child_condition', flat=True)
+    parent_child_conditions = [map_blank_key(child_condition) for child_condition in parent_child_conditions]
     return Counter(parent_child_conditions) 
 
 def get_genders():
     genders = User.objects.values_list('gender', flat=True)
+    genders = [map_blank_key(gender) for gender in genders]
     return Counter(genders) 
 
 def get_locations():
@@ -162,27 +165,8 @@ def get_locations():
 
     country_codes = User.objects.values_list('location', flat=True)
     continents = [country_to_continent(code) for code in country_codes if country_to_continent(code) is not None]
-    continent_counts = Counter(continents)
-    return Counter(continent_counts) 
+    return Counter(continents) 
 
-def country_to_continent(country_code):
-    """Converts a country code to continent name"""
-
-    try:
-        continent_code = pc.country_alpha2_to_continent_code(country_code)
-        continent_name = pc.convert_continent_code_to_continent_name(continent_code)
-        return continent_name
-    except KeyError:
-        return ""
-    
-def country_to_continent_specific(country_code):
-    """gets continent and full country name from code returns both"""
-
-    country = pycountry.countries.get(alpha_2=country_code)
-    country_name = country.name if country else ""
-    continent_name = country_to_continent(country_code)
-    return continent_name, country_name
-    
 def get_locations_specific():
     """Returns set of all countries for each continent and number of users in each"""
 
@@ -193,7 +177,30 @@ def get_locations_specific():
         continent_to_countries[continent].append(country)
     continent_counts = {continent: Counter(countries) for continent, countries in continent_to_countries.items()}
     return(continent_counts)
-           
+
+def country_to_continent(country_code):
+    """Converts a country code to continent name"""
+
+    try:
+        continent_code = pc.country_alpha2_to_continent_code(country_code)
+        continent_name = pc.convert_continent_code_to_continent_name(continent_code)
+        return continent_name
+    except KeyError:
+        return "Unknown"
+    
+def country_to_continent_specific(country_code):
+    """gets continent and full country name from code returns both"""
+
+    country = pycountry.countries.get(alpha_2=country_code)
+    country_name = country.name if country else "Unknown"
+    continent_name = country_to_continent(country_code)
+    return continent_name, country_name
+    
+def map_blank_key(key):
+    """Return 'Unknown' if the key is blank or None, otherwise return the ethnicity."""
+     
+    return key if key else "Unknown"
+
 def get_user_type(user):
     if hasattr(user, 'parent'):
         return "PARENT"
