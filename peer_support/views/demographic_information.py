@@ -39,8 +39,7 @@ def demographic_information(request):
         'oceania_labels': list(get_locations_specific().get("Oceania", {}).keys()),
         'oceania_count': list(get_locations_specific().get("Oceania", {}).values()),
         'antarctica_labels': list(get_locations_specific().get("Antarctica", {}).keys()),
-        'antarctica_count': list(get_locations_specific().get("Antarctica", {}).values()),
-        'active_tab': 'user_info'
+        'antarctica_count': list(get_locations_specific().get("Antarctica", {}).values())
     }
     return render(request, 'demographic_information.html', context)
 
