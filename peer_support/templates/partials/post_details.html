@@ -13,13 +13,14 @@
     {% endif %}
     {% if from_feed %}
         <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info" style = "border-color: #0dcaf0;">View Post</a>
+        <a href="" class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}"></a>
     {% endif %}
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<a href="" class="btn btn-info bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}"></a>
-<p id="like-count-{{ post.id }}">{{ post.number_of_likes }}</p>
+
+<p id="like-count-{{ post.id }}">{{ post.like_count }}</p>
 
 <script>
 $(document).ready(function() {
@@ -61,5 +62,3 @@ $(document).ready(function() {
     });
 });
 </script>
-
-
