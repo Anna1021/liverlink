@@ -18,18 +18,23 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<a href="#" class="bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}"></a>
+<a href="" class="btn btn-info bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}"></a>
+<p id="like-count-{{ post.id }}">{{ post.number_of_likes }}</p>
 
 <script>
 $(document).ready(function() {
-    $('.like-post:not(.initialized)').each(function() {
+    $('.like-post').each(function() {
         var $this = $(this);
         var postId = $this.data('post-id');
 
-        $this.addClass('initialized'); // Mark the button as initialized
-
         $this.click(function(e) {
             e.preventDefault();
+
+            if ($this.hasClass('request-in-progress')) {
+                return; // Do nothing if a request is already in progress
+            }
+
+            $this.addClass('request-in-progress'); // Mark the button as having an in-progress request
 
             $.ajax({
                 url: "{% url 'like_post' post_id=0 %}".replace('0', postId),
@@ -45,9 +50,16 @@ $(document).ready(function() {
                     } else {
                         $this.removeClass('bi-hand-thumbs-up-fill').addClass('bi-hand-thumbs-up');
                     }
+                    var $likeCount = $('#like-count-' + postId);
+                    $likeCount.text(data.like_count);
+                },
+                complete: function() {
+                    $this.removeClass('request-in-progress'); // Remove the in-progress mark after the request is complete
                 }
             });
         });
     });
 });
 </script>
+
+

@@ -19,5 +19,10 @@ class Post(models.Model):
 
     def get_comments(self):
         """Return comments"""
-        
+
         return self.replies.filter(parent=None)
+
+    def like_count(self):
+        """Return the number of likes."""
+
+        return self.likes.count()

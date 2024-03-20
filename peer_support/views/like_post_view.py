@@ -15,4 +15,5 @@ def like_post(request, post_id):
         liked = False
     else:
         post.likes.add(request.user)
-    return JsonResponse({"liked": liked})
+    like_count = post.like_count()
+    return JsonResponse({"liked": liked, "like_count": like_count})
