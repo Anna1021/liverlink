@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, reverse
-from peer_support.models import Report, Message, User, PostComment
+from peer_support.models import Report, Message, User, Post, PostComment
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
@@ -28,6 +28,8 @@ class AcceptReportView(LoginRequiredMixin, View):
         if isinstance(reported_object, Message):
             self.reported_message(reported_object)
         elif isinstance(reported_object, PostComment):
+            self.reported_post_comment(reported_object)
+        elif isinstance(reported_object, Post):
             self.reported_post_comment(reported_object)
         else:
             self.reported_user(reported_object)
