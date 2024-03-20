@@ -8,6 +8,8 @@ class DeleteCommentView(LoginRequiredMixin, View):
     """Delete comment"""
     
     def get(self, request, comment_id):
+        """Checks user is authorised to delete comment then deletes it"""
+
         comment = get_comment(comment_id)
         post = None
         if comment:

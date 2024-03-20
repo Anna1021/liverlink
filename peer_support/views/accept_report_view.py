@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, reverse
-from peer_support.models import Report, Message, User
+from peer_support.models import Report, Message, User, PostComment
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
@@ -26,16 +26,22 @@ class AcceptReportView(LoginRequiredMixin, View):
         if not reported_object:
             return False
         if isinstance(reported_object, Message):
-            self.handle_reported_message(reported_object)
+            self.reported_message(reported_object)
+        elif isinstance(reported_object, PostComment):
+            self.reported_post_comment(reported_object)
         else:
-            self.handle_reported_user(reported_object)
+            self.reported_user(reported_object)
         report.delete()
         return True
 
-    def handle_reported_message(self, message):
+    def reported_message(self, message):
         all_users = User.objects.all()  
         message.delete(all_users) 
 
-    def handle_reported_user(self, user):
+    def reported_user(self, user):
         user.is_active = False
         user.save()
+    
+    def reported_post_comment(self,post_comment):
+        post_comment.delete()
+        

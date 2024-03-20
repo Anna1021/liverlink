@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Report, Message, Post
+from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Report, Message, Post, PostComment
 
 
 class UserProfileInline(admin.StackedInline):
@@ -7,6 +7,13 @@ class UserProfileInline(admin.StackedInline):
     """Adds the user profile interface to the user interface."""
     model = UserProfile
     can_delete = False
+
+@admin.register(PostComment)
+class PostCommentAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for post comments."""
+    
+    list_display = ('id', 'post', 'author', 'parent', 'content', 'created_at')
+    list_filter = ('created_at', 'author')
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -104,4 +111,3 @@ class PostAdmin(admin.ModelAdmin):
         'text','author', 'created_at'
     ]
 
-    

@@ -1,10 +1,14 @@
 {% load profanity %}
+{% load static %}
+{% load reporting_tags %}
 <li>
     <div class="card-body post-card">
         <div class="row">
             <div class="col-md-10">
-                <p>{{ comment.author }}</p>
-                <p>{{ comment.content |censor}}</p>
+                <a href="{% url 'profile' post.author.username %}"></a><p>{{ comment.author }}</p></a>
+                
+                <p {% if comment|is_comment_reported_by_user:user %} data-text="{{ comment.content |censor}}"
+                 id="reported" class="comment-body text-muted" {% endif %} class="comment-body">{{ comment.content |censor}}</p>
             </div>
             <div class="col-md-2 nav-item dropdown">
                 <a class="nav-link" href="#" id="message-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -15,12 +19,19 @@
                     <li><a class="dropdown-item" href="{% url 'delete_comment' comment.id %}">Delete</a></li>
                     {% else %}
                     <li>
-                        <form method="post">
-                            {% csrf_token %}
-                            {% include 'partials/bootstrap_form.html' with form=report_form %}
-                            <input type="hidden" name="action" value="{{comment.id}}">
-                            <button type="submit">Report</button>
-                        </form>
+                        <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
+                            Report
+                            <ul class="dropdown-menu nested-dropdown">
+                                <li>
+                                    <form method="post">
+                                    {% csrf_token %}
+                                    {% include 'partials/bootstrap_form.html' with form=report_form %}
+                                    <input type="hidden" name="action" value="{{comment.id}}">
+                                    <button class = "btn btn-primary" type="submit" name="report">Report</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                     {% endif %}
                 </ul>
@@ -46,3 +57,4 @@
         </blockquote>
     </div>
 </li>
+<script src="{% static 'js/reporting.js' %}"></script>

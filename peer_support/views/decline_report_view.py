@@ -14,7 +14,7 @@ class DeclineReportView(LoginRequiredMixin, View):
         report = get_object_or_404(Report, id=report_id)
         success = self.process_reported_object(report)
         if success:
-            messages.success(request, "Report and the reported object have been successfully deleted.")
+            messages.success(request, "Report has been successfully deleted.")
         else:
             messages.error(request, "The reported object could not be found.")
         return redirect('moderation')
