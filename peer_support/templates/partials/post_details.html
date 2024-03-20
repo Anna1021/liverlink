@@ -1,4 +1,37 @@
 {% load profanity %}
+<div class="col-md-10">
+    <a href="{% url 'profile' post.author.username %}"></a><p>{{ post.author }}</p></a>
+    
+    <p {% if post|is_object_reported_by_user:user %} data-text="{{ post.text |censor}}"
+     id="reported" class="text-muted" {% endif %} >{{ post.text |censor}}</p>
+</div>
+<div class="col-md-2 nav-item dropdown">
+    <a class="nav-link" href="#" id="message-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi-three-dots-vertical"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="message-menu-dropdown">
+        {% if comment.author == user %}
+        <li><a class="dropdown-item" href="{% url 'delete_comment' comment.id %}">Delete</a></li>
+        {% else %}
+        <li>
+            <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
+                Report
+                <ul class="dropdown-menu nested-dropdown">
+                    <li>
+                        <form method="post">
+                        {% csrf_token %}
+                        {% include 'partials/bootstrap_form.html' with form=report_form %}
+                        <input type="hidden" name="action" value="{{comment.id}}">
+                        <button class = "btn btn-primary" type="submit" name="report_comment">Report</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+</div>
 <div class="post-header">
     <a href="{% url 'profile' post.author.username %}">
         <h4 class="font-weight-bold">{{ post.author }}</h3>
@@ -14,3 +47,4 @@
         <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info" style = "border-color: #0dcaf0;">View Post</a>
     {% endif %}
 </div>
+<script src="{% static 'js/reporting.js' %}"></script>

@@ -8,6 +8,7 @@ from django.contrib import messages
 
 
 class PostView(LoginRequiredMixin,FormView):
+    """Display posts made by users"""
 
     def get(self,request,post_id):
         post = get_post(request,post_id)
@@ -20,24 +21,36 @@ class PostView(LoginRequiredMixin,FormView):
 
     def post(self,request, post_id):
         """Show the detail of a post and comment on the post"""
-        comment_id = request.POST.get('action')
-        if comment_id:
-            self.report_submission(request, comment_id)
+
+        if 'report_comment' in request.POST:
+            comment_id = request.POST.get('action')
+            self.comment_report(request, comment_id)
+        elif 'report_message' in request.POST:
+            message_id = request.POST.get('action')
+            self.comment_report(request, message_id)
         else:
             self.comment_submission(request, post_id)
         return redirect('post_detail', post_id=post_id)
     
-    def report_submission(self, request, comment_id):
-        """Handle report form submission."""
-        
+    def comment_report(self, request, comment_id):
         comment = get_object_or_404(PostComment, id=comment_id)
         report_form = ReportForm(request.POST)
         if report_form.is_valid():
             report_form.save_report_for_object(comment, request.user)
-            messages.success(request, "Profile reported successfully.")
+            messages.success(request, "Comment reported successfully.")
+        else:
+            messages.error(request, "There was an issue with the report.")
+
+    def comment_report(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        report_form = ReportForm(request.POST)
+        if report_form.is_valid():
+            report_form.save_report_for_object(post, request.user)
+            messages.success(request, "Post reported successfully.")
         else:
             messages.error(request, "There was an issue with the report.")
     
+
     def comment_submission(self,request, post_id):
         post = get_object_or_404(Post, pk=post_id)
         form = CommentForm(request.user,post,data=request.POST)

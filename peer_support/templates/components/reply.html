@@ -7,8 +7,8 @@
             <div class="col-md-10">
                 <a href="{% url 'profile' post.author.username %}"></a><p>{{ comment.author }}</p></a>
                 
-                <p {% if comment|is_comment_reported_by_user:user %} data-text="{{ comment.content |censor}}"
-                 id="reported" class="comment-body text-muted" {% endif %} class="comment-body">{{ comment.content |censor}}</p>
+                <p {% if comment|is_object_reported_by_user:user %} data-text="{{ comment.content |censor}}"
+                 id="reported" class="text-muted" {% endif %}>{{ comment.content |censor}}</p>
             </div>
             <div class="col-md-2 nav-item dropdown">
                 <a class="nav-link" href="#" id="message-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -27,7 +27,7 @@
                                     {% csrf_token %}
                                     {% include 'partials/bootstrap_form.html' with form=report_form %}
                                     <input type="hidden" name="action" value="{{comment.id}}">
-                                    <button class = "btn btn-primary" type="submit" name="report">Report</button>
+                                    <button class = "btn btn-primary" type="submit" name="report_comment">Report</button>
                                     </form>
                                 </li>
                             </ul>
