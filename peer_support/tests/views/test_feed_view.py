@@ -29,7 +29,7 @@ class FeedViewTestCase(TestCase):
 
         self.form_input={
             'visibility':'G',
-            'text':'Test post'
+            'content':'Test post'
         }
     
     def test_feed_url(self):
@@ -62,7 +62,7 @@ class FeedViewTestCase(TestCase):
         self.assertNotIn('first',response.context)
     
     def test_post_text_must_not_be_empty(self):
-        self.form_input['text'] = ''
+        self.form_input['content'] = ''
         before_count = Post.objects.count()
         response = self.client.post(self.url,data=self.form_input)
         after_count = Post.objects.count()
@@ -74,7 +74,7 @@ class FeedViewTestCase(TestCase):
         self.assertTrue(form.is_bound)
 
     def test_post_text_must_not_exceed_maximum_280_characters(self):
-        self.form_input['text'] = 'A' * 281
+        self.form_input['content'] = 'A' * 281
         before_count = Post.objects.count()
         response = self.client.post(self.url,data=self.form_input)
         after_count = Post.objects.count()
@@ -86,7 +86,7 @@ class FeedViewTestCase(TestCase):
         self.assertTrue(form.is_bound)
     
     def test_post_valid_data(self):
-        response = self.client.post(self.url, self.form_input)
+        response = self.client.post(self.url, self.form_input)  
         self.assertRedirects(response, reverse('feed'))    
 
     def test_global_feed_contains_global_and_friends_posts(self):

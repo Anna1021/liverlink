@@ -108,6 +108,6 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('created_at',)
     ordering = ('-created_at',)
     list_display = [
-        'text','author', 'created_at'
+        'content','author', 'created_at'
     ]
 

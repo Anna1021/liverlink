@@ -1,9 +1,10 @@
 from django.views.generic.edit import FormView
-from django.shortcuts import redirect, render,reverse
+from django.shortcuts import redirect, render,reverse, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import Post
-from peer_support.forms import PostForm
+from peer_support.forms import PostForm, ReportForm
 from .helpers import retrieve_friend_posts
+from django.contrib import messages
 
 class FeedView(LoginRequiredMixin, FormView):
     """Feed view."""
@@ -16,11 +17,15 @@ class FeedView(LoginRequiredMixin, FormView):
         if current_user.first_login == True:
             current_user.first_login = False
             current_user.save()
-            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form,'first':True})
-        return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
+            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form, 'report_form': ReportForm(),'first':True})
+        return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form, 'report_form': ReportForm()})
 
     def post(self,request):
         """Submit post"""
+        if 'report_post' in request.POST:
+            post_id = request.POST.get('action')
+            self.comment_post(request, post_id)
+            return redirect(reverse('feed'))
         form = PostForm(request.user,data=request.POST)
         if form.is_valid():
             post = form.save()
@@ -39,4 +44,12 @@ class FeedView(LoginRequiredMixin, FormView):
             user_posts = user_posts|Post.objects.filter(visibility='G')
         user_posts = user_posts.order_by("-created_at")
         return user_posts
-        
+
+    def comment_post(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        report_form = ReportForm(request.POST)
+        if report_form.is_valid():
+            report_form.save_report_for_object(post, request.user)
+            messages.success(request, "Post reported successfully.")
+        else:
+            messages.error(request, "There was an issue with the report.")

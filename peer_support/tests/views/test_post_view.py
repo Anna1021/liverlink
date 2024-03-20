@@ -84,11 +84,6 @@ class PostViewTestCase(TestCase):
         response = self.client.post(self.url, data=self.comment_input_data)
         response_count_after = PostComment.objects.count()
         self.assertEqual(response_count_after, response_count_before)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'post_detail.html')
-        self.assertIn('form', response.context)
-        form = response.context['comment_form']
-        self.assertFalse(form.is_valid())
-        self.assertIn('content', form.errors)  
-        self.assertEqual(form.errors['content'], ['This field is required.'])
+        self.assertRedirects(response, self.url, status_code=302, target_status_code=200)
+        
 

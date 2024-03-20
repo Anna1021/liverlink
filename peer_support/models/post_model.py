@@ -6,7 +6,7 @@ class Post(models.Model):
     """Model for representing text-based posts."""
     
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.CharField(max_length=280)
+    content = models.CharField(max_length=280)
     visibility = models.CharField(default='G',max_length=10)
     created_at = models.DateTimeField(default=timezone.now)
 

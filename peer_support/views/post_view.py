@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, render, get_object_or_404, reverse
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic.edit import FormView
 from peer_support.models import Post, PostComment
 from peer_support.forms import CommentForm, ReportForm
@@ -25,9 +25,9 @@ class PostView(LoginRequiredMixin,FormView):
         if 'report_comment' in request.POST:
             comment_id = request.POST.get('action')
             self.comment_report(request, comment_id)
-        elif 'report_message' in request.POST:
-            message_id = request.POST.get('action')
-            self.comment_report(request, message_id)
+        elif 'report_post' in request.POST:
+            post_id = request.POST.get('action')
+            self.comment_post(request, post_id)
         else:
             self.comment_submission(request, post_id)
         return redirect('post_detail', post_id=post_id)
@@ -41,15 +41,14 @@ class PostView(LoginRequiredMixin,FormView):
         else:
             messages.error(request, "There was an issue with the report.")
 
-    def comment_report(self, request, post_id):
+    def comment_post(self, request, post_id):
         post = get_object_or_404(Post, id=post_id)
         report_form = ReportForm(request.POST)
         if report_form.is_valid():
             report_form.save_report_for_object(post, request.user)
             messages.success(request, "Post reported successfully.")
         else:
-            messages.error(request, "There was an issue with the report.")
-    
+            messages.error(request, "There was an issue with the post.")
 
     def comment_submission(self,request, post_id):
         post = get_object_or_404(Post, pk=post_id)
@@ -57,4 +56,6 @@ class PostView(LoginRequiredMixin,FormView):
         if form.is_valid():
             parent_id = request.POST.get('parent_id')
             form.save(parent_id)
+        else:
+            messages.error(request, "There was an issue with the report.")
     
