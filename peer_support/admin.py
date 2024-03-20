@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Report, Message, Post
 
-
 class UserProfileInline(admin.StackedInline):
     """Configuration of the admin interface for user profiles."""
     """Adds the user profile interface to the user interface."""
@@ -12,6 +11,7 @@ class UserProfileInline(admin.StackedInline):
 class UserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for users."""
     
+    list_filter = ["date_of_birth", "gender", "location", "hospital", "ethnicity", "language"]
     inlines = [UserProfileInline]
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio'
@@ -21,6 +21,7 @@ class UserAdmin(admin.ModelAdmin):
 class PatientAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for patients."""
 
+    list_filter = ["date_of_birth", "gender", "location", "hospital", "ethnicity", "language", "condition", "transplant", "age_of_diagnosis"]
     inlines = [UserProfileInline]
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'condition', 'age_of_diagnosis', 'transplant'
@@ -30,6 +31,7 @@ class PatientAdmin(admin.ModelAdmin):
 class ParentAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for parents."""
 
+    list_filter = ["date_of_birth", "gender", "location", "hospital", "ethnicity", "language", "child_condition", "child_transplant", "child_age_of_diagnosis"]
     inlines = [UserProfileInline]
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'child_condition', 'child_age_of_diagnosis', 'child_transplant'
@@ -39,6 +41,7 @@ class ParentAdmin(admin.ModelAdmin):
 class MentorAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for mentors."""
 
+    list_filter = ["date_of_birth", "gender", "location", "hospital", "ethnicity", "language", "condition", "transplant", "age_of_diagnosis"]
     inlines = [UserProfileInline]
     list_display = [
         'id','username', 'first_name', 'last_name', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio', 'condition', 'age_of_diagnosis', 'referral_code', 'transplant'
@@ -52,56 +55,22 @@ class ReferralAdmin(admin.ModelAdmin):
         'referrer', 'code'
     ]
 
-@admin.register(Conversation)
-class ConversationAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for conversations."""
-
-    filter_vertical = ('users','messages')
-    list_display = [
-        'id'
-    ]
-
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for notifications."""
 
+    list_filter = ["viewed", "created"]
     list_display = [
         'id', 'title', 'description', 'created', 'viewed', 'user'
-    ]
-
-@admin.register(FriendRequest)
-class FriendRequestAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for friend requests."""
-
-    list_display = [
-        'id','sender', 'receiver', 'is_accepted'
     ]
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for friend requests."""
 
+    list_filter = ["reason", "reported_at"]
     list_display = [
         'reason','reported_at', 'content_type', 'object_id', 'content_object'
-    ]
-
-@admin.register(Message)
-class MessageAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for friend requests."""
-
-    list_display = [
-        'id','sender','content', 'send_time', 'previous_message'
-    ]
-
-@admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
-    """Configuration of the admin interface for Post."""
-    
-    date_hierarchy = 'created_at' 
-    list_filter = ('created_at',)
-    ordering = ('-created_at',)
-    list_display = [
-        'text','author', 'created_at'
     ]
 
     
