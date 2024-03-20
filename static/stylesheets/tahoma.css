@@ -1,0 +1,8 @@
+.tahoma p,
+.tahoma h1,
+.tahoma h2,
+.tahoma h3,
+.tahoma h4,
+.tahoma h5 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
