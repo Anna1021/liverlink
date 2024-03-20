@@ -3,9 +3,8 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic.edit import FormView
 from peer_support.models import Post, PostComment
 from peer_support.forms import CommentForm
-from .helpers import get_post
+from .helpers import get_post, send_notification
 from django.contrib import messages
-
 
 class PostView(LoginRequiredMixin,FormView):
 
@@ -25,8 +24,8 @@ class PostView(LoginRequiredMixin,FormView):
         form = CommentForm(request.user,post,data=request.POST)
         if form.is_valid():
             parent_id = request.POST.get('parent_id')
-            form.save(parent_id)
+            comment = form.save(parent_id)
+            send_notification(comment)
             return redirect('post_detail', post_id=post_id)
         else:
             return render(request, 'post_detail.html', {'post': post,'comments': comments,'comment_form': form})
-    

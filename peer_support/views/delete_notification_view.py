@@ -8,7 +8,7 @@ def delete_notification(request, notification_id):
     """Delete a notification."""
     
     notification = get_object_or_404(Notification, id=notification_id)
-    if notification.friend_request:
-        notification.friend_request.delete()
+    if notification.get_is_friend_request:
+        notification.content_object.delete()
     notification.delete()
     return redirect('inbox')

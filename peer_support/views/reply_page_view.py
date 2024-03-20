@@ -3,6 +3,7 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import Question, Response
 from peer_support.forms import NewReplyForm
+from .helpers import send_notification
 
 class ReplyPageView(LoginRequiredMixin, View):
     """Allows users to reply to a question"""
@@ -25,6 +26,7 @@ class ReplyPageView(LoginRequiredMixin, View):
             if parent_id:
                 reply.parent = Response.objects.get(id=parent_id)
             reply.save()
+            send_notification(reply)
             return redirect(f'/question/{question_id}#{reply.id}')
         else:
             return render(request, 'resources.html', {'form': form})

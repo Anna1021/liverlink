@@ -1,5 +1,5 @@
 import uuid
-from peer_support.models import Referral, Mentor, User, Patient, Parent, Post, FriendRequest
+from peer_support.models import Referral, Mentor, User, Patient, Parent, Post, FriendRequest, Response, Conversation
 from django.conf import settings
 from django.shortcuts import redirect, reverse
 from peer_support.models import Notification, PostComment
@@ -210,3 +210,38 @@ def get_user_type(user):
         return "MENTOR"
     else:
         return "ADMIN"
+
+def send_notification(object, **kwargs):
+    """Send a notification."""
+
+    if isinstance(object, Response):
+        user = object.question.author
+        notifying_user = object.user
+        send_notification_to_parent(object, notifying_user)
+    elif isinstance(object, PostComment):
+        user = object.post.author
+        notifying_user = object.author
+        send_notification_to_parent(object, notifying_user)
+    elif isinstance(object, FriendRequest):
+        user = object.receiver
+        notifying_user = object.sender
+    elif isinstance(object, Conversation):
+        user = kwargs.get('conv_user', None)
+        notifying_user = kwargs.get('conv_creator', None)
+    else:
+        return
+    if user != notifying_user:
+        Notification.objects.create(user=user, notifying_user=notifying_user, content_object=object)
+        
+def send_notification_to_parent(object, notifying_user):
+    """Send a notification to the parent reply/comment, if one exists."""
+
+    if not object.parent:
+        return
+    if isinstance(object, Response):
+        user = object.parent.user
+    elif isinstance(object, PostComment):
+        user = object.parent.author
+    if user != notifying_user:
+        Notification.objects.create(user=user, notifying_user=notifying_user, content_object=object, 
+                                    description=f"{notifying_user} has replied to your reply.")

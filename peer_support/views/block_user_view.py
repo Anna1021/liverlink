@@ -20,7 +20,12 @@ class BlockUserView(LoginRequiredMixin, View):
     def delete_friend_request(self, request, blocked_user):
         """Delete any existing friend requests and associated notifications between the current user and blocked user."""
         
-        friend_requests = FriendRequest.objects.filter((Q(sender=blocked_user) & Q(receiver = request.user)) | (Q(sender=request.user) & Q(receiver=blocked_user)))
-        friend_request_notifications = Notification.objects.filter(friend_request__in=friend_requests)
+        friend_requests = FriendRequest.objects.filter((Q(sender=blocked_user) & Q(receiver=request.user)) | (Q(sender=request.user) & Q(receiver=blocked_user)))
+        self.delete_friend_request_notifications(request, blocked_user)
         friend_requests.delete()
-        friend_request_notifications.delete()
+
+    def delete_friend_request_notifications(self, request, blocked_user):
+        """Delete any existing notifications referencing these friend requests."""
+
+        notifications = Notification.objects.filter((Q(user=blocked_user) & Q(notifying_user=request.user)) | (Q(user=request.user) & Q(notifying_user=blocked_user)))
+        notifications.delete()

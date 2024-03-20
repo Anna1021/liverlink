@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import Question
 from peer_support.forms import NewReplyForm, NewResponseForm
+from .helpers import send_notification
 
 class QuestionPageView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -27,6 +28,7 @@ class QuestionPageView(LoginRequiredMixin, View):
             response.user = request.user
             response.question = get_object_or_404(Question, id=id)
             response.save()
+            send_notification(response)
             return redirect(f'/question/{id}#{response.id}')
         question = get_object_or_404(Question, id=id)
         reply_form = NewReplyForm() 
