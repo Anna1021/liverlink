@@ -9,18 +9,16 @@
     <p>{{ post.text |censor}}</p>
     <p>{{ post.created_at }}</p>
     {% if post.author == request.user %}
-        <a href="{% url 'delete_post' post_id=post.id %}" class="btn-danger btn" style = "border-color: #dc3545;">Delete</a>
+        <a href="{% url 'delete_post' post_id=post.id %}" class="btn-danger btn">Delete</a>
     {% endif %}
     {% if from_feed %}
-        <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info" style = "border-color: #0dcaf0;">View Post</a>
+        <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info">View Post</a>
         <a href="" class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}"></a>
+        <span class="profile-subheading pl-2" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
     {% endif %}
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-
-<p id="like-count-{{ post.id }}">{{ post.like_count }}</p>
 
 <script>
 $(document).ready(function() {
