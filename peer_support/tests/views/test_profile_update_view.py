@@ -1,4 +1,4 @@
-"""Tests for the profile settings view."""
+"""Tests for the profile update view."""
 import datetime
 from django.contrib import messages
 from django.test import TestCase
@@ -7,8 +7,8 @@ from peer_support.forms import PatientForm, ParentForm, MentorForm, UserForm, Pr
 from peer_support.models import Patient, Parent, Mentor, User, Professional
 from peer_support.tests.helpers import reverse_with_next
 
-class SettingsViewTestCase(TestCase):
-    """Test suite for the profile settings view."""
+class ProfileUpdateViewTestCase(TestCase):
+    """Test suite for the profile update view."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
@@ -16,7 +16,7 @@ class SettingsViewTestCase(TestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/other_parents.json',
-        'peer_support/tests/fixtures/default_professional.json',
+        'peer_support/tests/fixtures/other_professionals.json',
         'peer_support/tests/fixtures/default_user_profile.json',
         'peer_support/tests/fixtures/other_user_profiles.json',
         'peer_support/tests/fixtures/default_admin.json'
@@ -27,7 +27,7 @@ class SettingsViewTestCase(TestCase):
         self.admin = User.objects.get(username='@admin')
         self.patient = Patient.objects.get(username='@janedoe')
         self.mentor = Mentor.objects.get(username='@johndoe')
-        self.professional = Professional.objects.get(username='@johndoe')
+        self.professional = Professional.objects.get(username='@hazelsmith')
         self.url = reverse('settings')
         self.user_form_input = {
             'first_name': 'Admin',
@@ -265,17 +265,16 @@ class SettingsViewTestCase(TestCase):
         form = response.context['form']
         self.assertTrue(form.is_bound)
         self.professional.refresh_from_db()
-        self.assertEqual(self.professional.username, '@johndoe')
-        self.assertEqual(self.professional.first_name, 'John')
-        self.assertEqual(self.professional.last_name, 'Doe')
-        self.assertEqual(self.professional.email, 'johndoe@example.org')
-        self.assertEqual(self.professional.date_of_birth, datetime.date(1990, 1, 1))
-        self.assertEqual(self.professional.gender, 'M')
-        self.assertEqual(self.professional.location, 'GB')
-        self.assertEqual(self.professional.ethnicity, 'BR')
-        self.assertEqual(self.professional.language, 'en')
-        self.assertEqual(self.professional.bio, "I'm a test user")
-        self.assertEqual(self.professional.expertise, 'Cirrhosis')
+        self.assertEqual(self.professional.username, '@hazelsmith')
+        self.assertEqual(self.professional.first_name, 'Hazel')
+        self.assertEqual(self.professional.last_name, 'Smith')
+        self.assertEqual(self.professional.email, 'hazelsmith@example.com')
+        self.assertEqual(self.professional.date_of_birth, datetime.date(1981, 1, 3))
+        self.assertEqual(self.professional.gender, 'F')
+        self.assertEqual(self.professional.location, 'US')
+        self.assertEqual(self.professional.ethnicity, 'AS')
+        self.assertEqual(self.professional.bio, "I'm a professional therapist and I'm here to help you.")
+        self.assertEqual(self.professional.expertise, 'Biliary atresia')
         self.assertEqual(self.professional.referral_code, '9C274FF391') 
 
     def test_unsuccessful_profile_update_due_to_duplicate_username(self):
@@ -433,7 +432,7 @@ class SettingsViewTestCase(TestCase):
         self.assertEqual(self.professional.ethnicity, 'RO'),
         self.assertEqual(self.professional.language, 'en'),
         self.assertEqual(self.professional.bio, 'I am a test professional.'),
-        self.assertEqual(self.professional.expertise, 'Cirrhosis'),
+        self.assertEqual(self.professional.expertise, 'Haemochromatosis'),
         self.assertEqual(self.professional.referral_code, '9C274FF391'),
 
     def test_post_profile_redirects_when_not_logged_in(self):

@@ -19,18 +19,6 @@ class ProfileView(LoginRequiredMixin, View):
         context = self.set_context(request, username)
         return render(request, 'profile.html', context)
     
-    def get_user_type(self, user):
-        if hasattr(user, 'parent'):
-            return "PARENT"
-        elif hasattr(user, 'patient'):
-            return "PATIENT"
-        elif hasattr(user, 'mentor'):
-            return "MENTOR"
-        elif hasattr(user, 'professional'):
-            return "PROFESSIONAL"
-        else:
-            return "ADMIN"
-
     def get_context(self, user, posts, request):
         return {
             'user': user, 
