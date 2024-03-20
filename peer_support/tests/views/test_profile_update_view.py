@@ -217,7 +217,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.parent.first_name, 'Alex')
         self.assertEqual(self.parent.last_name, 'Smith')
         self.assertEqual(self.parent.email, 'alexsmith@example.com')
-        self.assertEqual(self.parent.date_of_birth, datetime.date(1988, 8, 12))
+        self.assertEqual(self.parent.date_of_birth, datetime.date(1978, 8, 12))
         self.assertEqual(self.parent.gender, 'M')
         self.assertEqual(self.parent.location, 'US')
         self.assertEqual(self.parent.ethnicity, 'OW')

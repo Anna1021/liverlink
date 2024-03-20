@@ -1,5 +1,10 @@
 from django.contrib import admin
+<<<<<<< HEAD
 from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest,  Question, Response, Report, Message, Post
+=======
+from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Report, Message, Post
+
+>>>>>>> 5088af57147912dcd1ef114f93953c4399877213
 
 class UserProfileInline(admin.StackedInline):
     """Configuration of the admin interface for user profiles."""
@@ -102,3 +107,5 @@ class PostAdmin(admin.ModelAdmin):
     list_display = [
         'text','author', 'created_at'
     ]
+
+    

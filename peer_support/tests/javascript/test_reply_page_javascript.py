@@ -19,7 +19,7 @@ class ReplyPageTest(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.add_argument("--headless") 
+        options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
         cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(50)
@@ -32,8 +32,10 @@ class ReplyPageTest(StaticLiveServerTestCase):
 
     def test_reply_form_toggle(self):
         user = User.objects.get(username='@johndoe')
+        user.friends.set(User.objects.exclude(username='@johndoe'))
         user.first_login = False
         user.save()
+        self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         try:
             self.selenium.get(f'{self.live_server_url}/log_in/')
             username_input =self.wait.until(EC.visibility_of_element_located((By.NAME, "username")))

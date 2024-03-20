@@ -43,6 +43,7 @@ blockquote {
   flex-direction: row;
   justify-content: space-between;
   padding: 0 24px;
+  align-items: center;
   border-bottom: 1px solid lightgray;
 }
 
@@ -157,10 +158,6 @@ blockquote {
   margin-top: 30px;
 }
 
-.no-responses-text {
-  color: #1B1F3B;
-}
-
 .response-body {
   margin: 0;
 }
@@ -218,6 +215,23 @@ a.username {
 }
 
 .question-body,.question-title,.responses-container{
-  width: 752px;
+  width: auto;
   word-wrap: break-word;
+}
+.delete-icon{
+  background-color: transparent;
+  outline: none;
+  min-width: fit-content;
+  border: none;
+  margin-bottom: 10px;
+}
+.question-header {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-align{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
