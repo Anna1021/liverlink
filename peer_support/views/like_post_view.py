@@ -3,15 +3,16 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from peer_support.models import Post
 
+
 @login_required
 def like_post(request, post_id):
     """Like a post."""
 
     post = get_object_or_404(Post, id=post_id)
-    liked = True 
+    liked = True
     if request.user in post.likes.all():
         post.likes.remove(request.user)
         liked = False
     else:
         post.likes.add(request.user)
-    return JsonResponse({'liked': liked})
+    return JsonResponse({"liked": liked})

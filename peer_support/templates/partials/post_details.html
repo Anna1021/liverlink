@@ -1,4 +1,5 @@
 {% load profanity %}
+{% csrf_token %}
 <div class="post-header">
     <a href="{% url 'profile' post.author.username %}">
         <h4 class="font-weight-bold">{{ post.author }}</h3>
@@ -21,28 +22,31 @@
 
 <script>
 $(document).ready(function() {
-    $('.like-post').click(function(e) {
-        e.preventDefault();
-
-        var $this = $(this); // Save reference to the clicked element
+    $('.like-post:not(.initialized)').each(function() {
+        var $this = $(this);
         var postId = $this.data('post-id');
 
-        $.ajax({
-            url: "{% url 'like_post' post_id=post.id %}",
-            data: {
-                'post_id': postId
-            },
-            dataType: 'json',
-            success: function(data) {
-                if (data.liked) {
-                    console.log('liked');
-                    // Change the thumbs up to fill for the clicked element only
-                    $this.removeClass('bi-hand-thumbs-up').addClass('bi-hand-thumbs-up-fill');
-                } else {
-                    // Change the thumbs up to unfill for the clicked element only
-                    $this.removeClass('bi-hand-thumbs-up-fill').addClass('bi-hand-thumbs-up');
+        $this.addClass('initialized'); // Mark the button as initialized
+
+        $this.click(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: "{% url 'like_post' post_id=0 %}".replace('0', postId),
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.liked) {
+                        $this.removeClass('bi-hand-thumbs-up').addClass('bi-hand-thumbs-up-fill');
+                    } else {
+                        $this.removeClass('bi-hand-thumbs-up-fill').addClass('bi-hand-thumbs-up');
+                    }
                 }
-            }
+            });
         });
     });
 });
