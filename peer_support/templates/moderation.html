@@ -1,6 +1,7 @@
 {% extends 'dashboard.html' %}
 {% block page %}
 {% load static %}
+{% load reporting_tags %}
 {% include 'partials/administrative_navbar.html' %}    
 <h1>Reports</h1>
 {% for report in reports %}
@@ -8,7 +9,7 @@
         <p>Reason: {{ report.reason }}</p>
         <p>Reported At: {{ report.reported_at }}</p>
         <p>Content Type: {{ report.content_type }}</p>
-        <p>Reported Content: {{ report.content_object.content }}</p>
+        <p>Reported Content: {% display_reported_content report %}</p>
         <button class="btn btn-success accept-request" onclick="window.location.href='/accept_report/{{report.id}}';"><i class="bi bi-check"></i></button>
         &nbsp;
         <button class="btn btn-danger decline" onclick="window.location.href='/decline_report/{{ report.id }}';"><i class="bi bi-x"></i></button>

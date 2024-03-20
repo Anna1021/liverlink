@@ -1,56 +1,80 @@
 {% extends 'dashboard.html' %}
 {% load static %}
 {% load profanity %}
+{% load reporting_tags %}
 {% block page %}
-    {% include 'partials/resources-navbar.html' %}
-        <div class="page question-page">
-            <div class="question-header">
-                <div class ="header-align">
-                <h2 class="question-title">{{ question.title | censor }}</h2>
-                <div class="dropdown">
-                    <a href="#" class="delete-icon" id="actionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="bi bi-three-dots-vertical"></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown">
-                        <li>
-                            <form method="post" action="{% url 'delete_question' id=question.id %}">
+{% include 'partials/resources-navbar.html' %}
+<div class="page question-page">
+    <div class="question-header">
+        <div class ="header-align">
+        <h2 class="question-title">{{ question.title | censor }}</h2>
+        <div class="dropdown">
+            <a href="#" class="delete-icon" id="actionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="bi bi-three-dots-vertical"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown">
+                <li>
+                    <form method="post" action="{% url 'delete_question' id=question.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this question?');">
+                            Delete Question
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
+                        Report
+                        <ul class="dropdown-menu nested-dropdown">
+                            <li>
+                                <form method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this question?');">
-                                    Delete Question
-                                </button>
-                            </form>
-                        </li>
+                                {% include 'partials/bootstrap_form.html' with form=report_form %}
+                                <input type="hidden" name="action" value="{{question.id}}">
+                                <button class = "btn btn-primary" type="submit" name="report_question">Report</button>
+                                </form>
+                            </li>
                         </ul>
-                        </div>
                     </div>
-        <p {% if question.author in current_user.blocked_users.all %} data-text="{{question.body | censor}}"
-            id="blocked-question" class="question-body text-muted" {% endif %} class="question-body">{{ question.body | censor}}
-        </p>
-        <span class="question-author">author : <a href="{% url 'profile' question.author.username %}"
-                class="username">{{ question.author.username }}</a></span>
-
-        <div class="responses-container">
-            <h4 class="responses-container-heading">Responses</h4>
-            {% if not question.responses.all %}
-                <p class="no-responses-text">No responses yet</p>
-            {% else %}
-                {% for response in question.get_responses %}
-                    {% include 'partials/response.html' with response=response %}
-                {% endfor %}
-            {% endif %}
+                </li>
+            </ul>
         </div>
+    </div>
+    {% if question.author in current_user.blocked_users.all %}
+    <p data-text="{{ question.body|censor }}" id="blocked-question" class="question-body text-muted">
+    {% elif question|is_object_reported_by_user:user %}
+    <p data-text="{{ question.body|censor }}" id="reported" class="text-muted">
+    {% else %}
+    <p>
+    {% endif %}
+    {{ question.body|censor }}</p>
 
-        {% if user.is_authenticated %}
-        <form method="POST" action="" class="response-form">
-            {% csrf_token %}
-            <div class="fieldWrapper">
-                <label for="{{ response_form.body.id_for_label }}">Your answer:</label>
-                {{ response_form.body }}
-            </div>
-            <input type="submit" value="Send" class="submit-button" />
-        </form>
+    <span class="question-author">author : <a href="{% url 'profile' question.author.username %}"
+            class="username">{{ question.author.username }}</a></span>
+
+    <div class="responses-container">
+        <h4 class="responses-container-heading">Responses</h4>
+        {% if not question.responses.all %}
+            <p class="no-responses-text">No responses yet</p>
+        {% else %}
+            {% for response in question.get_responses %}
+                {% include 'partials/response.html' with response=response %}
+            {% endfor %}
         {% endif %}
-  
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="{% static 'js/question_page.js' %}"></script>
-  {% endblock %}
+    </div>
+
+    {% if user.is_authenticated %}
+    <form method="POST" action="" class="response-form">
+        {% csrf_token %}
+        <div class="fieldWrapper">
+            <label for="{{ response_form.body.id_for_label }}">Your answer:</label>
+            {{ response_form.body }}
+        </div>
+        <input type="submit" value="Send" class="submit-button" />
+    </form>
+    {% endif %}
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'js/question_page.js' %}"></script>
+<script src="{% static 'js/reporting.js' %}"></script>
+{% endblock %}

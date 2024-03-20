@@ -1,10 +1,12 @@
 from django.views import View
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from peer_support.models import Question
-from peer_support.forms import NewReplyForm, NewResponseForm
+from peer_support.models import Question, Response
+from peer_support.forms import NewReplyForm, NewResponseForm, ReportForm
+from django.contrib import messages
 
 class QuestionPageView(LoginRequiredMixin, View):
+    """Displays a single question and all responses"""
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
 
@@ -17,23 +19,43 @@ class QuestionPageView(LoginRequiredMixin, View):
             'response_form': response_form,
             'reply_form': reply_form,
             'current_user': request.user,
+            'report_form': ReportForm(),
         }
         return render(request, 'question.html', context)
 
     def post(self, request, id):
+        if 'report_question' in request.POST:
+            question_id = request.POST.get('action')
+            self.question_report(request, question_id)
+        elif 'report_response' in request.POST:
+            response_id = request.POST.get('action')
+            self.response_post(request, response_id)
+        else:
+            self.response_post(request, id)
+        return redirect('question', id=id)
+    
+    def response_post(self,request,id):
         response_form = NewResponseForm(request.POST)
         if response_form.is_valid():
             response = response_form.save(commit=False)
             response.user = request.user
             response.question = get_object_or_404(Question, id=id)
             response.save()
-            return redirect(f'/question/{id}#{response.id}')
-        question = get_object_or_404(Question, id=id)
-        reply_form = NewReplyForm() 
-        context = {
-            'question': question,
-            'response_form': response_form,
-            'reply_form': reply_form,
-            'current_user': request.user,
-        }
-        return render(request, 'question.html', context)
+    
+    def question_report(self, request, comment_id):
+        comment = get_object_or_404(Question, id=comment_id)
+        report_form = ReportForm(request.POST)
+        if report_form.is_valid():
+            report_form.save_report_for_object(comment, request.user)
+            messages.success(request, "Comment reported successfully.")
+        else:
+            messages.error(request, "There was an issue with the report.")
+
+    def response_report(self, request, post_id):
+        post = get_object_or_404(Response, id=post_id)
+        report_form = ReportForm(request.POST)
+        if report_form.is_valid():
+            report_form.save_report_for_object(post, request.user)
+            messages.success(request, "Post reported successfully.")
+        else:
+            messages.error(request, "There was an issue with the post.")

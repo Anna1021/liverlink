@@ -8,7 +8,7 @@ from django.contrib import messages
 
 
 class PostView(LoginRequiredMixin,FormView):
-    """Display posts made by users"""
+    """Show the detail of a post and comment on the post"""
 
     def get(self,request,post_id):
         post = get_post(request,post_id)
@@ -20,14 +20,12 @@ class PostView(LoginRequiredMixin,FormView):
         return render(request, 'post_detail.html', {'post': post,'comments': comments, 'comment_form': comment_form,'report_form': ReportForm()})
 
     def post(self,request, post_id):
-        """Show the detail of a post and comment on the post"""
-
         if 'report_comment' in request.POST:
             comment_id = request.POST.get('action')
             self.comment_report(request, comment_id)
         elif 'report_post' in request.POST:
             post_id = request.POST.get('action')
-            self.comment_post(request, post_id)
+            self.post_report(request, post_id)
         else:
             self.comment_submission(request, post_id)
         return redirect('post_detail', post_id=post_id)
@@ -41,7 +39,7 @@ class PostView(LoginRequiredMixin,FormView):
         else:
             messages.error(request, "There was an issue with the report.")
 
-    def comment_post(self, request, post_id):
+    def post_report(self, request, post_id):
         post = get_object_or_404(Post, id=post_id)
         report_form = ReportForm(request.POST)
         if report_form.is_valid():

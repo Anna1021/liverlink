@@ -23,11 +23,11 @@ class DeclineReportView(LoginRequiredMixin, View):
         """Processes the reported object based on its type."""
         
         reported_object = report.content_object
+        report.delete()
         if not reported_object:
             return False
         if isinstance(reported_object, Message):
             self.handle_reported_message(report, reported_object)
-        report.delete()
         return True
 
     def handle_reported_message(self, report, reported_object):
