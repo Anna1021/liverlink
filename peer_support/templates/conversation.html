@@ -83,5 +83,12 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var first_message = "{{ first_message }}"
+        var username = "{{ user.username }}";
+        var conversation_id = "{{ conversation.id }}";
+        var storageKey = "message"+conversation_id;
+        var scrollKey = "scroll"+conversation_id;
+    </script>
     <script src="{% static 'js/conversation.js' %}"></script>
   {% endblock %}
