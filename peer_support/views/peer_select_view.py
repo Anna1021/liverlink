@@ -5,10 +5,11 @@ from django.contrib import messages
 from peer_support.forms import SortUserForm, FilterUserForm, SearchUserForm
 from .helpers import get_addable_peers, get_user_type
 
+
 class PeerSelectView(LoginRequiredMixin, View):
     """Displays the page for viewing users on network."""
 
-    template_name = 'peer_select.html'
+    template_name = "peer_select.html"
 
     def get(self, request):
         users = get_addable_peers(request.user)
@@ -21,7 +22,7 @@ class PeerSelectView(LoginRequiredMixin, View):
         users_with_types = [{'user': user, 'user_type': get_user_type(user)} for user in users]
         context = {'users': users_with_types, 'form_sort': form_sort, 'form_filter': form_filter, 'form_search': form_search}
         return render(request, self.template_name, context)
-        
+
     def process_search(self, users, form_search):
         """Process search form."""
 

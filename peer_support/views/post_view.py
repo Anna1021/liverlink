@@ -7,26 +7,25 @@ from .helpers import get_post
 from django.contrib import messages
 
 
-class PostView(LoginRequiredMixin,FormView):
+class PostView(LoginRequiredMixin, FormView):
 
-    def get(self,request,post_id):
-        post = get_post(request,post_id)
+    def get(self, request, post_id):
+        post = get_post(request, post_id)
         if not post:
-            messages.error(request,"This post does not exist")
-            return redirect('feed')
-        comments = PostComment.objects.filter(post=post, parent=None) 
-        comment_form = CommentForm(request.user,post)
+            messages.error(request, "This post does not exist")
+            return redirect("feed")
+        comments = PostComment.objects.filter(post=post, parent=None)
+        comment_form = CommentForm(request.user, post)
         return render(request, 'post_detail.html', {'post': post,'comments': comments, 'comment_form': comment_form})
 
-    def post(self,request, post_id):
+    def post(self, request, post_id):
         """Show the detail of a post and comment on the post"""
         post = get_object_or_404(Post, pk=post_id)
         comments = PostComment.objects.filter(post=post, parent=None)
-        form = CommentForm(request.user,post,data=request.POST)
+        form = CommentForm(request.user, post, data=request.POST)
         if form.is_valid():
-            parent_id = request.POST.get('parent_id')
+            parent_id = request.POST.get("parent_id")
             form.save(parent_id)
-            return redirect('post_detail', post_id=post_id)
+            return redirect("post_detail", post_id=post_id)
         else:
             return render(request, 'post_detail.html', {'post': post,'comments': comments,'comment_form': form})
-    

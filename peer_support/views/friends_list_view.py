@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from .helpers import get_user_type
 
+
 class FriendsListView(LoginRequiredMixin, View):
     """Display the list of friends."""
 
@@ -17,10 +18,10 @@ class FriendsListView(LoginRequiredMixin, View):
         friends_with_types = [{'friend': friend, 'user_type': get_user_type(friend)} for friend in friends]
         context = {'friends': friends_with_types, 'form_sort': form_sort, 'form_filter': form_filter, 'form_search': form_search}
         return render(request, 'friends_list.html', context)
-        
+
     def get_forms(self, request):
         """Return the search, sort, and filter forms."""
-        
+
         form_search = SearchUserForm(data=request.GET)
         form_sort = SortUserForm(data=request.GET)
         form_filter = FilterUserForm(data=request.GET)

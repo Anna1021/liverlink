@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views import View
 from peer_support.models import Notification
 
+
 class InboxView(LoginRequiredMixin, View):
     """Display the current user's inbox."""
 

@@ -13,14 +13,20 @@ class ConversationView(LoginRequiredMixin, FormView):
 
     def get(self, request, conversation_id):
         if conversation_id == 0:
-            return render(request, self.template_name, {'user_conversations': request.user.sort_conversations()})
+            return render(request, self.template_name, {"user_conversations": request.user.sort_conversations()})
         conversation = get_conversation(request, conversation_id)
         if not conversation:
             return no_conversation_url(request)
         message_form = MessageForm(conversation, user=request.user)
         report_form = ReportForm()
         blocked_dm = check_blocked_dm(request.user, conversation)
-        context = { 'blocked_dm': blocked_dm, 'message_form': message_form, 'report_form': report_form , 'conversation': conversation, 'user_conversations': request.user.sort_conversations()}
+        context = {
+            "blocked_dm": blocked_dm,
+            "message_form": message_form,
+            "report_form": report_form,
+            "conversation": conversation,
+            "user_conversations": request.user.sort_conversations(),
+        }
         return render(request, self.template_name, context)
 
     def post(self, request, conversation_id):
@@ -46,7 +52,7 @@ class ConversationView(LoginRequiredMixin, FormView):
             messages.error(request,"This message is not valid")
             return self.form_invalid(message_form) 
 
-    def handle_report_message(self,request,conversation_id,message_id):
+    def handle_report_message(self, request, conversation_id, message_id):
         """Handles the report request for a message."""
 
         message = get_object_or_404(Message, id=message_id)
@@ -58,4 +64,4 @@ class ConversationView(LoginRequiredMixin, FormView):
             messages.success(request, "Message reported successfully.")
         else:
             messages.error(request, "There was an issue with the report.")
-        return redirect(reverse('conversation', kwargs={'conversation_id': conversation_id}))
+        return redirect(reverse("conversation", kwargs={"conversation_id": conversation_id}))
