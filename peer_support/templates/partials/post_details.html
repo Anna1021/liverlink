@@ -14,9 +14,9 @@
     {% if from_feed %}
         <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info">View Post</a>
         {% if post.liked_by_user %}
-            <button class="btn apply-btn bi bi-hand-thumbs-up-fill like-post" data-post-id="{{ post.id }}"></button>
+            <button class="btn apply-btn bi bi-hand-thumbs-up-fill like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|join:', ' }}"></button>
         {% else %}
-            <button class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}"></button>
+            <button class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|join:', ' }}"></button>
         {% endif %}
         
         <span class="profile-subheading pl-2" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
@@ -27,10 +27,11 @@
 
 <script>
 $(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
     $('.like-post').each(function() {
         var $this = $(this);
         var postId = $this.data('post-id');
-        
+
         $this.click(function(e) {
             e.preventDefault();
 
