@@ -1,16 +1,17 @@
 $(document).ready(function() {
-    reported()
+    reported();
 
-    function reported(){
-        var reported_object = document.getElementById('reported');
-        if (reported_object) {
-            reported_object.innerHTML = "You have reported this. Click to reveal."
-            reported_object.addEventListener('click', function() {
-                var question_text = reported_object.getAttribute('data-text')
-                reported_object.innerHTML = question_text
-                reported_object.classList.remove('text-muted')
-            })
+    function reported() {
+        var reportedObjects = document.querySelectorAll('[data-reported="true"]');
+        if (reportedObjects.length > 0) {
+            reportedObjects.forEach(function(reportedObject) {
+                reportedObject.innerHTML = "You have reported this. Click to reveal.";
+                reportedObject.addEventListener('click', function() {
+                    var questionText = reportedObject.getAttribute('data-text');
+                    reportedObject.innerHTML = questionText;
+                    reportedObject.classList.remove('text-muted');
+                });
+            });
         }
     }
 });
-

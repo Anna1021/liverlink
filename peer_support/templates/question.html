@@ -7,46 +7,50 @@
 <div class="page question-page">
     <div class="question-header">
         <div class ="header-align">
-        <h2 class="question-title">{{ question.title | censor }}</h2>
-        <div class="dropdown">
-            <a href="#" class="delete-icon" id="actionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="bi bi-three-dots-vertical"></span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown">
-                <li>
-                    <form method="post" action="{% url 'delete_question' id=question.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this question?');">
-                            Delete Question
-                        </button>
-                    </form>
-                </li>
-                <li>
-                    <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
-                        Report
-                        <ul class="dropdown-menu nested-dropdown">
-                            <li>
-                                <form method="post">
-                                {% csrf_token %}
-                                {% include 'partials/bootstrap_form.html' with form=report_form %}
-                                <input type="hidden" name="action" value="{{question.id}}">
-                                <button class = "btn btn-primary" type="submit" name="report_question">Report</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
+            <h2 class="question-title">{{ question.title | censor }}</h2>
+            <div class="dropdown">
+                <a href="#" class="delete-icon" id="actionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="bi bi-three-dots-vertical"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown">
+                    {% if question.author == current_user %}
+                    <li>
+                        <form method="post" action="{% url 'delete_question' id=question.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this question?');">
+                                Delete
+                            </button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <li>
+                        <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
+                            Report
+                            <ul class="dropdown-menu nested-dropdown">
+                                <li>
+                                    <form method="post">
+                                    {% csrf_token %}
+                                    {% include 'partials/bootstrap_form.html' with form=report_form %}
+                                    <input type="hidden" name="action" value="{{question.id}}">
+                                    <button class = "btn btn-primary" type="submit" name="report_question">Report</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-    </div>
     {% if question.author in current_user.blocked_users.all %}
     <p data-text="{{ question.body|censor }}" id="blocked-question" class="question-body text-muted">
     {% elif question|is_object_reported_by_user:user %}
-    <p data-text="{{ question.body|censor }}" id="reported" class="text-muted">
+    <p data-text="{{ question.body|censor }}" data-reported="true" class="text-muted">
     {% else %}
     <p>
     {% endif %}
     {{ question.body|censor }}</p>
+    </div>
 
     <span class="question-author">author : <a href="{% url 'profile' question.author.username %}"
             class="username">{{ question.author.username }}</a></span>

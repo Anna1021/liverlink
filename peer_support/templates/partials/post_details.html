@@ -38,7 +38,7 @@
 </div>
 <div class="card-body">
     <p {% if post|is_object_reported_by_user:user %} data-text="{{ post.content |censor}}"
-    id="reported" class="text-muted" {% endif %}>{{ post.content |censor}}</p>
+    data-reported="true" class="text-muted" {% endif %}>{{ post.content |censor}}</p>
     <p>{{ post.created_at }}</p>
     {% if post.author == request.user %}
         <a href="{% url 'delete_post' post_id=post.id %}" class="btn-danger btn" style = "border-color: #dc3545;">Delete</a>

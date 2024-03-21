@@ -29,7 +29,7 @@ class QuestionPageView(LoginRequiredMixin, View):
             self.question_report(request, question_id)
         elif 'report_response' in request.POST:
             response_id = request.POST.get('action')
-            self.response_post(request, response_id)
+            self.response_report(request, response_id)
         else:
             self.response_post(request, id)
         return redirect('question', id=id)
@@ -51,11 +51,11 @@ class QuestionPageView(LoginRequiredMixin, View):
         else:
             messages.error(request, "There was an issue with the report.")
 
-    def response_report(self, request, post_id):
-        post = get_object_or_404(Response, id=post_id)
+    def response_report(self, request, response_id):
+        response = get_object_or_404(Response, id=response_id)
         report_form = ReportForm(request.POST)
         if report_form.is_valid():
-            report_form.save_report_for_object(post, request.user)
-            messages.success(request, "Post reported successfully.")
+            report_form.save_report_for_object(response, request.user)
+            messages.success(request, "Response reported successfully.")
         else:
-            messages.error(request, "There was an issue with the post.")
+            messages.error(request, "There was an issue with the response.")

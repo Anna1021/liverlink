@@ -8,7 +8,7 @@
                 <a href="{% url 'profile' post.author.username %}"></a><p>{{ comment.author }}</p></a>
                 
                 <p {% if comment|is_object_reported_by_user:user %} data-text="{{ comment.content |censor}}"
-                 id="reported" class="text-muted" {% endif %}>{{ comment.content |censor}}</p>
+                 data-reported="true" class="text-muted" {% endif %}>{{ comment.content |censor}}</p>
             </div>
             <div class="col-md-2 nav-item dropdown">
                 <a class="nav-link" href="#" id="message-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
