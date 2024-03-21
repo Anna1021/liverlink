@@ -55,12 +55,12 @@ class PostCommentModelTestCase(TestCase):
         with self.assertRaises(PostComment.DoesNotExist):
             PostComment.objects.get(pk=self.comment.pk)
 
-    def test_delete_parent_comments_sets_to_null(self):
+    def test_delete_parent_comments_deletes_comment(self):
         child_comment = PostComment.objects.get(pk=2)
         self.assertEqual(child_comment.parent,self.comment)
         self.comment.delete()
-        child_comment = PostComment.objects.get(pk=2)
-        self.assertIsNone(child_comment.parent)
+        with self.assertRaises(PostComment.DoesNotExist):
+            PostComment.objects.get(pk=child_comment.pk)
         
     def _assert_comment_is_valid(self):
         try:

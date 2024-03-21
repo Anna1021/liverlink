@@ -1,7 +1,7 @@
 :root {
   --dark-main-bg-color: #212529;
   --dark-filter-btn-color: #F4F9F9; 
-  --dark-submit-btn-color: #6A94AE;
+  --dark-submit-btn-color: #720fe3;
   --dark-btn-text-color: #161D6F;
 }
 
@@ -86,7 +86,7 @@
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 20px;
-  background-color: #5b209a;
+  background-color: #436780;
   color: white;
   padding-right: 30px;
   padding-top: 20px;
@@ -149,7 +149,6 @@
 }
 
 .dark-theme .card{
-  
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     border-radius: 20px;
@@ -221,6 +220,28 @@ background-color: var(--dark-submit-btn-color);
   background-color: var(--dark-main-bg-color);
   color: white;
 }
+
+.dark-theme .profile-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dark-theme .mentor-profile-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 8px solid #436780;
+}
+
 .dark-theme .profile-head h7 {
   font-size: 15px;
   color: #91BBD3;
@@ -234,4 +255,71 @@ background-color: var(--dark-submit-btn-color);
 .dark-theme .profile-head h6 {
     font-size: 20px;
     color: #91BBD3;
+}
+
+.dark-theme .no-responses-text {
+  color: #ffffff;
+}
+
+.dark-theme .delete-response-button {
+  background-color: rgb(205, 205, 233);
+  color: black;
+  border-color: #9da1d3;
+  box-shadow: #afaeff;
+  border-radius: 0.25rem;
+}
+
+.dark-theme .delete-btn {
+  border: 1px solid #9da1d3;
+  background-color: rgb(205, 205, 233);
+  color: black;
+  box-shadow: #e4d0fc;
+  font-size: 12px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; 
+}
+
+.dark-theme .delete-btn:hover {
+  background-color: #9da1d3; 
+  color: white; 
+}
+
+.dark-theme .apply-btn{
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.dark-theme .selected-feed {
+  background-color: rgb(194, 192, 195);
+  border-radius: 5px;
+  color: #000000;
+}
+
+.dark-theme .post-header h4 {
+  color: #91BBD3;
+}
+
+.dark-theme .post-card{
+  width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.5);
+  transition: 0.3s;
+  border-radius: 20px;
+  background-color: var(--dark-main-bg-color);
+  color: white;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-left: 30px;
+  align-content: center;
+  margin: 10px;
+}
+
+.dark-theme .actions-icon,
+.dark-theme .delete-icon {
+  color: white;
+}
+
+.dark-theme .actions-icon:hover{
+  color: var(--dark-submit-btn-color);
 }

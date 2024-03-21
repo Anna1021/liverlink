@@ -28,7 +28,6 @@ from .profile_view import ProfileView
 from .inbox_view import InboxView
 from .delete_notification_view import delete_notification
 from .clear_notifications_view import clear_notifications
-
 from .post_view import PostView
 from .delete_post_view import DeletePostView
 from .feed_view import FeedView
@@ -43,3 +42,7 @@ from .delete_conversation_view import DeleteConversationView
 from .submit_feedback_view import SubmitFeedbackView
 from .feedback_view import FeedbackView
 from .delete_feedback_view import delete_feedback
+from .demographic_information import demographic_information
+from .delete_question_view import delete_question
+from .delete_reply_view import delete_reply
+from .delete_comment_view import DeleteCommentView

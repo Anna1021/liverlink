@@ -1,8 +1,6 @@
 from django.contrib import admin
-from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Question, Response, Report, Message, Post, Feedback
+from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Report, Message, Post
 
-admin.site.register(Question)
-admin.site.register(Response)
 
 class UserProfileInline(admin.StackedInline):
     """Configuration of the admin interface for user profiles."""
@@ -113,3 +111,5 @@ class PostAdmin(admin.ModelAdmin):
     list_display = [
         'text','author', 'created_at'
     ]
+
+    

@@ -39,13 +39,12 @@
 
 .user-list{
     list-style-type: none;
-    background-color: aliceblue;
+    background-color: #2e2d38;
     padding-left: 0;
     width: 100%;
     border-radius: 5px;
 }
 .add-btn{
-    background-color: aliceblue;
     margin:0;
     width: 100%;
 }
@@ -53,6 +52,7 @@
 .user-card{
     width:100%;
     padding-left: 0;
+    color: white;
     margin-left:0;
     list-style: none;
 }

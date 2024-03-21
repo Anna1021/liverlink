@@ -72,6 +72,10 @@ class UserModelTestCase(TestCase):
         self.user.first_name = 'x' * 51
         self._assert_user_is_invalid()
 
+    def test_first_name_cant_contain_profanity(self):
+        self.user.first_name = "damn"
+        self._assert_user_is_invalid()
+
 
     def test_last_name_must_not_be_blank(self):
         self.user.last_name = ''
@@ -88,6 +92,10 @@ class UserModelTestCase(TestCase):
 
     def test_last_name_must_not_contain_more_than_50_characters(self):
         self.user.last_name = 'x' * 51
+        self._assert_user_is_invalid()
+
+    def test_last_name_cant_contain_profanity(self):
+        self.user.last_name = "damn"
         self._assert_user_is_invalid()
 
 
@@ -118,6 +126,10 @@ class UserModelTestCase(TestCase):
 
     def test_email_must_not_contain_more_than_one_at(self):
         self.user.email = 'johndoe@@example.org'
+        self._assert_user_is_invalid()
+
+    def test_email_cant_contain_profanity(self):
+        self.user.email = "damn@example.com"
         self._assert_user_is_invalid()
 
 
@@ -233,6 +245,10 @@ class UserModelTestCase(TestCase):
         second_user = User.objects.get(username='@janedoe')
         self.user.bio = second_user.bio
         self._assert_user_is_valid()
+
+    def test_bio_cant_contain_profanity(self):
+        self.user.bio = "damn"
+        self._assert_user_is_invalid()
 
     
     def test_friends_may_be_blank(self):

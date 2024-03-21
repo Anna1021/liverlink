@@ -15,6 +15,14 @@
     border-radius: 50%;
     object-fit: cover;
 }
+  
+.mentor-profile-img {
+    text-align: center;
+    width: 60%;
+    padding-top: 60%; 
+    position: relative; 
+    margin: auto;
+}
 
 .profile-head .nav-tabs {
     margin-top: 5%;
@@ -53,5 +61,23 @@ a.dropdown-item-form:hover {
     outline: none;
     min-width: fit-content;
     border: none;
-    color: white;
+}
+
+
+.dropdown-item:hover > .dropdown-menu.nested-dropdown {
+    display: block;
+    position: absolute;
+    left: 100%; 
+    top: 0;
+    margin-top: 0; 
+    margin-left: -1px;
+    border-bottom: 60px dashed transparent;
+}
+
+.dropdown-item {
+    position: relative;
+}
+
+.dropdown-menu.nested-dropdown {
+    min-width: 150px; 
 }

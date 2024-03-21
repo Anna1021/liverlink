@@ -1,45 +1,44 @@
 {% extends 'partials/conversation_menu.html' %}
 {% load static %}
 {% block convo %}
-<div class="conversation-details">
-    <div id="name-form">
-        <h3 id="conversation-name">{{conversation}}</h3>
+<div class="container conversation-details">
+    <div class="row mb-3 h-25" id="name-form">
+        <h3 id="conversation-name" class="pb-3">{{conversation}}</h3>
         <div id="conversation-name-input">
             <form method="post" action="{% url 'conversation_details' conversation.id %}">
                 {% csrf_token %}
                 <input type="text" name="new_name" value="{{ conversation.display_name }}">
-                <input type="submit" name="rename_conversation" value="Save">
+                <input class="btn btn-primary" type="submit" name="rename_conversation" value="Save">
             </form>
         </div>
-        <button onclick="toggle(this)" id="rename-button">Rename</button>
+        <button onclick="toggle(this)" id="rename-button" class="btn btn-primary">Rename</button>   
     </div>
-    <div>
-        <div class="row user-list-header">
-            <div class="col-md-7">
-                <h4>Members:</h4>
-            </div>
-            {% include 'partials/add_users.html' %}
-
+    <div class="row user-list-header mt-3">
+        <div class="col-md-7">
+            <h4>Members:</h4>
         </div>
-        <ul class="user-list notranslate">
-            {% for user in conversation.users.all %}
-            <li><a class="btn user-card notranslate" href="{% url 'profile' user.username %}">{{ user }}</a></li>
-            {% endfor %}
-        </ul>
+        {% include 'partials/add_users.html' %}
+    </div>
 
-        <div class="cnav-item dropdown d-flex justify-content-center">
-            <a class="nav-link btn btn-danger leave-btn" href="#" id="leave-group-dropdown" role="button"
+    <ul class="user-list notranslate">
+        {% for user in conversation.users.all %}
+            <li><a class="btn user-card notranslate" href="{% url 'profile' user.username %}">{{ user }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <div class="cnav-item dropdown d-flex justify-content-center">
+        <a class="nav-link btn btn-danger leave-btn" style="color:white"href="#" id="leave-group-dropdown" role="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Leave group
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end leave-confirmation leave-btn"
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end leave-confirmation leave-btn"
                 aria-labelledby="leave-group-dropdown">
-                <li><a href="{% url 'leave_conversation' conversation.id %}"
+            <li><a href="{% url 'leave_conversation' conversation.id %}"
                         class="btn btn-outline-danger d-flex justify-content-center">Confirm</a></li>
-            </ul>
-        </div>
+        </ul>
     </div>
 </div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="{% static 'js/rename_conversation.js' %}"></script>
 <script src="{% static 'js/users_form.js' %}"></script>

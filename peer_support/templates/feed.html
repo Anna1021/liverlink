@@ -4,7 +4,6 @@
 
 <title>Feed</title>
 
-<div class="card shadow box-area my-2" style="background-color: #202428;"> 
   <div class="row">
     <div class="col-md-8">
       <h1 class="card-header">Your feed</h1>
@@ -13,7 +12,7 @@
     <div class="col-md-4">
       <form id="feedForm" method="GET">
         <input type="hidden" name="feed_type" id="feedType" value="{{feed_type}}">
-        <button type="button" id="toggleFeedButton" class="btn btn-primary">
+        <button type="button" id="toggleFeedButton" class="btn apply-btn">
           <div class="row">
             <div class="col-md-6 {% if feed_type == 'global' %}selected-feed{% endif %}">Global</div>
             <div class="col-md-6 {% if feed_type == 'friends' %}selected-feed{% endif %}">Friends</div>
@@ -24,7 +23,7 @@
   
   </div>
 
-  <button type="button" class="btn btn-light mt-2" id="create-post" data-bs-toggle="modal" data-bs-target="#create_post">Create post</button>
+  <button type="button" class="btn apply-btn mt-2 mb-2" id="create-post" data-bs-toggle="modal" data-bs-target="#create_post">Create post</button>
   <div class="modal fade" id="create_post" tabindex="-1" aria-labelledby="create_post" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content card">
@@ -36,7 +35,7 @@
             <form method="post" class="px-4 py-3" novalidate>
               {% csrf_token %}
               {% include 'partials/bootstrap_form.html' with form=form %}
-              <button class="btn btn-primary" type="submit">Add</button>
+              <button class="btn apply-btn btn-primary" type="submit">Add</button>
             </form>
           </div>
         </div>
@@ -45,7 +44,7 @@
  
   <div class="scrollable-feed"> 
     {% for post in posts %}
-    <div class="post-card scrollable-container pb-2">
+    <div class="post-card pb-2">
       {% include 'partials/post_details.html' with post=post from_feed=True %}
     </div>
     {% empty %}
