@@ -105,7 +105,7 @@
   margin-top: 3%;
   margin-bottom: 5%;
   border-radius: 0.8rem;
-  background: #2e2d38;
+  background: var(--dark-main-bg-color);
 }
 .dark-theme .profile-subheading {
   color: #ffffff;
