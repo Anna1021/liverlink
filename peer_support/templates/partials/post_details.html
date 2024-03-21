@@ -1,6 +1,8 @@
 {% load profanity %}
+{% load static %}
 {% load post_tags %}
 {% csrf_token %}
+<meta name="csrf-token" content="{{ csrf_token }}">
 <div class="post-header">
     <a href="{% url 'profile' post.author.username %}">
         <h4 class="font-weight-bold">{{ post.author }}</h4>
@@ -23,46 +25,7 @@
     <span class="profile-subheading pl-2" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 <script>
-$(document).ready(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-    $('.like-post').each(function() {
-        var $this = $(this);
-        var postId = $this.data('post-id');
-
-        $this.click(function(e) {
-            e.preventDefault();
-
-            if ($this.hasClass('request-in-progress')) {
-                return;
-            }
-
-            $this.addClass('request-in-progress'); 
-
-            $.ajax({
-                url: "{% url 'like_post' post_id=0 %}".replace('0', postId),
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                dataType: 'json',
-                success: function(data) {
-                    if (data.liked) {
-                        $this.removeClass('bi-hand-thumbs-up').addClass('bi-hand-thumbs-up-fill');
-                    } else {
-                        $this.removeClass('bi-hand-thumbs-up-fill').addClass('bi-hand-thumbs-up');
-                    }
-                    var $likeCount = $('#like-count-' + postId);
-                    $likeCount.text(data.like_count);
-                },
-                complete: function() {
-                    $this.removeClass('request-in-progress');
-                }
-            });
-        });
-    });
-});
+    var likePostUrl = "{% url 'like_post' 0 %}";
 </script>
+<script src="{% static 'js/post_details.js' %}"></script>

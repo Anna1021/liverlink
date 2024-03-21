@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic.edit import FormView
-from django.db.models import Count, Q
 from peer_support.models import Post, PostComment
 from peer_support.forms import CommentForm
 from .helpers import get_post
