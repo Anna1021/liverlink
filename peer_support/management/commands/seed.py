@@ -9,85 +9,282 @@ from peer_support.models.model_choices import *
 from peer_support.forms.form_choices import CONDITION_CHOICES, TRANSPLANT_CHOICES
 
 patient_fixtures = [
-    {'username': '@johndoe', 'email': 'john.doe@example.org', 'first_name': 'John', 'last_name': 'Doe', 'date_of_birth': '2000-01-01', 'gender': 'M', 'location': 'GB', 'hospital': 'Croydon Health Services NHS Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am John.', 'condition': 'Diabetes', 'age_of_diagnosis': 5},
-    {'username': '@janedoe', 'email': 'jane.doe@example.org', 'first_name': 'Jane', 'last_name': 'Doe', 'date_of_birth': '2008-01-01', 'gender': 'F', 'location': 'FR', 'ethnicity': 'RO', 'language': 'fr', 'bio': 'Hi, I am Jane.', 'condition': 'Hepatitis A', 'age_of_diagnosis': 10, 'transplant': 'Y'},
-    {'username': '@charliejohnson', 'email': 'charlie.johnson@example.org', 'first_name': 'Charlie', 'last_name': 'Johnson', 'date_of_birth': '2006-01-01', 'gender': 'O', 'location': 'BD', 'ethnicity': 'IN', 'language': 'bn', 'bio': 'Hi, I am Charlie.', 'condition': 'Liver cancer', 'age_of_diagnosis': 15},
+    {
+        "username": "@johndoe",
+        "email": "john.doe@example.org",
+        "first_name": "John",
+        "last_name": "Doe",
+        "date_of_birth": "2000-01-01",
+        "gender": "M",
+        "location": "GB",
+        "hospital": "Croydon Health Services NHS Trust",
+        "ethnicity": "BR",
+        "language": "en",
+        "bio": "Hi, I am John.",
+        "condition": "Diabetes",
+        "age_of_diagnosis": 5,
+    },
+    {
+        "username": "@janedoe",
+        "email": "jane.doe@example.org",
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "date_of_birth": "2008-01-01",
+        "gender": "F",
+        "location": "FR",
+        "ethnicity": "RO",
+        "language": "fr",
+        "bio": "Hi, I am Jane.",
+        "condition": "Hepatitis A",
+        "age_of_diagnosis": 10,
+        "transplant": "Y",
+    },
+    {
+        "username": "@charliejohnson",
+        "email": "charlie.johnson@example.org",
+        "first_name": "Charlie",
+        "last_name": "Johnson",
+        "date_of_birth": "2006-01-01",
+        "gender": "O",
+        "location": "BD",
+        "ethnicity": "IN",
+        "language": "bn",
+        "bio": "Hi, I am Charlie.",
+        "condition": "Liver cancer",
+        "age_of_diagnosis": 15,
+    },
 ]
 
 parent_fixtures = [
-    {'username': '@jackjones', 'email': 'jack.jones@example.org', 'first_name': 'Jack', 'last_name': 'Jones', 'date_of_birth': '1980-01-01', 'gender': 'M', 'location': 'GB', 'hospital': 'Croydon Health Services NHS Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am Jack.', 'child_condition': 'Diabetes', 'child_age_of_diagnosis': 5},
-    {'username': '@jilljones', 'email': 'jill.jones@example.org', 'first_name': 'Jill', 'last_name': 'Jones', 'date_of_birth': '1985-04-20', 'gender': 'F', 'location': 'FR', 'ethnicity': 'RO', 'language': 'fr', 'bio': 'Hi, I am Jill.', 'child_condition': 'Hepatitis A', 'child_age_of_diagnosis': 10},
-    {'username': '@danielcaesar', 'email': 'daniel.caesar@example.org', 'first_name': 'Daniel', 'last_name': 'Caesar', 'date_of_birth': '1992-03-02', 'gender': 'O', 'location': 'BD', 'ethnicity': 'BD', 'language': 'bn', 'bio': 'Hi, I am Daniel.', 'child_condition': 'Liver cancer', 'child_age_of_diagnosis': 15, 'child_transplant': 'Y'},
+    {
+        "username": "@jackjones",
+        "email": "jack.jones@example.org",
+        "first_name": "Jack",
+        "last_name": "Jones",
+        "date_of_birth": "1980-01-01",
+        "gender": "M",
+        "location": "GB",
+        "hospital": "Croydon Health Services NHS Trust",
+        "ethnicity": "BR",
+        "language": "en",
+        "bio": "Hi, I am Jack.",
+        "child_condition": "Diabetes",
+        "child_age_of_diagnosis": 5,
+    },
+    {
+        "username": "@jilljones",
+        "email": "jill.jones@example.org",
+        "first_name": "Jill",
+        "last_name": "Jones",
+        "date_of_birth": "1985-04-20",
+        "gender": "F",
+        "location": "FR",
+        "ethnicity": "RO",
+        "language": "fr",
+        "bio": "Hi, I am Jill.",
+        "child_condition": "Hepatitis A",
+        "child_age_of_diagnosis": 10,
+    },
+    {
+        "username": "@danielcaesar",
+        "email": "daniel.caesar@example.org",
+        "first_name": "Daniel",
+        "last_name": "Caesar",
+        "date_of_birth": "1992-03-02",
+        "gender": "O",
+        "location": "BD",
+        "ethnicity": "BD",
+        "language": "bn",
+        "bio": "Hi, I am Daniel.",
+        "child_condition": "Liver cancer",
+        "child_age_of_diagnosis": 15,
+        "child_transplant": "Y",
+    },
 ]
 
 mentor_fixtures = [
-    {'username': '@sarahsmith', 'email': 'sarah.smith@example.org', 'first_name': 'Sarah', 'last_name': 'Smith', 'date_of_birth': '1992-05-15', 'gender': 'F', 'location': 'US', 'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hello, I am Sarah.', 'condition': 'Diabetes', 'age_of_diagnosis': 7, 'referral_code':'ABC123'},
-    {'username': '@davidbrown', 'email': 'david.brown@example.org', 'first_name': 'David', 'last_name': 'Brown', 'date_of_birth': '1985-09-20', 'gender': 'M', 'location': 'CA', 'hospital': 'Countess of Chester Hospital NHS Foundation Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hey there, I am David.', 'age_of_diagnosis': 8, 'referral_code':'DEF456'},
-    {'username': '@emilywilson', 'email': 'emily.wilson@example.org', 'first_name': 'Emily', 'last_name': 'Wilson', 'date_of_birth': '1978-12-03', 'gender': 'F', 'location': 'AU', 'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am Emily.', 'age_of_diagnosis': 3, 'referral_code':'GHI789'},
+    {
+        "username": "@sarahsmith",
+        "email": "sarah.smith@example.org",
+        "first_name": "Sarah",
+        "last_name": "Smith",
+        "date_of_birth": "1992-05-15",
+        "gender": "F",
+        "location": "US",
+        "hospital": "Blackpool Teaching Hospitals NHS Foundation Trust",
+        "ethnicity": "BR",
+        "language": "en",
+        "bio": "Hello, I am Sarah.",
+        "condition": "Diabetes",
+        "age_of_diagnosis": 7,
+        "referral_code": "ABC123",
+    },
+    {
+        "username": "@davidbrown",
+        "email": "david.brown@example.org",
+        "first_name": "David",
+        "last_name": "Brown",
+        "date_of_birth": "1985-09-20",
+        "gender": "M",
+        "location": "CA",
+        "hospital": "Countess of Chester Hospital NHS Foundation Trust",
+        "ethnicity": "BR",
+        "language": "en",
+        "bio": "Hey there, I am David.",
+        "age_of_diagnosis": 8,
+        "referral_code": "DEF456",
+    },
+    {
+        "username": "@emilywilson",
+        "email": "emily.wilson@example.org",
+        "first_name": "Emily",
+        "last_name": "Wilson",
+        "date_of_birth": "1978-12-03",
+        "gender": "F",
+        "location": "AU",
+        "hospital": "Blackpool Teaching Hospitals NHS Foundation Trust",
+        "ethnicity": "BR",
+        "language": "en",
+        "bio": "Hi, I am Emily.",
+        "age_of_diagnosis": 3,
+        "referral_code": "GHI789",
+    },
 ]
 
 friend_request_fixtures = [
-    {'sender': patient_fixtures[0], 'receiver': parent_fixtures[0]},
-    {'sender': parent_fixtures[0], 'receiver': patient_fixtures[0]},
-    {'sender': patient_fixtures[1], 'receiver': parent_fixtures[1]},
+    {"sender": patient_fixtures[0], "receiver": parent_fixtures[0]},
+    {"sender": parent_fixtures[0], "receiver": patient_fixtures[0]},
+    {"sender": patient_fixtures[1], "receiver": parent_fixtures[1]},
 ]
 
 notification_fixtures = [
-    {'title': 'Welcome to Peer Support', 'description': 'Welcome to Peer Support. We are glad to have you here.', 'user':  patient_fixtures[0]},
-    {'title': 'New like to your post', 'description': 'Your post has received a new like.', 'user':  patient_fixtures[0]},
-    {'title': 'New message', 'description': 'You have received a new message.', 'user': patient_fixtures[0]},
+    {
+        "title": "Welcome to Peer Support",
+        "description": "Welcome to Peer Support. We are glad to have you here.",
+        "user": patient_fixtures[0],
+    },
+    {
+        "title": "New like to your post",
+        "description": "Your post has received a new like.",
+        "user": patient_fixtures[0],
+    },
+    {
+        "title": "New message",
+        "description": "You have received a new message.",
+        "user": patient_fixtures[0],
+    },
 ]
 
 message_fixtures = [
-    {'sender': patient_fixtures[0], 'content': 'Hello, how are you?'},
-    {'sender': parent_fixtures[0], 'content': 'I am good, thank you.'},
-    {'sender': parent_fixtures[0], 'content': 'How are you?'},
-    {'sender': patient_fixtures[1], 'content': 'I am good'},
-    {'sender': parent_fixtures[1], 'content': 'Hi'},
+    {"sender": patient_fixtures[0], "content": "Hello, how are you?"},
+    {"sender": parent_fixtures[0], "content": "I am good, thank you."},
+    {"sender": parent_fixtures[0], "content": "How are you?"},
+    {"sender": patient_fixtures[1], "content": "I am good"},
+    {"sender": parent_fixtures[1], "content": "Hi"},
 ]
 
 conversation_fixtures = [
-    {'users': [patient_fixtures[0], parent_fixtures[0]], 'messages': [message_fixtures[0], message_fixtures[1], message_fixtures[2]]},
-    {'users': [patient_fixtures[1], parent_fixtures[1]], 'messages': [message_fixtures[3], message_fixtures[4]]},
-    {'users': [patient_fixtures[0], parent_fixtures[2]],  'messages': [message_fixtures[1]]},                                
+    {
+        "users": [patient_fixtures[0], parent_fixtures[0]],
+        "messages": [message_fixtures[0], message_fixtures[1], message_fixtures[2]],
+    },
+    {
+        "users": [patient_fixtures[1], parent_fixtures[1]],
+        "messages": [message_fixtures[3], message_fixtures[4]],
+    },
+    {
+        "users": [patient_fixtures[0], parent_fixtures[2]],
+        "messages": [message_fixtures[1]],
+    },
 ]
 
 question_fixtures = [
-    {'author': patient_fixtures[0], 'title': 'Question 1', 'body': 'This is my first question.'},
-    {'author': parent_fixtures[0], 'title': 'Question 2', 'body': 'I have a question for you.'},
-    {'author': patient_fixtures[1], 'title': 'Question 3', 'body': 'Can you help me with this?'},
-    {'author': parent_fixtures[1], 'title': 'Question 4', 'body': 'I need help.'},
+    {
+        "author": patient_fixtures[0],
+        "title": "Question 1",
+        "body": "This is my first question.",
+    },
+    {
+        "author": parent_fixtures[0],
+        "title": "Question 2",
+        "body": "I have a question for you.",
+    },
+    {
+        "author": patient_fixtures[1],
+        "title": "Question 3",
+        "body": "Can you help me with this?",
+    },
+    {"author": parent_fixtures[1], "title": "Question 4", "body": "I need help."},
 ]
 
 response_fixtures = [
-    {'user': mentor_fixtures[0], 'question': question_fixtures[0], 'body': 'This is my first response.'},
-    {'user': mentor_fixtures[1], 'question': question_fixtures[1], 'body': 'I have a response for you.'},
-    {'user': mentor_fixtures[2], 'question': question_fixtures[2], 'body': 'I can help you with this.'},
-    {'user': parent_fixtures[0], 'question': question_fixtures[3], 'body': 'I can help you.'},
+    {
+        "user": mentor_fixtures[0],
+        "question": question_fixtures[0],
+        "body": "This is my first response.",
+    },
+    {
+        "user": mentor_fixtures[1],
+        "question": question_fixtures[1],
+        "body": "I have a response for you.",
+    },
+    {
+        "user": mentor_fixtures[2],
+        "question": question_fixtures[2],
+        "body": "I can help you with this.",
+    },
+    {
+        "user": parent_fixtures[0],
+        "question": question_fixtures[3],
+        "body": "I can help you.",
+    },
 ]
 
 report_fixtures = [
-    {'reporter': patient_fixtures[0], 'reason': 'abuse', 'content_type': 'User', 'object_id': patient_fixtures[1]},
-    {'reporter': parent_fixtures[0], 'reason': 'other', 'content_type': 'Message', 'object_id': message_fixtures[0]},
-    {'reporter': patient_fixtures[2], 'reason': 'spam', 'content_type': 'User', 'object_id': parent_fixtures[0]},
+    {
+        "reporter": patient_fixtures[0],
+        "reason": "abuse",
+        "content_type": "User",
+        "object_id": patient_fixtures[1],
+    },
+    {
+        "reporter": parent_fixtures[0],
+        "reason": "other",
+        "content_type": "Message",
+        "object_id": message_fixtures[0],
+    },
+    {
+        "reporter": patient_fixtures[2],
+        "reason": "spam",
+        "content_type": "User",
+        "object_id": parent_fixtures[0],
+    },
 ]
 
 post_fixtures = [
-    {'author': patient_fixtures[0], 'text': 'This is my post'},
-    {'author': parent_fixtures[0], 'text': 'Hello world!', 'visibility': 'F'},
-    {'author': mentor_fixtures[0], 'text': 'Hello, I am a mentor.'},
+    {"author": patient_fixtures[0], "text": "This is my post"},
+    {"author": parent_fixtures[0], "text": "Hello world!", "visibility": "F"},
+    {"author": mentor_fixtures[0], "text": "Hello, I am a mentor."},
 ]
 
 post_comment_fixtures = [
-    {'post': post_fixtures[0], 'author': parent_fixtures[0], 'content': 'This is my comment.'},
-    {'post': post_fixtures[1], 'author': patient_fixtures[0], 'content': 'Hello!'},
-    {'post': post_fixtures[2], 'author': mentor_fixtures[0], 'content': 'Hi, I am a mentor.'},
+    {
+        "post": post_fixtures[0],
+        "author": parent_fixtures[0],
+        "content": "This is my comment.",
+    },
+    {"post": post_fixtures[1], "author": patient_fixtures[0], "content": "Hello!"},
+    {
+        "post": post_fixtures[2],
+        "author": mentor_fixtures[0],
+        "content": "Hi, I am a mentor.",
+    },
 ]
 
 feedback_fixtures = [
-    {'title': 'Fix this', 'content': 'This is broken.'},
-    {'title': 'Improve that', 'content': 'This could be improved'},
-    {'title': 'Add this', 'content': 'This is missing.'},
+    {"title": "Fix this", "content": "This is broken."},
+    {"title": "Improve that", "content": "This could be improved"},
+    {"title": "Add this", "content": "This is missing."},
 ]
 
 
@@ -106,11 +303,11 @@ class Command(BaseCommand):
     POST_COUNT = 500
     POST_COMMENT_COUNT = 1000
     FEEDBACK_COUNT = 500
-    DEFAULT_PASSWORD = 'Password123'
-    help = 'Seeds the database with sample data'
+    DEFAULT_PASSWORD = "Password123"
+    help = "Seeds the database with sample data"
 
     def __init__(self):
-        self.faker = Faker('en_GB')
+        self.faker = Faker("en_GB")
 
     def handle(self, *args, **options):
         self.create_patients()
@@ -157,7 +354,6 @@ class Command(BaseCommand):
 
         self.create_feedbacks()
         self.feedback = Feedback.objects.all()
-
 
     def create_patients(self):
         self.generate_patient_fixtures()
@@ -265,7 +461,7 @@ class Command(BaseCommand):
     def generate_random_patients(self):
         patient_count = Patient.objects.count()
         while patient_count < self.PATIENT_COUNT:
-            print(f"Seeding patient {patient_count}/{self.PATIENT_COUNT}", end='\r')
+            print(f"Seeding patient {patient_count}/{self.PATIENT_COUNT}", end="\r")
             self.generate_patient()
             patient_count = Patient.objects.count()
         print("Patient seeding complete.      ")
@@ -273,7 +469,7 @@ class Command(BaseCommand):
     def generate_random_parents(self):
         parent_count = Parent.objects.count()
         while parent_count < self.PARENT_COUNT:
-            print(f"Seeding parent {parent_count}/{self.PARENT_COUNT}", end='\r')
+            print(f"Seeding parent {parent_count}/{self.PARENT_COUNT}", end="\r")
             self.generate_parent()
             parent_count = Parent.objects.count()
         print("Parent seeding complete.      ")
@@ -281,7 +477,7 @@ class Command(BaseCommand):
     def generate_random_mentors(self):
         mentor_count = Mentor.objects.count()
         while mentor_count < self.MENTOR_COUNT:
-            print(f"Seeding mentor {mentor_count}/{self.MENTOR_COUNT}", end='\r')
+            print(f"Seeding mentor {mentor_count}/{self.MENTOR_COUNT}", end="\r")
             self.generate_mentor()
             mentor_count = Mentor.objects.count()
         print("Mentor seeding complete.      ")
@@ -313,7 +509,7 @@ class Command(BaseCommand):
     def generate_random_questions(self):
         question_count = Question.objects.count()
         while question_count < self.QUESTION_COUNT:
-            print(f"Seeding question {question_count}/{self.QUESTION_COUNT}", end='\r')
+            print(f"Seeding question {question_count}/{self.QUESTION_COUNT}", end="\r")
             self.generate_question()
             question_count = Question.objects.count()
         print("Question seeding complete.      ")
@@ -321,7 +517,7 @@ class Command(BaseCommand):
     def generate_random_responses(self):
         response_count = Response.objects.count()
         while response_count < self.RESPONSE_COUNT:
-            print(f"Seeding response {response_count}/{self.RESPONSE_COUNT}", end='\r')
+            print(f"Seeding response {response_count}/{self.RESPONSE_COUNT}", end="\r")
             self.generate_response()
             response_count = Response.objects.count()
         print("Response seeding complete.      ")
@@ -329,7 +525,7 @@ class Command(BaseCommand):
     def generate_random_reports(self):
         report_count = Report.objects.count()
         while report_count < self.REPORT_COUNT:
-            print(f"Seeding report {report_count}/{self.REPORT_COUNT}", end='\r')
+            print(f"Seeding report {report_count}/{self.REPORT_COUNT}", end="\r")
             self.generate_report()
             report_count = Report.objects.count()
         print("Report seeding complete.      ")
@@ -337,7 +533,7 @@ class Command(BaseCommand):
     def generate_random_posts(self):
         post_count = Post.objects.count()
         while post_count < self.POST_COUNT:
-            print(f"Seeding post {post_count}/{self.POST_COUNT}", end='\r')
+            print(f"Seeding post {post_count}/{self.POST_COUNT}", end="\r")
             self.generate_post()
             post_count = Post.objects.count()
         print("Post seeding complete.      ")
@@ -353,7 +549,7 @@ class Command(BaseCommand):
     def generate_random_feedbacks(self):
         feedback_count = Feedback.objects.count()
         while feedback_count < self.FEEDBACK_COUNT:
-            print(f"Seeding feedback {feedback_count}/{self.FEEDBACK_COUNT}", end='\r')
+            print(f"Seeding feedback {feedback_count}/{self.FEEDBACK_COUNT}", end="\r")
             self.generate_feedback()
             feedback_count = Feedback.objects.count()
         print("Feedback seeding complete.      ")
@@ -425,76 +621,86 @@ class Command(BaseCommand):
     def generate_friend_request(self):
         sender = self.users[randint(0, len(self.users) - 1)]
         receiver = self.users[randint(0, len(self.users) - 1)]
-        sender = {'username': sender.username}
-        receiver = {'username': receiver.username}
-        self.try_create_friend_request({'sender': sender, 'receiver': receiver})
+        sender = {"username": sender.username}
+        receiver = {"username": receiver.username}
+        self.try_create_friend_request({"sender": sender, "receiver": receiver})
 
     def generate_notification(self):
         user = self.users[randint(0, len(self.users) - 1)]
         friend_request = None
         if self.friend_requests.filter(receiver=user) and random.choice([True, False]):
             friend_request = random.choice(self.friend_requests.filter(receiver=user))
-            title = 'Friend Request'
-        else: 
+            title = "Friend Request"
+        else:
             title = self.faker.sentence()
         description = self.faker.text(max_nb_chars=100)
-        user = {'username': user.username}
-        self.try_create_notification({'title': title, 'description': description, 'user': user, 'friend_request': friend_request})
+        user = {"username": user.username}
+        self.try_create_notification({"title": title, "description": description, "user": user, "friend_request": friend_request})
 
     def generate_conversation(self):
-        users = [self.users[randint(0, len(self.users) - 1)], self.users[randint(0, len(self.users) - 1)]]
-        users = {'usernames': [user.username for user in users]}
+        users = [
+            self.users[randint(0, len(self.users) - 1)],
+            self.users[randint(0, len(self.users) - 1)],
+        ]
+        users = {"usernames": [user.username for user in users]}
         messages = []
         for _ in range(randint(1, 15)):
-            sender = users['usernames'][randint(0, len(users['usernames']) - 1)]
+            sender = users["usernames"][randint(0, len(users["usernames"]) - 1)]
             content = self.faker.text(max_nb_chars=100)
-            message = {'sender': sender, 'content': content}
+            message = {"sender": sender, "content": content}
             messages.append(message)
-        self.try_create_conversation({'users': users, 'messages': messages})
+        self.try_create_conversation({"users": users, "messages": messages})
 
     def generate_question(self):
         author = self.users[randint(0, len(self.users) - 1)]
         title = self.faker.sentence()
         body = self.faker.text(max_nb_chars=100)
-        author = {'username': author.username}
-        self.try_create_question({'author': author, 'title': title, 'body': body})
+        author = {"username": author.username}
+        self.try_create_question({"author": author, "title": title, "body": body})
 
     def generate_response(self):
         user = self.users[randint(0, len(self.users) - 1)]
         question = self.questions[randint(0, len(self.questions) - 1)]
         body = self.faker.text(max_nb_chars=100)
-        user = {'username': user.username}
-        question = {'title': question.title}
-        self.try_create_response({'user': user, 'question': question, 'body': body})
+        user = {"username": user.username}
+        question = {"title": question.title}
+        self.try_create_response({"user": user, "question": question, "body": body})
 
     def generate_report(self):
         reporter = self.users[randint(0, len(self.users) - 1)]
         reason = self.faker.random_element(elements=(tuple(report[0] for report in REPORT_CHOICES)))
-        content_type = self.faker.random_element(elements=('user', 'message'))
-        object_id = self.get_content_type(content_type).model_class().objects.order_by('?').first().pk
-        reporter = {'username': reporter.username}
-        self.try_create_report({'reporter': reporter, 'reason': reason, 'content_type': content_type, 'object_id': object_id})
+        content_type = self.faker.random_element(elements=("user", "message"))
+        object_id = (self.get_content_type(content_type)
+            .model_class()
+            .objects.order_by("?")
+            .first()
+            .pk
+        )
+        reporter = {"username": reporter.username}
+        self.try_create_report({"reporter": reporter, "reason": reason,  "content_type": content_type, "object_id": object_id})
 
     def generate_post(self):
         author = self.users[randint(0, len(self.users) - 1)]
         text = self.faker.text(max_nb_chars=280)
-        visibility = self.faker.random_element(elements=('G', 'F'))
-        author = {'username': author.username}
-        self.try_create_post({'author': author, 'text': text, 'visibility': visibility})
+        visibility = self.faker.random_element(elements=("G", "F"))
+        author = {"username": author.username}
+        self.try_create_post({"author": author, "text": text, "visibility": visibility})
 
     def generate_post_comment(self):
         post = self.posts[randint(0, len(self.posts) - 1)]
         author = self.users[randint(0, len(self.users) - 1)]
         content = self.faker.text(max_nb_chars=255)
-        post = {'text': post.text}
-        author = {'username': author.username}
-        self.try_create_post_comment({'post': post, 'author': author, 'content': content})
+        post = {"text": post.text}
+        author = {"username": author.username}
+        self.try_create_post_comment(
+            {"post": post, "author": author, "content": content}
+        )
 
     def generate_feedback(self):
         title = self.faker.sentence()
         content = self.faker.text(max_nb_chars=500)
-        self.try_create_feedback({'title': title, 'content': content})
-        
+        self.try_create_feedback({"title": title, "content": content})
+
     def try_create_patient(self, data):
         try:
             self.create_patient(data)
@@ -506,7 +712,7 @@ class Command(BaseCommand):
             self.create_parent(data)
         except:
             pass
-    
+
     def try_create_mentor(self, data):
         try:
             self.create_mentor(data)
@@ -574,17 +780,17 @@ class Command(BaseCommand):
             pass
 
     def create_user(self, model, data):
-        profile_picture = data.pop('profile_picture', None)
+        profile_picture = data.pop("profile_picture", None)
         user = model.objects.create(**data)
         if profile_picture:
             user.userprofile.profile_picture = profile_picture
             user.userprofile.save()
         user.set_password(Command.DEFAULT_PASSWORD)
-        if data['username'] == '@johndoe':
+        if data["username"] == "@johndoe":
             user.is_superuser = user.is_staff = True
         user.save()
         if model == Mentor:
-            Referral.objects.create(referrer=user, code=data['referral_code'])
+            Referral.objects.create(referrer=user, code=data["referral_code"])
         return user
 
     def create_patient(self, data):
@@ -597,23 +803,26 @@ class Command(BaseCommand):
         self.create_user(Mentor, data)
 
     def create_friend_request(self, data):
-        sender = self.get_user(data['sender'])
-        receiver = self.get_user(data['receiver'])
+        sender = self.get_user(data["sender"])
+        receiver = self.get_user(data["receiver"])
         FriendRequest.objects.create(sender=sender, receiver=receiver)
 
     def create_notification(self, data):
-        data['user'] = self.get_user(data['user'])
+        data["user"] = self.get_user(data["user"])
         Notification.objects.create(**data)
 
     def create_message(self, data):
-        data['sender'] = self.get_user({'username':data['sender']})
+        data["sender"] = self.get_user({"username": data["sender"]})
         message = Message.objects.create(**data)
         return message
 
     def create_conversation(self, data):
-        users = [self.get_user({'username': username}) for username in data['users']['usernames']]
+        users = [
+            self.get_user({"username": username})
+            for username in data["users"]["usernames"]
+        ]
         conversation = Conversation.objects.create()
-        message_objects = [self.create_message(message) for message in data['messages']]
+        message_objects = [self.create_message(message) for message in data["messages"]]
         for message_object in message_objects:
             message_object.visible_to.set(users)
         conversation.users.set(users)
@@ -623,49 +832,53 @@ class Command(BaseCommand):
             user.conversations.add(conversation)
 
     def create_question(self, data):
-        data['author'] = self.get_user(data['author'])
+        data["author"] = self.get_user(data["author"])
         Question.objects.create(**data)
 
     def create_response(self, data):
-        data['user'] = self.get_user(data['user'])
-        data['question'] = Question.objects.filter(title=data['question']['title']).first()
+        data["user"] = self.get_user(data["user"])
+        data["question"] = Question.objects.filter(
+            title=data["question"]["title"]
+        ).first()
         Response.objects.create(**data)
 
     def create_report(self, data):
-        data['reporter'] = self.get_user(data['reporter'])
-        if data['content_type'] == 'User':
-            data['object_id'] = self.get_user(data['object_id']).pk
-        elif data['content_type'] == 'Message':
-            data['object_id'] = self.get_message(data['object_id']).pk
-        data['content_type'] = self.get_content_type(data['content_type'].lower())
+        data["reporter"] = self.get_user(data["reporter"])
+        if data["content_type"] == "User":
+            data["object_id"] = self.get_user(data["object_id"]).pk
+        elif data["content_type"] == "Message":
+            data["object_id"] = self.get_message(data["object_id"]).pk
+        data["content_type"] = self.get_content_type(data["content_type"].lower())
         Report.objects.create(**data)
 
     def create_post(self, data):
-        data['author'] = self.get_user(data['author'])
+        data["author"] = self.get_user(data["author"])
         Post.objects.create(**data)
 
     def create_post_comment(self, data):
-        data['post'] = self.get_post(data['post'])
-        data['author'] = self.get_user(data['author'])
+        data["post"] = self.get_post(data["post"])
+        data["author"] = self.get_user(data["author"])
         PostComment.objects.create(**data)
 
     def create_feedback(self, data):
         Feedback.objects.create(**data)
-    
+
     def get_message(self, data):
-        return Message.objects.filter(sender=self.get_user(data['sender']).pk).first()
-    
+        return Message.objects.filter(sender=self.get_user(data["sender"]).pk).first()
+
     def get_user(self, data):
-        return User.objects.get(username=data['username'])
-    
+        return User.objects.get(username=data["username"])
+
     def get_content_type(self, model_name):
         return ContentType.objects.get(model=model_name)
 
     def get_post(self, data):
-        return Post.objects.filter(text=data['text']).first()
+        return Post.objects.filter(text=data["text"]).first()
+
 
 def create_username(first_name, last_name):
-    return '@' + first_name.lower() + last_name.lower()
+    return "@" + first_name.lower() + last_name.lower()
+
 
 def create_email(first_name, last_name):
-    return first_name + '.' + last_name + '@example.org'
+    return first_name + "." + last_name + "@example.org"
