@@ -10,7 +10,6 @@ class LikePostViewTestCase(TestCase):
 
     fixtures = [
         "peer_support/tests/fixtures/default_user.json",
-        "peer_support/tests/fixtures/other_users.json",
         "peer_support/tests/fixtures/default_post.json",
     ]
 
