@@ -35,16 +35,17 @@ class FeedView(LoginRequiredMixin, FormView):
 
     def retrieve_posts(self, request):
         """Retrieve posts and display them in chronological order."""
+
         feed_type = request.GET.get("feed_type")
         user_posts = retrieve_friend_posts(request)
-
         if feed_type != "friends":
             user_posts = user_posts | Post.objects.filter(visibility="G")
+        annotated_posts = self.annotate_posts(request, user_posts)
+        return annotated_posts
 
-        # Annotate each post with the like count and whether the current user has liked the post
-        user_posts = user_posts.annotate(
-            like_count=Count("likes"),
+    def annotate_posts(self, request, posts):
+        """Annotate each post with whether the current user has liked the post."""
+
+        return posts.annotate(
             liked_by_user=Count("likes", filter=Q(likes=request.user))
         ).order_by("-created_at")
-
-        return user_posts
