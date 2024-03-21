@@ -1,0 +1,53 @@
+{% extends 'dashboard.html' %}
+{% block page %}
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+{% include 'partials/administrative_navbar.html' %}    
+<div class="container my-2">
+    <select class="btn btn-primary dropdown-toggle" id="barChartDataSelect">
+        {%include "partials/user_demographics/demographic_options.html" %}
+    </select>
+    <select class="btn btn-primary dropdown-toggle" id="continentSelectBar" style="display: none;">
+        {%include "partials/user_demographics/continent_options.html" %}
+    </select>
+    <canvas id="barChart"></canvas>
+    <select class="btn btn-primary dropdown-toggle" id="pieChartDataSelect">
+        {%include "partials/user_demographics/demographic_options.html" %}
+    </select>
+    <select class="btn btn-primary dropdown-toggle" id="continentSelectPie" style="display: none;">
+        {%include "partials/user_demographics/continent_options.html" %}
+    </select>
+    <canvas id="ethnicityChart" style="margin-top: 20px;"></canvas>
+</div>
+<script>
+    var user_types_labels={{user_types_labels|safe}};
+    var user_types_count={{user_types_count|safe}};
+    var age_range_labels={{age_range_labels|safe}};
+    var age_range_counts={{age_range_counts|safe}};
+    var ethnicities={{ethnicities|safe}};
+    var ethnicity_count={{ethnicity_count|safe}};
+    var patient_condition_labels={{patient_condition_labels|safe}};
+    var patient_condition_count={{patient_condition_count|safe}};
+    var parent_child_condition_labels={{parent_child_condition_labels|safe}};
+    var parent_child_condition_count={{parent_child_condition_count|safe}};
+    var gender_labels={{gender_labels|safe}};
+    var gender_count={{gender_count|safe}};
+    var location_labels={{location_labels|safe}};
+    var location_count={{location_count|safe}};
+    var europe_labels = {{ europe_labels|safe }};
+    var europe_count = {{ europe_count|safe }};
+    var north_america_labels = {{ north_america_labels|safe }};
+    var north_america_count = {{ north_america_count|safe }};
+    var south_america_labels = {{ south_america_labels|safe }};
+    var south_america_count = {{ south_america_count|safe }};
+    var asia_labels = {{ asia_labels|safe }};
+    var asia_count = {{ asia_count|safe }};
+    var africa_labels = {{ africa_labels|safe }};
+    var africa_count = {{ africa_count|safe }};
+    var oceania_labels = {{ oceania_labels|safe }};
+    var oceania_count = {{ oceania_count|safe }};
+    var antarctica_labels = {{ antarctica_labels|safe }};
+    var antarctica_count = {{ antarctica_count|safe }};
+</script>
+<script src="{% static 'js/demographic_info.js' %}"></script>
+{% endblock %}

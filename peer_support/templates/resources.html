@@ -3,7 +3,7 @@
 {% block page %}
 {% load profanity %}
   <div class="main">
-    <div id="resources-card" class="card shadow box-area my-2">
+    <div id="resources-card">
   {% include 'partials/resources-navbar.html' %}
   <div class="page">
     <div class="section">
@@ -17,8 +17,18 @@
               by {{question.author.username}}
             </p>
           </a>
+          <form method="get" action="{% url 'delete_question' id=question.id %}" onsubmit="return confirmDelete()">
+              {% csrf_token %}
+              <button type="submit" class="btn delete-btn btn-lg btn-outline-danger">Delete</button>
+          </form> 
+          <script>
+              function confirmDelete() {
+                  return confirm('Are you sure you want to delete this question?');
+              }
+          </script>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       </div>
       <hr>
       {% include 'partials/resource_table.html' %}

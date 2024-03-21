@@ -11,7 +11,7 @@
         "is_staff": true,
         "is_active": true,
         "is_superuser": true,
-        "password": "pfgr5567uu_sha256$260000$4Bhgjgfse58D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
+        "password": "pbkdf2_sha256$260000$4BNvFuAWoTT1XVU8D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
         "gender": "N",
         "location": "US"
         }

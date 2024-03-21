@@ -6,8 +6,8 @@
     <form method="post" class="px-4 py-3" novalidate>
         {% csrf_token %}
         {% include 'partials/bootstrap_form.html' with form=form %}
-        <button type="submit" id="direct">Message directly</button>
-        <button type="submit" name="group" value=":3" id="group">Create group chat</button>
+        <button type="submit" class="btn btn-primary my-2" id="direct">Message directly</button>
+        <button type="submit" class="btn btn-primary my-2" name="group" value=":3" id="group">Create group chat</button>
     </form>
 </div>
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
