@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Report, Message, Post
+from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Report, Message, Post, Feedback
 
 
 class UserProfileInline(admin.StackedInline):
@@ -50,6 +50,14 @@ class ReferralAdmin(admin.ModelAdmin):
 
     list_display = [
         'referrer', 'code'
+    ]
+
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for feedback."""
+
+    list_display = [
+        'title', 'content', 'submitted_at'
     ]
 
 @admin.register(Conversation)
