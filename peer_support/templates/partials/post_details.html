@@ -1,7 +1,10 @@
 {% load profanity %}
 {% load static %}
 <div class="post-header d-flex align-items-center">
-    <img href="{% url 'profile' post.author.username %}" src="{% static post.author.userprofile.profile_picture %}" alt="Profile Picture" class="rounded-circle friend-profile-picture ml-3 mr-2" style="width: 70px; height: 70px;">
+    <a href="{% url 'profile' post.author.username %}">
+        <img src="{% static post.author.userprofile.profile_picture %}" alt="Profile Picture" class="rounded-circle friend-profile-picture ml-3 mr-3" style="width: 70px; height: 70px;">
+    </a>
+    </a>
     <a href="{% url 'profile' post.author.username %}">
         <h4 class="font-weight-bold pt-1 mb-0">{{ post.author }}</h4>
     </a>
