@@ -28,12 +28,12 @@ class MentorModelTestCase(TestCase):
         self.mentor.condition = self.second_mentor.condition
         self._assert_mentor_is_valid()
 
-    def test_condition_can_be_50_characters_long(self):
-        self.mentor.condition = 'x' * 50
+    def test_condition_can_be_100_characters_long(self):
+        self.mentor.condition = 'x' * 100
         self._assert_mentor_is_valid()
 
-    def test_condition_cannot_be_over_50_characters_long(self):
-        self.mentor.condition = 'x' * 51
+    def test_condition_cannot_be_over_100_characters_long(self):
+        self.mentor.condition = 'x' * 101
         self._assert_mentor_is_invalid()
     
     def test_age_of_diagnosis_can_be_blank(self):

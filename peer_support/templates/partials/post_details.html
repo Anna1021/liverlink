@@ -1,15 +1,16 @@
-<div class="card-header">
+{% load profanity %}
+<div class="post-header">
     <a href="{% url 'profile' post.author.username %}">
-        <h4 style="color:white" class="font-weight-bold">{{ post.author }}</h3>
+        <h4 class="font-weight-bold">{{ post.author }}</h3>
     </a>
 </div>
 <div class="card-body">
-    <p>{{ post.text }}</p>
+    <p>{{ post.text |censor}}</p>
     <p>{{ post.created_at }}</p>
     {% if post.author == request.user %}
-        <a href="{% url 'delete_post' post_id=post.id %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'delete_post' post_id=post.id %}" class="btn-danger btn" style = "border-color: #dc3545;">Delete</a>
     {% endif %}
     {% if from_feed %}
-        <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info">View Post</a>
+        <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info" style = "border-color: #0dcaf0;">View Post</a>
     {% endif %}
 </div>

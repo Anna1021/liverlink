@@ -18,9 +18,9 @@ class ThemeSwitcherTest(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.add_argument("--headless") 
+        options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
-        cls.selenium = WebDriver(service=Service(), options=options)
+        cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(10)
         cls.wait = WebDriverWait(cls.selenium, 50)
     @classmethod
@@ -30,9 +30,10 @@ class ThemeSwitcherTest(StaticLiveServerTestCase):
 
     def test_theme_switcher(self):
         user = User.objects.get(username='@johndoe')
+        user.friends.set(User.objects.exclude(username='@johndoe'))
         user.first_login = False
         user.save()
-        self.selenium.get(f'{self.live_server_url}/log_in/')
+        self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         try:
             username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
             username_input.send_keys('@johndoe')

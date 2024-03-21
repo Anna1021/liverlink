@@ -52,6 +52,14 @@ class ReferralAdmin(admin.ModelAdmin):
         'referrer', 'code'
     ]
 
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for feedback."""
+
+    list_display = [
+        'title', 'content', 'submitted_at'
+    ]
+
 @admin.register(Conversation)
 class ConversationAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for conversations."""

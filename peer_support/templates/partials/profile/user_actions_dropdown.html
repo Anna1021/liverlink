@@ -30,13 +30,18 @@
         <a class="dropdown-item" href="#" id="block-link" data-user-id="{{user.id}}"
             data-action="block-user">Block this user</a>
         {% endif %}
-        <a class="dropdown-item" href="#" id="report-link" data-action="report-user">
-            <form method="post">
-                {% csrf_token %}
-                {% include 'partials/bootstrap_form.html' with form=report_form %}
-                <input type="hidden" name="action" value="{{message.id}}">
-                <button type="submit" name="report">Report</button>
-            </form>
-        </a>
+        <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
+            Report
+            <ul class="dropdown-menu nested-dropdown">
+                <li>
+                    <form method="post">
+                    {% csrf_token %}
+                    {% include 'partials/bootstrap_form.html' with form=report_form %}
+                    <input type="hidden" name="action" value="{{message.id}}">
+                    <button class = "btn btn-primary" type="submit" name="report">Report</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>

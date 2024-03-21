@@ -1,0 +1,11 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link {% if request.path == '/moderation/' %} active {% endif %}" id="reportContent" href="{% url 'moderation' %}" role="tab">Reports</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if request.path == '/demographic_information/' %} active {% endif %}" id="demographic-information" href="{% url 'demographic-information' %}" role="tab">User information</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if request.path == '/feedback/' %} active {% endif %}" id="reportContent" href="{% url 'feedback' %}" role="tab">Feedback</a>
+    </li>
+</ul>

@@ -1,0 +1,31 @@
+/*
+ * Feedback styling
+ */
+
+ .feedback-header{
+    display: flex;
+    align-items: center;
+ }
+
+.feedback-title {
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.feedback-date {
+    color: grey;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.feedback-content {
+    margin-top: 2px;
+    font-size: 16px;
+}
+
+.card-spacing {
+    padding-top: 16px !important;
+    padding-bottom: 20px !important;
+    padding-right: 8px !important;
+    padding-left: 16px !important;
+}
