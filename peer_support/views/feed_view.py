@@ -1,6 +1,7 @@
 from django.views.generic.edit import FormView
 from django.shortcuts import redirect, render, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Q
 from peer_support.models import Post
 from peer_support.forms import PostForm
 from .helpers import retrieve_friend_posts
@@ -34,10 +35,16 @@ class FeedView(LoginRequiredMixin, FormView):
 
     def retrieve_posts(self, request):
         """Retrieve posts and display them in chronological order."""
-
         feed_type = request.GET.get("feed_type")
         user_posts = retrieve_friend_posts(request)
+
         if feed_type != "friends":
             user_posts = user_posts | Post.objects.filter(visibility="G")
-        user_posts = user_posts.order_by("-created_at")
+
+        # Annotate each post with the like count and whether the current user has liked the post
+        user_posts = user_posts.annotate(
+            like_count=Count("likes"),
+            liked_by_user=Count("likes", filter=Q(likes=request.user))
+        ).order_by("-created_at")
+
         return user_posts

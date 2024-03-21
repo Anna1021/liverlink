@@ -32,7 +32,6 @@ from .post_view import PostView
 from .delete_post_view import DeletePostView
 from .feed_view import FeedView
 from .like_post_view import like_post
-from .get_like_status_view import get_like_status
 from .conversation_details_view import ConversationDetailsView
 from .remove_friend_view import remove_friend
 from .moderation_view import ModerationView
