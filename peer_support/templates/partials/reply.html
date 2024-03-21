@@ -50,7 +50,7 @@
             <ul>
                 {% for reply in comment.get_replies %}
                     <li>
-                        {% include 'components/reply.html' with comment=reply %}
+                        {% include 'partials/reply.html' with comment=reply %}
                     </li>
                 {% endfor %}
             </ul>

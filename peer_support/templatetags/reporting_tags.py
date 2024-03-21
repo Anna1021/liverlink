@@ -27,3 +27,9 @@ def display_reported_content(report):
         return reported_object.content
     else:
         return "Content not available"
+    
+@register.filter(name='split')
+def split_string(value, key):
+    if hasattr(value, 'model'):
+        value = value.model
+    return value.split(key)

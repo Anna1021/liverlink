@@ -1,35 +1,61 @@
 {% extends 'dashboard.html' %}
 {% load static %}
-{% block page %}
 {% load profanity %}
-  <div class="main">
-    <div id="resources-card">
-  {% include 'partials/resources-navbar.html' %}
-  <div class="page">
-    <div class="section">
-      <h1 class="title">All questions</h1>
-      <div class="scrollable-container">
-        {% for question in questions %}
-        <div class="question-list-item">
-          <a href="{% url 'question' question.id %}">
-            <p class="question-list-item-title">{{question.title | censor}}</p>
-            <p class="question-list-item-author">
-              by {{question.author.username}}
-            </p>
-          </a>
-          <form method="get" action="{% url 'delete_question' id=question.id %}" onsubmit="return confirmDelete()">
-              {% csrf_token %}
-              <button type="submit" class="btn delete-btn btn-lg btn-outline-danger">Delete</button>
-          </form> 
-          <script>
-              function confirmDelete() {
-                  return confirm('Are you sure you want to delete this question?');
-              }
-          </script>
+{% block page %}
+<div class="main">
+  <div id="resources-card">
+    {% include 'partials/resources-navbar.html' %}
+    <div class="page">
+      <div class="section">
+        <h1 class="title">All questions</h1>
+        <div class="scrollable-container">
+          {% for question in questions %}
+          <div class="question-list-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'question' question.id %}" class="flex-grow-1 me-3">
+              <p class="question-list-item-title">{{ question.title | censor }}</p>
+              <p class="question-list-item-author">by {{ question.author.username }}</p>
+            </a>
+            <div class="dropdown">
+              <a href="#" class="delete-icon" id="actionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="bi bi-three-dots-vertical"></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown">
+                  {% if question.author == request.user %}
+                  <li>
+                      <form method="post" action="{% url 'delete_question' id=question.id %}">
+                          {% csrf_token %}
+                          <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this question?');">
+                              Delete
+                          </button>
+                      </form>
+                  </li>
+                  {% else %}
+                  <li>
+                      <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
+                          Report
+                          <ul class="dropdown-menu nested-dropdown">
+                              <li>
+                                  <form method="post">
+                                  {% csrf_token %}
+                                  {% include 'partials/bootstrap_form.html' with form=report_form %}
+                                  <input type="hidden" name="action" value="{{question.id}}">
+                                  <button class = "btn btn-primary" type="submit" name="report_question">Report</button>
+                                  </form>
+                              </li>
+                          </ul>
+                      </div>
+                  </li>
+                  {% endif %}
+              </ul>
+          </div>
           </div>
           {% endfor %}
         </div>
       </div>
       <hr>
       {% include 'partials/resource_table.html' %}
+    </div>
+  </div>
+</div>
+
 {% endblock %}
