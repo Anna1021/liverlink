@@ -11,17 +11,19 @@ class QuestionPageView(LoginRequiredMixin, View):
     redirect_field_name = 'redirect_to'
 
     def get(self, request, id, *args, **kwargs):
-        question = get_object_or_404(Question, id=id)
-        response_form = NewResponseForm()
-        reply_form = NewReplyForm()
+        context = self.get_context(request, id)
+        return render(request, 'question.html', context)
+    
+    def get_context(self, request ,question_id):
+        question = get_object_or_404(Question, id=question_id)
         context = {
             'question': question,
-            'response_form': response_form,
-            'reply_form': reply_form,
+            'response_form': NewResponseForm(),
+            'reply_form': NewReplyForm(),
             'current_user': request.user,
             'report_form': ReportForm(),
         }
-        return render(request, 'question.html', context)
+        return context
 
     def post(self, request, id):
         if 'report_question' in request.POST:
@@ -31,7 +33,7 @@ class QuestionPageView(LoginRequiredMixin, View):
             response_id = request.POST.get('action')
             self.response_report(request, response_id)
         else:
-            self.response_post(request, id)
+            return self.response_post(request, id)
         return redirect('question', id=id)
     
     def response_post(self,request,id):
@@ -41,12 +43,16 @@ class QuestionPageView(LoginRequiredMixin, View):
             response.user = request.user
             response.question = get_object_or_404(Question, id=id)
             response.save()
+            return redirect(f'/question/{id}#{response.id}')
+        context = self.get_context(request, id)
+        context['response_form']= response_form
+        return render(request, 'question.html', context)
     
     def question_report(self, request, comment_id):
-        comment = get_object_or_404(Question, id=comment_id)
+        question = get_object_or_404(Question, id=comment_id)
         report_form = ReportForm(request.POST)
         if report_form.is_valid():
-            report_form.save_report_for_object(comment, request.user)
+            report_form.save_report_for_object(question, request.user)
             messages.success(request, "Comment reported successfully.")
         else:
             messages.error(request, "There was an issue with the report.")

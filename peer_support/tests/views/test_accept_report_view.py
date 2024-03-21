@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.messages import get_messages
-from peer_support.models import Report, Message, User
+from peer_support.models import Report, Message, User, Post
 
 class AcceptReportViewTestCase(TestCase):
     """Tests of the accept report view"""
@@ -13,8 +13,10 @@ class AcceptReportViewTestCase(TestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/default_message.json',
+        'peer_support/tests/fixtures/default_post.json',
         'peer_support/tests/fixtures/default_report_message.json',
         'peer_support/tests/fixtures/default_report_user.json',
+        'peer_support/tests/fixtures/default_report_post.json',
     ]
     
     def setUp(self):
@@ -64,3 +66,16 @@ class AcceptReportViewTestCase(TestCase):
         self.assertFalse(User.objects.get(pk=self.user_to_report.pk).is_active)
         messages = list(get_messages(response.wsgi_request))
         self.assertTrue(any(["successfully deleted" in message.message for message in messages]))
+    
+    def test_successful_post_deletion_by_staff(self):
+        report_post = Report.objects.get(pk=1)
+        post_to_report = Post.objects.get(pk=report_post.object_id)  
+        url_post = reverse('accept_report', kwargs={'report_id': report_post.id})
+        self.assertTrue(Post.objects.filter(pk=post_to_report.pk).exists())
+        response = self.client.get(url_post)
+        self.assertFalse(Post.objects.filter(pk=post_to_report.pk).exists())
+        self.assertFalse(Report.objects.filter(pk=report_post.pk).exists())
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any(["successfully deleted" in str(message) for message in messages]))
+        self.assertRedirects(response, reverse('moderation'))
+

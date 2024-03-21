@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from peer_support.forms import PostForm
 from peer_support.models import User, Post
+from django.contrib import messages
 
 class FeedViewTestCase(TestCase):
     """Tests of the feed view."""
@@ -102,3 +103,26 @@ class FeedViewTestCase(TestCase):
         self.assertContains(response, "Friend post")
         self.assertNotContains(response, "Stranger post global")    
         self.assertNotContains(response, "Stranger post friends")  
+
+    def test_report_post_valid(self):
+        report_data = {
+            'report_post': True,
+            'action': self.friend_post.pk, 
+            'reason': 'spam' 
+        }
+        response = self.client.post(self.url, report_data, follow=True)
+        self.assertRedirects(response, self.url)
+        updated_post = Post.objects.get(pk=self.friend_post.pk)
+        messages_list = [m.message for m in messages.get_messages(response.wsgi_request)]
+        self.assertIn("Post reported successfully.", messages_list)
+
+    def test_report_post_invalid(self):
+        report_data = {
+            'report_post': True,
+            'action': self.friend_post.pk,
+            'reason': 'Sphjgyjgham'
+        }
+        response = self.client.post(self.url, report_data, follow=True)
+        self.assertRedirects(response, self.url)
+        messages_list = [m.message for m in messages.get_messages(response.wsgi_request)]
+        self.assertIn("There was an issue with the report.", messages_list)

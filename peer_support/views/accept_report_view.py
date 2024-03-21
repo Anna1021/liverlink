@@ -42,6 +42,6 @@ class AcceptReportView(LoginRequiredMixin, View):
         user.is_active = False
         user.save()
     
-    def simple_delete(self,post_comment):
-        post_comment.delete()
+    def simple_delete(self,reported_object):
+        reported_object.delete()
         
