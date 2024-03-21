@@ -59,6 +59,7 @@ urlpatterns = [
     path('feed/', views.FeedView.as_view(), name='feed'),
     path('delete_post/<int:post_id>', views.DeletePostView.as_view(), name='delete_post'),
     path('like_post/<int:post_id>', views.like_post, name='like_post'),
+    path('get_like_status/<int:post_id>', views.get_like_status, name='get_like_status'),
     path('delete_comment/<int:comment_id>', views.DeleteCommentView.as_view(), name='delete_comment'),
     path('delete_conversation/<int:conversation_id>',views.DeleteConversationView.as_view(),name='delete_conversation'),
 ]

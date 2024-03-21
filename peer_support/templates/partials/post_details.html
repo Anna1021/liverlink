@@ -2,18 +2,18 @@
 {% csrf_token %}
 <div class="post-header">
     <a href="{% url 'profile' post.author.username %}">
-        <h4 class="font-weight-bold">{{ post.author }}</h3>
+        <h4 class="font-weight-bold">{{ post.author }}</h4>
     </a>
 </div>
 <div class="card-body">
-    <p>{{ post.text |censor}}</p>
+    <p>{{ post.text | censor }}</p>
     <p>{{ post.created_at }}</p>
     {% if post.author == request.user %}
         <a href="{% url 'delete_post' post_id=post.id %}" class="btn-danger btn">Delete</a>
     {% endif %}
     {% if from_feed %}
         <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info">View Post</a>
-        <a href="" class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}"></a>
+        <a href="" class="btn apply-btn bi like-post" data-post-id="{{ post.id }}"></a>
         <span class="profile-subheading pl-2" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
     {% endif %}
 </div>
@@ -26,14 +26,28 @@ $(document).ready(function() {
         var $this = $(this);
         var postId = $this.data('post-id');
 
+        // Fetch initial like status from the server
+        $.ajax({
+            url: "{% url 'get_like_status' post_id=0 %}".replace('0', postId),
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                if (data.liked) {
+                    $this.addClass('bi-hand-thumbs-up-fill');
+                } else {
+                    $this.addClass('bi-hand-thumbs-up');
+                }
+            }
+        });
+
         $this.click(function(e) {
             e.preventDefault();
 
             if ($this.hasClass('request-in-progress')) {
-                return; // Do nothing if a request is already in progress
+                return;
             }
 
-            $this.addClass('request-in-progress'); // Mark the button as having an in-progress request
+            $this.addClass('request-in-progress'); 
 
             $.ajax({
                 url: "{% url 'like_post' post_id=0 %}".replace('0', postId),
@@ -53,7 +67,7 @@ $(document).ready(function() {
                     $likeCount.text(data.like_count);
                 },
                 complete: function() {
-                    $this.removeClass('request-in-progress'); // Remove the in-progress mark after the request is complete
+                    $this.removeClass('request-in-progress');
                 }
             });
         });

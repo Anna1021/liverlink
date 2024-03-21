@@ -16,12 +16,7 @@ class PostView(LoginRequiredMixin, FormView):
             return redirect("feed")
         comments = PostComment.objects.filter(post=post, parent=None)
         comment_form = CommentForm(request.user, post)
-        liked_by_current_user = self.liked_by_current_user(post, request.user)
-        return render(
-            request,
-            "post_detail.html",
-            {"post": post, "comments": comments, "comment_form": comment_form},
-        )
+        return render(request, "post_detail.html", {"post": post, "comments": comments, "comment_form": comment_form})
 
     def post(self, request, post_id):
         """Show the detail of a post and comment on the post"""
@@ -34,4 +29,5 @@ class PostView(LoginRequiredMixin, FormView):
             form.save(parent_id)
             return redirect("post_detail", post_id=post_id)
         else:
-            return render(request, "post_detail.html", {"post": post, "comments": comments, "comment_form": form} )
+            return render(request, "post_detail.html", {"post": post, "comments": comments, "comment_form": form})
+            
