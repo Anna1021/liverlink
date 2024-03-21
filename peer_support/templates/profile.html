@@ -44,10 +44,12 @@
         </div>
         <div class="row">
             <div class="col-md-4">
+                {% if not current_user in blocklist and not user in blocklist %}
                 <div class="profile-subheading pt-5 pl-3">
                     <label>Bio</label>
                     <p>{{ user.bio }}</p>
                 </div>
+                {% endif %}
             </div>
             <div class="col-md-7">
                 {% if not user.is_active %}
@@ -63,7 +65,6 @@
                             {% include 'partials/profile/user_information.html' %}
                         </div>
                         <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
-                            <p>Timeline</p>
                             {% for post in posts %}
                             {% include 'partials/post_details.html' with from_feed=True post=post %}
                             {% empty %}
