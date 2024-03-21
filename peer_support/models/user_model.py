@@ -31,7 +31,7 @@ class User(AbstractUser):
     conversations = models.ManyToManyField('Conversation', blank=True)
     first_login = models.BooleanField(default=True)
 
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'date_of_birth']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'date_of_birth']
 
     class Meta:
         """Model options."""

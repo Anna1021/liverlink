@@ -58,6 +58,19 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Feedback',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('title', models.CharField(max_length=50)),
+                ('content', models.CharField(max_length=500)),
+                ('submitted_at', models.DateTimeField(auto_now_add=True)),
+            ],
+            options={
+                'verbose_name': 'Feedback',
+                'verbose_name_plural': 'Feedback',
+            },
+        ),
+        migrations.CreateModel(
             name='FriendRequest',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
