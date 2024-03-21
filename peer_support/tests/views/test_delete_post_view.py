@@ -11,17 +11,13 @@ class DeletePostViewTestCase(TestCase):
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/default_post.json',
-        'peer_support/tests/fixtures/other_posts.json'
     ]
 
     def setUp(self):
         self.post = Post.objects.get(pk=1)
         self.user = User.objects.get(username='@johndoe')
         self.client.login(username=self.user.username, password="Password123")
-        self.url = reverse('delete_post', kwargs={'post_id':self.post.id, 'post_id':self.post.id})
-
-        self.post.author = self.user
-        self.post.save()
+        self.url = reverse('delete_post', kwargs={'post_id':self.post.id})
 
     def test_delete_post_url(self):
         self.assertEqual(self.url, '/delete_post/1')
