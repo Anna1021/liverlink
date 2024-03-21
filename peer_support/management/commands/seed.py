@@ -84,6 +84,12 @@ post_comment_fixtures = [
     {'post': post_fixtures[2], 'author': mentor_fixtures[0], 'content': 'Hi, I am a mentor.'},
 ]
 
+feedback_fixtures = [
+    {'title': 'Fix this', 'content': 'This is broken.'},
+    {'title': 'Improve that', 'content': 'This could be improved'},
+    {'title': 'Add this', 'content': 'This is missing.'},
+]
+
 
 class Command(BaseCommand):
     """Build automation command to seed the database."""
@@ -99,6 +105,7 @@ class Command(BaseCommand):
     REPORT_COUNT = 250
     POST_COUNT = 500
     POST_COMMENT_COUNT = 1000
+    FEEDBACK_COUNT = 500
     DEFAULT_PASSWORD = 'Password123'
     help = 'Seeds the database with sample data'
 
@@ -148,6 +155,10 @@ class Command(BaseCommand):
         self.create_post_comments()
         self.post_comments = PostComment.objects.all()
 
+        self.create_feedbacks()
+        self.feedback = Feedback.objects.all()
+
+
     def create_patients(self):
         self.generate_patient_fixtures()
         self.generate_random_patients()
@@ -194,6 +205,10 @@ class Command(BaseCommand):
     def create_post_comments(self):
         self.generate_post_comment_fixtures()
         self.generate_random_post_comments()
+
+    def create_feedbacks(self):
+        self.generate_feedback_fixtures()
+        self.generate_random_feedbacks()
 
     def generate_patient_fixtures(self):
         for data in patient_fixtures:
@@ -242,6 +257,10 @@ class Command(BaseCommand):
     def generate_post_comment_fixtures(self):
         for data in post_comment_fixtures:
             self.create_post_comment(data)
+
+    def generate_feedback_fixtures(self):
+        for data in feedback_fixtures:
+            self.create_feedback(data)
 
     def generate_random_patients(self):
         patient_count = Patient.objects.count()
@@ -331,6 +350,14 @@ class Command(BaseCommand):
             post_comment_count = PostComment.objects.count()
         print("Post comment seeding complete.      ")
 
+    def generate_random_feedbacks(self):
+        feedback_count = Feedback.objects.count()
+        while feedback_count < self.FEEDBACK_COUNT:
+            print(f"Seeding feedback {feedback_count}/{self.FEEDBACK_COUNT}", end='\r')
+            self.generate_feedback()
+            feedback_count = Feedback.objects.count()
+        print("Feedback seeding complete.      ")
+
     def generate_user_data(self):
         first_name = self.faker.first_name()
         last_name = self.faker.last_name()
@@ -376,17 +403,23 @@ class Command(BaseCommand):
     def seed_friends(self):
         print("Seeding friends...", end='\r')
         for user in self.users:
-            for _ in range(randint(1, 10)):
+            friends_count = user.friends.count()
+            if friends_count >= 10:
+                continue
+            for _ in range(randint(1, 10 - friends_count)):
                 friend = self.users[randint(0, len(self.users) - 1)]
-                if friend != user:
+                if friend != user and friend not in user.friends.all():
                     user.friends.add(friend)
 
     def seed_blocked_users(self):
         print("Seeding blocked users...", end='\r')
         for user in self.users:
-            for _ in range(randint(1, 10)):
+            blocked_user_count = user.blocked_users.count()
+            if blocked_user_count >= 10:
+                continue
+            for _ in range(randint(1, 10 - blocked_user_count)):
                 blocked_user = self.users[randint(0, len(self.users) - 1)]
-                if blocked_user != user and blocked_user not in user.friends.all():
+                if blocked_user != user and blocked_user not in user.friends.all() and blocked_user not in user.blocked_users.all():
                     user.blocked_users.add(blocked_user)
 
     def generate_friend_request(self):
@@ -456,6 +489,11 @@ class Command(BaseCommand):
         post = {'text': post.text}
         author = {'username': author.username}
         self.try_create_post_comment({'post': post, 'author': author, 'content': content})
+
+    def generate_feedback(self):
+        title = self.faker.sentence()
+        content = self.faker.text(max_nb_chars=500)
+        self.try_create_feedback({'title': title, 'content': content})
         
     def try_create_patient(self, data):
         try:
@@ -526,6 +564,12 @@ class Command(BaseCommand):
     def try_create_post_comment(self, data):
         try:
             self.create_post_comment(data)
+        except:
+            pass
+
+    def try_create_feedback(self, data):
+        try:
+            self.create_feedback(data)
         except:
             pass
 
@@ -604,6 +648,9 @@ class Command(BaseCommand):
         data['post'] = self.get_post(data['post'])
         data['author'] = self.get_user(data['author'])
         PostComment.objects.create(**data)
+
+    def create_feedback(self, data):
+        Feedback.objects.create(**data)
     
     def get_message(self, data):
         return Message.objects.filter(sender=self.get_user(data['sender']).pk).first()
