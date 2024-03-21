@@ -2,26 +2,24 @@
 {% block page %}
 {% load static %}
 <div class="container">
-    <div class="card shadow box-area my-2">
-        <h2>Add friend</h2>
-        <hr>
-        <div class="row">
-            {% include 'partials/search_filter_sort_users.html' %}
-        </div>
-        <div style="overflow-y:auto;">
-            <hr style="margin-top: 0;">
-            {% if users|length == 0 %}
-            <p>No users</p>
-            {% else %}
-            <div class="container my-2">
-                <div class="row">
-                    {% for friend in users %}
-                        {% include "partials/user_card.html" with parent_template="find_friends" user=friend.user %}
-                    {% endfor %}
-                </div>
+    <h2>Add friend</h2>
+    <hr>
+    <div class="row">
+        {% include 'partials/search_filter_sort_users.html' %}
+    </div>
+    <div style="overflow-y:auto;">
+        <hr style="margin-top: 0;">
+        {% if users|length == 0 %}
+        <p>No users</p>
+        {% else %}
+        <div class="container my-2">
+            <div class="row">
+                {% for friend in users %}
+                    {% include "partials/user_card.html" with parent_template="find_friends" user=friend.user %}
+                {% endfor %}
             </div>
-            {% endif %}
         </div>
+        {% endif %}
     </div>
 </div>
 <script>

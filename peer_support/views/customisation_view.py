@@ -15,6 +15,8 @@ class CustomisationView(LoginRequiredMixin, View):
         return render(request, 'customisation.html', context)
 
     def get_profile_pictures(self):
+        """Get all profile pictures from static files"""
+        
         profile_pictures_dir = finders.find('profile_pictures', all=True)
         profile_pictures = []
         for dir in profile_pictures_dir:

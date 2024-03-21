@@ -45,7 +45,7 @@ class ModerationViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'moderation.html')
 
-    def test_reports_listing_for_staff(self):
+    def test_reports_listing(self):
         response = self.client.get(self.url)
         self.assertTrue('reports' in response.context)
         self.assertEqual(len(response.context['reports']), 1)
