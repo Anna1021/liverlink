@@ -4,13 +4,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import Post
 from peer_support.forms import PostForm
 from .helpers import retrieve_friend_posts
+from django.core.paginator import Paginator
 
 class FeedView(LoginRequiredMixin, FormView):
     """Feed view."""
     
     def get(self,request):
         feed_type = request.GET.get('feed_type','global')  
-        user_posts = self.retrieve_posts(request)
+        page_number = request.GET.get('page')
+        user_posts = self.retrieve_posts(request,page_number)
         form = PostForm(request.user)
         current_user = request.user 
         if current_user.first_login == True:
@@ -30,7 +32,7 @@ class FeedView(LoginRequiredMixin, FormView):
             user_posts = self.retrieve_posts(request)
             return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
 
-    def retrieve_posts(self,request):
+    def retrieve_posts(self,request,page):
         """Retrieve posts and display them in chronological order."""
 
         feed_type = request.GET.get('feed_type') 
@@ -38,5 +40,7 @@ class FeedView(LoginRequiredMixin, FormView):
         if feed_type != 'friends':
             user_posts = user_posts|Post.objects.filter(visibility='G')
         user_posts = user_posts.order_by("-created_at")
-        return user_posts
+        paginator = Paginator(user_posts, 10)
+        posts = paginator.get_page(page)
+        return posts
         

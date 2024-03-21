@@ -8,6 +8,21 @@
   <div class="page">
     <div class="section">
       <h1 class="title">All questions</h1>
+      <div class="row justify-content-center">
+        <div class="col-md-2 text-center">
+          {% if questions.has_previous %}
+            <a href="?page={{ questions.previous_page_number }}"> previous </a>
+          {% endif %}
+        </div>
+        <div class="col-md-2 text-center">
+          <span class="current-page">{{ questions.number }}</span>
+        </div>
+        <div class="col-md-2 text-center">
+          {% if questions.has_next %}
+            <a href="?page={{ questions.next_page_number }}"> next</a>
+          {% endif %}
+        </div>
+      </div>
       <div class="scrollable-container">
         {% for question in questions %}
         <div class="question-list-item">
