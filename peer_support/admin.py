@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Patient, Parent, Mentor, Referral, UserProfile, Notification, Report
+from .models import User, Patient, Parent, Mentor, Referral, UserProfile, Notification, Report, Question, Response
 
 class UserProfileInline(admin.StackedInline):
     """Configuration of the admin interface for user profiles."""
@@ -12,17 +12,19 @@ class UserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for users."""
     
     ordering = ('username',)
-    list_filter = ["is_active"]
+    search_fields = ('username', 'id')
+    list_filter = ["is_active", "date_joined"]
     inlines = [UserProfileInline]
     list_display = [
-        'id','username', "is_active" ]
+        'id','username', "is_active"]
 
 @admin.register(Patient)
 class PatientAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for patients."""
 
     ordering = ('username',)
-    list_filter = ["is_active"]
+    search_fields = ('username', 'id')
+    list_filter = ["is_active", "date_joined"]
     inlines = [UserProfileInline]
     list_display = [
         'id','username', "is_active" 
@@ -33,7 +35,8 @@ class ParentAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for parents."""
 
     ordering = ('username',)
-    list_filter = ["is_active"]
+    search_fields = ('username', 'id')
+    list_filter = ["is_active", "date_joined"]
     inlines = [UserProfileInline]
     list_display = [
         'id','username', "is_active" 
@@ -44,7 +47,8 @@ class MentorAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for mentors."""
 
     ordering = ('username',)
-    list_filter = ["is_active"]
+    search_fields = ('username', 'id')
+    list_filter = ["is_active", "date_joined"]
     inlines = [UserProfileInline]
     list_display = [
         'id','username', "is_active" 
@@ -63,6 +67,7 @@ class NotificationAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for notifications."""
 
     ordering = ('title',)
+    search_fields = ('title', 'id')
     list_filter = ["viewed", "created"]
     list_display = [
         'id', 'title', 'created', 'viewed', 'user'
@@ -72,9 +77,29 @@ class NotificationAdmin(admin.ModelAdmin):
 class ReportAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for friend requests."""
 
+    search_fields = ('reporter', 'reason')
     list_filter = ["reason", "reported_at"]
     list_display = [
-        'reason','reported_at'
+        'reporter', 'reason','reported_at'
     ]
 
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for friend requests."""
+
+    search_fields = ('author', 'title')
+    list_filter = ["created_at"]
+    list_display = [
+        'author', 'title'
+    ]
+
+@admin.register(Response)
+class ResponseAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for friend requests."""
+
+    search_fields = ('user', 'question')
+    list_filter = ["created_at"]
+    list_display = [
+        'user', 'question'
+    ]
     
