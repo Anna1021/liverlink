@@ -1,4 +1,5 @@
 {% load profanity %}
+{% load post_tags %}
 {% csrf_token %}
 <div class="post-header">
     <a href="{% url 'profile' post.author.username %}">
@@ -14,9 +15,9 @@
     {% if from_feed %}
         <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info">View Post</a>
         {% if post.liked_by_user %}
-            <button class="btn apply-btn bi bi-hand-thumbs-up-fill like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|join:', ' }}"></button>
+            <button class="btn apply-btn bi bi-hand-thumbs-up-fill like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
         {% else %}
-            <button class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|join:', ' }}"></button>
+            <button class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
         {% endif %}
         
         <span class="profile-subheading pl-2" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
