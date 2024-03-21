@@ -3,23 +3,28 @@
         "model": "peer_support.notification",
         "pk": 2,
         "fields": {
-            "title": "Another Test Notification",
-            "description": "This is a another test notification",
+            "title": "New Friend Request",
+            "description": "@johndoe has sent you a friend request.",
             "created": "2023-01-02 11:16:09.184106+01:00",
             "viewed": false,
             "user": 2,
-            "friend_request": 1
+            "notifying_user": 1,
+            "content_type": 20,
+            "object_id": 1
         }
     },
     {
         "model": "peer_support.notification",
         "pk": 3,
         "fields": {
-            "title": "Newest Notification",
-            "description": "This is the newest notification",
+            "title": "New Group Conversation",
+            "description": "@petrapickles has added you to a group conversation.",
             "created": "2024-01-02 11:16:09.184106+01:00",
             "viewed": false,
-            "user": 1
+            "user": 4,
+            "notifying_user": 3,
+            "content_type": 10,
+            "object_id": 1
         }
     }
 ]

@@ -12,26 +12,38 @@ class Notification(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     viewed = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    notifying_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'notifications_sent', null=True)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
-    object_id = models.PositiveIntegerField(null=True)
+    notifying_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'notifications_sent', blank=True, null=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, blank=True, null=True)
+    object_id = models.PositiveIntegerField(blank=True, null=True)
     content_object = GenericForeignKey('content_type', 'object_id')
 
-    def set_title(self):
-        """Set the title of the notification based on its content_type."""
+    def get_title(self):
+        """Get the title of the notification based on its content_type."""
 
-        self.title = "New " + self.content_type.name.title()
+        return "New " + self.content_type.name.title()
 
-    def set_description(self):
-        """Set the description of the notification based on its content_type."""
+    def get_description(self):
+        """Get the description of the notification based on its content_type."""
 
-        descriptions = {'friend request' : f"{self.notifying_user.username} has sent you a friend request.",
-                        'post comment' : f"{self.notifying_user.username} has commented on your post.",
-                        'response' : f"{self.notifying_user.username} has replied to your question.",
-                        'conversation' : f"{self.notifying_user.username} has created a conversation with you.",
-                        'group conversation' : f"{self.notifying_user.username} has added you to a group conversation."}
+        if self.notifying_user:
+            descriptions = {'friend request' : f"{self.notifying_user.username} has sent you a friend request.",
+                            'post comment' : f"{self.notifying_user.username} has commented on your post.",
+                            'response' : f"{self.notifying_user.username} has replied to your question.",
+                            'conversation' : f"{self.notifying_user.username} has created a conversation with you.",
+                            'group conversation' : f"{self.notifying_user.username} has added you to a group conversation."}
+            
+            if self.content_type.name in descriptions.keys():
+                return descriptions[self.content_type.name]
+        return f"Content type '{self.content_type.name}' has no default description."
 
-        self.description = descriptions[self.content_type.name]
+    def set_default_fields(self):
+        """If the notification has no content_object, set the title and description fields to a default."""
+
+        if not self.title:
+            self.title = "Default Title"
+
+        if not self.description:
+            self.description = "Default description"
 
     def get_URL(self):
         """Return the URL to use (to access the content_object) for the notification page."""
@@ -44,7 +56,10 @@ class Notification(models.Model):
             elif self.content_type.name == 'response':
                 return self.get_question_URL()
 
-        return reverse('profile', kwargs={'username': self.notifying_user})
+        if self.notifying_user:
+            return reverse('profile', kwargs={'username': self.notifying_user})
+        else:
+            return reverse('inbox')
     
     def get_post_URL(self):
         """Return the URL to the post being replied to, if the post still exists."""
@@ -72,10 +87,11 @@ class Notification(models.Model):
         """Save the notification with the correct title and description."""
 
         if self.content_type:
-            if self.content_type.name == 'conversation' and not self.notifying_user:
-                self.notifying_user = self.content_object.users.exclude(username=self.user.username)
             if not self.title:
-                self.set_title()
+                self.title = self.get_title()
             if not self.description:
-                self.set_description()
+                self.description = self.get_description()
+        else:
+            self.set_default_fields()
+    
         super().save(*args, **kwargs)
