@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic.edit import FormView
+from django.db.models import Count, Q
 from peer_support.models import Post, PostComment
 from peer_support.forms import CommentForm
 from .helpers import get_post
@@ -14,8 +15,9 @@ class PostView(LoginRequiredMixin, FormView):
         if not post:
             messages.error(request, "This post does not exist")
             return redirect("feed")
-        comments = PostComment.objects.filter(post=post, parent=None)
-        comment_form = CommentForm(request.user, post)
+        post.liked_by_user = post.likes.filter(id=request.user.id).exists()
+        comments = PostComment.objects.filter(post=post, parent=None) 
+        comment_form = CommentForm(request.user, post) 
         return render(request, "post_detail.html", {"post": post, "comments": comments, "comment_form": comment_form})
 
     def post(self, request, post_id):
