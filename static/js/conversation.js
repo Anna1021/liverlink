@@ -9,7 +9,7 @@ $(document).ready(function() {
         window.location.reload();
     }
     hideBlockedMessages()
-    if ($('#conversation').scrollTop()<$('#conversation').prop('scrollHeight')-600){
+    if ($('#conversation').scrollTop()<$('#conversation').prop('scrollHeight')-($('#conversation').prop('clientHeight')+120)){
         $('#scroll-down').show();
     }
     function hideBlockedMessages(){
@@ -27,22 +27,26 @@ $(document).ready(function() {
     function setScroll(){
         let scrollPos = 0;
         let previousUrl = document.referrer;
-        var navigationEntries = performance.getEntriesByType("navigation");
-        if (navigationEntries.length > 0) {
-            var navigationType = navigationEntries[0].type;
-            if (navigationType === "reload" && sessionStorage.getItem(scrollKey)>600) {
+        // console.log(sessionStorage.getItem(scrollKey)+" four");
+        if (sessionStorage.getItem(scrollKey)!==null) {
+            if (sessionStorage.getItem(scrollKey)>$('#conversation').prop('clientHeight')+120) {
                 scrollPos = sessionStorage.getItem(scrollKey);
             } else if (previousUrl.split("?")[0]==currentUrl.split("?")[0] && previousUrl.split("?")[1]!=currentUrl.split("?")[1]){
-                scrollPos = sessionStorage.getItem(scrollKey);
-            } else if (previousUrl==currentUrl && sessionStorage.getItem(scrollKey)!==null){
+                if (previousUrl.split('=').length > 1 && currentUrl.split('=').length > 1){
+                    scrollPos = sessionStorage.getItem(scrollKey);
+                }
+            } else if (previousUrl==currentUrl && previousUrl.split('=').length == 1){
                 scrollPos = sessionStorage.getItem(scrollKey);
             }
         }  
-        scrollPos = $('#conversation').prop('scrollHeight')-scrollPos
+        // console.log($('#conversation').prop('scrollHeight')+" three");
+        // console.log(scrollPos + " two");
+        scrollPos = $('#conversation').prop('scrollHeight')-scrollPos;
         $('#conversation').scrollTop(scrollPos);
+        // console.log($('#conversation').scrollTop() + " one");
     }
     $('#conversation').scroll(function(){
-        if ($(this).scrollTop()<$(this).prop('scrollHeight')-600){
+        if ($(this).scrollTop()<$(this).prop('scrollHeight')-($('#conversation').prop('clientHeight')+120)){
             $('#scroll-down').show();
         }else{
             $('#scroll-down').hide();
