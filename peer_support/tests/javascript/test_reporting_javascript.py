@@ -5,8 +5,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from peer_support.models import User
+from peer_support.models import User,  Report
 from selenium.common.exceptions import TimeoutException
+from django.contrib.contenttypes.models import ContentType
 
 import time
 class ReportingJavascriptTest(StaticLiveServerTestCase):
@@ -38,6 +39,10 @@ class ReportingJavascriptTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_reported_object_muted(self):
+        self.report_post = Report.objects.get(pk=4)
+        post_content_type = ContentType.objects.get_for_model(Post) 
+        self.report_post.content_type = post_content_type
+        self.report_post.save()
         user = User.objects.get(username='@admin')
         user.first_login = False
         user.save()
