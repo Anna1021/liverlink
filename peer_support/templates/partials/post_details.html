@@ -1,16 +1,31 @@
 {% load profanity %}
+{% load static %}
+{% load post_tags %}
+{% csrf_token %}
+<meta name="csrf-token" content="{{ csrf_token }}">
 <div class="post-header">
     <a href="{% url 'profile' post.author.username %}">
-        <h4 class="font-weight-bold">{{ post.author }}</h3>
+        <h4 class="font-weight-bold">{{ post.author }}</h4>
     </a>
 </div>
 <div class="card-body">
-    <p>{{ post.text |censor}}</p>
+    <p>{{ post.text | censor }}</p>
     <p>{{ post.created_at }}</p>
     {% if post.author == request.user %}
-        <a href="{% url 'delete_post' post_id=post.id %}" class="btn-danger btn" style = "border-color: #dc3545;">Delete</a>
+        <a href="{% url 'delete_post' post_id=post.id %}" class="btn-danger btn">Delete</a>
     {% endif %}
     {% if from_feed %}
-        <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info" style = "border-color: #0dcaf0;">View Post</a>
+        <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info">View Post</a>
     {% endif %}
+    {% if post.liked_by_user %}
+        <button class="btn apply-btn bi bi-hand-thumbs-up-fill like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
+    {% else %}
+        <button class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
+    {% endif %}
+    <span class="profile-subheading pl-2" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
 </div>
+
+<script>
+    var likePostUrl = "{% url 'like_post' 0 %}";
+</script>
+<script src="{% static 'js/post_details.js' %}"></script>
