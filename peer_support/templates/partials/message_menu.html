@@ -10,7 +10,7 @@
             <button class= "dropdown-item" type="submit" name="delete" value="me">Delete for me</button>
             {% if user == message.sender %}
             <button class= "dropdown-item delete_all" type="submit" name="delete" value="all">Delete for everyone</button>
-            {% if message.sender != user %}
+            {% else %}
             {% include 'partials/report_dropdown.html' with form=report_form object_id=message.id report_type='report_message' %}
             {%endif%}
         </form></li>

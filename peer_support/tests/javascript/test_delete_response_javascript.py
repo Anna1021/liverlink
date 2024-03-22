@@ -19,7 +19,7 @@ class DeleteResponseTest(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.add_argument("--headless") 
+        #options.add_argument("--headless") 
         options.add_argument("--window-size=1920,1080")
         cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(50)
@@ -50,18 +50,16 @@ class DeleteResponseTest(StaticLiveServerTestCase):
             resources_button =self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Resources')]")))
             resources_button.click()
 
-            link =self.wait.until(EC.element_to_be_clickable((By.XPATH, "//p[@class='question-list-item-title' and contains(text(), 'Sample Question Title')]")))
-            link.click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//p[@class='question-list-item-title' and contains(text(), 'Sample Question Title')]"))).click()
+            actions_dropdown = self.wait.until(EC.element_to_be_clickable((By.ID, "actionsDropdown")))
+            actions_dropdown.click()
+            
+            delete_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Delete')]")))
+            delete_button.click()
 
-            delete_response_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@class='delete-response-button']")))
-            delete_response_button.click()
+            alert = self.wait.until(EC.alert_is_present())
 
-            # Cancel the alert
-            self.wait.until(EC.alert_is_present())
-            self.selenium.switch_to.alert.dismiss()
-            delete_response_button.click()
-            self.wait.until(EC.alert_is_present())
-            self.selenium.switch_to.alert.accept()
+            alert.accept()
 
             page_source = self.selenium.page_source
             self.assertNotIn("This is a sample response body", page_source)
