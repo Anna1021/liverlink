@@ -4,7 +4,7 @@ import datetime
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 from peer_support.models import Mentor, Referral, User, Conversation, GroupConversation, Notification, FriendRequest, Response, PostComment
-from peer_support.views.helpers import create_referral, get_referral_code, get_addable_peers, check_blocked_dm, send_notification, send_notification_to_parent
+from peer_support.views.helpers import create_referral, get_referral_code, get_addable_peers, check_blocked_dm, send_notification, send_notification_to_parent, country_to_continent, country_to_continent_specific
 
 class HelpersViewTestCase(TestCase):
     """Unit tests for the helpers view."""
@@ -47,6 +47,18 @@ class HelpersViewTestCase(TestCase):
     def test_get_referral_code_no_referral(self):
         referral_code = get_referral_code(self.mentor)
         self.assertIsNone(referral_code)
+
+    def test_country_to_continent_known(self):
+        self.assertEqual(country_to_continent('US'), 'North America')
+
+    def test_country_to_continent_unknown(self):
+        self.assertEqual(country_to_continent('XX'), 'Unknown') 
+
+    def test_country_to_continent_two_known(self):
+        self.assertEqual(country_to_continent_specific('US'), ('North America', 'United States'))
+
+    def test_country_to_continent_two_unknown(self):
+        self.assertEqual(country_to_continent_specific('XX'), ('Unknown', 'Unknown'))
     
     def test_get_addable_peers(self):
         current_user = User.objects.get(username='@petrapickles')
