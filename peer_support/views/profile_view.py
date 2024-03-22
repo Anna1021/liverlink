@@ -16,9 +16,20 @@ class ProfileView(LoginRequiredMixin, View):
         if not user_exists(username):
             messages.error(request, "The profile you tried to access does not exist.")
             return redirect(reverse("feed"))
-
         context = self.set_context(request, username)
+        context = self.set_user_type(context, request.user)
         return render(request, "profile.html", context)
+
+    def set_user_type(self, context, user):
+        """Set the user type in the context"""
+
+        if hasattr(user, 'parent'):
+            context['parent'] = user.parent
+        elif hasattr(user, 'patient'):
+            context['patient'] = user.patient
+        else:
+            context['mentor'] = user.mentor
+        return context
 
     def get_context(self, user, posts, request):
         return {
