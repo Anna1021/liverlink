@@ -230,7 +230,7 @@ def send_notification(object, **kwargs):
         notifying_user = kwargs.get('conv_creator', None)
     else:
         return
-    if user != notifying_user:
+    if user and notifying_user and user != notifying_user:
         Notification.objects.create(user=user, notifying_user=notifying_user, content_object=object)
         
 def send_notification_to_parent(object, notifying_user):
@@ -240,7 +240,7 @@ def send_notification_to_parent(object, notifying_user):
         return
     if isinstance(object, Response):
         user = object.parent.user
-    elif isinstance(object, PostComment):
+    else:
         user = object.parent.author
     if user != notifying_user:
         Notification.objects.create(user=user, notifying_user=notifying_user, content_object=object, 
