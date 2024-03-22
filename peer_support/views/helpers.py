@@ -77,13 +77,6 @@ def conversation_is_direct(request,conversation):
         return True
     return False
 
-def get_message(request,conversation,message_id):
-    conversation_messages = conversation.messages.filter(id=message_id)
-    if conversation_messages.count() == 0 or request.user not in conversation_messages[0].visible_to.all():
-        messages.error(request,"This message does not exist.")
-        return None
-    return conversation_messages.get(id=message_id)
-
 def no_conversation_url(request):
     context = {'user_conversations':request.user.sort_conversations()}
     return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
