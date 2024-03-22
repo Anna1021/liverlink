@@ -157,24 +157,6 @@ friend_request_fixtures = [
     {"sender": patient_fixtures[1], "receiver": parent_fixtures[1]},
 ]
 
-notification_fixtures = [
-    {
-        "title": "Welcome to Peer Support",
-        "description": "Welcome to Peer Support. We are glad to have you here.",
-        "user": patient_fixtures[0],
-    },
-    {
-        "title": "New like to your post",
-        "description": "Your post has received a new like.",
-        "user": patient_fixtures[0],
-    },
-    {
-        "title": "New message",
-        "description": "You have received a new message.",
-        "user": patient_fixtures[0],
-    },
-]
-
 message_fixtures = [
     {"sender": patient_fixtures[0], "content": "Hello, how are you?"},
     {"sender": parent_fixtures[0], "content": "I am good, thank you."},
@@ -195,6 +177,30 @@ conversation_fixtures = [
     {
         "users": [patient_fixtures[0], parent_fixtures[2]],
         "messages": [message_fixtures[1]],
+    },
+]
+
+notification_fixtures = [
+    {
+        "title": "Welcome to Peer Support",
+        "description": "Welcome to Peer Support. We are glad to have you here.",
+        "user": patient_fixtures[0],
+    },
+    {
+        "title": "New Friend Request",
+        "description": "@jackjones has sent you a friend request.",
+        "user": patient_fixtures[0],
+        "notifying_user": parent_fixtures[0],
+        "content_type": ContentType.objects.get_for_model(FriendRequest),
+        "object_id": 1
+    },
+    {
+        "title": "New Conversation",
+        "description": "@jackjones has added you to a conversation.",
+        "user": patient_fixtures[0],
+        "notifying_user": parent_fixtures[0],
+        "content_type": ContentType.objects.get_for_model(Conversation),
+        "object_id": 1
     },
 ]
 
@@ -328,9 +334,6 @@ class Command(BaseCommand):
         self.create_friend_requests()
         self.friend_requests = FriendRequest.objects.all()
 
-        self.create_notifications()
-        self.notifications = Notification.objects.all()
-
         self.create_messages()
         self.messages = Message.objects.all()
 
@@ -354,6 +357,9 @@ class Command(BaseCommand):
 
         self.create_feedbacks()
         self.feedback = Feedback.objects.all()
+
+        self.create_notifications()
+        self.notifications = Notification.objects.all()
 
     def create_patients(self):
         self.generate_patient_fixtures()
@@ -627,15 +633,27 @@ class Command(BaseCommand):
 
     def generate_notification(self):
         user = self.users[randint(0, len(self.users) - 1)]
-        friend_request = None
+        title = None
+        description = None
+        notifying_user = None
+        content_type = None
+        object_id = None
         if self.friend_requests.filter(receiver=user) and random.choice([True, False]):
             friend_request = random.choice(self.friend_requests.filter(receiver=user))
-            title = "Friend Request"
+            notifying_user = friend_request.sender
+            content_type = ContentType.objects.get_for_model(FriendRequest)
+            object_id = friend_request.id
+        elif self.post_comments.filter(post__author=user) and random.choice([True, False]):
+            post_comment = random.choice(self.post_comments.filter(post__author=user))
+            notifying_user = post_comment.author
+            content_type = ContentType.objects.get_for_model(PostComment)
+            object_id = post_comment.id
         else:
             title = self.faker.sentence()
-        description = self.faker.text(max_nb_chars=100)
+            description = self.faker.text(max_nb_chars=100)
         user = {"username": user.username}
-        self.try_create_notification({"title": title, "description": description, "user": user, "friend_request": friend_request})
+        self.try_create_notification({"title": title, "description": description, "user": user, "notifying_user": notifying_user,
+                                      "content_type": content_type, "object_id": object_id})
 
     def generate_conversation(self):
         users = [
@@ -808,7 +826,7 @@ class Command(BaseCommand):
         FriendRequest.objects.create(sender=sender, receiver=receiver)
 
     def create_notification(self, data):
-        data["user"] = self.get_user(data["user"])
+        data["user"] = self.get_user(data["user"]) ##
         Notification.objects.create(**data)
 
     def create_message(self, data):
