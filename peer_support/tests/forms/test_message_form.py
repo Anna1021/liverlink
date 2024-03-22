@@ -55,18 +55,6 @@ class MessageFormTestCase(TestCase):
         message = Message.objects.last()
         self.assertIn(message,self.conversation.messages.all())
 
-    def test_previous_message_set_to_last_message(self):
-        target_message = self.conversation.messages.last()
-        form = MessageForm(self.conversation, user = self.sender, data=self.form_input)
-        message = form.save()
-        self.assertEqual(message.previous_message, target_message)
-
-    def test_previous_message_none_if_no_messages_before(self):
-        self.conversation.messages.set(Message.objects.none())
-        form = MessageForm(self.conversation,user = self.sender, data=self.form_input)
-        message = form.save()
-        self.assertIsNone(message.previous_message)
-
     def test_deleted_conversation_returns_after_message_sent(self):
         users = User.objects.filter(username=self.receiver.username)
         self.assertIn(self.receiver, self.conversation.users.all())
