@@ -27,11 +27,11 @@
         </ul>
     </div>
 </div>
-    {% if from_feed %}
-        <a href="{% url 'post_detail' post_id=post.id %}"  class="profile-subheading">
-    {% else %}
-        <a>
-    {% endif %}
+{% if from_feed %}
+    <a href="{% url 'post_detail' post_id=post.id %}"  class="profile-subheading">
+{% else %}
+    <a>
+{% endif %}
 <div class="card-body">
     <p {% if post|is_object_reported_by_user:user %} data-text="{{ post.content |censor}}"
     data-reported="true" class="text-muted" {% endif %}>{{ post.content |censor}}</p>
@@ -42,10 +42,7 @@
         <button class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
     {% endif %}
     <span class="profile-subheading pl-2" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
-</div>
-{% if from_feed %}
-    <a href="{% url 'post_detail' post_id=post.id %}"  class="profile-subheading">    </a>
-{% endif %}
+</div></a>
 <script>
     var likePostUrl = "{% url 'like_post' 0 %}";
 </script>

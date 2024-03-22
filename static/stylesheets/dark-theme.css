@@ -110,6 +110,7 @@
 .dark-theme .profile-subheading {
   color: #ffffff;
   font-weight: 600;
+  text-decoration: none;
 }
 
 .dark-theme .profile-head h5 {

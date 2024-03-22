@@ -139,6 +139,7 @@
 .light-theme .profile-subheading {
   color: #000000;
   font-weight: 600;
+  text-decoration: none;
 }
 
 .light-theme .profile-head h5 {
