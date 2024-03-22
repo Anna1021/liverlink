@@ -826,7 +826,7 @@ class Command(BaseCommand):
         FriendRequest.objects.create(sender=sender, receiver=receiver)
 
     def create_notification(self, data):
-        data["user"] = self.get_user(data["user"]) ##
+        data["user"] = self.get_user(data["user"])
         Notification.objects.create(**data)
 
     def create_message(self, data):

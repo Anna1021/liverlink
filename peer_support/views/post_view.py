@@ -14,6 +14,9 @@ class PostView(LoginRequiredMixin,FormView):
         if not post:
             messages.error(request, "This post does not exist")
             return redirect("feed")
+        if post.author in request.user.blocked_users.all() or request.user in post.author.blocked_users.all():
+            messages.error(request, "You cannot view this post!")
+            return redirect('feed')
         post.liked_by_user = post.likes.filter(id=request.user.id).exists()
         comments = PostComment.objects.filter(post=post, parent=None) 
         comment_form = CommentForm(request.user,post)
