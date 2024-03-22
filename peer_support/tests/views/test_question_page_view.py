@@ -1,6 +1,7 @@
 """Tests of the Question Page view."""
 from django.test import TestCase, Client
-from peer_support.models import Question, Response, User
+from django.contrib.contenttypes.models import ContentType
+from peer_support.models import Question, Response, User, Notification
 from peer_support.forms import NewResponseForm
 from django.urls import reverse
 
@@ -38,3 +39,27 @@ class QuestionPageTestCase(TestCase):
         self.assertTrue(Response.objects.filter(body='This is a test response.', user=self.user, question=self.question).exists())
         response_id = Response.objects.get(body='This is a test response.', user=self.user, question=self.question).id
         self.assertRedirects(response, f'/question/{self.question.id}#{response_id}')
+
+    def test_question_page_valid_POST_sends_notification(self):
+        form_data = {'body': 'This is a test response.'}
+        replying_user = User.objects.get(id=2)
+        self.client.logout()
+        self.client.force_login(replying_user)
+        notification_before_count = Notification.objects.count()
+        response = self.client.post(self.url, form_data)
+        self.assertEqual(response.status_code, 302)
+        notification_after_count = Notification.objects.count()
+        self.assertEqual(notification_before_count + 1, notification_after_count)
+        self.assertTrue(Response.objects.filter(body='This is a test response.', user=replying_user, question=self.question).exists())
+        response = Response.objects.get(body='This is a test response.', user=replying_user, question=self.question)
+        content_type_id = ContentType.objects.get_for_model(Response)
+        notification = Notification.objects.get(content_type=content_type_id, object_id=response.id)
+        self.assertEqual(notification.title, "New Response")
+        self.assertEqual(notification.description, "@janedoe has replied to your question.")
+        self.assertEqual(notification.user, self.user)
+        self.assertEqual(notification.notifying_user, replying_user)
+        self.assertEqual(notification.content_type, content_type_id)
+        self.assertEqual(notification.object_id, response.id)
+        self.assertEqual(notification.content_object, response)
+
+
