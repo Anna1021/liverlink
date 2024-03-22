@@ -65,7 +65,7 @@ class FeedViewTestCase(TestCase):
         for i in range(10):
             Post.objects.create(
                 author=self.user,
-                text="Page should only have ten posts"
+                content="Page should only have ten posts"
             )
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
