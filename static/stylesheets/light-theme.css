@@ -162,11 +162,15 @@
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
 }
-.light-theme .nav-tabs,
+.light-theme .profile-head .nav-tabs,
 .light-theme .nav-link.active{
   border: none;
   border-bottom: 2px solid #56555e;
 }
+.light-theme .nav-link {
+  color: #4A7A7A;
+}
+
 
 .light-theme .form-control {
   display: block;

@@ -118,11 +118,16 @@
   color: #ffffff;
 }
 
-.dark-theme .nav-tabs,
+.dark-theme .profile-head .nav-tabs,
 .dark-theme .nav-link.active {
   border: none;
   border-bottom: 2px solid #91BBD3;
 }
+
+.dark-theme .nav-link {
+  color: #91BBD3
+}
+
 .dark-theme #loginBox {
   border-radius: 20px;
   background-color:#2E2D38;
