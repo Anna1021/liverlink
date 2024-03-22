@@ -3,7 +3,6 @@ from django.test import TestCase
 from peer_support.models import Question, Report, Post, User
 from django.template import Context, Template
 from django.contrib.contenttypes.models import ContentType
-from django.utils import timezone
 
 class ReportingTagsTestCase(TestCase):
     """Unit tests for the reporting template tags"""

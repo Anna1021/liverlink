@@ -3,7 +3,6 @@ from django.contrib.contenttypes.models import ContentType
 from peer_support.models import Report
 from django.urls import reverse
 from django.utils.html import format_html
-from django.contrib.contenttypes.models import ContentType
 
 register = template.Library()
 

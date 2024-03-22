@@ -1,7 +1,6 @@
 """Tests of the post view."""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.forms import PostForm
 from peer_support.models import User, Post, PostComment, Report
 from django.contrib import messages
 

@@ -1,14 +1,12 @@
 """Unit tests of reporting javascript."""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from peer_support.models import User, FriendRequest, Notification
+from peer_support.models import User
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support.ui import Select
 
 import time
 class ReportingJavascriptTest(StaticLiveServerTestCase):
@@ -27,7 +25,7 @@ class ReportingJavascriptTest(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        #options.add_argument("--headless")
+        options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
         cls.selenium = WebDriver(options=options)
         cls.selenium.maximize_window()

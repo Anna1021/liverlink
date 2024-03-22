@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, reverse
-from peer_support.models import Report, Message, User, Post, PostComment
+from peer_support.models import Report, Message, User
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View

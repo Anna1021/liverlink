@@ -7,7 +7,7 @@ from .helpers import retrieve_friend_posts
 from django.contrib import messages
 
 class FeedView(LoginRequiredMixin, FormView):
-    """Feed view."""
+    """Displays posts on both global and friend feeds."""
     
     def get(self,request):
         feed_type = request.GET.get('feed_type','global')  
