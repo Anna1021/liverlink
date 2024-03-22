@@ -19,5 +19,6 @@ class Command(BaseCommand):
         Question.objects.all().delete()
         Report.objects.all().delete()
         Response.objects.all().delete()
+        Feedback.objects.all().delete()
         User.objects.filter(is_staff=False).delete()
         

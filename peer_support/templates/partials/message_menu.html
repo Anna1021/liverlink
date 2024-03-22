@@ -2,28 +2,18 @@
     <a class="nav-link" href="#" id="message-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bi-three-dots-vertical"></i>
     </a>
-    <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="message-menu-dropdown" >
-        <li><a class="dropdown-item" href="{% url 'delete_message' conversation.id message.id %}">Delete for me</a></li>
-        {% if message.sender == user %}
-        <li><a class="dropdown-item" name="delete_all" value=":3"
-                href="{% url 'delete_message' conversation.id message.id %}">Delete for everyone</a></li>
-        {% endif %}
-        {% if message.sender != user %}
-        <li>
-            <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
-                Report
-                <ul class="dropdown-menu nested-dropdown">
-                    <li>
-                        <form method="post">
-                        {% csrf_token %}
-                        {% include 'partials/bootstrap_form.html' with form=report_form %}
-                        <input type="hidden" name="action" value="{{message.id}}">
-                        <button type="submit" name="report">Report</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        {%endif%}
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="message-menu-dropdown">
+        <li><form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="first_message" value="{{ first_message }}">
+            <input type="hidden" name="action" value="{{message.id}}">
+            <button class= "dropdown-item" type="submit" name="delete" value="me">Delete for me</button>
+            {% if user == message.sender %}
+            <button class= "dropdown-item delete_all" type="submit" name="delete" value="all">Delete for everyone</button>
+            {% else %}
+                {% include 'partials/bootstrap_form.html' with form=report_form %}
+                <button type="submit">Report</button>
+            {% endif %}
+        </form></li>
     </ul>
 </div>
