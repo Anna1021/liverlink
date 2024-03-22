@@ -1,12 +1,18 @@
 from django.contrib import admin
-from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Report, Message, Post
-
+from .models import *
 
 class UserProfileInline(admin.StackedInline):
     """Configuration of the admin interface for user profiles."""
     """Adds the user profile interface to the user interface."""
     model = UserProfile
     can_delete = False
+
+@admin.register(PostComment)
+class PostCommentAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for post comments."""
+    
+    list_display = ('id', 'post', 'author', 'parent', 'content', 'created_at')
+    list_filter = ('created_at', 'author')
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -52,6 +58,14 @@ class ReferralAdmin(admin.ModelAdmin):
         'referrer', 'code'
     ]
 
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for feedback."""
+
+    list_display = [
+        'title', 'content', 'submitted_at'
+    ]
+
 @admin.register(Conversation)
 class ConversationAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for conversations."""
@@ -90,7 +104,23 @@ class MessageAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for friend requests."""
 
     list_display = [
-        'id','sender','content', 'send_time', 'previous_message'
+        'id','sender','content', 'send_time'
+    ]
+
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for questions."""
+
+    list_display = [
+        'id', 'author', 'title'
+    ]
+
+@admin.register(Response)
+class ResponseAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for responses."""
+
+    list_display = [
+        'id', 'user', 'question', 'parent', 'body'
     ]
 
 @admin.register(Post)
@@ -101,7 +131,5 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('created_at',)
     ordering = ('-created_at',)
     list_display = [
-        'text','author', 'created_at'
+        'content','author', 'created_at'
     ]
-
-    

@@ -22,10 +22,11 @@ class ConversationTagsTestCase(TestCase):
 
     def test_no_sender_for_same_sender(self):
         other_user = User.objects.get(username='@petrapickles')
-        message = self.group_conversation.messages.filter(sender=self.user).all()[1]
-        self.assertEqual(message.sender,message.previous_message.sender)
+        first_message = self.group_conversation.messages.filter(sender=self.user).all()[0]
+        second_message = self.group_conversation.messages.filter(sender=self.user).all()[1]
+        self.assertEqual(first_message.sender,second_message.sender)
         target_sender = ''
-        actual_sender = conversation_tags.sender_if_applicable(message,other_user,self.group_conversation)
+        actual_sender = conversation_tags.sender_if_applicable(second_message,other_user,self.group_conversation)
         self.assertEqual(target_sender,actual_sender)
 
     def test_no_senders_for_direct_conversation(self):
@@ -50,14 +51,15 @@ class ConversationTagsTestCase(TestCase):
 
     def test_sender_updates_if_previous_with_same_sender_deleted(self):
         other_user = User.objects.get(username='@petrapickles')
-        message = self.group_conversation.messages.all()[1]
+        first_message = self.group_conversation.messages.all()[0]
+        second_message = self.group_conversation.messages.all()[1]
         target_sender = ''
-        actual_sender = conversation_tags.sender_if_applicable(message,other_user,self.group_conversation)
+        actual_sender = conversation_tags.sender_if_applicable(second_message,other_user,self.group_conversation)
         self.assertEqual(target_sender,actual_sender)
-        message.previous_message.delete([other_user])
-        message = self.group_conversation.messages.all()[1]
+        first_message.delete([other_user])
+        second_message = self.group_conversation.messages.all()[1]
         target_sender = '@johndoe'
-        actual_sender = conversation_tags.sender_if_applicable(message,other_user,self.group_conversation)
+        actual_sender = conversation_tags.sender_if_applicable(second_message,other_user,self.group_conversation)
         self.assertEqual(target_sender,actual_sender)
 
     def test_correct_direct_conversation_names(self):
