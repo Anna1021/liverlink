@@ -24,6 +24,15 @@ class ReportingTagsTestCase(TestCase):
         self.report_post = Report.objects.get(pk=4)
         self.report_question = Report.objects.get(pk=5)
         self.report_user = Report.objects.get(pk=2)
+        post_content_type = ContentType.objects.get_for_model(Post)
+        self.report_post.content_type = post_content_type
+        self.report_post.save()
+        question_content_type = ContentType.objects.get_for_model(Question)
+        self.report_question.content_type = question_content_type
+        self.report_question.save()
+        user_content_type = ContentType.objects.get_for_model(User)
+        self.report_user.content_type = user_content_type
+        self.report_user.save()
         self.reported_question = Question.objects.get(pk=self.report_question.object_id)
         self.reported_post = Post.objects.get(pk=self.report_post.object_id)
         self.reported_user = User.objects.get(pk=self.report_user.object_id)

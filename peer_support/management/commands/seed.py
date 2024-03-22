@@ -681,16 +681,16 @@ class Command(BaseCommand):
 
     def generate_post(self):
         author = self.users[randint(0, len(self.users) - 1)]
-        text = self.faker.text(max_nb_chars=280)
+        content = self.faker.text(max_nb_chars=280)
         visibility = self.faker.random_element(elements=("G", "F"))
         author = {"username": author.username}
-        self.try_create_post({"author": author, "content": text, "visibility": visibility})
+        self.try_create_post({"author": author, "content": content, "visibility": visibility})
 
     def generate_post_comment(self):
         post = self.posts[randint(0, len(self.posts) - 1)]
         author = self.users[randint(0, len(self.users) - 1)]
         content = self.faker.text(max_nb_chars=255)
-        post = {"content": post.text}
+        post = {"content": post.content}
         author = {"username": author.username}
         self.try_create_post_comment(
             {"post": post, "author": author, "content": content}
@@ -873,7 +873,7 @@ class Command(BaseCommand):
         return ContentType.objects.get(model=model_name)
 
     def get_post(self, data):
-        return Post.objects.filter(text=data["content"]).first()
+        return Post.objects.filter(content=data["content"]).first()
 
 
 def create_username(first_name, last_name):

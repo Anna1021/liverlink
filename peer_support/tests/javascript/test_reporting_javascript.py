@@ -5,10 +5,10 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from peer_support.models import User
+from peer_support.models import User,  Report, Post
 from selenium.common.exceptions import TimeoutException
+from django.contrib.contenttypes.models import ContentType
 
-import time
 class ReportingJavascriptTest(StaticLiveServerTestCase):
     """Unit tests of reporting javascript."""
 
@@ -17,9 +17,7 @@ class ReportingJavascriptTest(StaticLiveServerTestCase):
         'peer_support/tests/fixtures/default_patient.json',
         'peer_support/tests/fixtures/default_admin.json',
         'peer_support/tests/fixtures/other_users.json',
-        'peer_support/tests/fixtures/default_post.json',
-        'peer_support/tests/fixtures/default_report_post.json',
-    ]
+        'peer_support/tests/fixtures/default_post.json',]
 
     @classmethod
     def setUpClass(cls):
@@ -38,9 +36,16 @@ class ReportingJavascriptTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_reported_object_muted(self):
-        user = User.objects.get(username='@admin')
-        user.first_login = False
-        user.save()
+        self.user = User.objects.get(username='@admin')
+        post_content_type = ContentType.objects.get_for_model(Post)
+        self.report_post = Report.objects.create(
+            reporter=self.user,
+            reason="other",
+            content_type=post_content_type,
+            object_id=Post.objects.first().pk
+        )
+        self.user.first_login = False
+        self.user.save()
         self.selenium.get(f'{self.live_server_url}/log_in/')
         try:
             username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))

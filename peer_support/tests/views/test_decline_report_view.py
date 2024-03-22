@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.messages import get_messages
 from peer_support.models import Report, Message, User
+from django.contrib.contenttypes.models import ContentType
 
 class DeclineReportViewTestCase(TestCase):
     """Tests of the decline report view"""
@@ -21,7 +22,13 @@ class DeclineReportViewTestCase(TestCase):
         self.admin_user = User.objects.get(username='@admin')
         self.message_to_report = Message.objects.first() 
         self.report_message = Report.objects.get(pk=1)
+        message_content_type = ContentType.objects.get_for_model(Message)
+        self.report_message.content_type = message_content_type
+        self.report_message.save()
         self.report_user = Report.objects.get(pk=2)
+        user_content_type = ContentType.objects.get_for_model(User)
+        self.report_user.content_type = user_content_type
+        self.report_user.save()
         self.message_to_report = Message.objects.get(pk=self.report_message.object_id)
         self.user_to_report = User.objects.get(pk=self.report_user.object_id)
         self.url_message = reverse('decline_report', kwargs={'report_id':self.report_message.id})
