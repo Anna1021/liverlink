@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import User, Patient, Parent, Mentor, Referral, Conversation, UserProfile, Notification, FriendRequest, Report, Message, Post, Feedback
-
+from .models import *
+# Register your models here.
 
 class UserProfileInline(admin.StackedInline):
     """Configuration of the admin interface for user profiles."""
@@ -98,7 +98,23 @@ class MessageAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for friend requests."""
 
     list_display = [
-        'id','sender','content', 'send_time', 'previous_message'
+        'id','sender','content', 'send_time'
+    ]
+
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for questions."""
+
+    list_display = [
+        'id', 'author', 'title'
+    ]
+
+@admin.register(Response)
+class ResponseAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for responses."""
+
+    list_display = [
+        'id', 'user', 'question', 'parent', 'body'
     ]
 
 @admin.register(Post)
@@ -111,5 +127,3 @@ class PostAdmin(admin.ModelAdmin):
     list_display = [
         'text','author', 'created_at'
     ]
-
-    
