@@ -6,6 +6,7 @@ from peer_support.models import Post
 from peer_support.forms import PostForm, ReportForm
 from .helpers import retrieve_friend_posts
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 
 class FeedView(LoginRequiredMixin, FormView):
@@ -44,7 +45,11 @@ class FeedView(LoginRequiredMixin, FormView):
         if feed_type != 'friends':
             user_posts = user_posts|Post.objects.filter(visibility='G')
         user_posts = user_posts.order_by("-created_at")
-        return user_posts
+        annotated_posts = self.annotate_posts(request, user_posts)
+        paginator = Paginator(annotated_posts, 10)
+        page_number = request.GET.get('page')
+        posts = paginator.get_page(page_number)
+        return posts
 
     def comment_post(self, request, post_id):
         post = get_object_or_404(Post, id=post_id)

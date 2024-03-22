@@ -59,8 +59,20 @@ class FeedViewTestCase(TestCase):
         form = response.context["form"]
         self.assertTrue(isinstance(form, PostForm))
         self.assertFalse(form.is_bound)
-        self.assertNotIn("first", response.context)
+        self.assertNotIn('first',response.context)
 
+    def test_correct_pagination(self):
+        for i in range(10):
+            Post.objects.create(
+                author=self.user,
+                text="Page should only have ten posts"
+            )
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'feed.html')
+        posts = response.context['posts']
+        self.assertEqual(len(posts),10)
+    
     def test_post_text_must_not_be_empty(self):
         self.form_input['content'] = ''
         before_count = Post.objects.count()
