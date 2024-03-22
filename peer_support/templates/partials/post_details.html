@@ -1,6 +1,9 @@
 {% load profanity %}
 {% load static %}
 {% load reporting_tags %}
+{% load post_tags %}
+{% csrf_token %}
+<meta name="csrf-token" content="{{ csrf_token }}">
 <div class="post-header d-flex justify-content-between align-items-start">
     <a href="{% url 'profile' post.author.username %}" class="flex-grow-1">
         <h4 class="font-weight-bold">{{ post.author }}</h4>
@@ -31,6 +34,16 @@
         <p {% if post|is_object_reported_by_user:user %} data-text="{{ post.content |censor}}"
         data-reported="true" class="text-muted" {% endif %}>{{ post.content |censor}}</p>
         <p>{{ post.created_at }}</p>
+        {% if post.liked_by_user %}
+        <button class="btn apply-btn bi bi-hand-thumbs-up-fill like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
+        {% else %}
+            <button class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
+        {% endif %}
+        <span class="profile-subheading pl-2" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
     </a>
 </div>
+<script>
+    var likePostUrl = "{% url 'like_post' 0 %}";
+</script>
+<script src="{% static 'js/post_details.js' %}"></script>
 <script src="{% static 'js/reporting.js' %}"></script>

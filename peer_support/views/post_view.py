@@ -10,11 +10,12 @@ from django.contrib import messages
 class PostView(LoginRequiredMixin,FormView):
     """Show the detail of a post and comment on the post"""
 
-    def get(self,request,post_id):
-        post = get_post(request,post_id)
+    def get(self, request, post_id):
+        post = get_post(request, post_id)
         if not post:
-            messages.error(request,"This post does not exist")
-            return redirect('feed')
+            messages.error(request, "This post does not exist")
+            return redirect("feed")
+        post.liked_by_user = post.likes.filter(id=request.user.id).exists()
         comments = PostComment.objects.filter(post=post, parent=None) 
         comment_form = CommentForm(request.user,post)
         return render(request, 'post_detail.html', {'post': post,'comments': comments, 'comment_form': comment_form,'report_form': ReportForm()})
@@ -52,7 +53,7 @@ class PostView(LoginRequiredMixin,FormView):
         post = get_object_or_404(Post, pk=post_id)
         form = CommentForm(request.user,post,data=request.POST)
         if form.is_valid():
-            parent_id = request.POST.get('parent_id')
+            parent_id = request.POST.get("parent_id")
             form.save(parent_id)
         else:
             messages.error(request, "There was an issue with the report.")

@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from peer_support.models import User
 
+
 class Patient(User):
     """Model used for patient authentication, and patient related information."""
 
@@ -10,5 +11,5 @@ class Patient(User):
     transplant = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        verbose_name = 'Patient'
-        verbose_name_plural = 'Patients'
+        verbose_name = "Patient"
+        verbose_name_plural = "Patients"

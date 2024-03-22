@@ -1,10 +1,12 @@
 from django.views.generic.edit import FormView
 from django.shortcuts import redirect, render,reverse, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Q
 from peer_support.models import Post
 from peer_support.forms import PostForm, ReportForm
 from .helpers import retrieve_friend_posts
 from django.contrib import messages
+
 
 class FeedView(LoginRequiredMixin, FormView):
     """Displays posts on both global and friend feeds."""
@@ -13,7 +15,7 @@ class FeedView(LoginRequiredMixin, FormView):
         feed_type = request.GET.get('feed_type','global')  
         user_posts = self.retrieve_posts(request)
         form = PostForm(request.user)
-        current_user = request.user 
+        current_user = request.user
         if current_user.first_login == True:
             current_user.first_login = False
             current_user.save()
@@ -28,16 +30,16 @@ class FeedView(LoginRequiredMixin, FormView):
         form = PostForm(request.user,data=request.POST)
         if form.is_valid():
             post = form.save()
-            return redirect(reverse('feed'), post_id=post.id)
+            return redirect(reverse("feed"), post_id=post.id)
         else:
-            feed_type = request.GET.get('feed_type')
+            feed_type = request.GET.get("feed_type")
             user_posts = self.retrieve_posts(request)
-            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
+            return render(request,  "feed.html", {"posts": user_posts, "feed_type": feed_type, "form": form})
 
-    def retrieve_posts(self,request):
+    def retrieve_posts(self, request):
         """Retrieve posts and display them in chronological order."""
 
-        feed_type = request.GET.get('feed_type') 
+        feed_type = request.GET.get("feed_type")
         user_posts = retrieve_friend_posts(request)
         if feed_type != 'friends':
             user_posts = user_posts|Post.objects.filter(visibility='G')
