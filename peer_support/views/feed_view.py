@@ -50,6 +50,13 @@ class FeedView(LoginRequiredMixin, FormView):
         page_number = request.GET.get('page')
         posts = paginator.get_page(page_number)
         return posts
+    
+    def annotate_posts(self, request, posts):
+        """Annotate each post with whether the current user has liked the post."""
+
+        return posts.annotate(
+            liked_by_user=Count("likes", filter=Q(likes=request.user))
+        ).order_by("-created_at")
 
     def report_post(self, request, post_id):
         post = get_object_or_404(Post, id=post_id)
@@ -59,10 +66,4 @@ class FeedView(LoginRequiredMixin, FormView):
             messages.success(request, "Post reported successfully.")
         else:
             messages.error(request, "There was an issue with the report.")
-    
-    def annotate_posts(self, request, posts):
-        """Annotate each post with whether the current user has liked the post."""
 
-        return posts.annotate(
-            liked_by_user=Count("likes", filter=Q(likes=request.user))
-        ).order_by("-created_at")

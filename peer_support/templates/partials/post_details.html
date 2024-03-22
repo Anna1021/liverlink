@@ -35,13 +35,14 @@
 <div class="card-body">
     <h6 {% if post|is_object_reported_by_user:user %} data-text="{{ post.content |censor}}"
     data-reported="true" class="text-muted" {% endif %}>{{ post.content |censor}}</h6>
-    <h6>{{ post.created_at }}</h6>
-    {% if post.liked_by_user %}
-        <button class="btn apply-btn bi bi-hand-thumbs-up-fill like-post mt-2" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
-    {% else %}
-        <button class="btn apply-btn bi bi-hand-thumbs-up like-post mt-2" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
-    {% endif %}
-    <span class="profile-subheading pl-2" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
+    <div class="d-flex align-items-center justify-content-start mt-3">
+        {% if post.liked_by_user %}
+            <button class="btn apply-btn bi bi-hand-thumbs-up-fill like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
+        {% else %}
+            <button class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
+        {% endif %}
+        <span class="profile-subheading pl-3 align-self-center" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
+    </div>
 </div></a>
 <script>
     var likePostUrl = "{% url 'like_post' 0 %}";
