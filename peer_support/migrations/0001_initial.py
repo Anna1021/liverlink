@@ -58,6 +58,19 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Feedback',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('title', models.CharField(max_length=50)),
+                ('content', models.CharField(max_length=500)),
+                ('submitted_at', models.DateTimeField(auto_now_add=True)),
+            ],
+            options={
+                'verbose_name': 'Feedback',
+                'verbose_name_plural': 'Feedback',
+            },
+        ),
+        migrations.CreateModel(
             name='FriendRequest',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -178,7 +191,7 @@ class Migration(migrations.Migration):
             name='Report',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('reason', models.CharField(choices=[('spam', 'Spam'), ('abuse', 'Abuse'), ('other', 'Other')], max_length=50)),
+                ('reason', models.CharField(choices=[('spam', 'Spam'), ('abuse', 'Abuse'), ('other', 'Other')], default='spam', max_length=50)),
                 ('reported_at', models.DateTimeField(auto_now_add=True)),
                 ('object_id', models.PositiveIntegerField()),
                 ('content_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contenttypes.contenttype')),
@@ -217,7 +230,6 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('content', models.CharField(max_length=100)),
                 ('send_time', models.DateTimeField(default=django.utils.timezone.now)),
-                ('previous_message', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='peer_support.message')),
                 ('sender', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
                 ('visible_to', models.ManyToManyField(blank=True, related_name='visible_to', to=settings.AUTH_USER_MODEL)),
             ],

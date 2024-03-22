@@ -13,7 +13,6 @@ from .profile_deactivate_view import deactivate_user
 from .conversation_view import ConversationView
 from .peer_select_view import PeerSelectView
 from .create_conversation_view import CreateConversationView
-from .delete_message_view import DeleteMessageView
 from .new_question_page_view import new_question_page
 from .reply_page_view import ReplyPageView
 from .resources_view import resources
@@ -40,6 +39,9 @@ from .decline_report_view import DeclineReportView
 from .leave_conversation_view import LeaveConversationView
 from .information_view import InformationView
 from .delete_conversation_view import DeleteConversationView
+from .submit_feedback_view import SubmitFeedbackView
+from .feedback_view import FeedbackView
+from .delete_feedback_view import delete_feedback
 from .demographic_information import demographic_information
 from .delete_question_view import delete_question
 from .delete_reply_view import delete_reply

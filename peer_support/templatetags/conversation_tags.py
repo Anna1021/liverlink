@@ -6,9 +6,10 @@ register = template.Library()
 def sender_if_applicable(message,user,conversation):
     if conversation.as_group() is None:
         return ""
-    previous = message.previous_message
+    messages = conversation.messages.filter(id__lt=message.id).order_by('-id')
+    previous = messages.first()
     while previous is not None and user not in previous.visible_to.all():
-        previous = previous.previous_message
+        previous = messages.exclude(id=previous.id).first()
     if previous is not None and previous.sender==message.sender:
         return ""
     return message.sender.username
@@ -19,3 +20,13 @@ def conversation_name(user,conversation):
         return str(conversation.as_group())
     other_user = conversation.users.exclude(pk=user.pk)[0]
     return other_user.username
+
+@register.filter
+def visible_messages(user,conversation):
+    return conversation.messages.filter(visible_to__in=[user])
+
+@register.filter
+def load_messages(messages,number):
+    if messages.count()==0:
+        return messages
+    return messages.filter(id__gte=int(number))
