@@ -75,7 +75,6 @@ class ReportingTagsTestCase(TestCase):
         rendered = template.render(context)
         self.assertIn("Content not available", rendered)
 
-
     def test_display_reported_content_for_invalid(self):
         faulty_report = Report.objects.create(
                 reporter=self.admin_user,
