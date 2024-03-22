@@ -14,8 +14,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
         ('contenttypes', '0002_remove_content_type_name'),
+        ('auth', '0012_alter_user_first_name_max_length'),
     ]
 
     operations = [
@@ -190,7 +190,7 @@ class Migration(migrations.Migration):
             name='Report',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('reason', models.CharField(choices=[('spam', 'Spam'), ('abuse', 'Abuse'), ('other', 'Other')], max_length=50)),
+                ('reason', models.CharField(choices=[('spam', 'Spam'), ('abuse', 'Abuse'), ('other', 'Other')], default='spam', max_length=50)),
                 ('reported_at', models.DateTimeField(auto_now_add=True)),
                 ('object_id', models.PositiveIntegerField()),
                 ('content_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contenttypes.contenttype')),
@@ -229,7 +229,6 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('content', models.CharField(max_length=100)),
                 ('send_time', models.DateTimeField(default=django.utils.timezone.now)),
-                ('previous_message', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='peer_support.message')),
                 ('sender', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
                 ('visible_to', models.ManyToManyField(blank=True, related_name='visible_to', to=settings.AUTH_USER_MODEL)),
             ],
