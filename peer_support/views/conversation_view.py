@@ -86,7 +86,6 @@ class ConversationView(LoginRequiredMixin, FormView):
             users = conversation.users.filter(username=request.user.username)
         message.delete(users)
 
-
     def handle_post_message(self, request, conversation_id):
         """Handles the post request for a message."""
 
