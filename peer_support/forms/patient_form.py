@@ -3,6 +3,7 @@ from peer_support.forms import UserForm
 from peer_support.models import Patient
 from .form_choices import CONDITION_CHOICES, TRANSPLANT_CHOICES
 
+
 class PatientForm(forms.ModelForm):
     """Form to update patient profiles."""
 
@@ -14,5 +15,5 @@ class PatientForm(forms.ModelForm):
         """Form options."""
 
         model = Patient
-        fields = UserForm.Meta.fields + ['condition', 'age_of_diagnosis', 'transplant']
+        fields = UserForm.Meta.fields + ["condition", "age_of_diagnosis", "transplant"]
         widgets = UserForm.Meta.widgets
