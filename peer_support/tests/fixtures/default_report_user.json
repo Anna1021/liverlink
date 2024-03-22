@@ -3,11 +3,11 @@
     "model": "peer_support.report",
     "pk": 2,
     "fields": {
-      "reporter": 8,
+      "reporter": 11,
       "reason": "spam",
       "reported_at": "2024-03-07T12:00:00Z",
       "content_type": 6,
-      "object_id": 2
+      "object_id": 1
     }
   }
 ]

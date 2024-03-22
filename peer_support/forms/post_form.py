@@ -2,15 +2,15 @@ from django import forms
 from peer_support.models import Post
 
 class PostForm(forms.ModelForm):
-    """Form to ask user for post text.
+    """Form to ask user for post content.
     The post author must be by the post creator.
     """
     class Meta:
 
         model = Post
-        fields = ['visibility', 'text']
+        fields = ['visibility', 'content']
         widgets = {
-            'text': forms.Textarea(attrs={'rows':2,'cols':50})
+            'content': forms.Textarea(attrs={'rows':2,'cols':50})
 
         }
     visibility = forms.ChoiceField(choices=[
@@ -26,7 +26,7 @@ class PostForm(forms.ModelForm):
         super().save(commit=False)
         post = Post.objects.create(
             author=self.author,
-            text=self.cleaned_data['text'],
+            content=self.cleaned_data['content'],
             visibility=self.cleaned_data['visibility']
         )
         return post

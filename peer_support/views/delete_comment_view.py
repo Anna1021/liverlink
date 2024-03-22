@@ -6,9 +6,11 @@ from .helpers import get_post, get_comment
 
 
 class DeleteCommentView(LoginRequiredMixin, View):
-    """Delete comment"""
-
+    """Allows authors of comments to delete"""
+    
     def get(self, request, comment_id):
+        """Checks user is authorised to delete comment then deletes it"""
+
         comment = get_comment(comment_id)
         post = None
         if comment:

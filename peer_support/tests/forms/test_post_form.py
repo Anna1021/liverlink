@@ -15,7 +15,7 @@ class PostFormTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
         self.form_input = {
-            'text':"Test post.",
+            'content':"Test post.",
             'visibility':"G"
         }
         self.post = Post.objects.get(pk=1)
@@ -26,22 +26,22 @@ class PostFormTestCase(TestCase):
     
     def test_form_has_necessary_fields(self):
         form = PostForm(self.user)
-        self.assertIn('text', form.fields)
+        self.assertIn('content', form.fields)
         self.assertIn('visibility',form.fields)
     
     def test_form_uses_model_validation(self):
-        self.form_input['text'] = 'x' * 281
+        self.form_input['content'] = 'x' * 281
         form = PostForm(self.user,data=self.form_input)
         self.assertFalse(form.is_valid())
-        self.assertIn('text', form.errors)
+        self.assertIn('content', form.errors)
 
-    def test_new_text_form_empty_text(self):
+    def test_new_content_form_empty_content(self):
         form_data = self.form_input.copy()
-        form_data['text'] = ''
+        form_data['content'] = ''
         form = PostForm(self.user,data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertIn('text', form.errors)
-        self.assertEqual(form.errors['text'],
+        self.assertIn('content', form.errors)
+        self.assertEqual(form.errors['content'],
                          ['This field is required.'])
 
     def test_form_must_save_correctly(self):
@@ -51,6 +51,6 @@ class PostFormTestCase(TestCase):
         after_count = Post.objects.count()
         self.assertEqual(after_count, before_count+1)
         self.assertEqual(post.author,self.user)
-        self.assertEqual(post.text,"Test post.")
+        self.assertEqual(post.content,"Test post.")
         self.assertEqual(post.visibility,"G")
 

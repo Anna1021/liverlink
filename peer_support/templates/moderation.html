@@ -5,7 +5,7 @@
 <div class="mb-3">
     <h1 class="mt-2 mb-3">Reports</h1>
     {% for report in reports %}
-        {% include 'partials/report.html' %}
+        {% include 'partials/report.html' with report=report %}
     {% empty %}
         <p>No reports found.</p>
     {% endfor %}

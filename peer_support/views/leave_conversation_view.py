@@ -12,15 +12,12 @@ class LeaveConversationView(LoginRequiredMixin, View):
         conversation = get_conversation(request, conversation_id)
         if not conversation:
             return no_conversation_url(request)
-        if conversation_is_direct(request, conversation):
+        if conversation_is_direct(request,conversation):
             context = {
-                "form": MessageForm(conversation, user=request.user),
-                "conversation": conversation,
-                "user_conversations": request.user.sort_conversations(),
-            }
-            return redirect(
-                reverse("conversation", kwargs={"conversation_id": conversation_id}),
-                context,
-            )
+                'form': MessageForm(conversation, user=request.user),
+                'conversation': conversation,
+                'user_conversations': request.user.sort_conversations()
+                }
+            return redirect(reverse("conversation",kwargs={'conversation_id':conversation_id}))
         conversation.as_group().remove_user(request.user)
         return no_conversation_url(request)
