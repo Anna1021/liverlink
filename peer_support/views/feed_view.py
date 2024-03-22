@@ -11,8 +11,7 @@ class FeedView(LoginRequiredMixin, FormView):
     
     def get(self,request):
         feed_type = request.GET.get('feed_type','global')  
-        page_number = request.GET.get('page')
-        user_posts = self.retrieve_posts(request,page_number)
+        user_posts = self.retrieve_posts(request)
         form = PostForm(request.user)
         current_user = request.user 
         if current_user.first_login == True:
@@ -32,7 +31,7 @@ class FeedView(LoginRequiredMixin, FormView):
             user_posts = self.retrieve_posts(request)
             return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
 
-    def retrieve_posts(self,request,page):
+    def retrieve_posts(self,request):
         """Retrieve posts and display them in chronological order."""
 
         feed_type = request.GET.get('feed_type') 
@@ -41,6 +40,7 @@ class FeedView(LoginRequiredMixin, FormView):
             user_posts = user_posts|Post.objects.filter(visibility='G')
         user_posts = user_posts.order_by("-created_at")
         paginator = Paginator(user_posts, 10)
-        posts = paginator.get_page(page)
+        page_number = request.GET.get('page')
+        posts = paginator.get_page(page_number)
         return posts
         
