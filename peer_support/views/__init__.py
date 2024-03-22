@@ -39,6 +39,9 @@ from .decline_report_view import DeclineReportView
 from .leave_conversation_view import LeaveConversationView
 from .information_view import InformationView
 from .delete_conversation_view import DeleteConversationView
+from .submit_feedback_view import SubmitFeedbackView
+from .feedback_view import FeedbackView
+from .delete_feedback_view import delete_feedback
 from .demographic_information import demographic_information
 from .delete_question_view import delete_question
 from .delete_reply_view import delete_reply

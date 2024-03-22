@@ -1,0 +1,13 @@
+{% extends 'dashboard.html' %}
+{% block page %}
+{% load static %}
+{% include 'partials/administrative_navbar.html' %} 
+<div class="mb-3">
+    <h1 class="mt-2">Feedback</h1>
+    {% for fb in feedback %}
+        {% include 'partials/feedback_card.html' with feedback=fb %}
+    {% empty %}
+        <p>No feedback found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -60,6 +60,11 @@ p.cover-text {
   z-index: -1;
 }
 
+.card-header {
+  background-color: transparent !important;
+  border-bottom: none !important;
+}
+
 /*
  * forms
  */
