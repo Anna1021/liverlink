@@ -32,7 +32,7 @@ $(document).ready(function () {
         $('#id_mentor_condition').parent().hide();
         $('#id_transplant').parent().hide();
         $('#id_child_transplant').parent().hide();
-        $('#id_expertise').parent().hide();
+        $('#id_professional_expertise').parent().hide();
 
     }
 
@@ -61,7 +61,7 @@ $(document).ready(function () {
                     $('#id_mentor_condition').parent().show();
                     $('#id_transplant').parent().show();
                 } else if (userType === 'PF') {
-                    $('#id_expertise').parent().show();
+                    $('#id_professional_expertise').parent().show();
                 }
             }
         });
