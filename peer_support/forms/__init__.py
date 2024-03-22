@@ -22,3 +22,4 @@ from .new_response_form import NewResponseForm
 from .new_reply_form import NewReplyForm
 from .report_form import ReportForm
 from .add_users_form import AddUsersForm
+from .feedback_form import FeedbackForm

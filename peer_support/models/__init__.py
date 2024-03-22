@@ -17,3 +17,4 @@ from .professional_model import Professional
 from .referral_model import Referral
 from .report_model import Report
 from .group_conversation_model import GroupConversation
+from .feedback_model import Feedback
