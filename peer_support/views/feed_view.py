@@ -42,11 +42,11 @@ class FeedView(LoginRequiredMixin, FormView):
         if feed_type != 'friends':
             user_posts = user_posts|Post.objects.filter(visibility='G')
         user_posts = user_posts.order_by("-created_at")
-        paginator = Paginator(user_posts, 10)
+        annotated_posts = self.annotate_posts(request, user_posts)
+        paginator = Paginator(annotated_posts, 10)
         page_number = request.GET.get('page')
         posts = paginator.get_page(page_number)
-        annotated_posts = self.annotate_posts(request, posts)
-        return annotated_posts
+        return posts
 
     def annotate_posts(self, request, posts):
         """Annotate each post with whether the current user has liked the post."""
