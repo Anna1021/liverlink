@@ -29,6 +29,7 @@ class NotificationModelTestCase(TestCase):
         self.second_user = User.objects.get(username='@janedoe')
         self.basic_notification = Notification.objects.get(id=1)
         self.object_notification = Notification.objects.get(id=2)
+        self.object_notification.content_type = ContentType.objects.get_for_model(GroupConversation)
 
     def test_valid_basic_notification(self):
         self._assert_basic_notification_is_valid()
