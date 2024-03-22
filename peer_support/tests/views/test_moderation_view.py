@@ -4,7 +4,8 @@ from django.urls import reverse
 from peer_support.models import User
 from peer_support.tests.helpers import reverse_with_next
 from django.contrib.messages import get_messages
-from peer_support.models import Report, User
+from peer_support.models import Report, Message
+from django.contrib.contenttypes.models import ContentType
 
 class ModerationViewTestCase(TestCase):
     """Tests of the moderation view."""
@@ -22,6 +23,9 @@ class ModerationViewTestCase(TestCase):
         self.url = reverse('moderation')
         self.admin_user = User.objects.get(username='@admin')
         self.report_message = Report.objects.get(pk=1)
+        message_content_type = ContentType.objects.get_for_model(Message)
+        self.report_message.content_type = message_content_type
+        self.report_message.save()
         self.client.force_login(self.admin_user)
 
     def test_get_moderation_redirects_when_not_logged_in(self):
