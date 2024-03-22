@@ -5,10 +5,12 @@
 {% csrf_token %}
 <meta name="csrf-token" content="{{ csrf_token }}">
 <div class="post-header d-flex justify-content-between align-items-start">
+    <a href="{% url 'profile' post.author.username %}">
+        <img src="{% static post.author.userprofile.profile_picture %}" alt="Profile Picture" class="rounded-circle friend-profile-picture ml-3 mr-3" style="width: 70px; height: 70px;">
+    </a>
     <a href="{% url 'profile' post.author.username %}" class="flex-grow-1">
         <h4 class="font-weight-bold">{{ post.author }}</h4>
     </a>
-
     <div class="col-md-2 nav-item dropdown">
         <a class="nav-link" href="#" id="message-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi-three-dots-vertical"></i>
@@ -25,23 +27,25 @@
         </ul>
     </div>
 </div>
-<div class="card-body">
     {% if from_feed %}
-        <a href="{% url 'post_detail' post_id=post.id %}" class="flex-grow-1 me-3">
+        <a href="{% url 'post_detail' post_id=post.id %}"  class="profile-subheading">
     {% else %}
         <a>
     {% endif %}
-        <p {% if post|is_object_reported_by_user:user %} data-text="{{ post.content |censor}}"
-        data-reported="true" class="text-muted" {% endif %}>{{ post.content |censor}}</p>
-        <p>{{ post.created_at }}</p>
-        {% if post.liked_by_user %}
-        <button class="btn apply-btn bi bi-hand-thumbs-up-fill like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
-        {% else %}
-            <button class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
-        {% endif %}
-        <span class="profile-subheading pl-2" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
-    </a>
+<div class="card-body">
+    <p {% if post|is_object_reported_by_user:user %} data-text="{{ post.content |censor}}"
+    data-reported="true" class="text-muted" {% endif %}>{{ post.content |censor}}</p>
+    <p>{{ post.created_at }}</p>
+    {% if post.liked_by_user %}
+    <button class="btn apply-btn bi bi-hand-thumbs-up-fill like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
+    {% else %}
+        <button class="btn apply-btn bi bi-hand-thumbs-up like-post" data-post-id="{{ post.id }}" data-toggle="tooltip" title="{{ post.likes.all|likes_summary }}"></button>
+    {% endif %}
+    <span class="profile-subheading pl-2" id="like-count-{{ post.id }}">{{ post.like_count }}</span>
 </div>
+{% if from_feed %}
+    <a href="{% url 'post_detail' post_id=post.id %}"  class="profile-subheading">    </a>
+{% endif %}
 <script>
     var likePostUrl = "{% url 'like_post' 0 %}";
 </script>
