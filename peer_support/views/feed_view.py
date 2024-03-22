@@ -5,6 +5,7 @@ from django.db.models import Count, Q
 from peer_support.models import Post
 from peer_support.forms import PostForm
 from .helpers import retrieve_friend_posts
+from django.core.paginator import Paginator
 
 
 class FeedView(LoginRequiredMixin, FormView):
@@ -38,10 +39,14 @@ class FeedView(LoginRequiredMixin, FormView):
 
         feed_type = request.GET.get("feed_type")
         user_posts = retrieve_friend_posts(request)
-        if feed_type != "friends":
-            user_posts = user_posts | Post.objects.filter(visibility="G")
+        if feed_type != 'friends':
+            user_posts = user_posts|Post.objects.filter(visibility='G')
+        user_posts = user_posts.order_by("-created_at")
         annotated_posts = self.annotate_posts(request, user_posts)
-        return annotated_posts
+        paginator = Paginator(annotated_posts, 10)
+        page_number = request.GET.get('page')
+        posts = paginator.get_page(page_number)
+        return posts
 
     def annotate_posts(self, request, posts):
         """Annotate each post with whether the current user has liked the post."""

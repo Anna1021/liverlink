@@ -1,7 +1,7 @@
 """Tests of the Resources view."""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.models import User
+from peer_support.models import User,Question
 from peer_support.tests.helpers import reverse_with_next
 
 class ResourcesViewTestCase(TestCase):
@@ -34,10 +34,16 @@ class ResourcesViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'resources.html')
 
     def test_pagination_is_correct(self):
+        for i in range(6):
+            Question.objects.create(
+                author=self.user,
+                title="Test for pagination",
+                body="Page should only have 10 questions"
+            )
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('questions' in response.context)
-        self.assertEqual(len(response.context['questions']), 5)
+        self.assertEqual(len(response.context['questions']), 10)
 
     def test_questions_ordered_by_created_at(self):
         response = self.client.get(self.url)

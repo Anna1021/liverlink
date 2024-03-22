@@ -41,9 +41,24 @@
         </div>
     </div>
   </div>
+  <div class="row justify-content-center">
+    <div class="col-md-2 text-center">
+      {% if posts.has_previous %}
+        <a href="?page={{ posts.previous_page_number }}"> previous </a>
+      {% endif %}
+    </div>
+    <div class="col-md-2 text-center">
+      <span class="current-page">{{ posts.number }}</span>
+    </div>
+    <div class="col-md-2 text-center">
+      {% if posts.has_next %}
+        <a href="?page={{ posts.next_page_number }}"> next</a>
+      {% endif %}
+    </div>
+  </div>
  
   <div class="scrollable-feed"> 
-    {% for post in posts %}
+    {% for post in posts.object_list %}
     <div class="post-card pb-2">
       {% include 'partials/post_details.html' with post=post from_feed=True %}
     </div>
