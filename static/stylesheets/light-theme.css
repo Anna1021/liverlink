@@ -74,7 +74,7 @@
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.25rem;
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 /*
@@ -187,7 +187,7 @@
   -moz-appearance: none;
   appearance: none;
   border-radius: 0.25rem;
-  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 .light-theme .notification-list {
@@ -229,7 +229,7 @@
 .light-theme .apply-btn{
   background-color: #720fe3;
   color: rgb(255, 255, 255);
-  border-color: #720fe3; 
+  border-color: transparent;
 }
 
 /*
@@ -253,8 +253,8 @@
 .light-theme .tutorial .btn{
   background-color: var(--filter-btn-color);
   color: var(--btn-text-color);
-  border-color: #b7ecff;
-
+  border-width: 2px;
+  border-color: black;
 }
 
 .light-theme #loginBox {
@@ -347,14 +347,14 @@
 .light-theme .delete-response-button {
   background-color: var(--filter-btn-color);
   color: var(--btn-text-color);
-  border-color: #9ad4d6; 
+  border-color: transparent;   
   border-radius: 0.25rem;
 }
 
 .light-theme .delete-btn {
   background-color: var(--filter-btn-color);
   color: black;
-  border-color: #9ad4d6; 
+  border-color: transparent; 
   font-size: 12px;
   padding: 5px 10px;
   cursor: pointer;

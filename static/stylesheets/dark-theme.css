@@ -9,7 +9,7 @@
 .dark-theme .log-in .btn{
   background-color: var(--dark-submit-btn-color);
   color: var(--btn-text-color);
-  border: 1px solid #720fe3;
+  border-color: transparent;
   display: inline-block;
   font-weight: 400;
   text-align: center;
@@ -24,7 +24,7 @@
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.25rem;
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 /*
@@ -172,7 +172,7 @@
 .dark-theme .SortFilter .btn {
   background-color: var(--dark-filter-btn-color);
   color: var(--dark-btn-text-color);
-  border-color: #d4aeff;
+  border-color: transparent;
   box-shadow: #d4aeff;
 }
 
@@ -270,7 +270,7 @@ background-color: var(--dark-submit-btn-color);
 .dark-theme .delete-response-button {
   background-color: rgb(205, 205, 233);
   color: black;
-  border-color: #9da1d3;
+  border-color: transparent;
   box-shadow: #afaeff;
   border-radius: 0.25rem;
 }
@@ -294,7 +294,6 @@ background-color: var(--dark-submit-btn-color);
 .dark-theme .apply-btn{
   color: #fff;
   background-color: #6c757d;
-  border-color: #6c757d;
 }
 
 .dark-theme .selected-feed {
