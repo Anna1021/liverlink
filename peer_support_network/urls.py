@@ -42,7 +42,6 @@ urlpatterns = [
     path('conversation/<int:conversation_id>', views.ConversationView.as_view(), name='conversation'),
     path('find_friends/', views.PeerSelectView.as_view(), name='peer_select'),
     path('create_conversation/',views.CreateConversationView.as_view(),name='create_conversation'),
-    path('delete_message/<int:conversation_id>/<int:message_id>/',views.DeleteMessageView.as_view(),name='delete_message'),
     path('create_conversation/', views.CreateConversationView.as_view(), name='create_conversation'),
     path('send_friend_request/<int:user_id>', views.SendFriendRequestView.as_view(), name='send_friend_request'),
     path('accept_friend_request/<int:friend_request_id>/<int:notification_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),

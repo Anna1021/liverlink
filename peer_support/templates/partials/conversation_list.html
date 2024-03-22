@@ -3,7 +3,7 @@
 <ul class="conversation-list">
     {% for conversation in user_conversations %}
     <li>
-    <a href="{% url 'conversation' conversation.id %}" class="btn conversation-btn conversation-card notranslate">
+    <a href="{% url 'conversation' conversation.id %}" class="btn conversation-btn conversation-name conversation-card notranslate">
         {% conversation_name user conversation %}
     </a>
     {% empty %}
