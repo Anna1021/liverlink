@@ -23,10 +23,12 @@ class AcceptReportViewTestCase(TestCase):
         self.admin_user = User.objects.get(username='@admin')
         self.report_message = Report.objects.get(pk=1)
         self.report_user = Report.objects.get(pk=2)
+        self.report_post = Report.objects.get(pk=4)
         self.message_to_report = Message.objects.get(pk=self.report_message.object_id)
         self.user_to_report = User.objects.get(pk =self.report_user.object_id)
         self.url_message = reverse('accept_report', kwargs={'report_id':self.report_message.id})
         self.url_user = reverse('accept_report', kwargs={'report_id':self.report_user.id})
+        self.url_post = reverse('accept_report', kwargs={'report_id':self.report_post.id})
         self.client.force_login(self.admin_user)
     
     def test_access_control_non_staff(self):
@@ -68,13 +70,11 @@ class AcceptReportViewTestCase(TestCase):
         self.assertTrue(any(["successfully deleted" in message.message for message in messages]))
     
     def test_successful_post_deletion_by_staff(self):
-        report_post = Report.objects.get(pk=1)
-        post_to_report = Post.objects.get(pk=report_post.object_id)  
-        url_post = reverse('accept_report', kwargs={'report_id': report_post.id})
+        post_to_report = Post.objects.get(pk=self.report_post.object_id)  
         self.assertTrue(Post.objects.filter(pk=post_to_report.pk).exists())
-        response = self.client.get(url_post)
+        response = self.client.get(self.url_post)
         self.assertFalse(Post.objects.filter(pk=post_to_report.pk).exists())
-        self.assertFalse(Report.objects.filter(pk=report_post.pk).exists())
+        self.assertFalse(Report.objects.filter(pk=self.report_post.pk).exists())
         messages = list(get_messages(response.wsgi_request))
         self.assertTrue(any(["successfully deleted" in str(message) for message in messages]))
         self.assertRedirects(response, reverse('moderation'))

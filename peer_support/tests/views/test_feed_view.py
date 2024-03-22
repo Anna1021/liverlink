@@ -19,15 +19,11 @@ class FeedViewTestCase(TestCase):
         self.user = User.objects.get(pk=1)
         self.user2 = User.objects.get(pk=2)
         self.user3 = User.objects.get(pk=3)
-        
         self.user.friends.add(self.user2)
-        
         self.post = Post.objects.get(pk=1)
         self.friend_post = Post.objects.get(pk=2)
         self.stranger_post = Post.objects.get(pk=3)
-
         self.client.login(username=self.user.username, password="Password123")
-
         self.form_input={
             'visibility':'G',
             'content':'Test post'
@@ -112,7 +108,6 @@ class FeedViewTestCase(TestCase):
         }
         response = self.client.post(self.url, report_data, follow=True)
         self.assertRedirects(response, self.url)
-        updated_post = Post.objects.get(pk=self.friend_post.pk)
         messages_list = [m.message for m in messages.get_messages(response.wsgi_request)]
         self.assertIn("Post reported successfully.", messages_list)
 

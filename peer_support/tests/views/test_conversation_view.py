@@ -131,6 +131,7 @@ class ConversationViewTestCase(TestCase):
     def test_successful_report(self):
         message_id_to_report = 1
         report_data = {
+            'report_message': True,
             'action': message_id_to_report,
             'reason': 'abuse'
         }
@@ -149,6 +150,7 @@ class ConversationViewTestCase(TestCase):
     def test_unsuccessful_report (self):
         valid_message_id = 1  
         report_data = {
+            'report_message': True,
             'action': valid_message_id,
             'reason': 'dfdsdf'
         }

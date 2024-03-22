@@ -14,21 +14,7 @@
             {% if post.author == request.user %}
             <li><a class="dropdown-item" href="{% url 'delete_post' post_id=post.id %}">Delete</a></li>
             {% else %}
-            <li>
-                <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
-                    Report
-                    <ul class="dropdown-menu nested-dropdown">
-                        <li>
-                            <form method="post">
-                            {% csrf_token %}
-                            {% include 'partials/bootstrap_form.html' with form=report_form %}
-                            <input type="hidden" name="action" value="{{post.id}}">
-                            <button class="btn btn-primary" type="submit" name="report_post">Report</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+            {% include 'partials/report_dropdown.html' with form=report_form object_id=post.id report_type='report_post' %}
             {% endif %}
             {% if from_feed %}
             <li><a class="dropdown-item" href="{% url 'post_detail' post_id=post.id %}">View Post</a></li>
@@ -37,14 +23,14 @@
     </div>
 </div>
 <div class="card-body">
-    <p {% if post|is_object_reported_by_user:user %} data-text="{{ post.content |censor}}"
-    data-reported="true" class="text-muted" {% endif %}>{{ post.content |censor}}</p>
-    <p>{{ post.created_at }}</p>
-    {% if post.author == request.user %}
-        <a href="{% url 'delete_post' post_id=post.id %}" class="btn-danger btn" style = "border-color: #dc3545;">Delete</a>
-    {% endif %}
     {% if from_feed %}
-        <a href="{% url 'post_detail' post_id=post.id %}" class="btn btn-info" style = "border-color: #0dcaf0;">View Post</a>
+        <a href="{% url 'post_detail' post_id=post.id %}" class="flex-grow-1 me-3">
+    {% else %}
+        <a>
     {% endif %}
+        <p {% if post|is_object_reported_by_user:user %} data-text="{{ post.content |censor}}"
+        data-reported="true" class="text-muted" {% endif %}>{{ post.content |censor}}</p>
+        <p>{{ post.created_at }}</p>
+    </a>
 </div>
 <script src="{% static 'js/reporting.js' %}"></script>

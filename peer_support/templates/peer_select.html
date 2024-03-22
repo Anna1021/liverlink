@@ -2,7 +2,7 @@
 {% block page %}
 {% load static %}
 <div class="container">
-    <h2>Add friend</h2>
+    <h2>Find friends</h2>
     <hr>
     <div class="row">
         {% include 'partials/search_filter_sort_users.html' %}
@@ -22,7 +22,7 @@
         {% endif %}
     </div>
 </div>
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     var sendFriendRequestUrl = "{% url 'send_friend_request' 0 %}";
 </script>

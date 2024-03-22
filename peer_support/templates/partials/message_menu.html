@@ -9,21 +9,7 @@
                 href="{% url 'delete_message' conversation.id message.id %}">Delete for everyone</a></li>
         {% endif %}
         {% if message.sender != user %}
-        <li>
-            <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
-                Report
-                <ul class="dropdown-menu nested-dropdown">
-                    <li>
-                        <form method="post">
-                        {% csrf_token %}
-                        {% include 'partials/bootstrap_form.html' with form=report_form %}
-                        <input type="hidden" name="action" value="{{message.id}}">
-                        <button type="submit" name="report">Report</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </li>
+        {% include 'partials/report_dropdown.html' with form=report_form object_id=message.id report_type='report_message' %}
         {%endif%}
     </ul>
 </div>

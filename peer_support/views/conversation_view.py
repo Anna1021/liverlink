@@ -24,11 +24,10 @@ class ConversationView(LoginRequiredMixin, FormView):
         return render(request, self.template_name, context)
 
     def post(self, request, conversation_id):
-        action = request.POST.get('action')
-        if action:
-            return self.handle_report_message(request, conversation_id,action)
-        else:
-            return self.handle_post_message(request, conversation_id)
+        if 'report_message' in request.POST:
+            message_id = request.POST.get('action')
+            return self.handle_report_message(request, conversation_id,message_id)
+        return self.handle_post_message(request, conversation_id)
 
     def handle_post_message(self, request, conversation_id):
         """Handles the post request for a message."""

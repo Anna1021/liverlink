@@ -23,21 +23,7 @@
             </button>
           </li>
           {% else %}
-          <li>
-              <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
-                  Report
-                  <ul class="dropdown-menu nested-dropdown">
-                      <li>
-                          <form method="post">
-                          {% csrf_token %}
-                          {% include 'partials/bootstrap_form.html' with form=report_form %}
-                          <input type="hidden" name="action" value="{{response.id}}">
-                          <button class = "btn btn-primary" type="submit" name="report_response">Report</button>
-                          </form>
-                      </li>
-                  </ul>
-              </div>
-          </li>
+          {% include 'partials/report_dropdown.html' with form=report_form object_id=response.id report_type='report_response' %}
           {% endif %}
       </ul>
     </div>

@@ -18,21 +18,7 @@
                     {% if comment.author == user %}
                     <li><a class="dropdown-item" href="{% url 'delete_comment' comment.id %}">Delete</a></li>
                     {% else %}
-                    <li>
-                        <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
-                            Report
-                            <ul class="dropdown-menu nested-dropdown">
-                                <li>
-                                    <form method="post">
-                                    {% csrf_token %}
-                                    {% include 'partials/bootstrap_form.html' with form=report_form %}
-                                    <input type="hidden" name="action" value="{{comment.id}}">
-                                    <button class = "btn btn-primary" type="submit" name="report_comment">Report</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+                    {% include 'partials/report_dropdown.html' with form=report_form object_id=comment.id report_type='report_comment' %}
                     {% endif %}
                 </ul>
             </div>

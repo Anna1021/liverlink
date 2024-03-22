@@ -21,7 +21,6 @@ class FeedView(LoginRequiredMixin, FormView):
         return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form, 'report_form': ReportForm()})
 
     def post(self,request):
-        """Submit post"""
         if 'report_post' in request.POST:
             post_id = request.POST.get('action')
             self.comment_post(request, post_id)

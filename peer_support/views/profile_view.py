@@ -46,7 +46,7 @@ class ProfileView(LoginRequiredMixin, View):
 
         if 'message' in request.POST:
             return self.conversation_submission(request)
-        elif 'report' in request.POST:
+        elif 'report_user' in request.POST:
             return self.report_submission(request, username)
         return redirect(reverse('profile', kwargs={'username': username}))
 

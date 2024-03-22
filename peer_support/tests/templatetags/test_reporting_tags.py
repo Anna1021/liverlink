@@ -3,6 +3,7 @@ from django.test import TestCase
 from peer_support.models import Question, Report, Post, User
 from django.template import Context, Template
 from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
 
 class ReportingTagsTestCase(TestCase):
     """Unit tests for the reporting template tags"""
@@ -35,7 +36,6 @@ class ReportingTagsTestCase(TestCase):
         )
         context = Context({'object': self.reported_question, 'user': self.admin_user})
         rendered = template.render(context)
-        print(rendered)
         self.assertIn("True", rendered)
 
     def test_display_reported_content_for_post(self):
@@ -47,8 +47,16 @@ class ReportingTagsTestCase(TestCase):
         rendered = template.render(context)
         self.assertIn(self.reported_post.content, rendered)
 
+    def test_display_reported_content_for_question(self):
+        template = Template(
+            "{% load reporting_tags %}"
+            "{% display_reported_content report %}"
+        )
+        context = Context({'report': self.report_question})
+        rendered = template.render(context)
+        self.assertIn(self.reported_question.body, rendered)
+
     def test_display_reported_content_for_user(self):
-        post_content_type = ContentType.objects.get_for_model(User)
         template = Template(
             "{% load reporting_tags %}"
             "{% display_reported_content report %}"
@@ -57,3 +65,49 @@ class ReportingTagsTestCase(TestCase):
         rendered = template.render(context)
         expected_link = f'href="/profile/{self.reported_user.username}/"'
         self.assertTrue(expected_link in rendered)
+
+    def test_display_reported_content_no_object(self):
+        self.reported_user.delete()
+        template = Template(
+            "{% load reporting_tags %}"
+            "{% display_reported_content report %}"
+        )
+        context = Context({'report': self.report_user})
+        rendered = template.render(context)
+        self.assertIn("Content not available", rendered)
+
+
+    def test_display_reported_content_for_invalid(self):
+        faulty_report = Report.objects.create(
+                reporter=self.admin_user,
+                reason='abuse',
+                content_type=ContentType.objects.get_for_model(self.report_post),
+                object_id=self.report_post.pk
+            )
+        template = Template(
+            "{% load reporting_tags %}"
+            "{% display_reported_content report %}"
+        )
+        context = Context({'report': faulty_report})
+        rendered = template.render(context)
+        self.assertIn("Content not available", rendered)
+
+    def test_split_model_filter(self):
+        template = Template(
+            "{% load reporting_tags %}"
+            "{{ value|split:key }}"
+        )
+        content_type = ContentType.objects.get_for_model(User)
+        context = Context({'value': content_type, 'key': '|'})
+        rendered = template.render(context)
+        self.assertIn("user", rendered)
+        self.assertNotIn("peer_support", rendered)
+
+    def test_split_string_without_model_attribute(self):
+        template_to_render = Template(
+            "{% load reporting_tags %}"
+            "{{ test_string|split:',' }}"
+        )
+        context = Context({"test_string": "apple,banana,cherry"})
+        rendered_template = template_to_render.render(context)
+        self.assertEqual(rendered_template, "[&#x27;apple&#x27;, &#x27;banana&#x27;, &#x27;cherry&#x27;]")

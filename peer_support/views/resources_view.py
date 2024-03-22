@@ -24,6 +24,6 @@ class ResourcesView(LoginRequiredMixin, View):
         report_form = ReportForm(request.POST)
         if report_form.is_valid():
             report_form.save_report_for_object(question, request.user)
-            messages.success(request, "Comment reported successfully.")
+            messages.success(request, "Question reported successfully.")
         else:
             messages.error(request, "There was an issue with the report.")
