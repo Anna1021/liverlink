@@ -21,4 +21,4 @@ class PostComment(models.Model):
         return PostComment.objects.filter(parent=self)
 
     def __str__(self):
-        return f"Comment by {self.author.username} on {self.post.text}"
+        return f'Comment by {self.author.username} on {self.post.content}'

@@ -1,12 +1,18 @@
 from django.contrib import admin
 from .models import *
-# Register your models here.
 
 class UserProfileInline(admin.StackedInline):
     """Configuration of the admin interface for user profiles."""
     """Adds the user profile interface to the user interface."""
     model = UserProfile
     can_delete = False
+
+@admin.register(PostComment)
+class PostCommentAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for post comments."""
+    
+    list_display = ('id', 'post', 'author', 'parent', 'content', 'created_at')
+    list_filter = ('created_at', 'author')
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -125,5 +131,5 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('created_at',)
     ordering = ('-created_at',)
     list_display = [
-        'text','author', 'created_at'
+        'content','author', 'created_at'
     ]

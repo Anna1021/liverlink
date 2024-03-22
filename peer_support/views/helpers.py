@@ -1,8 +1,7 @@
 import uuid
-from peer_support.models import Referral, Mentor, User, Patient, Parent, Post, FriendRequest
+from peer_support.models import Referral, Mentor, User, Patient, Parent, Post, FriendRequest, Notification, PostComment
 from django.conf import settings
 from django.shortcuts import redirect, reverse
-from peer_support.models import Notification, PostComment
 from django.contrib import messages
 from collections import Counter
 from datetime import date

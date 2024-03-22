@@ -39,10 +39,11 @@ class ConversationView(LoginRequiredMixin, FormView):
         new_message = None
         delete=request.POST.get('delete')
         action=request.POST.get('action')
-        if delete:
+        if 'report_message' in request.POST:
+            message_id = request.POST.get('action')
+            self.handle_report_message(request, message_id)
+        elif delete:
             self.handle_delete_message(request,conversation_id,action,delete)
-        elif action:
-            self.handle_report_message(request,conversation_id,action)
         else:
             new_message = self.handle_post_message(request,conversation_id)
         if new_message and first_message_id=='0':
@@ -85,7 +86,6 @@ class ConversationView(LoginRequiredMixin, FormView):
             users = conversation.users.filter(username=request.user.username)
         message.delete(users)
 
-
     def handle_post_message(self, request, conversation_id):
         """Handles the post request for a message."""
 
@@ -99,7 +99,7 @@ class ConversationView(LoginRequiredMixin, FormView):
         else:
             messages.error(request,"This message is not valid")
         
-    def handle_report_message(self,request,conversation_id,message_id):
+    def handle_report_message(self,request,message_id):
         """Handles the report request for a message."""
 
         message = get_object_or_404(Message, id=message_id)

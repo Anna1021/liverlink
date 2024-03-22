@@ -36,7 +36,7 @@ class DeclineReportViewTestCase(TestCase):
         self.assertIn(self.report_message.reporter, self.message_to_report.visible_to.all())
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Report and the reported object have been successfully deleted.")
+        self.assertEqual(str(messages[0]), "Report has been successfully deleted.")
 
     def test_access_control_non_staff(self):
         self.client.logout()
@@ -62,4 +62,4 @@ class DeclineReportViewTestCase(TestCase):
         self.assertTrue(User.objects.get(pk=self.user_to_report.pk).is_active)
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Report and the reported object have been successfully deleted.")
+        self.assertEqual(str(messages[0]), "Report has been successfully deleted.")

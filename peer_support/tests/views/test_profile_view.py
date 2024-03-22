@@ -33,7 +33,7 @@ class ProfileViewTest(TestCase):
     
     def test_successful_report_profile(self):
         report_data = {
-            'report': 'report',
+            'report_user': True,
             'action': self.user_to_report.pk,
             'reason': 'abuse'
         }
@@ -51,7 +51,7 @@ class ProfileViewTest(TestCase):
     def test_unsuccessful_report_profile(self):
         valid_message_id = 1  
         report_data = {
-            'report': 'report',
+            'report_user': True,
             'action': valid_message_id,
             'reason': 'dfdsdf'
         }

@@ -8,7 +8,7 @@
     <h4>Comments</h4>
     <ul>
         {% for comment in post.get_comments %}
-            {% include 'components/reply.html' with comment=comment %}
+            {% include 'partials/reply.html' with comment=comment %}
         {% endfor %}
     </ul>
 

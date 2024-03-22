@@ -11,9 +11,8 @@
             {% if user == message.sender %}
             <button class= "dropdown-item delete_all" type="submit" name="delete" value="all">Delete for everyone</button>
             {% else %}
-                {% include 'partials/bootstrap_form.html' with form=report_form %}
-                <button type="submit">Report</button>
-            {% endif %}
+            {% include 'partials/report_dropdown.html' with form=report_form object_id=message.id report_type='report_message' %}
+            {%endif%}
         </form></li>
     </ul>
 </div>

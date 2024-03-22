@@ -1,15 +1,10 @@
+{% load reporting_tags %}
 <div class="friend-inner-card col-12 row mt-2 mb-3 pb-2 ml-1">
     <div class="col-11">
         <p>Reason: {{ report.reason }}</p>
         <p>Reported At: {{ report.reported_at }}</p>
-        <p>Content Type: {{ report.content_type }}</p>
-        {% if report.content_type.model == "message" %}
-        <p>Reported Content: {{ report.content_object.content }}</p>
-        {% elif report.content_type.model == "user" %}
-            <p>Reported User: <a href="{% url 'profile' report.content_object.username %}">{{ report.content_object.username }}</a></p>
-        {% else %}
-            <p>Reported Content: Special case not handled.</p>
-        {% endif %}
+        <p>Content Type: {{ report.content_type|split:"| " | last }}</p>
+        <p>Reported Content: {% display_reported_content report %}</p>
     </div>
     <div class="col-1 my-auto">
         <button class="btn btn-success accept-request" onclick="window.location.href='/accept_report/{{report.id}}';"><i class="bi bi-check"></i></button>

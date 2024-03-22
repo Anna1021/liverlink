@@ -1,12 +1,12 @@
 [
   {
     "model": "peer_support.report",
-    "pk": 2,
+    "pk": 4,
     "fields": {
       "reporter": 11,
-      "reason": "spam",
+      "reason": "other",
       "reported_at": "2024-03-07T12:00:00Z",
-      "content_type": 6,
+      "content_type": 10,
       "object_id": 1
     }
   }
