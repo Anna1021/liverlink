@@ -1,6 +1,7 @@
 """Tests of the block user view."""
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.contenttypes.models import ContentType
 from peer_support.tests.helpers import reverse_with_next
 from peer_support.models import User, FriendRequest, Notification
 
@@ -56,18 +57,22 @@ class BlockUserViewTestCase(TestCase):
         self.assertEqual(FriendRequest.objects.count(), 1)
         self.assertEqual(Notification.objects.count(), 1)
         friend_request = FriendRequest.objects.first()
-        notification = Notification.objects.get(friend_request=friend_request)
+        content_type_id = ContentType.objects.get_for_model(FriendRequest)
+        notification = Notification.objects.get(content_type=content_type_id, object_id=friend_request.id)
         self.assertEqual(friend_request.sender, self.user)
         self.assertEqual(friend_request.receiver, self.second_user)
-        self.assertEqual(notification.title, 'Friend Request')
-        self.assertEqual(notification.description, '@johndoe sent you a friend request.')
-        self.assertEqual(notification.user, User.objects.get(username=self.second_user.username))
-        self.assertEqual(notification.friend_request, friend_request)
+        self.assertEqual(notification.title, 'New Friend Request')
+        self.assertEqual(notification.description, '@johndoe has sent you a friend request.')
+        self.assertEqual(notification.user, self.second_user)
+        self.assertEqual(notification.notifying_user, self.user)
+        self.assertEqual(notification.content_type, content_type_id)
+        self.assertEqual(notification.object_id, friend_request.id)
+        self.assertEqual(notification.content_object, friend_request)
         self.test_block_user()
         self.assertEqual(FriendRequest.objects.count(), 0)
         self.assertEqual(Notification.objects.count(), 0)
         self.assertFalse(FriendRequest.objects.filter(sender=self.user).filter(receiver=self.second_user).exists())
-        self.assertFalse(Notification.objects.filter(friend_request=friend_request).exists())
+        self.assertFalse(Notification.objects.filter(content_type=content_type_id, object_id=friend_request.id).exists())
 
     def test_block_user_successfully_deletes_associated_notifications_from_blocked_user(self):
         self.client.logout()
@@ -79,20 +84,24 @@ class BlockUserViewTestCase(TestCase):
         self.assertEqual(FriendRequest.objects.count(), 1)
         self.assertEqual(Notification.objects.count(), 1)
         friend_request = FriendRequest.objects.first()
-        notification = Notification.objects.get(friend_request=friend_request)
+        content_type_id = ContentType.objects.get_for_model(FriendRequest)
+        notification = Notification.objects.get(content_type=content_type_id, object_id=friend_request.id)
         self.assertEqual(friend_request.sender, self.second_user)
         self.assertEqual(friend_request.receiver, self.user)
-        self.assertEqual(notification.title, 'Friend Request')
-        self.assertEqual(notification.description, '@janedoe sent you a friend request.')
-        self.assertEqual(notification.user, User.objects.get(username=self.user.username))
-        self.assertEqual(notification.friend_request, friend_request)
+        self.assertEqual(notification.title, 'New Friend Request')
+        self.assertEqual(notification.description, '@janedoe has sent you a friend request.')
+        self.assertEqual(notification.user, self.user)
+        self.assertEqual(notification.notifying_user, self.second_user)
+        self.assertEqual(notification.content_type, content_type_id)
+        self.assertEqual(notification.object_id, friend_request.id)
+        self.assertEqual(notification.content_object, friend_request)
         self.client.logout()
         self.client.force_login(self.user)
         self.test_block_user()
         self.assertEqual(FriendRequest.objects.count(), 0)
         self.assertEqual(Notification.objects.count(), 0)
         self.assertFalse(FriendRequest.objects.filter(sender=self.second_user).filter(receiver=self.user).exists())
-        self.assertFalse(Notification.objects.filter(friend_request=friend_request).exists())
+        self.assertFalse(Notification.objects.filter(content_type=content_type_id, object_id=friend_request.id).exists())
 
     def test_block_user_successfully_removes_friend(self):
         before_friends_count = self.user.friends.count()
