@@ -22,7 +22,7 @@ class SortUserFormTestCase(TestCase):
         self.current_user_professional = Professional.objects.get(username= '@annamiller')
         self.current_user_mentor =  Mentor.objects.get(username='@johndoe')
         self.username_asc_order= ['@alexsmith', '@annamiller', '@carlosmartinez', '@craighughes','@hazelsmith', '@janedoe', '@johndoe', '@lindajohnson', '@mohamedalf', '@peterpickles', '@petrapickles', '@rajpatel', '@sambennet']
-        self.age_asc_order=['@janedoe', '@craighughes', '@petrapickles', '@sambennet', '@rajpatel', '@lindajohnson', '@johndoe', '@alexsmith', '@carlosmartinez', '@hazelsmith', '@mohamedalf', '@annamiller', '@peterpickles']
+        self.age_asc_order=['@janedoe', '@craighughes', '@petrapickles', '@sambennet', '@rajpatel', '@lindajohnson', '@johndoe', '@hazelsmith', '@alexsmith', '@annamiller', '@carlosmartinez', '@mohamedalf', '@peterpickles']
         self.users = User.objects.all()
 
     def test_form_has_necessary_fields(self):
