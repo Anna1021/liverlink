@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import User, FriendRequest, Post
 from peer_support.forms import ReportForm, ConversationForm
 from django.contrib import messages
-from .helpers import user_exists, get_user_type
+from .helpers import user_exists, get_user_type, send_notification
 
 class ProfileView(LoginRequiredMixin, View):
     """Displays user's profile"""
@@ -45,17 +45,21 @@ class ProfileView(LoginRequiredMixin, View):
         """Handle POST requests for the ReportForm and ConversationForm."""
 
         if 'message' in request.POST:
-            return self.conversation_submission(request)
+            return self.conversation_submission(request, username)
         elif 'report_user' in request.POST:
             return self.report_submission(request, username)
         return redirect(reverse('profile', kwargs={'username': username}))
 
-    def conversation_submission(self, request):
+    def conversation_submission(self, request, username):
         """Handle conversation form submission."""
 
+        user_conversation_before_count = request.user.conversations.count()
         conversation_form = ConversationForm(request.user, data=request.POST)
         conversation_form.fields['users'].queryset = User.objects.all()
         conversation = conversation_form.save(request.user)
+        if request.user.conversations.count() == user_conversation_before_count + 1:
+            user = User.objects.get(username=username)
+            send_notification(object=conversation, conv_user=user, conv_creator=request.user)
         return redirect(reverse('conversation', kwargs={'conversation_id': conversation.id}))
 
     def report_submission(self, request, username):
