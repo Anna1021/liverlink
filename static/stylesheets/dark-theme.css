@@ -307,11 +307,9 @@ background-color: var(--dark-submit-btn-color);
 }
 
 .dark-theme .post-card{
-  width: 100%;
-  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.5);
   transition: 0.3s;
   border-radius: 20px;
-  background-color: var(--dark-main-bg-color);
+  background-color: #2E2D38;
   color: white;
   padding-right: 30px;
   padding-top: 20px;
