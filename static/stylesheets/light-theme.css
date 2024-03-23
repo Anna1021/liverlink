@@ -74,7 +74,7 @@
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.25rem;
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 /*
@@ -130,15 +130,16 @@
   margin: 0
 }
 .light-theme .emp-profile {
-  padding: 3%;
-  margin-top: 3%;
-  margin-bottom: 5%;
-  border-radius: 0.8rem;
+  padding: 2.5%;
+  margin-top: 1.5%;
+  margin-bottom: 3%;
+  border-radius: 3.5rem;
   background:var(--main-bg-color);
 }
 .light-theme .profile-subheading {
   color: #000000;
   font-weight: 600;
+  text-decoration: none;
 }
 
 .light-theme .profile-head h5 {
@@ -161,11 +162,15 @@
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
 }
-.light-theme .nav-tabs,
+.light-theme .profile-head .nav-tabs,
 .light-theme .nav-link.active{
   border: none;
   border-bottom: 2px solid #56555e;
 }
+.light-theme .nav-link {
+  color: #4A7A7A;
+}
+
 
 .light-theme .form-control {
   display: block;
@@ -182,7 +187,7 @@
   -moz-appearance: none;
   appearance: none;
   border-radius: 0.25rem;
-  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 .light-theme .notification-list {
@@ -224,7 +229,7 @@
 .light-theme .apply-btn{
   background-color: #720fe3;
   color: rgb(255, 255, 255);
-  border-color: #720fe3; 
+  border-color: transparent;
 }
 
 /*
@@ -248,8 +253,8 @@
 .light-theme .tutorial .btn{
   background-color: var(--filter-btn-color);
   color: var(--btn-text-color);
-  border-color: #b7ecff;
-
+  border-width: 2px;
+  border-color: black;
 }
 
 .light-theme #loginBox {
@@ -308,16 +313,16 @@
 
 .light-theme .profile-head h7 {
   font-size: 15px;
-  color: #6490a9;
+  color: #4a7a7a;
 }
  .light-theme .profile-tab p {
   font-weight: 600;
-  color: #6490a9;
+  color: #4a7a7a;
 }
 
 .light-theme .profile-head h6 {
     font-size: 20px;
-    color: #6490a9;
+    color: #4a7a7a;
 }
 
 .light-theme .question-list-item-author {
@@ -342,14 +347,14 @@
 .light-theme .delete-response-button {
   background-color: var(--filter-btn-color);
   color: var(--btn-text-color);
-  border-color: #9ad4d6; 
+  border-color: transparent;   
   border-radius: 0.25rem;
 }
 
 .light-theme .delete-btn {
   background-color: var(--filter-btn-color);
   color: black;
-  border-color: #9ad4d6; 
+  border-color: transparent; 
   font-size: 12px;
   padding: 5px 10px;
   cursor: pointer;

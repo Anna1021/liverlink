@@ -1,8 +1,7 @@
 import uuid
-from peer_support.models import Referral, Mentor, User, Patient, Parent, Post, FriendRequest
+from peer_support.models import Referral, Mentor, User, Patient, Parent, Post, FriendRequest, Notification, PostComment
 from django.conf import settings
 from django.shortcuts import redirect, reverse
-from peer_support.models import Notification, PostComment
 from django.contrib import messages
 from collections import Counter
 from datetime import date
@@ -76,6 +75,7 @@ def get_addable_peers(current_user):
     return eligible_users
 
 
+
 def check_blocked_dm(current_user, conversation):
     """Check if the conversation is a DM and, if so, whether there is a block between the 2 users."""
 
@@ -99,15 +99,6 @@ def conversation_is_direct(request, conversation):
         messages.error(request, "You can only do this for a group conversation")
         return True
     return False
-
-
-def get_message(request, conversation, message_id):
-    conversation_messages = conversation.messages.filter(id=message_id)
-    if conversation_messages.count() == 0 or request.user not in conversation_messages[0].visible_to.all():
-        messages.error(request,"This message does not exist.")
-        return None
-    return conversation_messages.get(id=message_id)
-
 
 def no_conversation_url(request):
     context = {"user_conversations": request.user.sort_conversations()}

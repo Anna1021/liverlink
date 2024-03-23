@@ -16,9 +16,20 @@ class ProfileView(LoginRequiredMixin, View):
         if not user_exists(username):
             messages.error(request, "The profile you tried to access does not exist.")
             return redirect(reverse("feed"))
-
         context = self.set_context(request, username)
+        context = self.set_user_type(context, request.user)
         return render(request, "profile.html", context)
+
+    def set_user_type(self, context, user):
+        """Set the user type in the context"""
+
+        if hasattr(user, 'parent'):
+            context['parent'] = user.parent
+        elif hasattr(user, 'patient'):
+            context['patient'] = user.patient
+        else:
+            context['mentor'] = user.mentor
+        return context
 
     def get_context(self, user, posts, request):
         return {
@@ -48,14 +59,12 @@ class ProfileView(LoginRequiredMixin, View):
         """Handle POST requests for the ReportForm and ConversationForm."""
 
         if "message" in request.POST:
-            return self._handle_conversation_submission(request)
-        elif "report" in request.POST:
-            return self._handle_report_submission(request, username)
-        else:
-            messages.error(request, "There was an issue with the report.")
+            return self.conversation_submission(request)
+        elif "report_user" in request.POST:
+            return self.report_submission(request, username)
         return redirect(reverse("profile", kwargs={"username": username}))
 
-    def _handle_conversation_submission(self, request):
+    def conversation_submission(self, request):
         """Handle conversation form submission."""
 
         conversation_form = ConversationForm(request.user, data=request.POST)
@@ -63,7 +72,7 @@ class ProfileView(LoginRequiredMixin, View):
         conversation = conversation_form.save(request.user)
         return redirect(reverse("conversation", kwargs={"conversation_id": conversation.id}))
 
-    def _handle_report_submission(self, request, username):
+    def report_submission(self, request, username):
         """Handle report form submission."""
 
         user = get_object_or_404(User, username=username)

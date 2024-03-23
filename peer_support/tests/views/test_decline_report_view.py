@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.messages import get_messages
 from peer_support.models import Report, Message, User
+from django.contrib.contenttypes.models import ContentType
 
 class DeclineReportViewTestCase(TestCase):
     """Tests of the decline report view"""
@@ -21,7 +22,13 @@ class DeclineReportViewTestCase(TestCase):
         self.admin_user = User.objects.get(username='@admin')
         self.message_to_report = Message.objects.first() 
         self.report_message = Report.objects.get(pk=1)
+        message_content_type = ContentType.objects.get_for_model(Message)
+        self.report_message.content_type = message_content_type
+        self.report_message.save()
         self.report_user = Report.objects.get(pk=2)
+        user_content_type = ContentType.objects.get_for_model(User)
+        self.report_user.content_type = user_content_type
+        self.report_user.save()
         self.message_to_report = Message.objects.get(pk=self.report_message.object_id)
         self.user_to_report = User.objects.get(pk=self.report_user.object_id)
         self.url_message = reverse('decline_report', kwargs={'report_id':self.report_message.id})
@@ -36,7 +43,7 @@ class DeclineReportViewTestCase(TestCase):
         self.assertIn(self.report_message.reporter, self.message_to_report.visible_to.all())
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Report and the reported object have been successfully deleted.")
+        self.assertEqual(str(messages[0]), "Report has been successfully deleted.")
 
     def test_access_control_non_staff(self):
         self.client.logout()
@@ -62,4 +69,4 @@ class DeclineReportViewTestCase(TestCase):
         self.assertTrue(User.objects.get(pk=self.user_to_report.pk).is_active)
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Report and the reported object have been successfully deleted.")
+        self.assertEqual(str(messages[0]), "Report has been successfully deleted.")

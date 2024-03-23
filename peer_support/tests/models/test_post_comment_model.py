@@ -47,7 +47,7 @@ class PostCommentModelTestCase(TestCase):
         self.assertIn(reply2, replies)
     
     def test_str_method(self):
-        expected_str = f'Comment by {self.user.username} on {self.post.text}'
+        expected_str = f'Comment by {self.user.username} on {self.post.content}'
         self.assertEqual(str(self.comment), expected_str)
 
     def test_delete_post_deletes_comment(self):

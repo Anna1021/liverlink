@@ -1,35 +1,41 @@
 from django.views.generic.edit import FormView
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import redirect, render, reverse, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Q
 from peer_support.models import Post
-from peer_support.forms import PostForm
+from peer_support.forms import PostForm, ReportForm
 from .helpers import retrieve_friend_posts
+from django.contrib import messages
+from django.core.paginator import Paginator
 
 
 class FeedView(LoginRequiredMixin, FormView):
-    """Feed view."""
-
+    """Displays posts on both global and friend feeds."""
+    
     def get(self, request):
-        feed_type = request.GET.get("feed_type", "global")
+        feed_type = request.GET.get("feed_type", "global")  
         user_posts = self.retrieve_posts(request)
         form = PostForm(request.user)
         current_user = request.user
         if current_user.first_login == True:
             current_user.first_login = False
             current_user.save()
-            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form,'first':True})
-        return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
+            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form, 'report_form': ReportForm(), 'first':True})
+        return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form, 'report_form': ReportForm()})
 
-    def post(self, request):
-        """Submit post"""
-        form = PostForm(request.user, data=request.POST)
+    def post(self,request):
+        if 'report_post' in request.POST:
+            post_id = request.POST.get('action')
+            self.report_post(request, post_id)
+            return redirect(reverse('feed'))
+        form = PostForm(request.user,data=request.POST)
         if form.is_valid():
             post = form.save()
             return redirect(reverse("feed"), post_id=post.id)
         else:
             feed_type = request.GET.get("feed_type")
             user_posts = self.retrieve_posts(request)
-            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form})
+            return render(request,  "feed.html", {"posts": user_posts, "feed_type": feed_type, "form": form})
 
     def retrieve_posts(self, request):
         """Retrieve posts and display them in chronological order."""
@@ -39,4 +45,25 @@ class FeedView(LoginRequiredMixin, FormView):
         if feed_type != "friends":
             user_posts = user_posts | Post.objects.filter(visibility="G")
         user_posts = user_posts.order_by("-created_at")
-        return user_posts
+        annotated_posts = self.annotate_posts(request, user_posts)
+        paginator = Paginator(annotated_posts, 10)
+        page_number = request.GET.get('page')
+        posts = paginator.get_page(page_number)
+        return posts
+    
+    def annotate_posts(self, request, posts):
+        """Annotate each post with whether the current user has liked the post."""
+
+        return posts.annotate(
+            liked_by_user=Count("likes", filter=Q(likes=request.user))
+        ).order_by("-created_at")
+
+    def report_post(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        report_form = ReportForm(request.POST)
+        if report_form.is_valid():
+            report_form.save_report_for_object(post, request.user)
+            messages.success(request, "Post reported successfully.")
+        else:
+            messages.error(request, "There was an issue with the report.")
+
