@@ -55,7 +55,7 @@
                 <a href="{% url 'profile' message.sender.username %}" class="notranslate self-sender">{% sender_if_applicable message user conversation %}</a>
         {% endif %}
             <div class="col-md-10">
-                <div {% if message.sender in user.blocked_users.all %} data-text="{{message.content|censor}}" name="blocked-message" class="text-muted" {% endif %}>{{ message.content|censor }}</div>
+                <div {% if message.sender in user.blocked_users.all %} data-text="{{message.content|censor}}" data-blocked="true" class="text-muted" {% endif %}>{{ message.content|censor }}</div>
             </div>
             {% include 'partials/message_menu.html' %}
         </div>
@@ -91,4 +91,5 @@
         var scrollKey = "scroll"+conversation_id;
     </script>
     <script src="{% static 'js/conversation.js' %}"></script>
+    <script src="{% static 'js/blocking.js' %}"></script>
   {% endblock %}

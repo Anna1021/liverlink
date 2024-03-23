@@ -5,10 +5,10 @@
     <div class="card-body post-card">
         <div class="row">
             <div class="col-md-10">
-                <a href="{% url 'profile' post.author.username %}"></a><p>{{ comment.author }}</p></a>
+                <a href="{% url 'profile' comment.author.username %}"><p>{{ comment.author }}</p></a>
                 
                 <p {% if comment.author in user.blocked_users.all %} data-text="{{comment.content |censor}}" 
-                name="blocked-comment" class="text-muted"
+                data-blocked="true" class="text-muted"
                 {% elif comment|is_object_reported_by_user:user %} data-text="{{ comment.content |censor}}"
                  data-reported="true" class="text-muted" {% endif %}
                  >{{ comment.content |censor}}</p>
@@ -47,4 +47,4 @@
     </div>
 </li>
 <script src="{% static 'js/reporting.js' %}"></script>
-<script src="{% static 'js/comments.js' %}"></script>
+<script src="{% static 'js/blocking.js' %}"></script>
