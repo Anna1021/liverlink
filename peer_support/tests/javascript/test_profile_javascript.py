@@ -1,12 +1,12 @@
 """Unit tests of javascript in profile view."""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from peer_support.models import User, FriendRequest, Notification
+from django.contrib.contenttypes.models import ContentType
 from selenium.common.exceptions import TimeoutException
 
 class ProfileJavascriptTest(StaticLiveServerTestCase):
@@ -63,8 +63,9 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
             self.assertEqual("Request sent", friend_link.get_attribute("innerHTML"))
 
             friend_request = FriendRequest.objects.get(sender=user, receiver=second_user)
-            self.assertTrue(Notification.objects.filter(friend_request=friend_request).exists())
-            Notification.objects.get(friend_request=friend_request).delete()
+            content_type_id = ContentType.objects.get_for_model(FriendRequest).id
+            self.assertTrue(Notification.objects.filter(content_type=content_type_id, object_id=friend_request.id).exists())
+            Notification.objects.filter(content_type=content_type_id, object_id=friend_request.id).delete()
             friend_request.delete()
 
         except TimeoutException as e:
