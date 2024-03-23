@@ -777,10 +777,10 @@ class Command(BaseCommand):
             pass
 
     def try_create_post(self, data):
-        # try:
-        self.create_post(data)
-        # except:
-            # pass
+        try:
+            self.create_post(data)
+        except:
+            pass
 
     def try_create_post_comment(self, data):
         try:
