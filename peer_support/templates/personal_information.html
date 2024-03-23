@@ -1,5 +1,4 @@
 {% extends 'settings.html' %}
-{% load static %}
 {% block title %}
     <div class="ps-title-text">Personal information</div>
 {% endblock %}
@@ -11,5 +10,4 @@
     <span><input type="submit" value="Update" class="btn btn-primary"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate_user">Deactivate account</button></span>
     </form>
     {% include 'partials/profile-settings/deactivate_user_modal.html' %}
-    <script src="{% static 'js/settings.js' %}"></script>
 {% endblock %}
