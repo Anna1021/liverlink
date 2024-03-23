@@ -108,6 +108,17 @@ class PostViewTestCase(TestCase):
         self.assertEqual(notification.object_id, new_comment.id)
         self.assertEqual(notification.content_object, new_comment)
 
+    def test_valid_comment_creation_does_not_send_notification_if_authors_are_same(self):
+        response_count_before = PostComment.objects.count()
+        notification_count_before = Notification.objects.count()
+        self.client.post(self.url, self.comment_input_data)
+        response_count_after = PostComment.objects.count()
+        notification_count_after = Notification.objects.count()
+        self.assertEqual(response_count_after, response_count_before + 1)
+        self.assertEqual(notification_count_after, notification_count_before)
+        new_comment = PostComment.objects.latest('id')
+        self.assertEqual(new_comment.author, new_comment.post.author)
+
     def test_valid_reply_creation(self):
         self.comment_input_data["parent_id"] = self.comment.id
         response_count_before = PostComment.objects.count()
@@ -137,6 +148,19 @@ class PostViewTestCase(TestCase):
         new_comment = PostComment.objects.latest('id')
         content_type_id = ContentType.objects.get_for_model(PostComment)
         self.assertEqual(Notification.objects.filter(content_type=content_type_id, object_id = new_comment.id).count(), 2)
+
+    def test_valid_reply_creation_does_not_send_notification_if_authors_are_same(self):
+        self.comment_input_data["parent_id"] = self.comment.id
+        response_count_before = PostComment.objects.count()
+        notification_count_before = Notification.objects.count()
+        self.client.post(self.url, self.comment_input_data)
+        response_count_after = PostComment.objects.count()
+        notification_count_after = Notification.objects.count()
+        self.assertEqual(response_count_after, response_count_before + 1)
+        self.assertEqual(notification_count_after, notification_count_before)
+        new_comment = PostComment.objects.latest('id')
+        self.assertEqual(new_comment.author, new_comment.post.author)
+        self.assertEqual(new_comment.author, new_comment.parent.author)
         
     def test_invalid_comment_creation(self):
         response_count_before = PostComment.objects.count()
@@ -184,7 +208,7 @@ class PostViewTestCase(TestCase):
         response = self.client.post(self.url, form_data)
         self.assertEqual(response.status_code, 302)
         final_report_count = Report.objects.count()
-        self.assertEqual(final_report_count, initial_report_count)  # Count should not increase
+        self.assertEqual(final_report_count, initial_report_count)
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertIn("There was an issue with the report.", str(messages_list[0]))
 
@@ -198,7 +222,7 @@ class PostViewTestCase(TestCase):
         response = self.client.post(self.url, form_data)
         self.assertEqual(response.status_code, 302)
         final_report_count = Report.objects.count()
-        self.assertEqual(final_report_count, initial_report_count)  # No increase in report count
+        self.assertEqual(final_report_count, initial_report_count)
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertIn("There was an issue with the post.", str(messages_list[0]))
 

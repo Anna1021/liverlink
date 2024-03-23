@@ -25,6 +25,7 @@ class ReplyPageView(LoginRequiredMixin, View):
             if parent_id:
                  reply.parent = Response.objects.get(id=parent_id)
             reply.save()
+            self.send_notification(reply)
             return redirect(f'/question/{question_id}#{reply.id}')
         else:
             return render(request, 'resources.html', {'form': form})
@@ -35,6 +36,6 @@ class ReplyPageView(LoginRequiredMixin, View):
         if reply.parent and reply.parent.user != reply.user:
             Notification.objects.create(content_object=reply, user=reply.parent.user, notifying_user=reply.user,
                                         description=f"{reply.user} has replied to your reply.")
-        elif reply.user != reply.question.author:
+        if reply.user != reply.question.author:
             Notification.objects.create(content_object=reply, user=reply.question.author, notifying_user=reply.user)
 

@@ -24,7 +24,7 @@ class CreateConversationView(LoginRequiredMixin, FormView):
             create_group = True
         if form.is_valid():
             conversation = form.save(request.user, create_group)
-            for user in conversation.users.all():
+            for user in conversation.users.exclude(id=request.user.id):
                 Notification.objects.create(content_object=conversation, user=user, notifying_user=request.user)
             return redirect(reverse("conversation", kwargs={'conversation_id': conversation.id}), {'form': MessageForm(conversation, user=request.user), 'conversation': conversation, 'user_conversations': request.user.sort_conversations()})
         else:

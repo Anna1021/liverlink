@@ -65,6 +65,17 @@ class QuestionPageTestCase(TestCase):
         self.assertEqual(notification.object_id, response.id)
         self.assertEqual(notification.content_object, response)
 
+    def test_question_page_valid_POST_does_not_send_notification_if_question_has_same_author(self):
+        form_data = {'body': 'This is a test response.'}
+        notification_before_count = Notification.objects.count()
+        response = self.client.post(self.url, form_data)
+        self.assertEqual(response.status_code, 302)
+        notification_after_count = Notification.objects.count()
+        self.assertEqual(notification_before_count, notification_after_count)
+        response = Response.objects.last()
+        content_type_id = ContentType.objects.get_for_model(Response)
+        self.assertFalse(Notification.objects.filter(content_type=content_type_id, object_id=response.id).exists())
+
     def test_report_question_valid(self):
         initial_report_count = Report.objects.all().count()
         form_data = {
