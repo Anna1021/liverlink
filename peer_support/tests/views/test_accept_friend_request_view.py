@@ -11,13 +11,12 @@ class AcceptFriendRequestViewTestCase(TestCase):
                 'peer_support/tests/fixtures/other_users.json',
                 'peer_support/tests/fixtures/default_friend_request.json',
                 'peer_support/tests/fixtures/other_friend_requests.json',
-                'peer_support/tests/fixtures/default_notification.json',
-                'peer_support/tests/fixtures/other_notifications.json',
                 ]
 
     def setUp(self):
         self.url = reverse('accept_friend_request', args=[1, 2])
         self.user = User.objects.get(username='@janedoe')
+        self.friend_user = User.objects.get(username='@johndoe')
         self.client.force_login(self.user)
 
     def test_accept_friend_request_url(self):
@@ -25,11 +24,13 @@ class AcceptFriendRequestViewTestCase(TestCase):
 
     def test_accept_friend_request(self):
         friend_request = FriendRequest.objects.get(id=1)
+        self.assertNotIn(self.user, self.friend_user.friends.all())
         self.assertFalse(friend_request.is_accepted)
-        self.assertEqual(Notification.objects.count(), 3)
-        response = self.client.get(self.url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Notification.objects.count(), 3)
+        self.assertEqual(Notification.objects.count(), 0)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(self.user, self.friend_user.friends.all())
+        self.assertEqual(Notification.objects.count(), 1)
         notification = Notification.objects.last()
         self.assertEqual(notification.title, 'Friend Request Accepted')
         self.assertEqual(notification.description, '@janedoe accepted your friend request.')

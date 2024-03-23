@@ -3,15 +3,25 @@ import uuid
 import datetime
 from django.test import TestCase
 from peer_support.models import Mentor, Referral, User, Conversation, GroupConversation
-from peer_support.views.helpers import create_referral, get_referral_code, get_addable_peers, check_blocked_dm
+from peer_support.views.helpers import create_referral, get_referral_code, get_addable_peers, check_blocked_dm, country_to_continent, country_to_continent_specific
 
 class HelpersViewTestCase(TestCase):
     """Unit tests for the helpers view."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_admin.json',
+        'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
+        'peer_support/tests/fixtures/default_friend_request.json',
+        'peer_support/tests/fixtures/default_conversation.json',
+        'peer_support/tests/fixtures/default_message.json',
+        'peer_support/tests/fixtures/other_messages.json',
+        'peer_support/tests/fixtures/default_group_conversation.json',
+        'peer_support/tests/fixtures/default_question.json',
+        'peer_support/tests/fixtures/default_response.json',
+        'peer_support/tests/fixtures/default_post.json',
+        'peer_support/tests/fixtures/default_post_comment.json',
     ]
 
     def setUp(self):
@@ -36,6 +46,18 @@ class HelpersViewTestCase(TestCase):
     def test_get_referral_code_no_referral(self):
         referral_code = get_referral_code(self.mentor)
         self.assertIsNone(referral_code)
+
+    def test_country_to_continent_known(self):
+        self.assertEqual(country_to_continent('US'), 'North America')
+
+    def test_country_to_continent_unknown(self):
+        self.assertEqual(country_to_continent('XX'), 'Unknown') 
+
+    def test_country_to_continent_two_known(self):
+        self.assertEqual(country_to_continent_specific('US'), ('North America', 'United States'))
+
+    def test_country_to_continent_two_unknown(self):
+        self.assertEqual(country_to_continent_specific('XX'), ('Unknown', 'Unknown'))
     
     def test_get_addable_peers(self):
         current_user = User.objects.get(username='@petrapickles')

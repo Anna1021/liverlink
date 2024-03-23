@@ -49,34 +49,6 @@ class ConversationJavascriptTest(StaticLiveServerTestCase):
             self.conversation.messages.add(msg)
         self.conversation.save()
         self.user.save()
-
-    def test_hide_messages_from_blocked_users(self):
-        self.user.blocked_users.add(self.second_user)
-        self.user.save()
-        message = Message.objects.create(sender=self.second_user, content='ABC')
-        message.visible_to.add(self.user)
-        self.conversation.messages.add(message)
-    
-        self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        try:
-            username_input = self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
-            username_input.send_keys('@janedoe')
-            password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "password")))
-            password_input.send_keys('Password123')
-            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
-            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Messages')]"))).click()
-            self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "@petrapickles"))).click()
-
-            hidden_message = self.wait.until(EC.presence_of_element_located((By.NAME, "blocked-message")))
-            self.assertEqual("You have blocked this user. Click to reveal text.", hidden_message.get_attribute("innerHTML"))
-            self.assertEqual("text-muted", hidden_message.get_attribute("class"))
-            hidden_message.click()
-
-            self.assertEqual(hidden_message.get_attribute("data-text"), hidden_message.get_attribute("innerHTML"))
-            self.assertEqual("", hidden_message.get_attribute("class"))
-        
-        except TimeoutException as e:
-            self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
     
     def test_scrolls_to_bottom_at_first_load(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))

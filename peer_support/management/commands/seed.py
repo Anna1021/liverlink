@@ -157,24 +157,6 @@ friend_request_fixtures = [
     {"sender": patient_fixtures[1], "receiver": parent_fixtures[1]},
 ]
 
-notification_fixtures = [
-    {
-        "title": "Welcome to Peer Support",
-        "description": "Welcome to Peer Support. We are glad to have you here.",
-        "user": patient_fixtures[0],
-    },
-    {
-        "title": "New like to your post",
-        "description": "Your post has received a new like.",
-        "user": patient_fixtures[0],
-    },
-    {
-        "title": "New message",
-        "description": "You have received a new message.",
-        "user": patient_fixtures[0],
-    },
-]
-
 message_fixtures = [
     {"sender": patient_fixtures[0], "content": "Hello, how are you?"},
     {"sender": parent_fixtures[0], "content": "I am good, thank you."},
@@ -214,7 +196,11 @@ question_fixtures = [
         "title": "Question 3",
         "body": "Can you help me with this?",
     },
-    {"author": parent_fixtures[1], "title": "Question 4", "body": "I need help."},
+    {
+        "author": parent_fixtures[1],
+        "title": "Question 4",
+        "body": "I need help with something.",
+    },
 ]
 
 response_fixtures = [
@@ -281,23 +267,39 @@ post_fixtures = [
 ]
 
 post_comment_fixtures = [
-    {
-        "post": post_fixtures[0],
-        "author": parent_fixtures[0],
-        "content": "This is my comment.",
-    },
+    {"post": post_fixtures[0], "author": parent_fixtures[0], "content": "This is my comment."},
     {"post": post_fixtures[1], "author": patient_fixtures[0], "content": "Hello!"},
-    {
-        "post": post_fixtures[2],
-        "author": mentor_fixtures[0],
-        "content": "Hi, I am a mentor.",
-    },
+    {"post": post_fixtures[2], "author": mentor_fixtures[0], "content": "Hi, I am a mentor."},
 ]
 
 feedback_fixtures = [
     {"title": "Fix this", "content": "This is broken."},
     {"title": "Improve that", "content": "This could be improved"},
     {"title": "Add this", "content": "This is missing."},
+]
+
+notification_fixtures = [
+    {
+        "title": "Welcome to Peer Support",
+        "description": "Welcome to Peer Support. We are glad to have you here.",
+        "user": patient_fixtures[0],
+    },
+    {
+        "title": "New Friend Request",
+        "description": "@jackjones has sent you a friend request.",
+        "user": patient_fixtures[0],
+        "notifying_user": parent_fixtures[0],
+        "content_type": ContentType.objects.get_for_model(FriendRequest),
+        "object_id": 1
+    },
+    {
+        "title": "New Conversation",
+        "description": "@jackjones has added you to a conversation.",
+        "user": patient_fixtures[0],
+        "notifying_user": parent_fixtures[0],
+        "content_type": ContentType.objects.get_for_model(Conversation),
+        "object_id": 1
+    },
 ]
 
 
@@ -308,7 +310,6 @@ class Command(BaseCommand):
     PARENT_COUNT = 100
     MENTOR_COUNT = 100
     FRIEND_REQUEST_COUNT = 100
-    NOTIFICATION_COUNT = 500
     CONVERSATION_COUNT = 500
     QUESTION_COUNT = 250
     RESPONSE_COUNT = 1000
@@ -316,6 +317,7 @@ class Command(BaseCommand):
     POST_COUNT = 500
     POST_COMMENT_COUNT = 1000
     FEEDBACK_COUNT = 500
+    NOTIFICATION_COUNT = 500
     DEFAULT_PASSWORD = "Password123"
     help = "Seeds the database with sample data"
 
@@ -341,9 +343,6 @@ class Command(BaseCommand):
         self.create_friend_requests()
         self.friend_requests = FriendRequest.objects.all()
 
-        self.create_notifications()
-        self.notifications = Notification.objects.all()
-
         self.create_messages()
         self.messages = Message.objects.all()
 
@@ -367,6 +366,9 @@ class Command(BaseCommand):
 
         self.create_feedbacks()
         self.feedback = Feedback.objects.all()
+
+        self.create_notifications()
+        self.notifications = Notification.objects.all()
 
     def create_patients(self):
         self.generate_patient_fixtures()
@@ -435,10 +437,6 @@ class Command(BaseCommand):
         for data in friend_request_fixtures:
             self.try_create_friend_request(data)
 
-    def generate_notification_fixtures(self):
-        for data in notification_fixtures:
-            self.try_create_notification(data)
-
     def generate_message_fixtures(self):
         for data in message_fixtures:
             self.try_create_message(data)
@@ -471,6 +469,10 @@ class Command(BaseCommand):
         for data in feedback_fixtures:
             self.try_create_feedback(data)
 
+    def generate_notification_fixtures(self):
+        for data in notification_fixtures:
+            self.try_create_notification(data)
+
     def generate_random_patients(self):
         patient_count = Patient.objects.count()
         while patient_count < self.PATIENT_COUNT:
@@ -502,14 +504,6 @@ class Command(BaseCommand):
             self.generate_friend_request()
             friend_request_count = FriendRequest.objects.count()
         print("Friend request seeding complete.      ")
-
-    def generate_random_notifications(self):
-        notification_count = Notification.objects.count()
-        while notification_count < self.NOTIFICATION_COUNT:
-            print(f"Seeding notification {notification_count}/{self.NOTIFICATION_COUNT}", end='\r')
-            self.generate_notification()
-            notification_count = Notification.objects.count()
-        print("Notification seeding complete.      ")
 
     def generate_random_conversations(self):
         conversation_count = Conversation.objects.count()
@@ -566,6 +560,14 @@ class Command(BaseCommand):
             self.generate_feedback()
             feedback_count = Feedback.objects.count()
         print("Feedback seeding complete.      ")
+
+    def generate_random_notifications(self):
+        notification_count = Notification.objects.count()
+        while notification_count < self.NOTIFICATION_COUNT:
+            print(f"Seeding notification {notification_count}/{self.NOTIFICATION_COUNT}", end='\r')
+            self.generate_notification()
+            notification_count = Notification.objects.count()
+        print("Notification seeding complete.      ")
 
     def generate_user_data(self):
         first_name = self.faker.first_name()
@@ -638,18 +640,6 @@ class Command(BaseCommand):
         receiver = {"username": receiver.username}
         self.try_create_friend_request({"sender": sender, "receiver": receiver})
 
-    def generate_notification(self):
-        user = self.users[randint(0, len(self.users) - 1)]
-        friend_request = None
-        if self.friend_requests.filter(receiver=user) and random.choice([True, False]):
-            friend_request = random.choice(self.friend_requests.filter(receiver=user))
-            title = "Friend Request"
-        else:
-            title = self.faker.sentence()
-        description = self.faker.text(max_nb_chars=100)
-        user = {"username": user.username}
-        self.try_create_notification({"title": title, "description": description, "user": user, "friend_request": friend_request})
-
     def generate_conversation(self):
         users = [
             self.users[randint(0, len(self.users) - 1)],
@@ -716,6 +706,46 @@ class Command(BaseCommand):
         content = self.faker.text(max_nb_chars=500)
         self.try_create_feedback({"title": title, "content": content})
 
+    def generate_notification(self):
+        user = self.users[randint(0, len(self.users) - 1)]
+        if self.friend_requests.filter(receiver=user) and random.choice([True, False]):
+            self.generate_friend_request_notification(user)
+        elif self.post_comments.filter(post__author=user) and random.choice([True, False]):
+            self.generate_post_comment_notification(user)
+        elif self.responses.filter(question__author=user) and random.choice([True, False]):
+            self.generate_question_response_notification(user)
+        else:
+            title = self.faker.sentence()
+            description = self.faker.text(max_nb_chars=100)
+            self.try_create_notification({"title": title, "description": description, "user": user})
+
+    def generate_friend_request_notification(self, user):
+        friend_request = random.choice(self.friend_requests.filter(receiver=user))
+        notifying_user = friend_request.sender
+        content_type = ContentType.objects.get_for_model(FriendRequest)
+        object_id = friend_request.id
+        if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
+            self.try_create_notification({"user": user, "notifying_user": notifying_user,
+                                    "content_type": content_type, "object_id": object_id})
+            
+    def generate_post_comment_notification(self, user):
+        post_comment = random.choice(self.post_comments.filter(post__author=user))
+        notifying_user = post_comment.author
+        content_type = ContentType.objects.get_for_model(PostComment)
+        object_id = post_comment.id
+        if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
+            self.try_create_notification({"user": user, "notifying_user": notifying_user,
+                                    "content_type": content_type, "object_id": object_id})
+        
+    def generate_question_response_notification(self, user):
+        response = random.choice(self.responses.filter(question__author=user))
+        notifying_user = response.user
+        content_type = ContentType.objects.get_for_model(Response)
+        object_id = response.id
+        if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
+            self.try_create_notification({"user": user, "notifying_user": notifying_user,
+                                    "content_type": content_type, "object_id": object_id})
+
     def try_create_patient(self, data):
         try:
             self.create_patient(data)
@@ -737,12 +767,6 @@ class Command(BaseCommand):
     def try_create_friend_request(self, data):
         try:
             self.create_friend_request(data)
-        except:
-            pass
-
-    def try_create_notification(self, data):
-        try:
-            self.create_notification(data)
         except:
             pass
 
@@ -794,6 +818,12 @@ class Command(BaseCommand):
         except:
             pass
 
+    def try_create_notification(self, data):
+        try:
+            self.create_notification(data)
+        except:
+            pass
+
     def create_user(self, model, data):
         profile_picture = data.pop("profile_picture", None)
         user = model.objects.create(**data)
@@ -821,10 +851,6 @@ class Command(BaseCommand):
         sender = self.get_user(data["sender"])
         receiver = self.get_user(data["receiver"])
         FriendRequest.objects.create(sender=sender, receiver=receiver)
-
-    def create_notification(self, data):
-        data["user"] = self.get_user(data["user"])
-        Notification.objects.create(**data)
 
     def create_message(self, data):
         data["sender"] = self.get_user({"username": data["sender"]})
@@ -878,6 +904,9 @@ class Command(BaseCommand):
 
     def create_feedback(self, data):
         Feedback.objects.create(**data)
+
+    def create_notification(self, data):
+        Notification.objects.create(**data)
 
     def get_message(self, data):
         return Message.objects.filter(sender=self.get_user(data["sender"]).pk).first()

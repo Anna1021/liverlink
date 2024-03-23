@@ -1,6 +1,7 @@
 """Tests of the send friend request view."""
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.contenttypes.models import ContentType
 from peer_support.tests.helpers import reverse_with_next
 from peer_support.models import User, FriendRequest, Notification
 
@@ -23,16 +24,24 @@ class SendFriendRequestViewTestCase(TestCase):
         self.assertEqual(Notification.objects.count(), 0)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {'status': 'success'})
         self.assertEqual(FriendRequest.objects.count(), 1)
         self.assertEqual(Notification.objects.count(), 1)
         friend_request = FriendRequest.objects.first()
         self.assertEqual(friend_request.sender, self.user)
         self.assertEqual(friend_request.receiver, User.objects.get(username='@janedoe'))
         notification = Notification.objects.first()
-        self.assertEqual(notification.title, 'Friend Request')
-        self.assertEqual(notification.description, '@johndoe sent you a friend request.')
+        self.assertEqual(notification.title, 'New Friend Request')
+        self.assertEqual(notification.description, '@johndoe has sent you a friend request.')
         self.assertEqual(notification.user, User.objects.get(username='@janedoe'))
-        self.assertEqual(notification.friend_request, friend_request)
+        self.assertEqual(notification.notifying_user, self.user)
+        self.assertEqual(notification.content_type, ContentType.objects.get_for_model(FriendRequest))
+        self.assertEqual(notification.object_id, friend_request.id)
+        self.assertEqual(notification.content_object, friend_request)
+
+    def test_send_friend_request_only_allows_get_requests(self):
+        response = self.client.post(self.url, follow=True)
+        self.assertEqual(response.status_code, 405)
 
     def test_send_friend_request_without_being_logged_in(self):
         self.client.logout()
