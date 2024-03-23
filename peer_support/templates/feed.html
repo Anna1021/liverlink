@@ -44,7 +44,7 @@
   <div class="row justify-content-center pb-2">
     <div class="col-md-2 text-center">
       {% if posts.has_previous %}
-        <a href="?page={{ posts.previous_page_number }}" class="btn btn-primary"> previous </a>
+        <a href="?page={{ posts.previous_page_number }}" class="btn btn-primary"><i class="bi bi-arrow-left"></i></a>
       {% endif %}
     </div>
     <div class="col-md-2 text-center">
@@ -52,7 +52,7 @@
     </div>
     <div class="col-md-2 text-center">
       {% if posts.has_next %}
-        <a href="?page={{ posts.next_page_number }}" class="btn btn-primary"> next </a>
+        <a href="?page={{ posts.next_page_number }}" class="btn btn-primary"><i class="bi bi-arrow-right"></i></a>
       {% endif %}
     </div>
   </div>
