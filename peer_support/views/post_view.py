@@ -1,9 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic.edit import FormView
-from peer_support.models import Post, PostComment
+from peer_support.models import Post, PostComment, Notification
 from peer_support.forms import CommentForm, ReportForm
-from .helpers import get_post, send_notification
+from .helpers import get_post
 from django.contrib import messages
 
 class PostView(LoginRequiredMixin,FormView):
@@ -57,7 +57,13 @@ class PostView(LoginRequiredMixin,FormView):
         if form.is_valid():
             parent_id = request.POST.get('parent_id')
             comment = form.save(parent_id)
-            send_notification(comment)
+            self.send_notification(comment)
             return redirect('post_detail', post_id=post_id)
         else:
             messages.error(request, "There was an issue with the report.")
+
+    def send_notification(self, comment):
+        if comment.post.author != comment.author:
+            Notification.objects.create(content_object=comment, user=comment.post.author, notifying_user=comment.author)
+        if comment.parent and comment.parent.author != comment.author:
+            Notification.objects.create(content_object=comment, user=comment.parent.author, notifying_user=comment.author)

@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from peer_support.models import Question, Response
+from peer_support.models import Question, Response, Notification
 from peer_support.forms import NewReplyForm
-from .helpers import send_notification
 
 class ReplyPageView(LoginRequiredMixin, View):
     """Allows users to reply to a question"""
@@ -24,9 +23,18 @@ class ReplyPageView(LoginRequiredMixin, View):
             reply.user = request.user
             reply.question = Question.objects.get(id=question_id)
             if parent_id:
-                reply.parent = Response.objects.get(id=parent_id)
+                 reply.parent = Response.objects.get(id=parent_id)
             reply.save()
-            send_notification(reply)
             return redirect(f'/question/{question_id}#{reply.id}')
         else:
             return render(request, 'resources.html', {'form': form})
+        
+    def send_notification(self, reply):
+        """Send a notification to the question author and parent author."""
+        
+        if reply.parent and reply.parent.user != reply.user:
+            Notification.objects.create(content_object=reply, user=reply.parent.user, notifying_user=reply.user,
+                                        description=f"{reply.user} has replied to your reply.")
+        elif reply.user != reply.question.author:
+            Notification.objects.create(content_object=reply, user=reply.question.author, notifying_user=reply.user)
+

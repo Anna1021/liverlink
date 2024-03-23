@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView
 from django.urls import reverse
 from peer_support.forms import ConversationForm, MessageForm
-from .helpers import send_notification
+from peer_support.models import Notification
 
 class CreateConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
@@ -25,7 +25,7 @@ class CreateConversationView(LoginRequiredMixin, FormView):
         if form.is_valid():
             conversation = form.save(request.user, create_group)
             for user in conversation.users.all():
-                send_notification(conversation, conv_user = user, conv_creator=request.user)
+                Notification.objects.create(content_object=conversation, user=user, notifying_user=request.user)
             return redirect(reverse("conversation", kwargs={'conversation_id': conversation.id}), {'form': MessageForm(conversation, user=request.user), 'conversation': conversation, 'user_conversations': request.user.sort_conversations()})
         else:
             return render(request, self.template_name, {'form': form, 'user_conversations': request.user.sort_conversations()})

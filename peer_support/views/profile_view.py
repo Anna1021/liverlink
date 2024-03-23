@@ -1,10 +1,10 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from peer_support.models import User, FriendRequest, Post
+from peer_support.models import User, FriendRequest, Post, Notification
 from peer_support.forms import ReportForm, ConversationForm
 from django.contrib import messages
-from .helpers import user_exists, get_user_type, send_notification
+from .helpers import user_exists, get_user_type
 
 class ProfileView(LoginRequiredMixin, View):
     """Displays user's profile"""
@@ -59,7 +59,7 @@ class ProfileView(LoginRequiredMixin, View):
         conversation = conversation_form.save(request.user)
         if request.user.conversations.count() == user_conversation_before_count + 1:
             user = User.objects.get(username=username)
-            send_notification(object=conversation, conv_user=user, conv_creator=request.user)
+            Notification.objects.create(content_object=conversation, user=user, notifying_user=request.user)
         return redirect(reverse('conversation', kwargs={'conversation_id': conversation.id}))
 
     def report_submission(self, request, username):
