@@ -41,18 +41,18 @@
         </div>
     </div>
   </div>
-  <div class="row justify-content-center">
+  <div class="row justify-content-center pb-2">
     <div class="col-md-2 text-center">
       {% if posts.has_previous %}
-        <a href="?page={{ posts.previous_page_number }}"> previous </a>
+        <a href="?page={{ posts.previous_page_number }}" class="btn btn-primary"> previous </a>
       {% endif %}
     </div>
     <div class="col-md-2 text-center">
-      <span class="current-page">{{ posts.number }}</span>
+      <span class="current-page btn btn-primary">{{ posts.number }}</span>
     </div>
     <div class="col-md-2 text-center">
       {% if posts.has_next %}
-        <a href="?page={{ posts.next_page_number }}"> next</a>
+        <a href="?page={{ posts.next_page_number }}" class="btn btn-primary"> next </a>
       {% endif %}
     </div>
   </div>
