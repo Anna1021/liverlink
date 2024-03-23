@@ -26,6 +26,9 @@ class ProfileViewTest(TestCase):
     def setUp(self):
         self.user = User.objects.get(username='@johndoe')
         self.report_user = Report.objects.get(pk=2)
+        user_content_type = ContentType.objects.get_for_model(User)
+        self.report_user.content_type = user_content_type
+        self.report_user.save()
         self.user_to_report = User.objects.get(pk =self.report_user.object_id)
         self.user_to_message = User.objects.get(username='@janedoe')
         self.url_report = reverse('profile', kwargs={'username':self.user_to_report})
@@ -34,7 +37,7 @@ class ProfileViewTest(TestCase):
     
     def test_successful_report_profile(self):
         report_data = {
-            'report': 'report',
+            'report_user': True,
             'action': self.user_to_report.pk,
             'reason': 'abuse'
         }
@@ -52,7 +55,7 @@ class ProfileViewTest(TestCase):
     def test_unsuccessful_report_profile(self):
         valid_message_id = 1  
         report_data = {
-            'report': 'report',
+            'report_user': True,
             'action': valid_message_id,
             'reason': 'dfdsdf'
         }

@@ -1,6 +1,7 @@
 from peer_support.models import User
 from django.db import models
 
+
 class Question(models.Model):
     """Model used for questions in the peer support forum"""
 

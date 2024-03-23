@@ -18,8 +18,9 @@ class ConversationViewTestCase(TestCase):
 
     def setUp(self):
         self.conversation = Conversation.objects.get(pk=1)
-        self.url = reverse('conversation', kwargs={'conversation_id':self.conversation.id})
-        self.no_conversation_url = reverse('conversation', kwargs={'conversation_id':0})
+        self.message = Message.objects.get(pk=1)
+        self.url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
+        self.no_conversation_url = reverse('conversation',kwargs={'conversation_id':0})
         self.form_input = {
             'content':'Ploof'
         }
@@ -94,17 +95,49 @@ class ConversationViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'conversation.html')
 
+    def test_get_sets_message_params_to_zero_with_no_messages(self):
+        self.conversation.messages.set(Message.objects.none())
+        response = self.client.get(self.url)
+        first_message = response.context['first_message']
+        next_message = response.context['next_message']
+        self.assertEqual(first_message,0)
+        self.assertEqual(next_message,0)
+
+    def test_first_message_zero_if_specified_but_no_messages_exist(self):
+        self.conversation.messages.set(Message.objects.none())
+        response = self.client.get(self.url+"?first_message=1")
+        first_message = response.context['first_message']
+        next_message = response.context['next_message']
+        self.assertEqual(first_message,0)
+        self.assertEqual(next_message,0)
+
+    def test_first_message_set_to_other_if_specified_but_that_message_does_not_exist(self):
+        response = self.client.get(self.url+"?first_message=2")
+        first_message = response.context['first_message']
+        next_message = response.context['next_message']
+        self.assertEqual(first_message,4)
+        self.assertEqual(next_message,1)
+
+    def test_first_message_specified_after_sending_message_to_empty_conversation(self):
+        self.form_input['first_message'] = '0'
+        self.conversation.messages.set(Message.objects.none())
+        response = self.client.post(self.url, data=self.form_input,follow=True)
+        first_message = response.context['first_message']
+        next_message = response.context['next_message']
+        self.assertEqual(first_message,6)
+        self.assertEqual(next_message,6)
+
     def test_unsuccessful_message_send(self):
         self.form_input['content'] = ''
         before_count = Message.objects.count()
-        response = self.client.post(self.url, data=self.form_input)
+        response = self.client.post(self.url,data=self.form_input,follow=True)
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count)
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, self.url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'conversation.html')
-        form = response.context['form']
+        form = response.context['message_form']
         self.assertTrue(isinstance(form, MessageForm))
-        self.assertTrue(form.is_bound)
+        self.assertFalse(form.is_bound)
 
     def test_unsuccessful_direct_message_send_if_user_is_blocked(self):
         self.form_input['content'] = '123'
@@ -122,15 +155,19 @@ class ConversationViewTestCase(TestCase):
         after_count = Message.objects.count()
         self.assertEqual(after_count, before_count+1)
         self.assertRedirects(response, self.url, status_code=302, target_status_code=200)
-        self.assertRedirects(response, reverse('conversation', kwargs={'conversation_id': self.conversation.id}))
+        self.assertTemplateUsed(response, 'conversation.html')
         message = self.conversation.messages.last()
         self.assertEqual(message.sender, self.user)
         self.assertEqual(message.content, 'Ploof')
         self.assertIn(message,self.conversation.messages.all())
+        form = response.context['message_form']
+        self.assertTrue(isinstance(form, MessageForm))
+        self.assertFalse(form.is_bound)
 
     def test_successful_report(self):
-        message_id_to_report = 1
+        message_id_to_report = self.message.id
         report_data = {
+            'report_message': True,
             'action': message_id_to_report,
             'reason': 'abuse'
         }
@@ -147,8 +184,9 @@ class ConversationViewTestCase(TestCase):
         self.assertIn("Message reported successfully.", str(messages_list[0]))
 
     def test_unsuccessful_report (self):
-        valid_message_id = 1  
+        valid_message_id = self.message.id 
         report_data = {
+            'report_message': True,
             'action': valid_message_id,
             'reason': 'dfdsdf'
         }
@@ -157,3 +195,56 @@ class ConversationViewTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertIn("There was an issue with the report.", str(messages_list[0]))
+
+    def test_successful_delete_message_for_self(self):
+        delete_data = {
+            'action': self.message.id,
+            'delete': 'me'
+        }
+        visible_to_before = self.message.visible_to.count()
+        messages_before = Message.objects.count()
+        response = self.client.post(self.url,data=delete_data,follow=True)
+        visible_to_after = self.message.visible_to.count()
+        messages_after = Message.objects.count()
+        self.assertEqual(visible_to_after,visible_to_before-1)
+        self.assertEqual(messages_after,messages_before)
+        redirect_url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')
+
+    def test_successful_delete_message_for_all_individually(self):
+        delete_data = {
+            'action': self.message.id,
+            'delete': 'me'
+        }
+        visible_to_before = self.message.visible_to.count()
+        messages_before = self.conversation.messages.count()
+        response = self.client.post(self.url,data=delete_data,follow=True)
+        self.client.logout()
+        other_user = User.objects.get(username='@johndoe')
+        other_user.conversations.add(self.conversation)
+        self.client.login(username=other_user.username, password="Password123")
+        response = self.client.post(self.url,data=delete_data,follow=True)
+        visible_to_after = self.message.visible_to.count()
+        messages_after = self.conversation.messages.count()
+        self.assertEqual(visible_to_after,visible_to_before-2)
+        self.assertEqual(messages_after,messages_before-1)
+        redirect_url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')
+
+    def test_successful_delete_message_for_all_at_once(self):
+        delete_data = {
+            'action': self.message.id,
+            'delete': 'all'
+        }
+        visible_to_before = self.message.visible_to.count()
+        messages_before = Message.objects.count()
+        response = self.client.post(self.url,data=delete_data,follow=True)
+        visible_to_after = self.message.visible_to.count()
+        messages_after = Message.objects.count()
+        self.assertEqual(visible_to_after,visible_to_before-2)
+        self.assertEqual(messages_after,messages_before-1)
+        redirect_url = reverse('conversation',kwargs={'conversation_id':self.conversation.id})
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'conversation.html')

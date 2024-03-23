@@ -1,0 +1,14 @@
+[
+  {
+    "model": "peer_support.report",
+    "pk": 3,
+    "fields": {
+      "reporter": 8,
+      "reason": "spam",
+      "reported_at": "2024-03-07T12:00:00Z",
+      "content_type": 18,
+      "object_id": 1
+    }
+  }
+]
+  

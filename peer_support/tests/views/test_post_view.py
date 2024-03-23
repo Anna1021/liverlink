@@ -1,8 +1,7 @@
 """Tests of the post view."""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.forms import PostForm
-from peer_support.models import User, Post, PostComment
+from peer_support.models import User, Post, PostComment, Report
 from django.contrib import messages
 
 class PostViewTestCase(TestCase):
@@ -84,11 +83,61 @@ class PostViewTestCase(TestCase):
         response = self.client.post(self.url, data=self.comment_input_data)
         response_count_after = PostComment.objects.count()
         self.assertEqual(response_count_after, response_count_before)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'post_detail.html')
-        self.assertIn('form', response.context)
-        form = response.context['comment_form']
-        self.assertFalse(form.is_valid())
-        self.assertIn('content', form.errors)  
-        self.assertEqual(form.errors['content'], ['This field is required.'])
+        self.assertRedirects(response, self.url, status_code=302, target_status_code=200)
+        
+    def test_report_comment_valid(self):
+        initial_report_count = Report.objects.count()
+        form_data = {
+            'report_comment': True,
+            'action': self.comment.id,
+            'reason': 'abuse'
+        }
+        response = self.client.post(self.url, form_data)
+        self.assertEqual(response.status_code, 302)
+        final_report_count = Report.objects.count()
+        self.assertEqual(final_report_count, initial_report_count + 1)
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertIn("Comment reported successfully.", str(messages_list[0]))
+
+    def test_report_post_valid(self):
+        initial_report_count = Report.objects.count()
+        form_data = {
+            'report_post': True,
+            'action': self.post.id,
+            'reason': 'abuse'
+        }
+        response = self.client.post(self.url, form_data)
+        self.assertEqual(response.status_code, 302)
+        final_report_count = Report.objects.count()
+        self.assertEqual(final_report_count, initial_report_count + 1)
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertIn("Post reported successfully.", str(messages_list[0]))
+
+    def test_report_comment_invalid_reason(self):
+        initial_report_count = Report.objects.count()
+        form_data = {
+            'report_comment': True,
+            'action': self.comment.id,
+            'reason': 'dgfdd' 
+        }
+        response = self.client.post(self.url, form_data)
+        self.assertEqual(response.status_code, 302)
+        final_report_count = Report.objects.count()
+        self.assertEqual(final_report_count, initial_report_count)  # Count should not increase
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertIn("There was an issue with the report.", str(messages_list[0]))
+
+    def test_report_post_invalid_reason(self):
+        initial_report_count = Report.objects.count()
+        form_data = {
+            'report_post': True,
+            'action': self.post.id,
+            'reason': 'dgfdd' 
+        }
+        response = self.client.post(self.url, form_data)
+        self.assertEqual(response.status_code, 302)
+        final_report_count = Report.objects.count()
+        self.assertEqual(final_report_count, initial_report_count)  # No increase in report count
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertIn("There was an issue with the post.", str(messages_list[0]))
 

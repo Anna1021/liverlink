@@ -13,10 +13,9 @@ from .profile_deactivate_view import deactivate_user
 from .conversation_view import ConversationView
 from .peer_select_view import PeerSelectView
 from .create_conversation_view import CreateConversationView
-from .delete_message_view import DeleteMessageView
 from .new_question_page_view import new_question_page
 from .reply_page_view import ReplyPageView
-from .resources_view import resources
+from .resources_view import ResourcesView
 from .question_page_view import QuestionPageView
 from .send_friend_request_view import SendFriendRequestView
 from .accept_friend_request_view import AcceptFriendRequestView
@@ -31,6 +30,7 @@ from .clear_notifications_view import clear_notifications
 from .post_view import PostView
 from .delete_post_view import DeletePostView
 from .feed_view import FeedView
+from .like_post_view import like_post
 from .conversation_details_view import ConversationDetailsView
 from .remove_friend_view import remove_friend
 from .moderation_view import ModerationView
