@@ -693,27 +693,43 @@ class Command(BaseCommand):
 
     def generate_notification(self):
         user = self.users[randint(0, len(self.users) - 1)]
-        title = None
-        description = None
-        notifying_user = None
-        content_type = None
-        object_id = None
         if self.friend_requests.filter(receiver=user) and random.choice([True, False]):
-            friend_request = random.choice(self.friend_requests.filter(receiver=user))
-            notifying_user = friend_request.sender
-            content_type = ContentType.objects.get_for_model(FriendRequest)
-            object_id = friend_request.id
+            self.generate_friend_request_notification(user)
         elif self.post_comments.filter(post__author=user) and random.choice([True, False]):
-            post_comment = random.choice(self.post_comments.filter(post__author=user))
-            notifying_user = post_comment.author
-            content_type = ContentType.objects.get_for_model(PostComment)
-            object_id = post_comment.id
+            self.generate_post_comment_notification(user)
+        elif self.responses.filter(question__author=user) and random.choice([True, False]):
+            self.generate_question_response_notification(user)
         else:
             title = self.faker.sentence()
             description = self.faker.text(max_nb_chars=100)
-        user = {"username": user.username}
-        self.try_create_notification({"title": title, "description": description, "user": user, "notifying_user": notifying_user,
-                                      "content_type": content_type, "object_id": object_id})
+            self.try_create_notification({"title": title, "description": description, "user": user})
+
+    def generate_friend_request_notification(self, user):
+        friend_request = random.choice(self.friend_requests.filter(receiver=user))
+        notifying_user = friend_request.sender
+        content_type = ContentType.objects.get_for_model(FriendRequest)
+        object_id = friend_request.id
+        if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
+            self.try_create_notification({"user": user, "notifying_user": notifying_user,
+                                    "content_type": content_type, "object_id": object_id})
+            
+    def generate_post_comment_notification(self, user):
+        post_comment = random.choice(self.post_comments.filter(post__author=user))
+        notifying_user = post_comment.author
+        content_type = ContentType.objects.get_for_model(PostComment)
+        object_id = post_comment.id
+        if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
+            self.try_create_notification({"user": user, "notifying_user": notifying_user,
+                                    "content_type": content_type, "object_id": object_id})
+        
+    def generate_question_response_notification(self, user):
+        response = random.choice(self.responses.filter(question__author=user))
+        notifying_user = response.user
+        content_type = ContentType.objects.get_for_model(Response)
+        object_id = response.id
+        if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
+            self.try_create_notification({"user": user, "notifying_user": notifying_user,
+                                    "content_type": content_type, "object_id": object_id})
 
     def try_create_patient(self, data):
         try:
@@ -874,7 +890,6 @@ class Command(BaseCommand):
         Feedback.objects.create(**data)
 
     def create_notification(self, data):
-        data["user"] = self.get_user(data["user"])
         Notification.objects.create(**data)
 
     def get_message(self, data):
