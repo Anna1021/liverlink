@@ -66,4 +66,5 @@ class PostView(LoginRequiredMixin,FormView):
         if comment.post.author != comment.author:
             Notification.objects.create(content_object=comment, user=comment.post.author, notifying_user=comment.author)
         if comment.parent and comment.parent.author != comment.author:
-            Notification.objects.create(content_object=comment, user=comment.parent.author, notifying_user=comment.author)
+            Notification.objects.create(content_object=comment, user=comment.parent.author, notifying_user=comment.author,
+                                        description=f"{comment.author} has replied to your comment.")
