@@ -28,8 +28,8 @@
                 {% endif %}
             </div>
         </div>
-    {% if question.author in current_user.blocked_users.all %}
-    <p data-text="{{ question.body|censor }}" id="blocked-question" class="question-body text-muted">
+    {% if question.author in user.blocked_users.all %}
+    <p data-text="{{ question.body|censor }}" data-blocked="true" class="question-body text-muted">
     {% elif question|is_object_reported_by_user:user %}
     <p data-text="{{ question.body|censor }}" data-reported="true" class="text-muted">
     {% else %}
@@ -65,6 +65,6 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="{% static 'js/question_page.js' %}"></script>
+<script src="{% static 'js/blocking.js' %}"></script>
 <script src="{% static 'js/reporting.js' %}"></script>
 {% endblock %}
