@@ -5,7 +5,7 @@
     <div class="card-body post-card">
         <div class="row">
             <div class="col-md-10">
-                <a href="{% url 'profile' post.author.username %}"></a><p>{{ comment.author }}</p></a>
+                <a href="{% url 'profile' comment.author.username %}"><p>{{ comment.author }}</p></a>
                 
                 <p {% if comment.author in user.blocked_users.all %} data-text="{{comment.content |censor}}" 
                 data-blocked="true" class="text-muted"
