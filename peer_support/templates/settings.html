@@ -1,23 +1,24 @@
 {% extends 'base_content.html' %}
 {% block content %}
 {% load static %}
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <h2>Profile settings</h2>
-      <div class="col-2 ps-col">
-        <img src="{% static user.userprofile.profile_picture %}" class="ps-profile-picture" alt="Your profile picture"> </img>
-        <div class="divider"></div>
-        {% include 'partials/profile-settings/settings_sidebar.html' %}
+<div class="container px-0">
+  <div class="row mt-2">
+      <div class="col-md-3 ps-col">
+        <div class="card shadow box-area">
+          <h2>Profile settings</h2>
+          <img src="{% static user.userprofile.profile_picture %}" class="ps-profile-picture" alt="Your profile picture"> </img>
+          <div class="divider"></div>
+          {% include 'partials/profile-settings/settings_sidebar.html' %}
+        </div>
       </div>
-      <div class="col-8 ps-col">
-        {% block title %}{% endblock %}
-        <div class="divider-large"></div>
-        {% block page %}
-        {% endblock %}
+      <div class="col-md-9 ps-col">
+        <div class="card shadow box-area">
+          {% block title %}{% endblock %}
+          <div class="divider-large"></div>
+          {% block page %}
+          {% endblock %}
+        </div>
       </div>
-      <div class="col-2 ps-col"></div>
-    </div>
   </div>
   <row>
     <div class="ps-footer"></div>

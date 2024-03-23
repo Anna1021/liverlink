@@ -6,7 +6,7 @@
 
 {% block page %}
 <meta name="csrf-token" content="{{ csrf_token }}">
-<div class="picture-grid pt-3 pb-3">
+<div class="picture-grid pt-3 pb-3 ps-scrollable">
     {% for picture in profile_pictures %}
     <div class="picture-container">
         <img src="{% static 'profile_pictures/'|add:picture %}" alt="Profile Picture">

@@ -1,6 +1,7 @@
 from django import forms
 from peer_support.models import User
 
+
 class UserForm(forms.ModelForm):
     """Form to update user profiles."""
 
@@ -8,8 +9,20 @@ class UserForm(forms.ModelForm):
         """Form options."""
 
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio']
+        fields = [
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+            "date_of_birth",
+            "gender",
+            "location",
+            "hospital",
+            "ethnicity",
+            "language",
+            "bio",
+        ]
         widgets = {
-            'bio': forms.Textarea(attrs={'rows': 3}),
-            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            "bio": forms.Textarea(attrs={"rows": 3}),
+            "date_of_birth": forms.DateInput(attrs={"type": "date"}),
         }

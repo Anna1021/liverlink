@@ -1,19 +1,24 @@
 from django import forms
 from peer_support.models import Conversation, GroupConversation, User
 
+
 class ConversationForm(forms.ModelForm):
     """Form enabling users to create a new conversation"""
 
     class Meta:
         model = Conversation
-        fields = ['users']
-        users = forms.ModelMultipleChoiceField(queryset=User.objects.all(), widget=forms.CheckboxSelectMultiple(), required=True)
+        fields = ["users"]
+        users = forms.ModelMultipleChoiceField(
+            queryset=User.objects.all(),
+            widget=forms.CheckboxSelectMultiple(),
+            required=True,
+        )
 
     def __init__(self, user, **kwargs):
         """Construct new form instance with a user instance."""
 
         super().__init__(**kwargs)
-        self.fields['users'].queryset = user.friends.all()
+        self.fields["users"].queryset = user.friends.all()
 
     def filter_existing_conversations_by_users(self, new_users):
         """Filter existing conversations to those containing the new users."""
@@ -42,9 +47,9 @@ class ConversationForm(forms.ModelForm):
 
     def save(self, current_user, group=False):
         """Create a new conversation or fetch an existing one."""
-        
+
         super().save(commit=False)
-        new_users = self.cleaned_data.get('users')
+        new_users = self.cleaned_data.get("users")
         new_users |= User.objects.filter(username=current_user.username)
         if not group:
             conversation = self.get_direct_conversation(new_users)

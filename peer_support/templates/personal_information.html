@@ -5,12 +5,12 @@
 
 
 {% block page %}
-    <div class="card shadow box-area py-2">
-        <form action="{% url 'settings' %}" method="post">
-        {% csrf_token %}
+    <form action="{% url 'settings' %}" method="post">
+    {% csrf_token %}
+    <div class="ps-scrollable">
         {% include 'partials/bootstrap_form.html' with form=form %}
-        <span><input type="submit" value="Update" class="btn btn-primary"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate_user">Deactivate account</button></span>
-        </form>
-        {% include 'partials/profile-settings/deactivate_user_modal.html' %}
     </div>
+    <span><input type="submit" value="Update" class="btn btn-primary"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate_user">Deactivate account</button></span>
+    </form>
+    {% include 'partials/profile-settings/deactivate_user_modal.html' %}
 {% endblock %}

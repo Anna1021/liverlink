@@ -193,3 +193,11 @@ body {
   display: none;
 }
 
+::-webkit-scrollbar {
+  width: 8px;          
+}
+
+::-webkit-scrollbar-thumb {   
+  border-radius: 5px;
+  background: #9e9b9b;
+}
