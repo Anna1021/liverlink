@@ -4,7 +4,7 @@
 <blockquote id="{{response.id}}">
   <div class="response-container d-flex justify-content-between align-items-start">
     {% if response.user in current_user.blocked_users.all %} 
-    <p data-text="{{response.body|censor}}" name="blocked-response" class="response-body text-muted" >
+    <p data-text="{{response.body|censor}}" data-blocked="true" class="response-body text-muted" >
     {% elif response|is_object_reported_by_user:user %}
     <p data-text="{{ response.body|censor }}" data-reported="true" class="text-muted response-body">
     {% else %} 

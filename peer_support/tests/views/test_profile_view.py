@@ -1,7 +1,7 @@
 """Tests of the profile view"""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.models import Report, User, Conversation, GroupConversation, FriendRequest, Post
+from peer_support.models import Report, User, Conversation, GroupConversation, FriendRequest, Post, Notification
 from peer_support.forms import ReportForm
 from django.contrib.contenttypes.models import ContentType
 from peer_support.tests.helpers import reverse_with_next
@@ -93,7 +93,8 @@ class ProfileViewTest(TestCase):
             'message': 'message',
             'users': [self.user_to_message.id]
         }
-        response = self.client.post(self.url, data=conversation_data, follow=True)
+        url = reverse('profile',kwargs={'username':self.user_to_message.username})
+        response = self.client.post(url, data=conversation_data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Conversation.objects.count(), 1)
         conversation = Conversation.objects.first()
@@ -106,6 +107,31 @@ class ProfileViewTest(TestCase):
         self.assertIn(conversation, self.user.conversations.all())
         self.assertIn(conversation, self.user_to_message.conversations.all())
 
+    def test_get_conversation_creation_sends_notification(self):
+        self.assertEqual(Conversation.objects.count(), 0)
+        self.assertEqual(Notification.objects.count(), 0)
+        conversation_data = {
+            'message': 'message',
+            'users': [self.user_to_message.id]
+        }
+        url = reverse('profile',kwargs={'username':self.user_to_message.username})
+        response = self.client.post(url, data=conversation_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Conversation.objects.count(), 1)
+        conversation = Conversation.objects.first()
+        redirect_url = reverse('conversation', kwargs={'conversation_id': conversation.id})
+        notification = Notification.objects.first()
+        content_type = ContentType.objects.get_for_model(Conversation)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+        self.assertEqual(notification.title, "New Conversation")
+        self.assertEqual(notification.description, "@johndoe has created a conversation with you.")
+        self.assertEqual(notification.user, self.user_to_message)
+        self.assertEqual(notification.notifying_user, self.user)
+        self.assertEqual(notification.content_type, content_type)
+        self.assertEqual(notification.object_id, conversation.id)
+        self.assertEqual(notification.content_object, conversation)
+        self.assertEqual(notification.get_URL(), redirect_url)
+
     def test_get_conversation_when_no_direct_conversation_exists_creates_conversation(self):
         groupchat = GroupConversation.objects.create()
         groupchat.users.add(self.user)
@@ -116,7 +142,8 @@ class ProfileViewTest(TestCase):
             'message': 'message',
             'users': [self.user_to_message.id]
         }
-        response = self.client.post(self.url, data=conversation_data, follow=True)
+        url = reverse('profile',kwargs={'username':self.user_to_message.username})
+        response = self.client.post(url, data=conversation_data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Conversation.objects.count(), 2)
         conversation = Conversation.objects.last()
@@ -142,7 +169,8 @@ class ProfileViewTest(TestCase):
             'message': 'message',
             'users': [self.user_to_message.id]
         }
-        response = self.client.post(self.url, data=conversation_data, follow=True)
+        url = reverse('profile',kwargs={'username':self.user_to_message.username})
+        response = self.client.post(url, data=conversation_data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Conversation.objects.count(), 1)
         conversation = Conversation.objects.first()
@@ -155,6 +183,28 @@ class ProfileViewTest(TestCase):
         self.assertIsNone(conversation.as_group())
         self.assertIn(conversation, self.user.conversations.all())
         self.assertIn(conversation, self.user_to_message.conversations.all())
+
+    def test_get_conversation_when_conversation_exists_does_not_send_notification(self):
+        conv = Conversation.objects.create()
+        conv.users.add(self.user)
+        conv.users.add(self.user_to_message)
+        self.user.conversations.add(conv)
+        self.user_to_message.conversations.add(conv)
+        self.assertIsNone(conv.as_group())
+        self.assertEqual(Conversation.objects.count(), 1)
+        self.assertEqual(Notification.objects.count(), 0)
+        conversation_data = {
+            'message': 'message',
+            'users': [self.user_to_message.id]
+        }
+        url = reverse('profile',kwargs={'username':self.user_to_message.username})
+        response = self.client.post(url, data=conversation_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Conversation.objects.count(), 1)
+        self.assertEqual(Notification.objects.count(), 0)
+        conversation = Conversation.objects.first()
+        redirect_url = reverse('conversation', kwargs={'conversation_id': conversation.id})
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_profile_url(self):
         self.assertEqual(self.url,'/profile/@johndoe/')

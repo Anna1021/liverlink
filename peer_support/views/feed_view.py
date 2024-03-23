@@ -44,6 +44,8 @@ class FeedView(LoginRequiredMixin, FormView):
         user_posts = retrieve_friend_posts(request)
         if feed_type != 'friends':
             user_posts = user_posts|Post.objects.filter(visibility='G')
+        user_posts = user_posts.exclude(author__in=request.user.blocked_by.all()
+                                ).exclude(author__in=request.user.blocked_users.all())
         user_posts = user_posts.order_by("-created_at")
         annotated_posts = self.annotate_posts(request, user_posts)
         paginator = Paginator(annotated_posts, 10)

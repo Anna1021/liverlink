@@ -24,17 +24,8 @@ class CreateConversationView(LoginRequiredMixin, FormView):
             create_group = True
         if form.is_valid():
             conversation = form.save(request.user, create_group)
-            self.send_notification(request.user, conversation)
+            for user in conversation.users.exclude(id=request.user.id):
+                Notification.objects.create(content_object=conversation, user=user, notifying_user=request.user)
             return redirect(reverse("conversation", kwargs={'conversation_id': conversation.id}), {'form': MessageForm(conversation, user=request.user), 'conversation': conversation, 'user_conversations': request.user.sort_conversations()})
         else:
             return render(request, self.template_name, {'form': form, 'user_conversations': request.user.sort_conversations()})
-        
-    def send_notification(self, request_user, conversation):
-        """Sends notification to users in conversation"""
-        
-        for user in conversation.users.all().exclude(id=request_user.id):
-            Notification.objects.create(
-                title = "New conversation",
-                description = f"You have been added to a new conversation by {request_user.username}.",
-                user = user
-            )
