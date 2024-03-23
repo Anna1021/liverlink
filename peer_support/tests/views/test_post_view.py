@@ -44,6 +44,27 @@ class PostViewTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
+    def test_cannot_get_post_of_blocked_user(self):
+        invalid_url = reverse('post_detail',kwargs={'post_id':3})
+        self.user.blocked_users.add(User.objects.get(id=3))
+        response = self.client.get(invalid_url,follow=True)
+        self.assertRedirects(response, self.redirect_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed('feed.html')
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+
+    def test_cannot_get_post_of_blocked_by_user(self):
+        invalid_url = reverse('post_detail',kwargs={'post_id':3})
+        blocking_user = User.objects.get(id=3)
+        blocking_user.blocked_users.add(self.user)
+        response = self.client.get(invalid_url,follow=True)
+        self.assertRedirects(response, self.redirect_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed('feed.html')
+        messages_list = list(response.context['messages'])
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(messages_list[0].level, messages.ERROR)
+
     def test_cannot_get_private_post_of_non_friend(self):
         invalid_url = reverse('post_detail',kwargs={'post_id':5})
         response = self.client.get(invalid_url,follow=True)
