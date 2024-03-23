@@ -1,5 +1,15 @@
 {% load conversation_tags %}
-<nav class="col-md-3 d-md-block sidebar collapse pb-3">
+<button
+        class="navbar-toggler btn"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#conversation-list"
+        aria-controls="conversationList"
+        aria-expanded="false"
+        aria-label="List of conversations">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+<nav class="col-md-3 d-md-block sidebar collapse navbar-collapse pb-3" id="conversation-list">
 <ul class="conversation-list">
     {% for conversation in user_conversations %}
     <li>
