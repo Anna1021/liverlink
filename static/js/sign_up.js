@@ -26,16 +26,7 @@ $(document).ready(function() {
 
   // Bind the change event to the user type selection
   $('#id_user_type').change(handleUserTypeChange);
-
-  // Only show the hospital field if the user is from the United Kingdom
-  $('#id_hospital').parent().hide();
-  $('#id_location').change(function() {
-        if ($(this).val() == 'GB') {
-            $('#id_hospital').parent().show();
-        } else {
-            $('#id_hospital').parent().hide();
-        }
-    });
+  
 });
 
     
