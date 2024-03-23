@@ -27,7 +27,6 @@ $(document).ready(function() {
     function setScroll(){
         let scrollPos = 0;
         let previousUrl = document.referrer;
-        // console.log(sessionStorage.getItem(scrollKey)+" four");
         if (sessionStorage.getItem(scrollKey)!==null) {
             if (sessionStorage.getItem(scrollKey)>$('#conversation').prop('clientHeight')+120) {
                 scrollPos = sessionStorage.getItem(scrollKey);
@@ -39,11 +38,8 @@ $(document).ready(function() {
                 scrollPos = sessionStorage.getItem(scrollKey);
             }
         }  
-        // console.log($('#conversation').prop('scrollHeight')+" three");
-        // console.log(scrollPos + " two");
         scrollPos = $('#conversation').prop('scrollHeight')-scrollPos;
         $('#conversation').scrollTop(scrollPos);
-        // console.log($('#conversation').scrollTop() + " one");
     }
     $('#conversation').scroll(function(){
         if ($(this).scrollTop()<$(this).prop('scrollHeight')-($('#conversation').prop('clientHeight')+120)){
