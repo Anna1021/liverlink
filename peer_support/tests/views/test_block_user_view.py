@@ -24,12 +24,15 @@ class BlockUserViewTestCase(TestCase):
         before_count = self.user.blocked_users.count()
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {'status': 'success'})
         after_count = self.user.blocked_users.count()
         self.assertEqual(before_count + 1, after_count)
         self.assertIn(self.second_user, self.user.blocked_users.all())
         self.assertNotIn(self.user, self.second_user.blocked_users.all())
 
     def test_block_user_successfully_deletes_associated_friend_requests_from_blocking_user(self):
+        self.user.friends.remove(self.second_user)
+        self.user.save()
         friend_request = FriendRequest.objects.create(sender=self.user, receiver=self.second_user, is_accepted=False)
         before_friend_request_count = FriendRequest.objects.count()
         self.assertEqual(friend_request.sender, self.user)
@@ -40,6 +43,8 @@ class BlockUserViewTestCase(TestCase):
         self.assertFalse(FriendRequest.objects.filter(sender=self.user).filter(receiver=self.second_user).exists())
 
     def test_block_user_successfully_deletes_associated_friend_requests_from_blocked_user(self):
+        self.user.friends.remove(self.second_user)
+        self.user.save()
         friend_request = FriendRequest.objects.create(sender=self.second_user, receiver=self.user, is_accepted=False)
         before_friend_request_count = FriendRequest.objects.count()
         self.assertEqual(friend_request.sender, self.second_user)
@@ -116,6 +121,10 @@ class BlockUserViewTestCase(TestCase):
         self.assertNotIn(self.second_user, self.user.friends.all())
         self.assertNotIn(self.user, self.second_user.friends.all())
         self.assertEqual(before_friends_count, final_friends_count)
+
+    def test_block_user_only_allows_get_requests(self):
+        response = self.client.post(self.url, follow=True)
+        self.assertEqual(response.status_code, 405)
 
     def test_block_user_without_being_logged_in(self):
         self.client.logout()

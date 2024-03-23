@@ -24,6 +24,7 @@ class SendFriendRequestViewTestCase(TestCase):
         self.assertEqual(Notification.objects.count(), 0)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {'status': 'success'})
         self.assertEqual(FriendRequest.objects.count(), 1)
         self.assertEqual(Notification.objects.count(), 1)
         friend_request = FriendRequest.objects.first()
@@ -37,6 +38,10 @@ class SendFriendRequestViewTestCase(TestCase):
         self.assertEqual(notification.content_type, ContentType.objects.get_for_model(FriendRequest))
         self.assertEqual(notification.object_id, friend_request.id)
         self.assertEqual(notification.content_object, friend_request)
+
+    def test_send_friend_request_only_allows_get_requests(self):
+        response = self.client.post(self.url, follow=True)
+        self.assertEqual(response.status_code, 405)
 
     def test_send_friend_request_without_being_logged_in(self):
         self.client.logout()
