@@ -216,3 +216,10 @@ class SignUpFormTestCase(TestCase):
         form = SignUpForm(data=self.form_input)
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['date_of_birth'], ['You must be 13 years old to register.'])
+
+    def test_invalid_date_of_birth_more_than_25_years_ago(self):
+        self.form_input['date_of_birth'] = date.today() - timedelta(days=365*26)
+        self.form_input['user_type'] = 'PT'
+        form = SignUpForm(data=self.form_input)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['date_of_birth'], ['You must be less than 25 years old to register as a patient.'])
