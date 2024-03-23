@@ -308,6 +308,7 @@ background-color: var(--dark-submit-btn-color);
 }
 
 .dark-theme .post-card{
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 20px;
   background-color: #2E2D38;
@@ -343,4 +344,18 @@ background-color: var(--dark-submit-btn-color);
 
 .dark-theme a.ps-link:hover {
   color:black
+}
+
+.dark-theme ::-webkit-scrollbar {
+  width: 10px;          
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {   
+  border-radius: 30px;
+  background: #91BBD3;
+}
+
+.dark-theme ::-webkit-scrollbar-track {  
+  border-radius:10px;
+  background: black;
 }
