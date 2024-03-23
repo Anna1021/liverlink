@@ -1,16 +1,17 @@
 from django import forms
 from peer_support.models import Message
 
+
 class MessageForm(forms.ModelForm):
     """Form enabling users to send messages in a conversation"""
 
     class Meta:
         model = Message
-        fields = ['content']
+        fields = ["content"]
 
-    def __init__(self,conversation, user=None, **kwargs):
+    def __init__(self, conversation, user=None, **kwargs):
         """Construct new form instance with a conversation and user instance."""
-        
+
         super().__init__(**kwargs)
         self.conversation = conversation
         self.user = user
@@ -19,8 +20,8 @@ class MessageForm(forms.ModelForm):
         """Create the message content, linking it to the previous message if available."""
 
         return Message.objects.create(
-            sender = self.user,
-            content = self.cleaned_data.get('content'),
+            sender=self.user,
+            content=self.cleaned_data.get("content"),
         )
 
     def update_message_visibility_and_conversation(self, message):
