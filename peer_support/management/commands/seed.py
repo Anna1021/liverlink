@@ -102,6 +102,52 @@ parent_fixtures = [
     },
 ]
 
+professional_fixtures = [
+    {
+        'username': '@joanneclarke', 
+        'email': 'joanne.clarke@example.org', 
+        'first_name': 'Joanne', 
+        'last_name': 'Clarke', 
+        'date_of_birth': '1968-04-15', 
+        'gender': 'F', 
+        'location': 'US', 
+        'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 
+        'ethnicity': 'BR', 
+        'language': 'en', 
+        'bio': 'Hello, I am Joanne.', 
+        'expertise': 'Diabetes',
+        'referral_code':'ABC123'
+    },
+    {
+        'username': '@jeremybarnett', 
+        'email': 'jeremny.barnett@example.org', 
+        'first_name': 'Jeremy', 
+        'last_name': 'Barnett', 
+        'date_of_birth': '1995-11-2', 
+        'gender': 'M', 
+        'location': 'CA', 
+        'hospital': 'Countess of Chester Hospital NHS Foundation Trust', 
+        'ethnicity': 'BR', 
+        'language': 'en', 
+        'bio': 'Hey there, I am Jeremy.', 
+        'referral_code':'DEF456'
+    },
+    {
+        'username': '@paulaevans', 
+        'email': 'paula.evans@example.org', 
+        'first_name': 'Paula', 
+        'last_name': 'Evans', 
+        'date_of_birth': '1975-2-30', 
+        'gender': 'F', 
+        'location': 'AU', 
+        'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 
+        'ethnicity': 'BR', 
+        'language': 'en', 
+        'bio': 'Hi, I am Paula.', 
+        'referral_code':'GHI789'
+    },
+]
+
 mentor_fixtures = [
     {
         "username": "@sarahsmith",
@@ -155,12 +201,6 @@ friend_request_fixtures = [
     {"sender": patient_fixtures[0], "receiver": parent_fixtures[0]},
     {"sender": parent_fixtures[0], "receiver": patient_fixtures[0]},
     {"sender": patient_fixtures[1], "receiver": parent_fixtures[1]},
-]
-
-professional_fixtures = [
-    {'username': '@joanneclarke', 'email': 'joanne.clarke@example.org', 'first_name': 'Joanne', 'last_name': 'Clarke', 'date_of_birth': '1968-04-15', 'gender': 'F', 'location': 'US', 'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hello, I am Joanne.', 'expertise': 'Diabetes','referral_code':'ABC123'},
-    {'username': '@jeremybarnett', 'email': 'jeremny.barnett@example.org', 'first_name': 'Jeremy', 'last_name': 'Barnett', 'date_of_birth': '1995-11-2', 'gender': 'M', 'location': 'CA', 'hospital': 'Countess of Chester Hospital NHS Foundation Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hey there, I am Jeremy.', 'referral_code':'DEF456'},
-    {'username': '@paulaevans', 'email': 'paula.evans@example.org', 'first_name': 'Paula', 'last_name': 'Evans', 'date_of_birth': '1975-2-30', 'gender': 'F', 'location': 'AU', 'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 'ethnicity': 'BR', 'language': 'en', 'bio': 'Hi, I am Paula.', 'referral_code':'GHI789'},
 ]
 
 message_fixtures = [
