@@ -262,9 +262,22 @@ report_fixtures = [
 ]
 
 post_fixtures = [
-    {"author": patient_fixtures[0], "content": "This is my post"},
-    {"author": parent_fixtures[0], "content": "Hello world!", "visibility": "F"},
-    {"author": mentor_fixtures[0], "content": "Hello, I am a mentor."},
+    {
+        "author": patient_fixtures[0],
+        "content": "This is my post",
+        "likes": [parent_fixtures[0], mentor_fixtures[0]],
+    },
+    {
+        "author": parent_fixtures[0],
+        "content": "Hello world!",
+        "likes": [patient_fixtures[0]],
+        "visibility": "F",
+    },
+    {
+        "author": mentor_fixtures[0],
+        "content": "Hello, I am a mentor.",
+        "likes": [patient_fixtures[1], parent_fixtures[1]],
+    },
 ]
 
 post_comment_fixtures = [
@@ -436,27 +449,27 @@ class Command(BaseCommand):
 
     def generate_question_fixtures(self):
         for data in question_fixtures:
-            self.create_question(data)
+            self.try_create_question(data)
 
     def generate_response_fixtures(self):
         for data in response_fixtures:
-            self.create_response(data)
+            self.try_create_response(data)
 
     def generate_report_fixtures(self):
         for data in report_fixtures:
-            self.create_report(data)
+            self.try_create_report(data)
 
     def generate_post_fixtures(self):
         for data in post_fixtures:
-            self.create_post(data)
+            self.try_create_post(data)
 
     def generate_post_comment_fixtures(self):
         for data in post_comment_fixtures:
-            self.create_post_comment(data)
+            self.try_create_post_comment(data)
 
     def generate_feedback_fixtures(self):
         for data in feedback_fixtures:
-            self.create_feedback(data)
+            self.try_create_feedback(data)
 
     def generate_random_patients(self):
         patient_count = Patient.objects.count()
@@ -682,9 +695,11 @@ class Command(BaseCommand):
     def generate_post(self):
         author = self.users[randint(0, len(self.users) - 1)]
         content = self.faker.text(max_nb_chars=280)
+        likes = [self.users[randint(0, len(self.users) - 1)] for _ in range(randint(0, 100))]
         visibility = self.faker.random_element(elements=("G", "F"))
         author = {"username": author.username}
-        self.try_create_post({"author": author, "content": content, "visibility": visibility})
+        likes = [{"username": like.username} for like in likes]
+        self.try_create_post({"author": author, "content": content, "likes": likes, "visibility": visibility})
 
     def generate_post_comment(self):
         post = self.posts[randint(0, len(self.posts) - 1)]
@@ -817,10 +832,7 @@ class Command(BaseCommand):
         return message
 
     def create_conversation(self, data):
-        users = [
-            self.get_user({"username": username})
-            for username in data["users"]["usernames"]
-        ]
+        users = [self.get_user({"username": username}) for username in data["users"]["usernames"]]
         conversation = Conversation.objects.create()
         message_objects = [self.create_message(message) for message in data["messages"]]
         for message_object in message_objects:
@@ -853,8 +865,12 @@ class Command(BaseCommand):
 
     def create_post(self, data):
         data["author"] = self.get_user(data["author"])
-        Post.objects.create(**data)
-
+        likes = [self.get_user({"username": like["username"]}) for like in data["likes"]]
+        data.pop("likes")
+        post = Post.objects.create(**data)
+        post.likes.set(likes)
+        post.save()
+        
     def create_post_comment(self, data):
         data["post"] = self.get_post(data["post"])
         data["author"] = self.get_user(data["author"])
