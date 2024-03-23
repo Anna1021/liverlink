@@ -6,7 +6,7 @@ from peer_support.models import User
 
 class Notification(models.Model):
     """Model used for notifications."""
-    
+
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
     created = models.DateTimeField(auto_now_add=True)
@@ -26,12 +26,13 @@ class Notification(models.Model):
         """Get the description of the notification based on its content_type."""
 
         if self.notifying_user:
-            descriptions = {'friend request' : f"{self.notifying_user.username} has sent you a friend request.",
-                            'post comment' : f"{self.notifying_user.username} has commented on your post.",
-                            'response' : f"{self.notifying_user.username} has replied to your question.",
-                            'conversation' : f"{self.notifying_user.username} has created a conversation with you.",
-                            'group conversation' : f"{self.notifying_user.username} has added you to a group conversation."}
-            
+            descriptions = {
+                "friend request": f"{self.notifying_user.username} has sent you a friend request.",
+                "post comment": f"{self.notifying_user.username} has commented on your post.",
+                "response": f"{self.notifying_user.username} has replied to your question.",
+                "conversation": f"{self.notifying_user.username} has created a conversation with you.",
+                "group conversation": f"{self.notifying_user.username} has added you to a group conversation.",
+            }
             if self.content_type.name in descriptions.keys():
                 return descriptions[self.content_type.name]
         return f"Content type '{self.content_type.name}' has no default description."
@@ -41,7 +42,6 @@ class Notification(models.Model):
 
         if not self.title:
             self.title = "Default Title"
-
         if not self.description:
             self.description = "Default description"
 
@@ -55,32 +55,31 @@ class Notification(models.Model):
                 return self.get_conversation_URL()
             elif self.content_type.name == 'response':
                 return self.get_question_URL()
-
         if self.notifying_user:
             return reverse('profile', kwargs={'username': self.notifying_user})
         else:
             return reverse('inbox')
-    
+
     def get_post_URL(self):
         """Return the URL to the post being replied to, if the post still exists."""
 
-        return reverse('post_detail', kwargs={'post_id': self.content_object.post.id})
-    
+        return reverse("post_detail", kwargs={"post_id": self.content_object.post.id})
+
     def get_question_URL(self):
         """Return the URL to the question being replied to."""
 
-        return reverse('question', kwargs={'id': self.content_object.question.id})
-    
+        return reverse("question", kwargs={"id": self.content_object.question.id})
+
     def get_conversation_URL(self):
         """Return the URL of the conversation the user has been added to."""
 
-        return reverse('conversation', kwargs={'conversation_id': self.content_object.id})
-    
+        return reverse("conversation", kwargs={"conversation_id": self.content_object.id})
+
     def get_is_friend_request(self):
         """Return whether the notification is for a friend request."""
 
         if self.content_type:
-            return self.content_type.name == 'friend request'
+            return self.content_type.name == "friend request"
         return False
 
     def save(self, *args, **kwargs):
@@ -93,5 +92,4 @@ class Notification(models.Model):
                 self.description = self.get_description()
         else:
             self.set_default_fields()
-    
         super().save(*args, **kwargs)
