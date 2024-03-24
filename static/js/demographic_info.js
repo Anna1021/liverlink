@@ -38,6 +38,7 @@ function update_pie_chart_options(label_colour) {
 let label_colour = getThemeColors();
 let bar_chart_options = update_bar_chart_options(label_colour);
 let pie_chart_options = update_pie_chart_options(label_colour);
+
 //Charts information
 let user_type_data={
     labels:user_types_labels,
@@ -65,27 +66,47 @@ let ethnicity_data = {
         backgroundColor: colours, 
         data: ethnicity_count
     }],
-    title: "User Ethnicity among users"
+    title: "User Ethnicinicity distribution"
 };
 
 let patient_condition_data = {
     labels: patient_condition_labels, 
     datasets: [{
-        label: "Liver Disease Distribution",
+        label: "Condition Distribution",
         backgroundColor: colours,
         data: patient_condition_count 
     }],
-    title: "Liver Disease among Users"
+    title: "Condition among Patients"
+};
+
+let mentor_condition_data = {
+    labels: mentor_condition_labels, 
+    datasets: [{
+        label: "Condition Distribution",
+        backgroundColor: colours,
+        data: mentor_condition_count 
+    }],
+    title: "Condition among Mentors"
+};
+
+let professional_expertise_data = {
+    labels: professional_expertise_labels, 
+    datasets: [{
+        label: "Condition Distribution",
+        backgroundColor: colours,
+        data: professional_expertise_count 
+    }],
+    title: "Condition expertise among Professionals"
 };
 
 let parent_child_condition_data = {
     labels: parent_child_condition_labels, 
     datasets: [{
-        label: "Liver Disease Distribution",
+        label: "Condition Distribution",
         backgroundColor: colours,
         data: parent_child_condition_count 
     }],
-    title: "Liver Disease among Users"
+    title: "Condition among parents child condition"
 };
 
 let user_gender_data={
@@ -95,7 +116,7 @@ let user_gender_data={
             backgroundColor: colours,
             data: gender_count
         }],
-    title:"Genders among Users"
+    title:"User gender distribution "
 };
 
 let user_location_data={
@@ -105,7 +126,7 @@ let user_location_data={
             backgroundColor: colours,
             data: location_count
         }],
-    title:"Genders among Users"
+    title:"User location distribution"
 };
 
 let user_location_south_america_data={
@@ -239,6 +260,12 @@ document.getElementById("barChartDataSelect").addEventListener("change", functio
         case "patient_condition":
             update_bar_chart_data(patient_condition_data);
             break;
+        case "mentor_condition":
+            update_bar_chart_data(mentor_condition_data);
+            break;
+        case "professional_expertise":
+            update_bar_chart_data(professional_expertise_data);
+            break;
         case "parent_child_condition":
             update_bar_chart_data(parent_child_condition_data);
             break;
@@ -314,6 +341,12 @@ document.getElementById("pieChartDataSelect").addEventListener("change", functio
             break;
         case "parent_child_condition":
             update_pie_chart_data(parent_child_condition_data);
+            break;
+        case "mentor_condition":
+            update_pie_chart_data(mentor_condition_data);
+            break;
+        case "professional_expertise":
+            update_pie_chart_data(professional_expertise_data);
             break;
         case "user_gender":
             update_pie_chart_data(user_gender_data);
