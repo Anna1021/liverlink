@@ -787,6 +787,8 @@ class Command(BaseCommand):
             self.generate_post_comment_notification(user)
         elif self.responses.filter(question__author=user) and random.choice([True, False]):
             self.generate_question_response_notification(user)
+        elif self.posts.filter(author=user, likes__gte=1) and random.choice([True, False]):
+            self.generate_post_like_notification(user)
         else:
             title = self.faker.sentence()
             description = self.faker.text(max_nb_chars=100)
@@ -818,6 +820,16 @@ class Command(BaseCommand):
         if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
             self.try_create_notification({"user": user, "notifying_user": notifying_user,
                                     "content_type": content_type, "object_id": object_id})
+            
+    def generate_post_like_notification(self, user):
+        post = random.choice(self.posts.filter(author=user, likes__gte=1))
+        notifying_user = random.choice(post.likes.exclude(id=user.id))
+        content_type = ContentType.objects.get_for_model(Post)
+        object_id = post.id
+        title = "New Post Like"
+        if not Notification.objects.filter(content_type = content_type, object_id=object_id, notifying_user=notifying_user).exists():
+            self.try_create_notification({"user": user, "notifying_user": notifying_user, "title": title,
+                                          "content_type": content_type, "object_id": object_id})
 
     def try_create_patient(self, data):
         try:
