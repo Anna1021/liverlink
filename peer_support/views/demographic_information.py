@@ -27,6 +27,8 @@ class DemographicInformationView (LoginRequiredMixin, View):
             'patient_condition_count' :list(self.get_patient_conditions().values()),
             'mentor_condition_labels': list(self.get_mentor_conditions().keys()), 
             'mentor_condition_count' :list(self.get_mentor_conditions().values()),
+            'professional_expertise_labels': list(self.get_professional_expertise().keys()), 
+            'professional_expertise_count' :list(self.get_professional_expertise().values()),
             'gender_labels': list(self.get_genders().keys()), 
             'gender_count' :list(self.get_genders().values()),
             'parent_child_condition_labels': list(self.get_parent_child_conditions().keys()), 
@@ -49,6 +51,11 @@ class DemographicInformationView (LoginRequiredMixin, View):
             'antarctica_count': list(self.get_locations_specific().get("Antarctica", {}).values())
         }
         return render(request, 'demographic_information.html', context)
+    
+    def get_professional_expertise(self):
+        professional_expertise = Professional.objects.values_list('expertise', flat=True)
+        professional_expertise = [map_blank_key(expertise) for expertise in professional_expertise]
+        return Counter(professional_expertise) 
     
     def get_mentor_conditions(self):
         mentor_conditions = Mentor.objects.values_list('condition', flat=True)

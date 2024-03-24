@@ -72,31 +72,41 @@ let ethnicity_data = {
 let patient_condition_data = {
     labels: patient_condition_labels, 
     datasets: [{
-        label: "Liver Disease Distribution",
+        label: "Condition Distribution",
         backgroundColor: colours,
         data: patient_condition_count 
     }],
-    title: "Liver Disease among Patients"
+    title: "Condition among Patients"
 };
 
 let mentor_condition_data = {
     labels: mentor_condition_labels, 
     datasets: [{
-        label: "Liver Disease Distribution",
+        label: "Condition Distribution",
         backgroundColor: colours,
         data: mentor_condition_count 
     }],
-    title: "Liver Disease among Mentors"
+    title: "Condition among Mentors"
+};
+
+let professional_expertise_data = {
+    labels: professional_expertise_labels, 
+    datasets: [{
+        label: "Condition Distribution",
+        backgroundColor: colours,
+        data: professional_expertise_count 
+    }],
+    title: "Condition expertise among Professionals"
 };
 
 let parent_child_condition_data = {
     labels: parent_child_condition_labels, 
     datasets: [{
-        label: "Liver Disease Distribution",
+        label: "Condition Distribution",
         backgroundColor: colours,
         data: parent_child_condition_count 
     }],
-    title: "Liver Disease among parents child condition"
+    title: "Condition among parents child condition"
 };
 
 let user_gender_data={
@@ -253,6 +263,9 @@ document.getElementById("barChartDataSelect").addEventListener("change", functio
         case "mentor_condition":
             update_bar_chart_data(mentor_condition_data);
             break;
+        case "professional_expertise":
+            update_bar_chart_data(professional_expertise_data);
+            break;
         case "parent_child_condition":
             update_bar_chart_data(parent_child_condition_data);
             break;
@@ -331,6 +344,9 @@ document.getElementById("pieChartDataSelect").addEventListener("change", functio
             break;
         case "mentor_condition":
             update_pie_chart_data(mentor_condition_data);
+            break;
+        case "professional_expertise":
+            update_pie_chart_data(professional_expertise_data);
             break;
         case "user_gender":
             update_pie_chart_data(user_gender_data);
