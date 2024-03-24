@@ -6,7 +6,7 @@ from .form_choices import POST_VISIBILITY_CHOICES
 class PostForm(forms.ModelForm):
     """Form for creating a new post."""
 
-    visibility = forms.ChoiceField(choices=[POST_VISIBILITY_CHOICES])
+    visibility = forms.ChoiceField(choices=POST_VISIBILITY_CHOICES, required=True)
     class Meta:
         model = Post
         fields = ["visibility", "content"]
