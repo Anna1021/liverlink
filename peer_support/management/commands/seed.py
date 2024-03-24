@@ -393,8 +393,6 @@ class Command(BaseCommand):
         self.create_conversations()
         self.conversations = Conversation.objects.all()
 
-        self.messages = Message.objects.all()
-
         self.create_questions()
         self.questions = Question.objects.all()
 
@@ -439,9 +437,6 @@ class Command(BaseCommand):
     def create_notifications(self):
         self.generate_notification_fixtures()
         self.generate_random_notifications()
-
-    def create_messages(self):
-        self.generate_message_fixtures()
 
     def create_conversations(self):
         self.generate_conversation_fixtures()
@@ -957,7 +952,7 @@ class Command(BaseCommand):
     def create_conversation(self, data):
         users = [self.get_user({"username": user["username"]}) for user in data["users"]]
         conversation = Conversation.objects.create()
-        message_objects = [self.create_message(message) for message in data["messages"]]
+        message_objects = [self.try_create_message(message) for message in data["messages"]]
         for message_object in message_objects:
             message_object.visible_to.set(users)
         conversation.users.set(users)
