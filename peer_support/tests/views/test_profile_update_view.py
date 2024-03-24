@@ -61,7 +61,7 @@ class ProfileUpdateViewTestCase(TestCase):
             'last_name': 'Doe',
             'username': '@janedoe',
             'email': 'janedoe@example.org',
-            'date_of_birth': '1991-01-01',
+            'date_of_birth': '2002-01-01',
             'gender': 'F',
             'location': 'US',
             'ethnicity': 'RO',
@@ -242,7 +242,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.mentor.first_name, 'John')
         self.assertEqual(self.mentor.last_name, 'Doe')
         self.assertEqual(self.mentor.email, 'johndoe@example.org')
-        self.assertEqual(self.mentor.date_of_birth, datetime.date(1990, 1, 1))
+        self.assertEqual(self.mentor.date_of_birth, datetime.date(2001, 1, 1))
         self.assertEqual(self.mentor.gender, 'M')
         self.assertEqual(self.mentor.location, 'GB')
         self.assertEqual(self.mentor.ethnicity, 'BR')
@@ -344,7 +344,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.patient.first_name, 'Jane')
         self.assertEqual(self.patient.last_name, 'Doe')
         self.assertEqual(self.patient.email, 'janedoe@example.org')
-        self.assertEqual(self.patient.date_of_birth, datetime.date(1991, 1, 1)),
+        self.assertEqual(self.patient.date_of_birth, datetime.date(2002, 1, 1)),
         self.assertEqual(self.patient.gender, 'F'),
         self.assertEqual(self.patient.location, 'US'),
         self.assertEqual(self.patient.ethnicity, 'RO'),

@@ -22,7 +22,7 @@ class SortUserFormTestCase(TestCase):
         self.current_user_professional = Professional.objects.get(username= '@annamiller')
         self.current_user_mentor =  Mentor.objects.get(username='@johndoe')
         self.username_asc_order= ['@alexsmith', '@annamiller', '@carlosmartinez', '@craighughes','@hazelsmith', '@janedoe', '@johndoe', '@lindajohnson', '@mohamedalf', '@peterpickles', '@petrapickles', '@rajpatel', '@sambennet']
-        self.age_asc_order=['@janedoe', '@craighughes', '@petrapickles', '@sambennet', '@rajpatel', '@lindajohnson', '@johndoe', '@hazelsmith', '@alexsmith', '@annamiller', '@carlosmartinez', '@mohamedalf', '@peterpickles']
+        self.age_asc_order=['@janedoe', '@craighughes', '@johndoe', '@petrapickles', '@sambennet', '@rajpatel', '@lindajohnson', '@hazelsmith', '@alexsmith', '@annamiller', '@carlosmartinez', '@mohamedalf', '@peterpickles']
         self.users = User.objects.all()
 
     def test_form_has_necessary_fields(self):
@@ -163,7 +163,7 @@ class SortUserFormTestCase(TestCase):
         form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_mentor)
-        expected_order = ['@johndoe', '@petrapickles','@janedoe', '@peterpickles', '@lindajohnson','@mohamedalf', '@sambennet','@craighughes', '@carlosmartinez', '@rajpatel', '@alexsmith', '@annamiller','@hazelsmith']
+        expected_order = ['@johndoe', '@petrapickles','@janedoe', '@peterpickles', '@sambennet','@craighughes', '@rajpatel', '@mohamedalf', '@carlosmartinez', '@alexsmith', '@lindajohnson', '@annamiller', '@hazelsmith']
         sorted_usernames = [user.username for user in sorted_users]
         self.assertEqual(sorted_usernames, expected_order)   
     
