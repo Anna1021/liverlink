@@ -2,13 +2,12 @@ from .helpers import  calculate_age, country_to_continent, country_to_continent_
 from peer_support.models import Mentor, Professional, User, Patient, Parent
 from django.contrib import messages
 from django.shortcuts import render, reverse, redirect
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from collections import defaultdict
 from collections import Counter
 
-class DemographicInformationView (LoginRequiredMixin, View):
+class DemographicInformationView(LoginRequiredMixin, View):
     """Displays demographic inforamtion for all users to staff"""
 
     def get(self, request):
