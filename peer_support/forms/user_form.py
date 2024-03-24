@@ -27,6 +27,5 @@ class UserForm(forms.ModelForm):
         
         cleaned_data = super().clean()
         dob = cleaned_data.get('date_of_birth')
-        print(dob)
         self.validate_dob(dob)
         return cleaned_data
