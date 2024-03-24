@@ -13,6 +13,41 @@
     padding-left: 0px;
 }
 
+.conversation-sidebar {
+    width:200px;
+    transition: width 0.3s ease;
+}
+  
+#sidebar-toggle {
+    display: none;
+}
+  
+#sidebar-toggle:checked ~ .conversation-sidebar {
+    display: none;
+}
+  
+#sidebar-toggle:checked ~ .conversation-content {
+    flex-grow: 1;
+}
+  
+.conversation-sidebar label {
+    cursor: pointer;
+}
+
+@media (max-width: 768px){
+    .conversation-sidebar{
+        width:100%;
+    }
+
+    .conversation-content {
+        display: none;
+    }
+
+    #sidebar-toggle:checked ~ .conversation-content {
+        display: block; 
+    }
+}
+
 .conversation-menu{
     height:85vh;
 }
