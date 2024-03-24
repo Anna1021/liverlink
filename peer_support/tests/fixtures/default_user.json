@@ -8,7 +8,7 @@
       "username": "@johndoe",
       "email": "johndoe@example.org",
       "password": "pbkdf2_sha256$260000$4BNvFuAWoTT1XVU8D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
-      "date_of_birth": "1990-01-01",
+      "date_of_birth": "2001-01-01",
       "gender": "M",
       "location": "GB",
       "hospital": "Airedale NHS Foundation Trust",
