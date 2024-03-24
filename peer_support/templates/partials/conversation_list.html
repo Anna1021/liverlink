@@ -1,15 +1,17 @@
 {% load conversation_tags %}
-<button
-        class="navbar-toggler btn"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#conversation-list"
-        aria-controls="conversationList"
-        aria-expanded="false"
-        aria-label="List of conversations">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-<nav class="col-md-3 d-md-block sidebar collapse navbar-collapse pb-3" id="conversation-list">
+<div class="col-md-3 d-md-block pb-3">
+<!-- <button -->
+    <!-- class="navbar-toggler" -->
+    <!-- type="button" -->
+    <!-- data-bs-toggle="collapse" -->
+    <!-- data-bs-target="#conversationList" -->
+    <!-- aria-controls="conversationList" -->
+    <!-- aria-expanded="false" -->
+    <!-- aria-label="Toggle conversation list"> -->
+    <!-- <span class="navbar-toggler-icon"></span> -->
+<!-- </button> -->
+<a href="{% url 'create_conversation' %}" class="text-center fs-3"><i class="bi-pencil-square"></i></a>
+<nav class="collapse navbar-collapse sidebar" id="conversationList">
 <ul class="conversation-list">
     {% for conversation in user_conversations %}
     <li>
@@ -21,5 +23,5 @@
     </li>
     {% endfor %}
 </ul>
-<a href="{% url 'create_conversation' %}" class="text-center fs-3"><i class="bi-pencil-square"></i></a>
 </nav>
+</div>
