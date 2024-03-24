@@ -101,4 +101,4 @@ class PatientFormTestCase(TestCase):
         self.form_input['user_type'] = 'PT'
         form = PatientForm(data=self.form_input)
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['date_of_birth'], ['You must be less than 25 years old to register as a patient.'])
+        self.assertEqual(form.errors['date_of_birth'], ['You must be less than 25 years old to be a patient.'])
