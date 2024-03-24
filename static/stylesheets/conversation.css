@@ -18,22 +18,27 @@
     transition: width 0.3s ease;
     overflow-x: hidden;
 }
-
-.conversation-sidebar a{
-    width:100%;
-}
   
 #sidebar-toggle {
     display: none;
+}
+
+#sidebar-icon::before{
+    content:"\F284";
+}
+
+#sidebar-toggle:checked + label #sidebar-icon::before {
+    content:"\F285";
 }
   
 #sidebar-toggle:checked ~ .conversation-sidebar {
     width: 0px;
 }
-  
-#sidebar-toggle:checked ~ .conversation-content {
+
+.conversation-content {
+    flex:1;
     flex-grow: 1;
-}
+} 
 
 #sidebar-toggle:checked ~ .conversation-sidebar i {
     display:none;
@@ -43,7 +48,7 @@
     cursor: pointer;
 }
 
-@media (max-width: 768px){
+@media (max-width: 770px){
     .conversation-sidebar{
         width:100%;
         height:100%;
@@ -52,6 +57,14 @@
 
     .conversation-content {
         display: none;
+    }
+
+    #sidebar-icon::before{
+        content:"\f282";
+    }
+    
+    #sidebar-toggle:checked + label #sidebar-icon::before {
+        content:"\f286";
     }
 
     #sidebar-toggle:checked ~ .conversation-content {
