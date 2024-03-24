@@ -1,14 +1,21 @@
-    {% extends 'settings.html' %}
-    {% load static %}
-    {% block title %}
-        <div class="ps-title-text">Accessibility</div>
-    {% endblock %}  
-    {% block page %}
-    <select id="font-selector">
-        <option value="default">Default Font</option>
-        <option value="tahoma">Tahoma</option>
-        <option value="georgia">Georgia</option>
-        <option value="comic-sans">Comic-Sans</option>
-      </select>
-    {% endblock %}
-    
+{% extends 'settings.html' %}
+{% load static %}
+{% block title %}
+<div class="ps-title-text">Accessibility Settings</div>
+{% endblock %}
+{% block page %}
+<div class="accessibility-intro">
+  <p>Accessibility is crucial for ensuring that our platform is inclusive and usable for everyone, including users who might have visual impairments or reading difficulties. One way to enhance readability and overall accessibility is by allowing users to select the font type that they find most comfortable for reading.</p>
+  <p>Below is a selection of fonts that you can choose from. Each option demonstrates the appearance of its respective font. Select the one that best suits your reading preferences to enhance your experience on our platform.</p>
+</div>
+<select id="font-selector">
+    <option value="default" style="font-family: Arial, sans-serif;">Default Font</option>
+    <option value="tahoma" style="font-family: Tahoma, sans-serif;">Tahoma</option>
+    <option value="georgia" style="font-family: Georgia, serif;">Georgia</option>
+    <option value="comic-sans" style="font-family: 'Comic Sans MS', cursive, sans-serif;">Comic Sans</option>
+</select>
+<hr>
+<div class="feedback-accessibility">
+  <p>If you have suggestions for additional accessibility features or feedback on how we can improve, we'd love to hear from you. Your input helps us make our platform more accessible and user-friendly for everyone.</p>
+</div>
+{% endblock %}

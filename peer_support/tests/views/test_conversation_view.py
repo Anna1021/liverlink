@@ -30,7 +30,7 @@ class ConversationViewTestCase(TestCase):
 
     def test_conversation_url(self):
         self.assertEqual(self.url,'/conversation/1')
-
+ 
     def test_get_conversation(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
@@ -167,6 +167,7 @@ class ConversationViewTestCase(TestCase):
     def test_successful_report(self):
         message_id_to_report = self.message.id
         report_data = {
+            'report_message': True,
             'action': message_id_to_report,
             'reason': 'abuse'
         }
@@ -185,6 +186,7 @@ class ConversationViewTestCase(TestCase):
     def test_unsuccessful_report (self):
         valid_message_id = self.message.id 
         report_data = {
+            'report_message': True,
             'action': valid_message_id,
             'reason': 'dfdsdf'
         }

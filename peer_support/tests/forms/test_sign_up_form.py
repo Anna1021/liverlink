@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import check_password
 from django import forms
 from django.test import TestCase
 from peer_support.forms import SignUpForm
-from peer_support.models import Patient, Parent, Mentor, Referral
+from peer_support.models import Patient, Parent, Mentor, Professional, Referral
 from datetime import date, timedelta
 
 class SignUpFormTestCase(TestCase):
@@ -12,11 +12,11 @@ class SignUpFormTestCase(TestCase):
     
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
-        'peer_support/tests/fixtures/default_mentor.json',
+        'peer_support/tests/fixtures/default_professional.json',
     ]
 
     def setUp(self):
-        Referral.objects.create(referrer=Mentor.objects.get(username='@johndoe'), code='9C274FF391')
+        Referral.objects.create(referrer=Professional.objects.get(username='@johndoe'), code='9C274FF391')
 
         self.form_input = {
             'first_name': 'Jane',
@@ -33,9 +33,6 @@ class SignUpFormTestCase(TestCase):
             'new_password': 'Password123',
             'password_confirmation': 'Password123',
             'user_type': 'PT',
-            'condition': 'Cancer',
-            'transplant': 'N',
-            'age_of_diagnosis': 5,
         }
 
     def test_valid_sign_up_form(self):
@@ -53,14 +50,6 @@ class SignUpFormTestCase(TestCase):
         self.assertIn('date_of_birth', form.fields)
         date_of_birth_field = form.fields['date_of_birth']
         self.assertTrue(isinstance(date_of_birth_field, forms.DateField))
-        self.assertIn('gender', form.fields)
-        self.assertIn('location', form.fields)
-        self.assertIn('hospital', form.fields)
-        self.assertIn('ethnicity', form.fields)
-        self.assertIn('language', form.fields)
-        self.assertIn('bio', form.fields)
-        bio_field = form.fields['bio']
-        self.assertTrue(isinstance(bio_field, forms.CharField))
         self.assertIn('new_password', form.fields)
         new_password_widget = form.fields['new_password'].widget
         self.assertTrue(isinstance(new_password_widget, forms.PasswordInput))
@@ -68,9 +57,6 @@ class SignUpFormTestCase(TestCase):
         password_confirmation_widget = form.fields['password_confirmation'].widget
         self.assertTrue(isinstance(password_confirmation_widget, forms.PasswordInput))
         self.assertIn('user_type', form.fields)
-        self.assertIn('condition', form.fields)
-        self.assertIn('transplant', form.fields)
-        self.assertIn('age_of_diagnosis', form.fields)
 
     def test_form_uses_model_validation(self):
         self.form_input['username'] = 'badusername'
@@ -112,23 +98,11 @@ class SignUpFormTestCase(TestCase):
         self.assertEqual(user.last_name, 'Doe')
         self.assertEqual(user.email, 'janedoe@example.org')
         self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
-        self.assertEqual(user.gender, 'F')
-        self.assertEqual(user.location, 'GB')
-        self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
-        self.assertEqual(user.ethnicity, 'RO')
-        self.assertEqual(user.language, 'en')
-        self.assertEqual(user.bio, 'I am a test user.')
-        self.assertEqual(user.condition, 'Cancer')
-        self.assertEqual(user.transplant, 'N')
-        self.assertEqual(user.age_of_diagnosis, 5)
         is_password_correct = check_password('Password123', user.password)
         self.assertTrue(is_password_correct)
 
     def test_form_must_save_correctly_with_parent(self):
         self.form_input['user_type'] = 'PR'
-        self.form_input['child_condition'] = 'Cancer'
-        self.form_input['child_transplant'] = 'N'
-        self.form_input['child_age_of_diagnosis'] = 5
         form = SignUpForm(data=self.form_input)
         self.assertTrue(form.is_valid())
         before_count = Parent.objects.count()
@@ -140,32 +114,17 @@ class SignUpFormTestCase(TestCase):
         self.assertEqual(user.last_name, 'Doe')
         self.assertEqual(user.email, 'janedoe@example.org')
         self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
-        self.assertEqual(user.gender, 'F')
-        self.assertEqual(user.location, 'GB')
-        self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
-        self.assertEqual(user.ethnicity, 'RO')
-        self.assertEqual(user.language, 'en')
-        self.assertEqual(user.bio, 'I am a test user.')
-        self.assertEqual(user.child_condition, 'Cancer')
-        self.assertEqual(user.child_transplant, 'N')
-        self.assertEqual(user.child_age_of_diagnosis, 5)
         is_password_correct = check_password('Password123', user.password)
         self.assertTrue(is_password_correct)
 
     def test_mentor_referal_validation(self):
         self.form_input['user_type'] = 'MT'
-        self.form_input['condition'] = 'Cancer'
-        self.form_input['transplant'] = 'N'
-        self.form_input['age_of_diagnosis'] = 5
         self.form_input['referral_code']='NONEXISTING'
         form = SignUpForm(data=self.form_input)
         self.assertFalse(form.is_valid())
 
     def test_form_must_save_correctly_with_mentor(self):
         self.form_input['user_type'] = 'MT'
-        self.form_input['condition'] = 'Cancer'
-        self.form_input['transplant'] = 'N'
-        self.form_input['age_of_diagnosis'] = 5
         self.form_input['referral_code']='9C274FF391'
         form = SignUpForm(data=self.form_input)
         before_count = Mentor.objects.count()
@@ -178,15 +137,23 @@ class SignUpFormTestCase(TestCase):
         self.assertEqual(user.last_name, 'Doe')
         self.assertEqual(user.email, 'janedoe@example.org')
         self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
-        self.assertEqual(user.gender, 'F')
-        self.assertEqual(user.location, 'GB')
-        self.assertEqual(user.hospital, 'Croydon Health Services NHS Trust')
-        self.assertEqual(user.ethnicity, 'RO')
-        self.assertEqual(user.language, 'en')
-        self.assertEqual(user.bio, 'I am a test user.')
-        self.assertEqual(user.condition, 'Cancer')
-        self.assertEqual(user.transplant, 'N')
-        self.assertEqual(user.age_of_diagnosis, 5)
+        is_password_correct = check_password('Password123', user.password)
+        self.assertTrue(is_password_correct)
+
+    def test_form_must_save_correctly_with_professional(self):
+        self.form_input['user_type'] = 'PF'
+        self.form_input['referral_code']='9C274FF391'
+        form = SignUpForm(data=self.form_input)
+        before_count = Professional.objects.count()
+        self.assertTrue(form.is_valid())
+        form.save()
+        after_count = Professional.objects.count()
+        self.assertEqual(after_count, before_count+1)
+        user = Professional.objects.get(username='@janedoe')
+        self.assertEqual(user.first_name, 'Jane')
+        self.assertEqual(user.last_name, 'Doe')
+        self.assertEqual(user.email, 'janedoe@example.org')
+        self.assertEqual(user.date_of_birth, datetime.date(2004, 3, 2))
         is_password_correct = check_password('Password123', user.password)
         self.assertTrue(is_password_correct)
 
@@ -211,8 +178,8 @@ class SignUpFormTestCase(TestCase):
         form = SignUpForm(data=self.form_input)
         self.assertTrue(form.is_valid())
 
-    def test_invalid_date_of_birth_less_than_13_years_ago(self):
-        self.form_input['date_of_birth'] = date.today() - timedelta(days=365*12)
+    def test_invalid_date_of_birth_less_than_16_years_ago(self):
+        self.form_input['date_of_birth'] = date.today() - timedelta(days=365*15)
         form = SignUpForm(data=self.form_input)
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['date_of_birth'], ['You must be 13 years old to register.'])
+        self.assertEqual(form.errors['date_of_birth'], ['You must be 16 years old to register.'])

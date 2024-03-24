@@ -1,8 +1,9 @@
 from django import forms
 from peer_support.models import PostComment
 
-
 class CommentForm(forms.ModelForm):
+    """Form to comment on posts"""
+
     class Meta:
         model = PostComment
         fields = ['content']
@@ -23,8 +24,6 @@ class CommentForm(forms.ModelForm):
             author=self.author,
             post=self.post,
             parent=self.get_parent(parent_id),
-            content=self.cleaned_data['content']
-
-        )
+            content=self.cleaned_data['content'])
         return comment
         

@@ -71,22 +71,14 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='FriendRequest',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_accepted', models.BooleanField(default=False)),
-                ('receiver', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='friend_requests_received', to=settings.AUTH_USER_MODEL)),
-                ('sender', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='friend_requests_sent', to=settings.AUTH_USER_MODEL)),
-            ],
-        ),
-        migrations.CreateModel(
             name='Post',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.CharField(max_length=280)),
+                ('content', models.CharField(max_length=280)),
                 ('visibility', models.CharField(default='G', max_length=10)),
                 ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('likes', models.ManyToManyField(blank=True, related_name='likes', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ['-created_at'],
@@ -164,6 +156,22 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Professional',
+            fields=[
+                ('user_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('expertise', models.CharField(blank=True, max_length=50, null=True)),
+                ('referral_code', models.CharField(max_length=10)),
+            ],
+            options={
+                'verbose_name': 'Professional',
+                'verbose_name_plural': 'Professionals',
+            },
+            bases=('peer_support.user',),
+            managers=[
+                ('objects', django.contrib.auth.models.UserManager()),
+            ],
+        ),
+        migrations.CreateModel(
             name='UserProfile',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -216,10 +224,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=100)),
-                ('description', models.CharField(blank=True, max_length=1000)),
+                ('description', models.CharField(max_length=1000)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('viewed', models.BooleanField(default=False)),
-                ('friend_request', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='peer_support.friendrequest')),
+                ('object_id', models.PositiveIntegerField(blank=True, null=True)),
+                ('content_type', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='contenttypes.contenttype')),
+                ('notifying_user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='notifications_sent', to=settings.AUTH_USER_MODEL)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -231,6 +241,15 @@ class Migration(migrations.Migration):
                 ('send_time', models.DateTimeField(default=django.utils.timezone.now)),
                 ('sender', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
                 ('visible_to', models.ManyToManyField(blank=True, related_name='visible_to', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='FriendRequest',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('is_accepted', models.BooleanField(default=False)),
+                ('receiver', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='friend_requests_received', to=settings.AUTH_USER_MODEL)),
+                ('sender', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='friend_requests_sent', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.AddField(
@@ -268,7 +287,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('code', models.CharField(max_length=10, unique=True)),
-                ('referrer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='referrals_made', to='peer_support.mentor')),
+                ('referrer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='referrals_made', to='peer_support.professional')),
             ],
         ),
     ]

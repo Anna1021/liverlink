@@ -13,6 +13,7 @@ from .question_model import Question
 from .response_model import Response
 from .friend_request_model import FriendRequest
 from .mentor_model import Mentor
+from .professional_model import Professional
 from .referral_model import Referral
 from .report_model import Report
 from .group_conversation_model import GroupConversation

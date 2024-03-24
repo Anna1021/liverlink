@@ -23,7 +23,7 @@ class PeerSelectViewTestCase(TestCase):
         self.client.force_login(self.user)
 
     def test_peer_select_url(self):
-        self.assertEqual(self.url,'/peer_select/')
+        self.assertEqual(self.url,'/find_friends/')
 
     def test_get_peer_select(self):
         response = self.client.get(self.url)

@@ -1,0 +1,17 @@
+from django import forms
+from peer_support.forms import UserForm
+from peer_support.models import Professional
+from .form_choices import CONDITION_CHOICES
+
+class ProfessionalForm(forms.ModelForm):
+    """Form to update professional profiles."""
+
+    expertise = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
+    referral_code = forms.CharField(disabled=True, required=False)
+
+    class Meta:
+        """Form options."""
+
+        model = Professional
+        fields = UserForm.Meta.fields + ['referral_code', 'expertise']
+        widgets = UserForm.Meta.widgets
