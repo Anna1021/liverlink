@@ -204,24 +204,24 @@ friend_request_fixtures = [
 ]
 
 message_fixtures = [
-    {"sender": patient_fixtures[0], "content": "Hello, how are you?"},
-    {"sender": parent_fixtures[0], "content": "I am good, thank you."},
-    {"sender": parent_fixtures[0], "content": "How are you?"},
-    {"sender": patient_fixtures[1], "content": "I am good"},
-    {"sender": parent_fixtures[1], "content": "Hi"},
+    {"sender": patient_fixtures[0]['username'], "content": "Hello, how are you?"},
+    {"sender": parent_fixtures[0]['username'], "content": "I am good, thank you."},
+    {"sender": parent_fixtures[0]['username'], "content": "How are you?"},
+    {"sender": patient_fixtures[1]['username'], "content": "I am good"},
+    {"sender": parent_fixtures[1]['username'], "content": "Hi"},
 ]
 
 conversation_fixtures = [
     {
-        "users": [patient_fixtures[0], parent_fixtures[0]],
+        "users": {"usernames": [patient_fixtures[0]['username'], parent_fixtures[0]['username']]},
         "messages": [message_fixtures[0], message_fixtures[1], message_fixtures[2]],
     },
     {
-        "users": [patient_fixtures[1], parent_fixtures[1]],
+        "users": {"usernames": [patient_fixtures[1]['username'], parent_fixtures[1]['username']]},
         "messages": [message_fixtures[3], message_fixtures[4]],
     },
     {
-        "users": [patient_fixtures[0], parent_fixtures[2]],
+        "users": {"usernames": [patient_fixtures[0]['username'], parent_fixtures[2]['username']]},
         "messages": [message_fixtures[1]],
     },
 ]
@@ -443,9 +443,6 @@ class Command(BaseCommand):
     def create_notifications(self):
         self.generate_notification_fixtures()
         self.generate_random_notifications()
-
-    def create_messages(self):
-        self.generate_message_fixtures()
 
     def create_conversations(self):
         self.generate_conversation_fixtures()
