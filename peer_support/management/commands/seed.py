@@ -393,11 +393,9 @@ class Command(BaseCommand):
         self.create_friend_requests()
         self.friend_requests = FriendRequest.objects.all()
 
-        self.create_messages()
-        self.messages = Message.objects.all()
-
         self.create_conversations()
         self.conversations = Conversation.objects.all()
+        self.messages = Message.objects.all()
 
         self.create_questions()
         self.questions = Question.objects.all()
