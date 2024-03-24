@@ -205,6 +205,7 @@ message_fixtures = [
     {"sender": parent_fixtures[0], "content": "How are you?"},
     {"sender": patient_fixtures[1], "content": "I am good"},
     {"sender": parent_fixtures[1], "content": "Hi"},
+    {"sender": parent_fixtures[2], "content": "Hello"},
 ]
 
 conversation_fixtures = [
@@ -218,7 +219,7 @@ conversation_fixtures = [
     },
     {
         "users": [patient_fixtures[0], parent_fixtures[2]],
-        "messages": [message_fixtures[1]],
+        "messages": [message_fixtures[5]],
     },
 ]
 
@@ -389,11 +390,10 @@ class Command(BaseCommand):
         self.create_friend_requests()
         self.friend_requests = FriendRequest.objects.all()
 
-        self.create_messages()
-        self.messages = Message.objects.all()
-
         self.create_conversations()
         self.conversations = Conversation.objects.all()
+
+        self.messages = Message.objects.all()
 
         self.create_questions()
         self.questions = Question.objects.all()
@@ -958,7 +958,6 @@ class Command(BaseCommand):
         users = [self.get_user({"username": user["username"]}) for user in data["users"]]
         conversation = Conversation.objects.create()
         message_objects = [self.create_message(message) for message in data["messages"]]
-        print(message_objects)
         for message_object in message_objects:
             message_object.visible_to.set(users)
         conversation.users.set(users)
