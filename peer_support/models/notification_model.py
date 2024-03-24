@@ -29,6 +29,7 @@ class Notification(models.Model):
             descriptions = {
                 "friend request": f"{self.notifying_user.username} has sent you a friend request.",
                 "post comment": f"{self.notifying_user.username} has commented on your post.",
+                "post": f"{self.notifying_user.username} has liked your post.",
                 "response": f"{self.notifying_user.username} has replied to your question.",
                 "conversation": f"{self.notifying_user.username} has created a conversation with you.",
                 "group conversation": f"{self.notifying_user.username} has added you to a group conversation.",
@@ -49,7 +50,7 @@ class Notification(models.Model):
         """Return the URL to use (to access the content_object) for the notification page."""
 
         if self.content_object:
-            if self.content_type.name == 'post comment':
+            if self.content_type.name == 'post comment' or self.content_type.name == 'post':
                 return self.get_post_URL()
             elif self.content_type.name == 'conversation' or self.content_type.name == 'group conversation':
                 return self.get_conversation_URL()
@@ -61,9 +62,10 @@ class Notification(models.Model):
             return reverse('inbox')
 
     def get_post_URL(self):
-        """Return the URL to the post being replied to, if the post still exists."""
+        """Return the URL to the post liked / being replied to, if the post still exists."""
 
-        return reverse("post_detail", kwargs={"post_id": self.content_object.post.id})
+        post_id = self.content_object.id if self.content_type.name == 'post' else self.content_object.post.id
+        return reverse("post_detail", kwargs={"post_id": post_id})        
 
     def get_question_URL(self):
         """Return the URL to the question being replied to."""
