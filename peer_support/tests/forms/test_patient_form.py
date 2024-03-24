@@ -4,6 +4,7 @@ from django import forms
 from django.test import TestCase
 from peer_support.forms import PatientForm
 from peer_support.models import Patient
+from datetime import date, timedelta
 
 class PatientFormTestCase(TestCase):
     """Unit tests of the patient form."""
@@ -19,7 +20,7 @@ class PatientFormTestCase(TestCase):
             'last_name': 'Doe',
             'username': '@janedoe',
             'email': 'janedoe@example.org',
-            'date_of_birth': '1991-01-01',
+            'date_of_birth': '2002-01-01',
             'gender': 'F',
             'location': 'US',
             'ethnicity': 'RO',
@@ -84,7 +85,7 @@ class PatientFormTestCase(TestCase):
         self.assertEqual(user.first_name, 'Jane')
         self.assertEqual(user.last_name, 'Doe')
         self.assertEqual(user.email, 'janedoe@example.org')
-        self.assertEqual(user.date_of_birth, datetime.date(1991, 1, 1))
+        self.assertEqual(user.date_of_birth, datetime.date(2002, 1, 1))
         self.assertEqual(user.gender, 'F')
         self.assertEqual(user.location, 'US')
         self.assertEqual(user.ethnicity, 'RO')
@@ -94,3 +95,10 @@ class PatientFormTestCase(TestCase):
         self.assertEqual(user.transplant, 'Y'),
         self.assertEqual(user.age_of_diagnosis, 21),
         self.assertEqual(before_count, after_count)
+
+    def test_invalid_date_of_birth_more_than_25_years_ago(self):
+        self.form_input['date_of_birth'] = date.today() - timedelta(days=365*26)
+        self.form_input['user_type'] = 'PT'
+        form = PatientForm(data=self.form_input)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['date_of_birth'], ['You must be less than 25 years old to register as a patient.'])
