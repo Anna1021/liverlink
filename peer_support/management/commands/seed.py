@@ -104,47 +104,44 @@ parent_fixtures = [
 
 professional_fixtures = [
     {
-        'username': '@joanneclarke', 
-        'email': 'joanne.clarke@example.org', 
-        'first_name': 'Joanne', 
-        'last_name': 'Clarke', 
-        'date_of_birth': '1968-04-15', 
-        'gender': 'F', 
-        'location': 'US', 
-        'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 
-        'ethnicity': 'BR', 
-        'language': 'en', 
-        'bio': 'Hello, I am Joanne.', 
-        'expertise': 'Diabetes',
-        'referral_code':'ABC123'
+        "username": "@joanneclarke",
+        "email": "joanne.clarke@example.org",
+        "first_name": "Joanne",
+        "last_name": "Clarke",
+        "date_of_birth": "1968-04-15",
+        "gender": "F",
+        "location": "US",
+        "ethnicity": "BR",
+        "language": "en",
+        "bio": "Hello, I am Joanne.",
+        "expertise": "Diabetes",
+        "referral_code": "ABC123",
     },
     {
-        'username': '@jeremybarnett', 
-        'email': 'jeremny.barnett@example.org', 
-        'first_name': 'Jeremy', 
-        'last_name': 'Barnett', 
-        'date_of_birth': '1995-11-2', 
-        'gender': 'M', 
-        'location': 'CA', 
-        'hospital': 'Countess of Chester Hospital NHS Foundation Trust', 
-        'ethnicity': 'BR', 
-        'language': 'en', 
-        'bio': 'Hey there, I am Jeremy.', 
-        'referral_code':'DEF456'
+        "username": "@jeremybarnett",
+        "email": "jeremny.barnett@example.org",
+        "first_name": "Jeremy",
+        "last_name": "Barnett",
+        "date_of_birth": "1995-11-02",
+        "gender": "M",
+        "location": "CA",
+        "ethnicity": "BR",
+        "language": "en",
+        "bio": "Hey there, I am Jeremy.",
+        "referral_code": "DEF456",
     },
     {
-        'username': '@paulaevans', 
-        'email': 'paula.evans@example.org', 
-        'first_name': 'Paula', 
-        'last_name': 'Evans', 
-        'date_of_birth': '1975-2-30', 
-        'gender': 'F', 
-        'location': 'AU', 
-        'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 
-        'ethnicity': 'BR', 
-        'language': 'en', 
-        'bio': 'Hi, I am Paula.', 
-        'referral_code':'GHI789'
+        "username": "@paulaevans",
+        "email": "paula.evans@example.org",
+        "first_name": "Paula",
+        "last_name": "Evans",
+        "date_of_birth": "1975-2-30",
+        "gender": "F",
+        "location": "AU",
+        "ethnicity": "BR",
+        "language": "en",
+        "bio": "Hi, I am Paula.",
+        "referral_code": "GHI789",
     },
 ]
 
@@ -156,7 +153,7 @@ mentor_fixtures = [
         "last_name": "Smith",
         "date_of_birth": "1992-05-15",
         "gender": "F",
-        "location": "US",
+        "location": "GB",
         "hospital": "Blackpool Teaching Hospitals NHS Foundation Trust",
         "ethnicity": "BR",
         "language": "en",
@@ -172,7 +169,7 @@ mentor_fixtures = [
         "last_name": "Brown",
         "date_of_birth": "1985-09-20",
         "gender": "M",
-        "location": "CA",
+        "location": "GB",
         "hospital": "Countess of Chester Hospital NHS Foundation Trust",
         "ethnicity": "BR",
         "language": "en",
@@ -188,7 +185,6 @@ mentor_fixtures = [
         "date_of_birth": "1978-12-03",
         "gender": "F",
         "location": "AU",
-        "hospital": "Blackpool Teaching Hospitals NHS Foundation Trust",
         "ethnicity": "BR",
         "language": "en",
         "bio": "Hi, I am Emily.",
@@ -204,24 +200,24 @@ friend_request_fixtures = [
 ]
 
 message_fixtures = [
-    {"sender": patient_fixtures[0]['username'], "content": "Hello, how are you?"},
-    {"sender": parent_fixtures[0]['username'], "content": "I am good, thank you."},
-    {"sender": parent_fixtures[0]['username'], "content": "How are you?"},
-    {"sender": patient_fixtures[1]['username'], "content": "I am good"},
-    {"sender": parent_fixtures[1]['username'], "content": "Hi"},
+    {"sender": patient_fixtures[0], "content": "Hello, how are you?"},
+    {"sender": parent_fixtures[0], "content": "I am good, thank you."},
+    {"sender": parent_fixtures[0], "content": "How are you?"},
+    {"sender": patient_fixtures[1], "content": "I am good"},
+    {"sender": parent_fixtures[1], "content": "Hi"},
 ]
 
 conversation_fixtures = [
     {
-        "users": {"usernames": [patient_fixtures[0]['username'], parent_fixtures[0]['username']]},
+        "users": [patient_fixtures[0], parent_fixtures[0]],
         "messages": [message_fixtures[0], message_fixtures[1], message_fixtures[2]],
     },
     {
-        "users": {"usernames": [patient_fixtures[1]['username'], parent_fixtures[1]['username']]},
+        "users": [patient_fixtures[1], parent_fixtures[1]],
         "messages": [message_fixtures[3], message_fixtures[4]],
     },
     {
-        "users": {"usernames": [patient_fixtures[0]['username'], parent_fixtures[2]['username']]},
+        "users": [patient_fixtures[0], parent_fixtures[2]],
         "messages": [message_fixtures[1]],
     },
 ]
@@ -393,9 +389,11 @@ class Command(BaseCommand):
         self.create_friend_requests()
         self.friend_requests = FriendRequest.objects.all()
 
+        self.create_messages()
+        self.messages = Message.objects.all()
+
         self.create_conversations()
         self.conversations = Conversation.objects.all()
-        self.messages = Message.objects.all()
 
         self.create_questions()
         self.questions = Question.objects.all()
@@ -441,6 +439,9 @@ class Command(BaseCommand):
     def create_notifications(self):
         self.generate_notification_fixtures()
         self.generate_random_notifications()
+
+    def create_messages(self):
+        self.generate_message_fixtures()
 
     def create_conversations(self):
         self.generate_conversation_fixtures()
@@ -662,7 +663,7 @@ class Command(BaseCommand):
         child_transplant = self.faker.random_element(elements=(tuple(transplant[0] for transplant in TRANSPLANT_CHOICES)))
         user_data.update({'child_condition': child_condition, 'child_age_of_diagnosis': child_age_of_diagnosis, 'child_transplant': child_transplant})
         self.try_create_parent(user_data)
-    
+
     def generate_mentor(self):
         user_data = self.generate_user_data()
         condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
@@ -678,7 +679,7 @@ class Command(BaseCommand):
         referral_code = uuid.uuid4().hex[:10].upper()
         user_data.update({'expertise': expertise, 'referral_code': referral_code})
         self.try_create_professional(user_data)
-        
+
     def seed_friends(self):
         print("Seeding friends...", end='\r')
         for user in self.users:
@@ -713,10 +714,10 @@ class Command(BaseCommand):
             self.users[randint(0, len(self.users) - 1)],
             self.users[randint(0, len(self.users) - 1)],
         ]
-        users = {"usernames": [user.username for user in users]}
+        users = [{"username": user.username} for user in users]
         messages = []
         for _ in range(randint(1, 15)):
-            sender = users["usernames"][randint(0, len(users["usernames"]) - 1)]
+            sender = users[randint(0, len(users) - 1)]
             content = self.faker.text(max_nb_chars=100)
             message = {"sender": sender, "content": content}
             messages.append(message)
@@ -757,7 +758,14 @@ class Command(BaseCommand):
         visibility = self.faker.random_element(elements=("G", "F"))
         author = {"username": author.username}
         likes = [{"username": like.username} for like in likes]
-        self.try_create_post({"author": author, "content": content, "likes": likes, "visibility": visibility})
+        self.try_create_post(
+            {
+                "author": author,
+                "content": content,
+                "likes": likes,
+                "visibility": visibility,
+            }
+        )
 
     def generate_post_comment(self):
         post = self.posts[randint(0, len(self.posts) - 1)]
@@ -797,7 +805,7 @@ class Command(BaseCommand):
         if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
             self.try_create_notification({"user": user, "notifying_user": notifying_user,
                                     "content_type": content_type, "object_id": object_id})
-            
+
     def generate_post_comment_notification(self, user):
         post_comment = random.choice(self.post_comments.filter(post__author=user))
         notifying_user = post_comment.author
@@ -806,7 +814,7 @@ class Command(BaseCommand):
         if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
             self.try_create_notification({"user": user, "notifying_user": notifying_user,
                                     "content_type": content_type, "object_id": object_id})
-        
+
     def generate_question_response_notification(self, user):
         response = random.choice(self.responses.filter(question__author=user))
         notifying_user = response.user
@@ -815,7 +823,7 @@ class Command(BaseCommand):
         if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
             self.try_create_notification({"user": user, "notifying_user": notifying_user,
                                     "content_type": content_type, "object_id": object_id})
-            
+
     def generate_post_like_notification(self, user):
         post = random.choice(self.posts.filter(author=user, likes__gte=1))
         notifying_user = random.choice(post.likes.exclude(id=user.id))
@@ -942,14 +950,15 @@ class Command(BaseCommand):
         FriendRequest.objects.create(sender=sender, receiver=receiver)
 
     def create_message(self, data):
-        data["sender"] = self.get_user({"username": data["sender"]})
+        data["sender"] = self.get_user(data["sender"])
         message = Message.objects.create(**data)
         return message
 
     def create_conversation(self, data):
-        users = [self.get_user({"username": username}) for username in data["users"]["usernames"]]
+        users = [self.get_user({"username": user["username"]}) for user in data["users"]]
         conversation = Conversation.objects.create()
         message_objects = [self.create_message(message) for message in data["messages"]]
+        print(message_objects)
         for message_object in message_objects:
             message_object.visible_to.set(users)
         conversation.users.set(users)
@@ -985,7 +994,7 @@ class Command(BaseCommand):
         post = Post.objects.create(**data)
         post.likes.set(likes)
         post.save()
-        
+
     def create_post_comment(self, data):
         data["post"] = self.get_post(data["post"])
         data["author"] = self.get_user(data["author"])
