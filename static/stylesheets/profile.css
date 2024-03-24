@@ -24,6 +24,14 @@
     margin: auto;
 }
 
+.professional-profile-img {
+    text-align: center;
+    width: 60%;
+    padding-top: 60%; 
+    position: relative; 
+    margin: auto;
+}
+
 .profile-head .nav-tabs {
     margin-top: 5%;
     margin-bottom: 7%;

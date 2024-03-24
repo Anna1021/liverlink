@@ -1,0 +1,17 @@
+@font-face {
+    font-family: Comic Sans MS;
+    src :url(/Fonts/comic-sans/ComicSansMS3.tff)
+}
+
+.comic-sans h1,
+.comic-sans h2,
+.comic-sans h3,
+.comic-sans h4,
+.comic-sans h5,
+.comic-sans p,
+.comic-sans span,
+.comic-sans div,
+.comic-sans a
+{
+    font-family: Comic Sans MS;
+}

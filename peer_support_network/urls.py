@@ -66,4 +66,5 @@ urlpatterns = [
     path('demographic_information/',views.demographic_information,name='demographic-information'),
     path('delete_question/<int:id>/', views.delete_question, name='delete_question'),
     path('delete_reply/<int:reply_id>/', views.delete_reply, name='delete_reply'),
+    path('accessibility/', views.AccessibilityView.as_view(), name='accessibility'),
 ]
