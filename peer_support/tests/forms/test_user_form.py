@@ -88,4 +88,4 @@ class UserFormTestCase(TestCase):
         self.form_input['date_of_birth'] = date.today() - timedelta(days=365*15)
         form = UserForm(data=self.form_input)
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['date_of_birth'], ['You must be 6 years old to register.'])
+        self.assertEqual(form.errors['date_of_birth'], ['You must be 16 years old.'])

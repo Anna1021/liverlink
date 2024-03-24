@@ -31,7 +31,6 @@ def validate_min_age(dob):
 
     today = date.today()
     if dob and (dob.year + 16, dob.month, dob.day) > (today.year, today.month, today.day):
-        print("You must be 16 years old.")
         raise forms.ValidationError('You must be 16 years old.')
     
 def validate_max_age(dob, user_type):
@@ -39,7 +38,7 @@ def validate_max_age(dob, user_type):
 
     today = date.today()
     if dob and (dob.year + 25, dob.month, dob.day) < (today.year, today.month, today.day) and user_type == "PT":
-        raise forms.ValidationError('You must be less than 25 years old to register as a patient.')
+        raise forms.ValidationError('You must be less than 25 years old to be a patient.')
     
 def apply_filter_if_needed(queryset, field_name, value):
     if value and value != "any":

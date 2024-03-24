@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from peer_support.models import User, Parent, Patient, Mentor, Professional, Referral
 from .helpers import NewPasswordMixin
 from .form_choices import USER_TYPE_CHOICES
@@ -78,17 +79,17 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             except Referral.DoesNotExist:
                 self.add_error("referral_code", "Please enter a valid referral code.")
 
-    def clean_date_of_birth(self):
-        dob = self.cleaned_data.get('date_of_birth')
-        user_type = self.cleaned_data.get('user_type')
-        validate_min_age(dob)
-        validate_max_age(dob, user_type)
-        return dob   
-    
     def clean(self):
-        """Validate referral code."""
+        """Validate referral code and DOB."""
         cleaned_data = super().clean()
+
+        dob = cleaned_data.get('date_of_birth')
+        user_type = cleaned_data.get('user_type')
         referral_code = cleaned_data.get("referral_code")
-        user_type = cleaned_data.get("user_type")
+        try:
+            validate_min_age(dob)
+            validate_max_age(dob, user_type)
+        except ValidationError as e:
+            self.add_error('date_of_birth', e)
         self.validate_referral_code(referral_code, user_type)
         return cleaned_data
