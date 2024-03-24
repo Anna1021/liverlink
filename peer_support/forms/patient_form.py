@@ -19,7 +19,7 @@ class PatientForm(UserForm, forms.ModelForm):
         widgets = UserForm.Meta.widgets
 
     def clean_date_of_birth(self):
-        cleaned_data = super().clean_date_of_birth()
-        dob = cleaned_data.get('date_of_birth')
+        cleaned_data = super().clean()
+        dob = cleaned_data['date_of_birth']
         validate_max_age(dob, "PT")
         return dob
