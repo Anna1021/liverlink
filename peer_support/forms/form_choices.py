@@ -78,3 +78,8 @@ TRANSPLANT_CHOICES = [
     ('Y', 'Yes'), 
     ('N', 'No'),
 ]
+
+POST_VISIBILITY_CHOICES = [
+    ("G", "Global"),
+    ("F", "Friends"),
+]
