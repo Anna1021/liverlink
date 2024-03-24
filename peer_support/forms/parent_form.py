@@ -3,7 +3,7 @@ from peer_support.forms import UserForm
 from peer_support.models import Parent
 from .form_choices import CONDITION_CHOICES, TRANSPLANT_CHOICES
 
-class ParentForm(forms.ModelForm):
+class ParentForm(UserForm, forms.ModelForm):
     """Form to update parent profiles."""
 
     child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
