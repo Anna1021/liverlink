@@ -16,11 +16,11 @@ class UserForm(forms.ModelForm):
         }
 
     def validate_dob(self, dob):
-        """Check user is over 13 years old."""
+        """Check user is over 16 years old."""
 
         today = date.today()
-        if dob and (dob.year + 13, dob.month, dob.day) > (today.year, today.month, today.day):
-            self.add_error('date_of_birth', 'You must be 13 years old to register.')
+        if dob and (dob.year + 16, dob.month, dob.day) > (today.year, today.month, today.day):
+            self.add_error('date_of_birth', 'You must be 16 years old to register.')
 
     def clean(self):
         """Validation of referral code and DOB."""

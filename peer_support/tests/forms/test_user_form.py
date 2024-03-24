@@ -84,8 +84,8 @@ class UserFormTestCase(TestCase):
         self.assertEqual(user.bio, 'I am a test user.')
         self.assertEqual(before_count, after_count)
 
-    def test_invalid_date_of_birth_less_than_13_years_ago(self):
-        self.form_input['date_of_birth'] = date.today() - timedelta(days=365*12)
+    def test_invalid_date_of_birth_less_than_16_years_ago(self):
+        self.form_input['date_of_birth'] = date.today() - timedelta(days=365*15)
         form = UserForm(data=self.form_input)
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['date_of_birth'], ['You must be 13 years old to register.'])
+        self.assertEqual(form.errors['date_of_birth'], ['You must be 6 years old to register.'])
