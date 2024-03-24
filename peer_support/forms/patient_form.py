@@ -4,7 +4,8 @@ from peer_support.models import Patient
 from .form_choices import CONDITION_CHOICES, TRANSPLANT_CHOICES
 from datetime import date
 
-class PatientForm(UserForm, forms.ModelForm):
+
+class PatientForm(forms.ModelForm):
     """Form to update patient profiles."""
 
     condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
@@ -27,7 +28,7 @@ class PatientForm(UserForm, forms.ModelForm):
 
     def clean(self):
         """Validation of DOB."""
-        
+
         cleaned_data = super().clean()
         dob = cleaned_data.get('date_of_birth')
         self.validate_max_dob(dob)
