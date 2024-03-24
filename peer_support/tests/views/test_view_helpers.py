@@ -1,6 +1,5 @@
 """Unit tests for the helpers view."""
 import uuid
-import datetime
 from django.test import TestCase
 from peer_support.models import Professional, Referral, User, Conversation, GroupConversation
 from peer_support.views.helpers import create_referral, get_referral_code, get_addable_peers, check_blocked_dm, country_to_continent, country_to_continent_specific
