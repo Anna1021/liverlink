@@ -64,8 +64,12 @@ class Notification(models.Model):
     def get_post_URL(self):
         """Return the URL to the post liked / being replied to, if the post still exists."""
 
-        post_id = self.content_object.id if self.content_type.name == 'post' else self.content_object.post.id
-        return reverse("post_detail", kwargs={"post_id": post_id})        
+        post_id = (
+            self.content_object.id
+            if self.content_type.name == "post"
+            else self.content_object.post.id
+        )
+        return reverse("post_detail", kwargs={"post_id": post_id})
 
     def get_question_URL(self):
         """Return the URL to the question being replied to."""
