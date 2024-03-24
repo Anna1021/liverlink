@@ -1,6 +1,5 @@
 from django import forms
 from peer_support.models import User
-from datetime import date
 
 class UserForm(forms.ModelForm):
     """Form to update user profiles."""

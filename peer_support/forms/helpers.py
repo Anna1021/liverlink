@@ -26,26 +26,21 @@ class NewPasswordMixin(forms.Form):
             self.add_error('password_confirmation', 'Confirmation does not match password.')
         return cleaned_data
     
-class UserFormValidation(forms.ModelForm):
+def validate_min_age(dob):
+    """Check user is over 16 years old."""
 
-    def validate_dob(self, dob, user_type):
-        """Check user is over 16 and under 25 years old."""
+    today = date.today()
+    if dob and (dob.year + 16, dob.month, dob.day) > (today.year, today.month, today.day):
+        print("You must be 16 years old.")
+        raise forms.ValidationError('You must be 16 years old.')
+    
+def validate_max_age(dob, user_type):
+    """Check user is under 25 years old."""
 
-        today = date.today()
-        if dob and (dob.year + 16, dob.month, dob.day) > (today.year, today.month, today.day):
-            self.add_error('date_of_birth', 'You must be 16 years old to register.')
-        if dob and (dob.year + 25, dob.month, dob.day) < (today.year, today.month, today.day) and user_type == "PT":
-            self.add_error('date_of_birth', 'You must be less than 25 years old to register as a patient.')
-
-    def clean(self):
-        """Validate referral code and DOB."""
-        cleaned_data = super().clean()
-        referral_code = cleaned_data.get("referral_code")
-        user_type = cleaned_data.get("user_type")
-        dob = cleaned_data.get("date_of_birth")
-        self.validate_referral_code(referral_code, user_type)
-        self.validate_dob(dob, user_type)
-        return cleaned_data
+    today = date.today()
+    if dob and (dob.year + 25, dob.month, dob.day) < (today.year, today.month, today.day) and user_type == "PT":
+        raise forms.ValidationError('You must be less than 25 years old to register as a patient.')
+    
 
 def apply_filter_if_needed(queryset, field_name, value):
     if value and value != "any":
