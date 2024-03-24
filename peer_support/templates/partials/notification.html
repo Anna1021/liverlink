@@ -1,8 +1,11 @@
+{% load static %}
 <div class="notification-list d-flex justify-content-between">
     <div class="notification-list_content">
-        <div class="notification-list_img">
+        <div class="notification-list-img d-flex align-items-center">
             <a href="{{ notification.get_URL }}" aria-label="Link to notification object">
-            <img src="https://www.icegif.com/wp-content/uploads/2022/01/icegif-788.gif" alt="user">
+                {% if notification.notifying_user %}
+                    <img src="{% static notification.notifying_user.userprofile.profile_picture %}" alt="user">
+                {% endif %}
             </a>
         </div>
         <div class="notification-list_detail">
