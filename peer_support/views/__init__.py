@@ -42,7 +42,7 @@ from .delete_conversation_view import DeleteConversationView
 from .submit_feedback_view import SubmitFeedbackView
 from .feedback_view import FeedbackView
 from .delete_feedback_view import delete_feedback
-from .demographic_information import demographic_information
+from .demographic_information import DemographicInformationView
 from .delete_question_view import delete_question
 from .delete_reply_view import delete_reply
 from .delete_comment_view import DeleteCommentView

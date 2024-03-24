@@ -38,6 +38,7 @@ function update_pie_chart_options(label_colour) {
 let label_colour = getThemeColors();
 let bar_chart_options = update_bar_chart_options(label_colour);
 let pie_chart_options = update_pie_chart_options(label_colour);
+
 //Charts information
 let user_type_data={
     labels:user_types_labels,
@@ -65,7 +66,7 @@ let ethnicity_data = {
         backgroundColor: colours, 
         data: ethnicity_count
     }],
-    title: "User Ethnicity among users"
+    title: "User Ethnicinicity distribution"
 };
 
 let patient_condition_data = {
@@ -75,7 +76,17 @@ let patient_condition_data = {
         backgroundColor: colours,
         data: patient_condition_count 
     }],
-    title: "Liver Disease among Users"
+    title: "Liver Disease among Patients"
+};
+
+let mentor_condition_data = {
+    labels: mentor_condition_labels, 
+    datasets: [{
+        label: "Liver Disease Distribution",
+        backgroundColor: colours,
+        data: mentor_condition_count 
+    }],
+    title: "Liver Disease among Mentors"
 };
 
 let parent_child_condition_data = {
@@ -85,7 +96,7 @@ let parent_child_condition_data = {
         backgroundColor: colours,
         data: parent_child_condition_count 
     }],
-    title: "Liver Disease among Users"
+    title: "Liver Disease among parents child condition"
 };
 
 let user_gender_data={
@@ -95,7 +106,7 @@ let user_gender_data={
             backgroundColor: colours,
             data: gender_count
         }],
-    title:"Genders among Users"
+    title:"User gender distribution "
 };
 
 let user_location_data={
@@ -105,7 +116,7 @@ let user_location_data={
             backgroundColor: colours,
             data: location_count
         }],
-    title:"Genders among Users"
+    title:"User location distribution"
 };
 
 let user_location_south_america_data={
@@ -239,6 +250,9 @@ document.getElementById("barChartDataSelect").addEventListener("change", functio
         case "patient_condition":
             update_bar_chart_data(patient_condition_data);
             break;
+        case "mentor_condition":
+            update_bar_chart_data(mentor_condition_data);
+            break;
         case "parent_child_condition":
             update_bar_chart_data(parent_child_condition_data);
             break;
@@ -314,6 +328,9 @@ document.getElementById("pieChartDataSelect").addEventListener("change", functio
             break;
         case "parent_child_condition":
             update_pie_chart_data(parent_child_condition_data);
+            break;
+        case "mentor_condition":
+            update_pie_chart_data(mentor_condition_data);
             break;
         case "user_gender":
             update_pie_chart_data(user_gender_data);
