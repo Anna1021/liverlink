@@ -1,7 +1,7 @@
 from django.views import View
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from peer_support.models import Question, Response
+from peer_support.models import Question, Response, Notification
 from peer_support.forms import NewReplyForm, NewResponseForm, ReportForm
 from django.contrib import messages
 
@@ -43,10 +43,15 @@ class QuestionPageView(LoginRequiredMixin, View):
             response.user = request.user
             response.question = get_object_or_404(Question, id=id)
             response.save()
+            self.send_notification(response)
             return redirect(f'/question/{id}#{response.id}')
         context = self.get_context(request, id)
         context['response_form']= response_form
         return render(request, 'question.html', context)
+    
+    def send_notification(self, response):
+        if response.user != response.question.author:
+            Notification.objects.create(content_object=response, user=response.question.author, notifying_user=response.user)
     
     def question_report(self, request, comment_id):
         question = get_object_or_404(Question, id=comment_id)

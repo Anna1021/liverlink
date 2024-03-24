@@ -63,6 +63,7 @@ USER_TYPE_CHOICES = [
     ('PT', 'Patient'),
     ('PR', 'Parent'),
     ('MT', 'Mentor'),
+    ('PF', 'Professional'),
 ]
 
 SORT_USER_CHOICES = [

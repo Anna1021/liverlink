@@ -8,26 +8,12 @@ $(document).ready(function() {
         window.history.pushState({path: newUrl}, '', newUrl);
         window.location.reload();
     }
-    hideBlockedMessages()
     if ($('#conversation').scrollTop()<$('#conversation').prop('scrollHeight')-($('#conversation').prop('clientHeight')+120)){
         $('#scroll-down').show();
-    }
-    function hideBlockedMessages(){
-        var blocked_messages = document.getElementsByName('blocked-message');
-        for (var i = 0; i < blocked_messages.length; ++i) {
-            let message = blocked_messages[i]
-            message.innerHTML = "You have blocked this user. Click to reveal text."
-            message.addEventListener('click', function() {
-                var message_text = message.getAttribute('data-text')
-                message.innerHTML = message_text
-                message.classList.remove('text-muted')
-            }.bind(this, message))
-        }
     }
     function setScroll(){
         let scrollPos = 0;
         let previousUrl = document.referrer;
-        // console.log(sessionStorage.getItem(scrollKey)+" four");
         if (sessionStorage.getItem(scrollKey)!==null) {
             if (sessionStorage.getItem(scrollKey)>$('#conversation').prop('clientHeight')+120) {
                 scrollPos = sessionStorage.getItem(scrollKey);
@@ -39,11 +25,8 @@ $(document).ready(function() {
                 scrollPos = sessionStorage.getItem(scrollKey);
             }
         }  
-        // console.log($('#conversation').prop('scrollHeight')+" three");
-        // console.log(scrollPos + " two");
         scrollPos = $('#conversation').prop('scrollHeight')-scrollPos;
         $('#conversation').scrollTop(scrollPos);
-        // console.log($('#conversation').scrollTop() + " one");
     }
     $('#conversation').scroll(function(){
         if ($(this).scrollTop()<$(this).prop('scrollHeight')-($('#conversation').prop('clientHeight')+120)){

@@ -22,5 +22,6 @@ class AcceptFriendRequestView(LoginRequiredMixin, View):
         Notification.objects.create(
             title='Friend Request Accepted',
             description=f'{request.user.username} accepted your friend request.',
-            user=friend_request.sender
+            user=friend_request.sender,
+            notifying_user=request.user
         )

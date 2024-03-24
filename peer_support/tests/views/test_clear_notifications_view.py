@@ -26,7 +26,7 @@ class ClearNotificationsViewTestCase(TestCase):
         user_notifications = Notification.objects.filter(user=self.user)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(Notification.objects.count(), 1)
+        self.assertEqual(Notification.objects.count(), Notification.objects.exclude(user=self.user).count())
         self.assertEqual(user_notifications.count(), 0)
 
     def test_clear_notifications_without_being_logged_in(self):

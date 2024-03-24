@@ -28,6 +28,7 @@ class FilterUserForm(forms.Form):
     mentor_age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     mentor_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
     mentor_condition = forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
+    professional_expertise = forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
     transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
     child_transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
 
@@ -86,6 +87,9 @@ class FilterUserForm(forms.Form):
         if "MT" in user_type:
             mentors = self.filter_by_mentor_attributes()
             combined_queryset = combined_queryset | mentors
+        if "PF" in user_type:
+            professionals = self.filter_by_professional_attributes()
+            combined_queryset = combined_queryset | professionals
         return combined_queryset
     
     def filter_by_age_range(self, users):
@@ -143,6 +147,14 @@ class FilterUserForm(forms.Form):
             'transplant': 'mentor__transplant__icontains',  }
         mentors = User.objects.filter(mentor__isnull=False)
         return self.filter_by(mentors,filter_criteria)
+    
+    def filter_by_professional_attributes(self):
+        """Filters users based on professional attributes."""
+
+        filter_criteria = {
+            'professional_expertise': 'professional__expertise__icontains'}
+        professionals = User.objects.filter(professional__isnull=False)
+        return self.filter_by(professionals,filter_criteria)
     
     def filter_by(self,users,criteria):
         """Filters users based on given criteria."""

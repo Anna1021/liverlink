@@ -1,14 +1,14 @@
-"""Tests for the profile settings view."""
+"""Tests for the profile update view."""
 import datetime
 from django.contrib import messages
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.forms import PatientForm, ParentForm, MentorForm, UserForm
-from peer_support.models import Patient, Parent, Mentor, User
+from peer_support.forms import PatientForm, ParentForm, MentorForm, UserForm, ProfessionalForm
+from peer_support.models import Patient, Parent, Mentor, User, Professional
 from peer_support.tests.helpers import reverse_with_next
 
-class SettingsViewTestCase(TestCase):
-    """Test suite for the profile settings view."""
+class ProfileUpdateViewTestCase(TestCase):
+    """Test suite for the profile update view."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
@@ -16,6 +16,7 @@ class SettingsViewTestCase(TestCase):
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
         'peer_support/tests/fixtures/other_parents.json',
+        'peer_support/tests/fixtures/other_professionals.json',
         'peer_support/tests/fixtures/default_user_profile.json',
         'peer_support/tests/fixtures/other_user_profiles.json',
         'peer_support/tests/fixtures/default_admin.json'
@@ -26,6 +27,7 @@ class SettingsViewTestCase(TestCase):
         self.admin = User.objects.get(username='@admin')
         self.patient = Patient.objects.get(username='@janedoe')
         self.mentor = Mentor.objects.get(username='@johndoe')
+        self.professional = Professional.objects.get(username='@hazelsmith')
         self.url = reverse('settings')
         self.user_form_input = {
             'first_name': 'Admin',
@@ -84,6 +86,20 @@ class SettingsViewTestCase(TestCase):
             'age_of_diagnosis': 21,
             'transplant': 'N',
         }
+        self.professional_form_input = {
+            'first_name': 'Test',
+            'last_name': 'Professional',
+            'username': '@testprofessional1',
+            'email': 'testprofessional@example.org',
+            'date_of_birth': '1991-01-01',
+            'gender': 'M',
+            'location': 'US',
+            'ethnicity': 'RO',
+            'language': 'en',
+            'bio': 'I am a test professional.',
+            'expertise': 'Haemochromatosis',
+            'referral_code': '9C274FF391',
+        }
 
     def test_profile_url(self):
         self.assertEqual(self.url, '/settings/')
@@ -115,6 +131,13 @@ class SettingsViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
         self.assertTrue(isinstance(form, MentorForm))    
+
+    def test_get_professional_form_when_current_user_is_professional(self):
+        self.client.force_login(self.professional)
+        response = self.client.get(self.url)
+        self.assertTemplateUsed(response, 'settings.html')
+        form = response.context['form']
+        self.assertTrue(isinstance(form, ProfessionalForm))    
 
     def test_get_profile(self):
         self.client.force_login(self.patient)
@@ -229,6 +252,30 @@ class SettingsViewTestCase(TestCase):
         self.assertEqual(self.mentor.age_of_diagnosis, 13) 
         self.assertEqual(self.mentor.transplant, 'Y') 
         self.assertEqual(self.mentor.referral_code, '9C274FF391') 
+
+    def test_unsuccessful_profile_update_for_professional(self):
+        self.client.force_login(self.professional)
+        self.professional_form_input['username'] = 'BAD_USERNAME'
+        before_count = Professional.objects.count()
+        response = self.client.post(self.url, self.professional_form_input)
+        after_count = Professional.objects.count()
+        self.assertEqual(after_count, before_count)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'settings.html')
+        form = response.context['form']
+        self.assertTrue(form.is_bound)
+        self.professional.refresh_from_db()
+        self.assertEqual(self.professional.username, '@hazelsmith')
+        self.assertEqual(self.professional.first_name, 'Hazel')
+        self.assertEqual(self.professional.last_name, 'Smith')
+        self.assertEqual(self.professional.email, 'hazelsmith@example.com')
+        self.assertEqual(self.professional.date_of_birth, datetime.date(1981, 1, 3))
+        self.assertEqual(self.professional.gender, 'F')
+        self.assertEqual(self.professional.location, 'US')
+        self.assertEqual(self.professional.ethnicity, 'AS')
+        self.assertEqual(self.professional.bio, "I'm a professional therapist and I'm here to help you.")
+        self.assertEqual(self.professional.expertise, 'Biliary atresia')
+        self.assertEqual(self.professional.referral_code, '9C274FF391') 
 
     def test_unsuccessful_profile_update_due_to_duplicate_username(self):
         self.client.force_login(self.patient)
@@ -362,11 +409,11 @@ class SettingsViewTestCase(TestCase):
         self.assertEqual(self.mentor.referral_code, '9C274FF391'),
         self.assertEqual(self.mentor.transplant, 'N')
 
-    def test_successful_profile_update_for_mentor(self):
-        self.client.force_login(self.mentor)
-        before_count = Mentor.objects.count()
-        response = self.client.post(self.url, self.mentor_form_input, follow=True)
-        after_count = Mentor.objects.count()
+    def test_successful_profile_update_for_professional(self):
+        self.client.force_login(self.professional)
+        before_count = Professional.objects.count()
+        response = self.client.post(self.url, self.professional_form_input, follow=True)
+        after_count = Professional.objects.count()
         self.assertEqual(after_count, before_count)
         response_url = reverse('feed')
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
@@ -374,21 +421,19 @@ class SettingsViewTestCase(TestCase):
         messages_list = list(response.context['messages'])
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.SUCCESS)
-        self.mentor.refresh_from_db()
-        self.assertEqual(self.mentor.username, '@testmentor1')
-        self.assertEqual(self.mentor.first_name, 'Test')
-        self.assertEqual(self.mentor.last_name, 'Mentor')
-        self.assertEqual(self.mentor.email, 'testmentor@example.org')
-        self.assertEqual(self.mentor.date_of_birth, datetime.date(1991, 1, 1)),
-        self.assertEqual(self.mentor.gender, 'M'),
-        self.assertEqual(self.mentor.location, 'US'),
-        self.assertEqual(self.mentor.ethnicity, 'RO'),
-        self.assertEqual(self.mentor.language, 'en'),
-        self.assertEqual(self.mentor.bio, 'I am a test mentor.'),
-        self.assertEqual(self.mentor.condition, 'Haemochromatosis'),
-        self.assertEqual(self.mentor.age_of_diagnosis, 21),
-        self.assertEqual(self.mentor.referral_code, '9C274FF391'),
-        self.assertEqual(self.mentor.transplant, 'N')
+        self.professional.refresh_from_db()
+        self.assertEqual(self.professional.username, '@testprofessional1')
+        self.assertEqual(self.professional.first_name, 'Test')
+        self.assertEqual(self.professional.last_name, 'Professional')
+        self.assertEqual(self.professional.email, 'testprofessional@example.org')
+        self.assertEqual(self.professional.date_of_birth, datetime.date(1991, 1, 1)),
+        self.assertEqual(self.professional.gender, 'M'),
+        self.assertEqual(self.professional.location, 'US'),
+        self.assertEqual(self.professional.ethnicity, 'RO'),
+        self.assertEqual(self.professional.language, 'en'),
+        self.assertEqual(self.professional.bio, 'I am a test professional.'),
+        self.assertEqual(self.professional.expertise, 'Haemochromatosis'),
+        self.assertEqual(self.professional.referral_code, '9C274FF391'),
 
     def test_post_profile_redirects_when_not_logged_in(self):
         redirect_url = reverse_with_next('log_in', self.url)

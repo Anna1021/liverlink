@@ -108,6 +108,24 @@ class FeedViewTestCase(TestCase):
         self.assertContains(response, "Stranger post global")
         self.assertNotContains(response, "Stranger post friends")
 
+    def test_global_feed_does_not_contain_posts_from_blocked_users(self):
+        self.user.blocked_users.add(self.user2)
+        self.user.blocked_users.add(self.user3)
+        response = self.client.get(self.url + "?feed_type=global")
+        self.assertContains(response, "User post")
+        self.assertNotContains(response, "Friend post")
+        self.assertNotContains(response, "Stranger post global")
+        self.assertNotContains(response, "Stranger post friends")
+
+    def test_global_feed_does_not_contain_posts_from_blocked_by_users(self):
+        self.user2.blocked_users.add(self.user)
+        self.user3.blocked_users.add(self.user)
+        response = self.client.get(self.url + "?feed_type=global")
+        self.assertContains(response, "User post")
+        self.assertNotContains(response, "Friend post")
+        self.assertNotContains(response, "Stranger post global")
+        self.assertNotContains(response, "Stranger post friends")
+
     def test_friends_feed_contains_friend_and_user_posts_only(self):
         response = self.client.get(self.url + "?feed_type=friends")
         self.assertContains(response, "User post")

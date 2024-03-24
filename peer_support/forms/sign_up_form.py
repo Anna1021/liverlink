@@ -1,5 +1,5 @@
 from django import forms
-from peer_support.models import User, Parent, Patient, Mentor, Referral
+from peer_support.models import User, Parent, Patient, Mentor, Professional, Referral
 from .helpers import NewPasswordMixin
 from .form_choices import USER_TYPE_CHOICES, CONDITION_CHOICES, TRANSPLANT_CHOICES
 from datetime import date
@@ -8,21 +8,14 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
     """Form enabling unregistered users to sign up."""
     
     user_type = forms.ChoiceField(initial='', choices=USER_TYPE_CHOICES, required=True)
-    condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
-    age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
-    child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
-    child_age_of_diagnosis = forms.IntegerField(required=False, min_value=0)
     referral_code = forms.CharField(required=False, max_length=10, initial='')
-    transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
-    child_transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
 
     class Meta:
         """Form options."""
 
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth', 'gender', 'location', 'hospital', 'ethnicity', 'language', 'bio']
+        fields = ['first_name', 'last_name', 'username', 'email', 'date_of_birth'] 
         widgets = {
-            'bio': forms.Textarea(attrs={'rows': 3}),
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }
 
@@ -35,8 +28,10 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             user = self.create_patient(user_data)
         elif user_type == 'PR':
             user = self.create_parent(user_data)
-        else:
+        elif user_type == 'MT':
             user = self.create_mentor(user_data)
+        else:
+            user = self.create_professional(user_data)
         return user
 
     def get_user_data(self):
@@ -49,60 +44,51 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             'email': self.cleaned_data.get('email'),
             'password': self.cleaned_data.get('new_password'),
             'date_of_birth': self.cleaned_data.get('date_of_birth'),
-            'gender': self.cleaned_data.get('gender'),
-            'location': self.cleaned_data.get('location'),
-            'hospital': self.cleaned_data.get('hospital'),
-            'ethnicity': self.cleaned_data.get('ethnicity'),
-            'language': self.cleaned_data.get('language'),
-            'bio': self.cleaned_data.get('bio'),
         }
 
     def create_patient(self, user_data):
         """Create a new Patient user."""
 
-        user_data.update({
-            'condition': self.cleaned_data.get('condition'),
-            'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
-            'transplant': self.cleaned_data.get('transplant'),
-        })
         return Patient.objects.create_user(**user_data)
 
     def create_parent(self, user_data):
         """Create a new Parent user."""
 
-        user_data.update({
-            'child_condition': self.cleaned_data.get('child_condition'),
-            'child_age_of_diagnosis': self.cleaned_data.get('child_age_of_diagnosis'),
-            'child_transplant': self.cleaned_data.get('child_transplant'),
-        })
         return Parent.objects.create_user(**user_data)
 
     def create_mentor(self, user_data):
         """Create a new Mentor user."""
 
         user_data.update({
-            'condition': self.cleaned_data.get('condition'),
-            'age_of_diagnosis': self.cleaned_data.get('age_of_diagnosis'),
-            'transplant': self.cleaned_data.get('transplant'),
             'referral_code': self.cleaned_data.get('referral_code'),
         })
+
         return Mentor.objects.create_user(**user_data)
     
-    def validate_referral_code(self, referral_code, user_type):
-        """Check mentors use an existing referral code."""
+    def create_professional(self, user_data):
+        """Create a new Professional user."""
 
-        if user_type == 'MT':
+        user_data.update({
+            'referral_code': self.cleaned_data.get('referral_code'),
+        })
+        
+        return Professional.objects.create_user(**user_data)
+    
+    def validate_referral_code(self, referral_code, user_type):
+        """Check mentors and professionals use an existing referral code."""
+
+        if user_type == 'MT' or user_type == 'PF':
             try:
                 Referral.objects.get(code=referral_code)
             except Referral.DoesNotExist:
                 self.add_error('referral_code', "Please enter a valid referral code.")
 
     def validate_dob(self, dob, user_type):
-        """Check user is over 13 years old."""
+        """Check user is over 16 years old."""
 
         today = date.today()
-        if dob and (dob.year + 13, dob.month, dob.day) > (today.year, today.month, today.day):
-            self.add_error('date_of_birth', 'You must be 13 years old to register.')
+        if dob and (dob.year + 16, dob.month, dob.day) > (today.year, today.month, today.day):
+            self.add_error('date_of_birth', 'You must be 16 years old to register.')
         if dob and (dob.year + 25, dob.month, dob.day) < (today.year, today.month, today.day) and user_type == "PT":
             self.add_error('date_of_birth', 'You must be less than 25 years old to register as a patient.')
 
