@@ -6,14 +6,13 @@
         <div class="row">
             <div class="col-md-4">
                 {% if user_type == 'MENTOR' %}
-                <div class="mentor-profile-img">
-                    <img src="{% static user.userprofile.profile_picture %}" alt="User Profile Picture" />
-                </div>
+                    <div class="mentor-profile-img">
+                {% elif user_type == 'PROFESSIONAL' %}
+                    <div class="professional-profile-img">
                 {% else %}
                     <div class="profile-img">
-                        <img src="{% static user.userprofile.profile_picture %}" alt="User Profile Picture" />
-                    </div>
                 {% endif %}
+                    <img src="{% static user.userprofile.profile_picture %}" alt="User Profile Picture" /></div>
             </div>
             <div class="col-md-6">
                 <div class="profile-head">

@@ -123,6 +123,17 @@
   padding-left: 30px;
 }
 
+.light-theme .professional-friend-inner-card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 20px;
+  background-color: #baa8cf;
+  color: black;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-left: 30px;
+}
+
 .light-theme .question-list-item-title {
   color: rgb(0, 0, 0);
   font-size: 18px;
@@ -285,16 +296,6 @@
   color: rgb(0, 0, 0);
 }
 
-.light-theme .profile-img img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 .light-theme .mentor-profile-img img {
   position: absolute;
   top: 0;
@@ -304,6 +305,17 @@
   border-radius: 50%;
   object-fit: cover;
   border: 8px solid #7EBABB;
+}
+
+.light-theme .professional-profile-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 8px solid #baa8cf;
 }
 
 .light-theme .profile-head h7 {
