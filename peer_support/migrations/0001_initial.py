@@ -156,6 +156,22 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Professional',
+            fields=[
+                ('user_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('expertise', models.CharField(blank=True, max_length=50, null=True)),
+                ('referral_code', models.CharField(max_length=10)),
+            ],
+            options={
+                'verbose_name': 'Professional',
+                'verbose_name_plural': 'Professionals',
+            },
+            bases=('peer_support.user',),
+            managers=[
+                ('objects', django.contrib.auth.models.UserManager()),
+            ],
+        ),
+        migrations.CreateModel(
             name='UserProfile',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -271,7 +287,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('code', models.CharField(max_length=10, unique=True)),
-                ('referrer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='referrals_made', to='peer_support.mentor')),
+                ('referrer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='referrals_made', to='peer_support.professional')),
             ],
         ),
     ]

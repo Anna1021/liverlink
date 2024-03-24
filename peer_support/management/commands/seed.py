@@ -102,6 +102,52 @@ parent_fixtures = [
     },
 ]
 
+professional_fixtures = [
+    {
+        'username': '@joanneclarke', 
+        'email': 'joanne.clarke@example.org', 
+        'first_name': 'Joanne', 
+        'last_name': 'Clarke', 
+        'date_of_birth': '1968-04-15', 
+        'gender': 'F', 
+        'location': 'US', 
+        'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 
+        'ethnicity': 'BR', 
+        'language': 'en', 
+        'bio': 'Hello, I am Joanne.', 
+        'expertise': 'Diabetes',
+        'referral_code':'ABC123'
+    },
+    {
+        'username': '@jeremybarnett', 
+        'email': 'jeremny.barnett@example.org', 
+        'first_name': 'Jeremy', 
+        'last_name': 'Barnett', 
+        'date_of_birth': '1995-11-2', 
+        'gender': 'M', 
+        'location': 'CA', 
+        'hospital': 'Countess of Chester Hospital NHS Foundation Trust', 
+        'ethnicity': 'BR', 
+        'language': 'en', 
+        'bio': 'Hey there, I am Jeremy.', 
+        'referral_code':'DEF456'
+    },
+    {
+        'username': '@paulaevans', 
+        'email': 'paula.evans@example.org', 
+        'first_name': 'Paula', 
+        'last_name': 'Evans', 
+        'date_of_birth': '1975-2-30', 
+        'gender': 'F', 
+        'location': 'AU', 
+        'hospital': 'Blackpool Teaching Hospitals NHS Foundation Trust', 
+        'ethnicity': 'BR', 
+        'language': 'en', 
+        'bio': 'Hi, I am Paula.', 
+        'referral_code':'GHI789'
+    },
+]
+
 mentor_fixtures = [
     {
         "username": "@sarahsmith",
@@ -309,6 +355,7 @@ class Command(BaseCommand):
     PATIENT_COUNT = 100
     PARENT_COUNT = 100
     MENTOR_COUNT = 100
+    PROFESSIONAL_COUNT = 100
     FRIEND_REQUEST_COUNT = 100
     CONVERSATION_COUNT = 500
     QUESTION_COUNT = 250
@@ -333,6 +380,9 @@ class Command(BaseCommand):
 
         self.create_mentors()
         self.mentors = Mentor.objects.all()
+
+        self.create_professionals()
+        self.professionals = Professional.objects.all()
 
         self.users = User.objects.all()
 
@@ -381,6 +431,10 @@ class Command(BaseCommand):
     def create_mentors(self):
         self.generate_mentor_fixtures()
         self.generate_random_mentors()
+
+    def create_professionals(self):
+        self.generate_professional_fixtures()
+        self.generate_random_professionals()
 
     def create_friend_requests(self):
         self.generate_friend_request_fixtures()
@@ -432,6 +486,10 @@ class Command(BaseCommand):
     def generate_mentor_fixtures(self):
         for data in mentor_fixtures:
             self.try_create_mentor(data)
+
+    def generate_professional_fixtures(self):
+        for data in professional_fixtures:
+            self.try_create_professional(data)
 
     def generate_friend_request_fixtures(self):
         for data in friend_request_fixtures:
@@ -496,6 +554,14 @@ class Command(BaseCommand):
             self.generate_mentor()
             mentor_count = Mentor.objects.count()
         print("Mentor seeding complete.      ")
+
+    def generate_random_professionals(self):
+        professional_count = Professional.objects.count()
+        while professional_count < self.PROFESSIONAL_COUNT:
+            print(f"Seeding professional {professional_count}/{self.PROFESSIONAL_COUNT}", end='\r')
+            self.generate_professional()
+            professional_count = Professional.objects.count()
+        print("Professional seeding complete.      ")
 
     def generate_random_friend_requests(self):
         friend_request_count = FriendRequest.objects.count()
@@ -611,6 +677,13 @@ class Command(BaseCommand):
         user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'referral_code': referral_code, 'transplant': transplant})
         self.try_create_mentor(user_data)
 
+    def generate_professional(self):
+        user_data = self.generate_user_data()
+        expertise = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
+        referral_code = uuid.uuid4().hex[:10].upper()
+        user_data.update({'expertise': expertise, 'referral_code': referral_code})
+        self.try_create_professional(user_data)
+        
     def seed_friends(self):
         print("Seeding friends...", end='\r')
         for user in self.users:
@@ -764,6 +837,12 @@ class Command(BaseCommand):
         except:
             pass
 
+    def try_create_professional(self, data):
+        try:
+            self.create_professional(data)
+        except:
+            pass
+
     def try_create_friend_request(self, data):
         try:
             self.create_friend_request(data)
@@ -834,8 +913,8 @@ class Command(BaseCommand):
         if data["username"] == "@johndoe":
             user.is_superuser = user.is_staff = True
         user.save()
-        if model == Mentor:
-            Referral.objects.create(referrer=user, code=data["referral_code"])
+        if model == Mentor or model == Professional:
+            Referral.objects.create(referrer=user, code=data['referral_code'])
         return user
 
     def create_patient(self, data):
@@ -846,6 +925,9 @@ class Command(BaseCommand):
 
     def create_mentor(self, data):
         self.create_user(Mentor, data)
+
+    def create_professional(self, data):
+        self.create_user(Professional, data)
 
     def create_friend_request(self, data):
         sender = self.get_user(data["sender"])

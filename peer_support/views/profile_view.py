@@ -18,7 +18,7 @@ class ProfileView(LoginRequiredMixin, View):
           
         context = self.set_context(request, username)
         return render(request, 'profile.html', context)
-
+    
     def get_context(self, user, posts, request):
         return {
             'user': user, 

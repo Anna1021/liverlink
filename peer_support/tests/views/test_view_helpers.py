@@ -2,7 +2,7 @@
 import uuid
 import datetime
 from django.test import TestCase
-from peer_support.models import Mentor, Referral, User, Conversation, GroupConversation
+from peer_support.models import Professional, Referral, User, Conversation, GroupConversation
 from peer_support.views.helpers import create_referral, get_referral_code, get_addable_peers, check_blocked_dm, country_to_continent, country_to_continent_specific
 
 class HelpersViewTestCase(TestCase):
@@ -13,24 +13,20 @@ class HelpersViewTestCase(TestCase):
         'peer_support/tests/fixtures/default_user.json',
         'peer_support/tests/fixtures/other_users.json',
         'peer_support/tests/fixtures/other_patients.json',
-        'peer_support/tests/fixtures/default_friend_request.json',
+        'peer_support/tests/fixtures/other_professionals.json',
         'peer_support/tests/fixtures/default_conversation.json',
         'peer_support/tests/fixtures/default_message.json',
         'peer_support/tests/fixtures/other_messages.json',
         'peer_support/tests/fixtures/default_group_conversation.json',
-        'peer_support/tests/fixtures/default_question.json',
-        'peer_support/tests/fixtures/default_response.json',
-        'peer_support/tests/fixtures/default_post.json',
-        'peer_support/tests/fixtures/default_post_comment.json',
     ]
 
     def setUp(self):
-        self.mentor = Mentor.objects.create(username='@test_mentor', date_of_birth=datetime.date(1990,1,1),)
+        self.professional = Professional.objects.get(pk=12)
         
     def test_create_referral(self):
-        referral = create_referral(self.mentor)
+        referral = create_referral(self.professional)
         self.assertIsInstance(referral, Referral)
-        self.assertEqual(referral.referrer, self.mentor)
+        self.assertEqual(referral.referrer, self.professional)
     
     def test_create_referral_invalid_user(self):
         invalid_user = 'invalid_user'
@@ -39,12 +35,13 @@ class HelpersViewTestCase(TestCase):
 
     def test_get_referral_code(self):
         code = uuid.uuid4().hex[:10].upper()
-        Referral.objects.create(referrer=self.mentor, code=code)
-        referral_code = get_referral_code(self.mentor)
+        Referral.objects.create(referrer=self.professional, code=code)
+        referral_code = get_referral_code(self.professional)
         self.assertEqual(referral_code, code)
 
     def test_get_referral_code_no_referral(self):
-        referral_code = get_referral_code(self.mentor)
+        user = User.objects.get(id=1)
+        referral_code = get_referral_code(user)
         self.assertIsNone(referral_code)
 
     def test_country_to_continent_known(self):
@@ -108,5 +105,5 @@ class HelpersViewTestCase(TestCase):
         self.assertFalse(check_blocked_dm(second_user, group_conversation))
 
     def tearDown(self):
-        Mentor.objects.all().delete()
+        Professional.objects.all().delete()
         Referral.objects.all().delete()

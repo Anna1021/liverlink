@@ -1,5 +1,5 @@
 import uuid
-from peer_support.models import Referral, Mentor, User, Patient, Parent, Post, FriendRequest, Notification, PostComment
+from peer_support.models import Referral, Mentor, Professional, User, Patient, Parent, Post, FriendRequest, Notification, PostComment
 from django.conf import settings
 from django.shortcuts import redirect, reverse
 from django.contrib import messages
@@ -32,7 +32,7 @@ def notifications(request):
 def create_referral(user):
     """ Only creates referrals if the user is a mentor. """
 
-    if isinstance(user, Mentor): 
+    if isinstance(user, Professional): 
         code = uuid.uuid4().hex[:10].upper()
         referral = Referral.objects.create(referrer=user, code=code)
         return referral
@@ -208,5 +208,7 @@ def get_user_type(user):
         return "PATIENT"
     elif hasattr(user, 'mentor'):
         return "MENTOR"
+    elif hasattr(user, 'professional'):
+        return "PROFESSIONAL"
     else:
         return "ADMIN"
