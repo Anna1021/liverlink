@@ -2,7 +2,7 @@ from django import forms
 from peer_support.models import User, Parent, Patient, Mentor, Professional, Referral
 from .helpers import NewPasswordMixin
 from .form_choices import USER_TYPE_CHOICES
-from datetime import date
+from .helpers import validate_min_age, validate_max_age
 
 
 class SignUpForm(NewPasswordMixin, forms.ModelForm):
@@ -78,21 +78,17 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             except Referral.DoesNotExist:
                 self.add_error("referral_code", "Please enter a valid referral code.")
 
-    def validate_dob(self, dob, user_type):
-        """Check user is over 16 years old."""
-
-        today = date.today()
-        if dob and (dob.year + 16, dob.month, dob.day) > (today.year, today.month, today.day):
-            self.add_error('date_of_birth', 'You must be 16 years old to register.')
-        if dob and (dob.year + 25, dob.month, dob.day) < (today.year, today.month, today.day) and user_type == "PT":
-            self.add_error('date_of_birth', 'You must be less than 25 years old to register as a patient.')
-
+    def clean_date_of_birth(self):
+        dob = self.cleaned_data.get('date_of_birth')
+        user_type = self.cleaned_data.get('user_type')
+        validate_min_age(dob)
+        validate_max_age(dob, user_type)
+        return dob   
+    
     def clean(self):
-        """Validate referral code and DOB."""
+        """Validate referral code."""
         cleaned_data = super().clean()
         referral_code = cleaned_data.get("referral_code")
         user_type = cleaned_data.get("user_type")
-        dob = cleaned_data.get("date_of_birth")
         self.validate_referral_code(referral_code, user_type)
-        self.validate_dob(dob, user_type)
         return cleaned_data

@@ -41,7 +41,6 @@ def validate_max_age(dob, user_type):
     if dob and (dob.year + 25, dob.month, dob.day) < (today.year, today.month, today.day) and user_type == "PT":
         raise forms.ValidationError('You must be less than 25 years old to register as a patient.')
     
-
 def apply_filter_if_needed(queryset, field_name, value):
     if value and value != "any":
         filter_kwargs = {field_name: value}
