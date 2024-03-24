@@ -46,3 +46,4 @@ from .demographic_information import DemographicInformationView
 from .delete_question_view import delete_question
 from .delete_reply_view import delete_reply
 from .delete_comment_view import DeleteCommentView
+from .accessibility_view import AccessibilityView
