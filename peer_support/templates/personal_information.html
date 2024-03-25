@@ -3,11 +3,10 @@
     <div class="ps-title-text">Personal information</div>
 {% endblock %}
 
-
 {% block page %}
     <form action="{% url 'settings' %}" method="post">
     {% csrf_token %}
-    <div class="ps-scrollable">
+    <div class="pr-3 ps-scrollable">
         {% include 'partials/bootstrap_form.html' with form=form %}
     </div>
     <span><input type="submit" value="Update" class="btn btn-primary"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate_user">Deactivate account</button></span>

@@ -102,6 +102,49 @@ parent_fixtures = [
     },
 ]
 
+professional_fixtures = [
+    {
+        "username": "@joanneclarke",
+        "email": "joanne.clarke@example.org",
+        "first_name": "Joanne",
+        "last_name": "Clarke",
+        "date_of_birth": "1968-04-15",
+        "gender": "F",
+        "location": "US",
+        "ethnicity": "BR",
+        "language": "en",
+        "bio": "Hello, I am Joanne.",
+        "expertise": "Diabetes",
+        "referral_code": "ABC123",
+    },
+    {
+        "username": "@jeremybarnett",
+        "email": "jeremny.barnett@example.org",
+        "first_name": "Jeremy",
+        "last_name": "Barnett",
+        "date_of_birth": "1995-11-02",
+        "gender": "M",
+        "location": "CA",
+        "ethnicity": "BR",
+        "language": "en",
+        "bio": "Hey there, I am Jeremy.",
+        "referral_code": "DEF456",
+    },
+    {
+        "username": "@paulaevans",
+        "email": "paula.evans@example.org",
+        "first_name": "Paula",
+        "last_name": "Evans",
+        "date_of_birth": "1975-2-30",
+        "gender": "F",
+        "location": "AU",
+        "ethnicity": "BR",
+        "language": "en",
+        "bio": "Hi, I am Paula.",
+        "referral_code": "GHI789",
+    },
+]
+
 mentor_fixtures = [
     {
         "username": "@sarahsmith",
@@ -110,7 +153,7 @@ mentor_fixtures = [
         "last_name": "Smith",
         "date_of_birth": "1992-05-15",
         "gender": "F",
-        "location": "US",
+        "location": "GB",
         "hospital": "Blackpool Teaching Hospitals NHS Foundation Trust",
         "ethnicity": "BR",
         "language": "en",
@@ -126,7 +169,7 @@ mentor_fixtures = [
         "last_name": "Brown",
         "date_of_birth": "1985-09-20",
         "gender": "M",
-        "location": "CA",
+        "location": "GB",
         "hospital": "Countess of Chester Hospital NHS Foundation Trust",
         "ethnicity": "BR",
         "language": "en",
@@ -142,7 +185,6 @@ mentor_fixtures = [
         "date_of_birth": "1978-12-03",
         "gender": "F",
         "location": "AU",
-        "hospital": "Blackpool Teaching Hospitals NHS Foundation Trust",
         "ethnicity": "BR",
         "language": "en",
         "bio": "Hi, I am Emily.",
@@ -163,6 +205,7 @@ message_fixtures = [
     {"sender": parent_fixtures[0], "content": "How are you?"},
     {"sender": patient_fixtures[1], "content": "I am good"},
     {"sender": parent_fixtures[1], "content": "Hi"},
+    {"sender": parent_fixtures[2], "content": "Hello"},
 ]
 
 conversation_fixtures = [
@@ -176,7 +219,7 @@ conversation_fixtures = [
     },
     {
         "users": [patient_fixtures[0], parent_fixtures[2]],
-        "messages": [message_fixtures[1]],
+        "messages": [message_fixtures[5]],
     },
 ]
 
@@ -309,6 +352,7 @@ class Command(BaseCommand):
     PATIENT_COUNT = 100
     PARENT_COUNT = 100
     MENTOR_COUNT = 100
+    PROFESSIONAL_COUNT = 100
     FRIEND_REQUEST_COUNT = 100
     CONVERSATION_COUNT = 500
     QUESTION_COUNT = 250
@@ -334,6 +378,9 @@ class Command(BaseCommand):
         self.create_mentors()
         self.mentors = Mentor.objects.all()
 
+        self.create_professionals()
+        self.professionals = Professional.objects.all()
+
         self.users = User.objects.all()
 
         self.seed_friends()
@@ -342,9 +389,6 @@ class Command(BaseCommand):
 
         self.create_friend_requests()
         self.friend_requests = FriendRequest.objects.all()
-
-        self.create_messages()
-        self.messages = Message.objects.all()
 
         self.create_conversations()
         self.conversations = Conversation.objects.all()
@@ -382,6 +426,10 @@ class Command(BaseCommand):
         self.generate_mentor_fixtures()
         self.generate_random_mentors()
 
+    def create_professionals(self):
+        self.generate_professional_fixtures()
+        self.generate_random_professionals()
+
     def create_friend_requests(self):
         self.generate_friend_request_fixtures()
         self.generate_random_friend_requests()
@@ -389,9 +437,6 @@ class Command(BaseCommand):
     def create_notifications(self):
         self.generate_notification_fixtures()
         self.generate_random_notifications()
-
-    def create_messages(self):
-        self.generate_message_fixtures()
 
     def create_conversations(self):
         self.generate_conversation_fixtures()
@@ -432,6 +477,10 @@ class Command(BaseCommand):
     def generate_mentor_fixtures(self):
         for data in mentor_fixtures:
             self.try_create_mentor(data)
+
+    def generate_professional_fixtures(self):
+        for data in professional_fixtures:
+            self.try_create_professional(data)
 
     def generate_friend_request_fixtures(self):
         for data in friend_request_fixtures:
@@ -496,6 +545,14 @@ class Command(BaseCommand):
             self.generate_mentor()
             mentor_count = Mentor.objects.count()
         print("Mentor seeding complete.      ")
+
+    def generate_random_professionals(self):
+        professional_count = Professional.objects.count()
+        while professional_count < self.PROFESSIONAL_COUNT:
+            print(f"Seeding professional {professional_count}/{self.PROFESSIONAL_COUNT}", end='\r')
+            self.generate_professional()
+            professional_count = Professional.objects.count()
+        print("Professional seeding complete.      ")
 
     def generate_random_friend_requests(self):
         friend_request_count = FriendRequest.objects.count()
@@ -601,7 +658,7 @@ class Command(BaseCommand):
         child_transplant = self.faker.random_element(elements=(tuple(transplant[0] for transplant in TRANSPLANT_CHOICES)))
         user_data.update({'child_condition': child_condition, 'child_age_of_diagnosis': child_age_of_diagnosis, 'child_transplant': child_transplant})
         self.try_create_parent(user_data)
-    
+
     def generate_mentor(self):
         user_data = self.generate_user_data()
         condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
@@ -610,6 +667,13 @@ class Command(BaseCommand):
         transplant = self.faker.random_element(elements=(tuple(transplant[0] for transplant in TRANSPLANT_CHOICES)))
         user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'referral_code': referral_code, 'transplant': transplant})
         self.try_create_mentor(user_data)
+
+    def generate_professional(self):
+        user_data = self.generate_user_data()
+        expertise = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
+        referral_code = uuid.uuid4().hex[:10].upper()
+        user_data.update({'expertise': expertise, 'referral_code': referral_code})
+        self.try_create_professional(user_data)
 
     def seed_friends(self):
         print("Seeding friends...", end='\r')
@@ -645,10 +709,10 @@ class Command(BaseCommand):
             self.users[randint(0, len(self.users) - 1)],
             self.users[randint(0, len(self.users) - 1)],
         ]
-        users = {"usernames": [user.username for user in users]}
+        users = [{"username": user.username} for user in users]
         messages = []
         for _ in range(randint(1, 15)):
-            sender = users["usernames"][randint(0, len(users["usernames"]) - 1)]
+            sender = users[randint(0, len(users) - 1)]
             content = self.faker.text(max_nb_chars=100)
             message = {"sender": sender, "content": content}
             messages.append(message)
@@ -689,7 +753,14 @@ class Command(BaseCommand):
         visibility = self.faker.random_element(elements=("G", "F"))
         author = {"username": author.username}
         likes = [{"username": like.username} for like in likes]
-        self.try_create_post({"author": author, "content": content, "likes": likes, "visibility": visibility})
+        self.try_create_post(
+            {
+                "author": author,
+                "content": content,
+                "likes": likes,
+                "visibility": visibility,
+            }
+        )
 
     def generate_post_comment(self):
         post = self.posts[randint(0, len(self.posts) - 1)]
@@ -714,6 +785,8 @@ class Command(BaseCommand):
             self.generate_post_comment_notification(user)
         elif self.responses.filter(question__author=user) and random.choice([True, False]):
             self.generate_question_response_notification(user)
+        elif self.posts.filter(author=user, likes__gte=1) and random.choice([True, False]):
+            self.generate_post_like_notification(user)
         else:
             title = self.faker.sentence()
             description = self.faker.text(max_nb_chars=100)
@@ -727,7 +800,7 @@ class Command(BaseCommand):
         if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
             self.try_create_notification({"user": user, "notifying_user": notifying_user,
                                     "content_type": content_type, "object_id": object_id})
-            
+
     def generate_post_comment_notification(self, user):
         post_comment = random.choice(self.post_comments.filter(post__author=user))
         notifying_user = post_comment.author
@@ -736,7 +809,7 @@ class Command(BaseCommand):
         if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
             self.try_create_notification({"user": user, "notifying_user": notifying_user,
                                     "content_type": content_type, "object_id": object_id})
-        
+
     def generate_question_response_notification(self, user):
         response = random.choice(self.responses.filter(question__author=user))
         notifying_user = response.user
@@ -745,6 +818,16 @@ class Command(BaseCommand):
         if not Notification.objects.filter(content_type = content_type, object_id=object_id).exists():
             self.try_create_notification({"user": user, "notifying_user": notifying_user,
                                     "content_type": content_type, "object_id": object_id})
+
+    def generate_post_like_notification(self, user):
+        post = random.choice(self.posts.filter(author=user, likes__gte=1))
+        notifying_user = random.choice(post.likes.exclude(id=user.id))
+        content_type = ContentType.objects.get_for_model(Post)
+        object_id = post.id
+        title = "New Post Like"
+        if not Notification.objects.filter(content_type = content_type, object_id=object_id, notifying_user=notifying_user).exists():
+            self.try_create_notification({"user": user, "notifying_user": notifying_user, "title": title,
+                                          "content_type": content_type, "object_id": object_id})
 
     def try_create_patient(self, data):
         try:
@@ -761,6 +844,12 @@ class Command(BaseCommand):
     def try_create_mentor(self, data):
         try:
             self.create_mentor(data)
+        except:
+            pass
+
+    def try_create_professional(self, data):
+        try:
+            self.create_professional(data)
         except:
             pass
 
@@ -834,8 +923,8 @@ class Command(BaseCommand):
         if data["username"] == "@johndoe":
             user.is_superuser = user.is_staff = True
         user.save()
-        if model == Mentor:
-            Referral.objects.create(referrer=user, code=data["referral_code"])
+        if model == Mentor or model == Professional:
+            Referral.objects.create(referrer=user, code=data['referral_code'])
         return user
 
     def create_patient(self, data):
@@ -847,20 +936,23 @@ class Command(BaseCommand):
     def create_mentor(self, data):
         self.create_user(Mentor, data)
 
+    def create_professional(self, data):
+        self.create_user(Professional, data)
+
     def create_friend_request(self, data):
         sender = self.get_user(data["sender"])
         receiver = self.get_user(data["receiver"])
         FriendRequest.objects.create(sender=sender, receiver=receiver)
 
     def create_message(self, data):
-        data["sender"] = self.get_user({"username": data["sender"]})
+        data["sender"] = self.get_user(data["sender"])
         message = Message.objects.create(**data)
         return message
 
     def create_conversation(self, data):
-        users = [self.get_user({"username": username}) for username in data["users"]["usernames"]]
+        users = [self.get_user({"username": user["username"]}) for user in data["users"]]
         conversation = Conversation.objects.create()
-        message_objects = [self.create_message(message) for message in data["messages"]]
+        message_objects = [self.try_create_message(message) for message in data["messages"]]
         for message_object in message_objects:
             message_object.visible_to.set(users)
         conversation.users.set(users)
@@ -896,7 +988,7 @@ class Command(BaseCommand):
         post = Post.objects.create(**data)
         post.likes.set(likes)
         post.save()
-        
+
     def create_post_comment(self, data):
         data["post"] = self.get_post(data["post"])
         data["author"] = self.get_user(data["author"])

@@ -1,13 +1,11 @@
 import uuid
-from peer_support.models import Referral, Mentor, User, Patient, Parent, Post, FriendRequest, Notification, PostComment
+from peer_support.models import Referral, Professional, User, Post, FriendRequest, Notification, PostComment
 from django.conf import settings
 from django.shortcuts import redirect, reverse
 from django.contrib import messages
-from collections import Counter
 from datetime import date
 import pycountry
 import pycountry_convert as pc
-from collections import defaultdict
 from django.db.models import Q
 
 
@@ -38,7 +36,7 @@ def notifications(request):
 def create_referral(user):
     """Only creates referrals if the user is a mentor."""
 
-    if isinstance(user, Mentor):
+    if isinstance(user, Professional): 
         code = uuid.uuid4().hex[:10].upper()
         referral = Referral.objects.create(referrer=user, code=code)
         return referral
@@ -73,7 +71,6 @@ def get_addable_peers(current_user):
         .distinct()
     )
     return eligible_users
-
 
 
 def check_blocked_dm(current_user, conversation):
@@ -132,90 +129,6 @@ def calculate_age(born):
     today = date.today()
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
-
-def get_age_ranges():
-    users_ages = [calculate_age(user.date_of_birth) for user in User.objects.all() if user.date_of_birth is not None]
-    age_ranges = {"13-20": 0, "21-30": 0, "31-40": 0, "41-50": 0, "51-60": 0, "61-70": 0, "71+":0}
-    for age in users_ages:
-        if 13 <= age <= 20:
-            age_ranges["13-20"]+=1
-        elif 21 <= age <= 30:
-            age_ranges["21-30"]+=1
-        elif 31 <= age <= 40:
-            age_ranges["31-40"]+=1
-        elif 41 <= age <= 50:
-            age_ranges["41-50"]+=1
-        elif 51 <= age <= 60:
-            age_ranges["51-60"]+=1
-        elif 61 <= age <= 70:
-            age_ranges["61-70"]+=1
-        else:
-            age_ranges["71+"]+=1
-    return age_ranges
-
-def get_user_types():
-    num_patients = Patient.objects.count()
-    num_parents = Parent.objects.count()
-    num_mentors = Mentor.objects.count()
-    return {'patients': num_patients,
-        'parents': num_parents,
-        'mentors': num_mentors,}
-
-
-def get_user_ethnicities():
-    users = User.objects.all()
-    ethnicity_names = [user.ethnicity_name() for user in users]
-    ethnicity_names = [map_blank_key(user.ethnicity_name()) for user in users]
-    return Counter(ethnicity_names)
-
-
-def get_patient_conditions():
-    patient_conditions = Patient.objects.values_list("condition", flat=True)
-    patient_conditions = [map_blank_key(condition) for condition in patient_conditions]
-    return Counter(patient_conditions)
-
-
-def get_parent_child_conditions():
-    parent_child_conditions = Parent.objects.values_list("child_condition", flat=True)
-    parent_child_conditions = [
-        map_blank_key(child_condition) for child_condition in parent_child_conditions
-    ]
-    return Counter(parent_child_conditions)
-
-
-def get_genders():
-    genders = User.objects.values_list("gender", flat=True)
-    genders = [map_blank_key(gender) for gender in genders]
-    return Counter(genders)
-
-
-def get_locations():
-    """Returns set of all continets and number of users in each"""
-
-    country_codes = User.objects.values_list("location", flat=True)
-    continents = [
-        country_to_continent(code)
-        for code in country_codes
-        if country_to_continent(code) is not None
-    ]
-    return Counter(continents)
-
-
-def get_locations_specific():
-    """Returns set of all countries for each continent and number of users in each"""
-
-    country_codes = User.objects.values_list("location", flat=True)
-    continent_to_countries = defaultdict(list)
-    for code in country_codes:
-        continent, country = country_to_continent_specific(code)
-        continent_to_countries[continent].append(country)
-    continent_counts = {
-        continent: Counter(countries)
-        for continent, countries in continent_to_countries.items()
-    }
-    return continent_counts
-
-
 def country_to_continent(country_code):
     """Converts a country code to continent name"""
 
@@ -238,16 +151,18 @@ def country_to_continent_specific(country_code):
 
 def map_blank_key(key):
     """Return 'Unknown' if the key is blank or None, otherwise return the ethnicity."""
-     
+
     return key if key else "Unknown"
 
 
 def get_user_type(user):
-    if hasattr(user, 'parent'):
+    if hasattr(user, "parent"):
         return "PARENT"
-    elif hasattr(user, 'patient'):
+    elif hasattr(user, "patient"):
         return "PATIENT"
-    elif hasattr(user, 'mentor'):
+    elif hasattr(user, "mentor"):
         return "MENTOR"
+    elif hasattr(user, "professional"):
+        return "PROFESSIONAL"
     else:
         return "ADMIN"

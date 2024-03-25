@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
 from django.urls import reverse
-from peer_support.models import Patient, Parent, Mentor
-from peer_support.forms import UserForm, PatientForm, ParentForm, MentorForm
+from peer_support.models import Patient, Parent, Mentor, Professional
+from peer_support.forms import UserForm, PatientForm, ParentForm, MentorForm, ProfessionalForm
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
@@ -21,6 +21,8 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
             return ParentForm
         elif Mentor.objects.filter(id=self.request.user.id).exists():
             return MentorForm
+        elif Professional.objects.filter(id=self.request.user.id).exists():
+            return ProfessionalForm
         else:
             return UserForm
 
@@ -34,6 +36,8 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
             user = Parent.objects.get(id=user_id)
         elif Mentor.objects.filter(id=user_id).exists():
             user = Mentor.objects.get(id=user_id)
+        elif Professional.objects.filter(id=user_id).exists():
+            user = Professional.objects.get(id=user_id)
         else:
             user = self.request.user
         return user

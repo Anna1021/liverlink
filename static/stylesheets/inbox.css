@@ -24,9 +24,9 @@
     display: flex;
 }
 
-.notification-list .notification-list_content .notification-list_img img {
-    height: 48px;
-    width: 48px;
+.notification-list .notification-list_content .notification-list-img img {
+    height: 60px;
+    width: 60px;
     border-radius: 50px;
     margin-right: 20px;
 }

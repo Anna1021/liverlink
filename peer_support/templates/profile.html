@@ -7,6 +7,8 @@
             <div class="col-md-4">
                 {% if user_type == 'MENTOR' %}
                     <div class="mentor-profile-img">
+                {% elif user_type == 'PROFESSIONAL' %}
+                    <div class="professional-profile-img">
                 {% else %}
                     <div class="profile-img">
                 {% endif %}
@@ -62,13 +64,17 @@
                             {% include 'partials/profile/user_information.html' %}
                         </div>
                         <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
-                            {% for post in posts %}
-                            {% include 'partials/post_details.html' with from_feed=True post=post %}
-                            {% empty %}
-                            <div class="profile-subheading col-md-6">
-                                This user has no posts yet
+                            <div class="scrollable-feed"> 
+                                {% for post in posts %}
+                                <div class="post-card pb-2">
+                                {% include 'partials/post_details.html' with from_feed=True post=post %}
+                                </div>
+                                {% empty %}
+                                <div class="profile-subheading col-md-6">
+                                    This user has no posts yet
+                                </div>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
                         </div>
                     </div>
                 </div>
