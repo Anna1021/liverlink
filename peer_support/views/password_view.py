@@ -31,6 +31,7 @@ class PasswordView(LoginRequiredMixin, FormView):
         user = self.request.user
         referral_code = get_referral_code(user)  
         context['referral_code'] = referral_code
+        context['block_list'] = user.blocked_users.all()
         return context
 
     def get_success_url(self):

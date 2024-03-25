@@ -20,7 +20,6 @@ from .question_page_view import QuestionPageView
 from .send_friend_request_view import SendFriendRequestView
 from .accept_friend_request_view import AcceptFriendRequestView
 from .friends_list_view import FriendsListView
-from .other_user_settings_view import OtherUserSettingsView
 from .block_user_view import BlockUserView
 from .unblock_user_view import UnblockUserView
 from .profile_view import ProfileView
