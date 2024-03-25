@@ -72,6 +72,22 @@ class FilterUserFormTestCase(TestCase):
         results = form.filter_users(self.users)
         self.assertTrue(all(user.parent for user in results))
 
+    def test_filter_by_user_type_mentor(self):
+        form_data = self.showAll
+        form_data['user_type'] = ['MT']
+        form = FilterUserForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        self.assertTrue(all(user.mentor for user in results))
+
+    def test_filter_by_user_type_professional(self):
+        form_data = self.showAll
+        form_data['user_type'] = ['PF']
+        form = FilterUserForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        results = form.filter_users(self.users)
+        self.assertTrue(all(user.professional for user in results))
+
     def test_min_age(self):
         form_data = self.showAll
         form_data['min_age'] = 25

@@ -1,5 +1,6 @@
 [
   {
+    "//": "Contains content_type of user id",
     "model": "peer_support.report",
     "pk": 2,
     "fields": {

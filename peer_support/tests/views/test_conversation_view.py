@@ -30,7 +30,7 @@ class ConversationViewTestCase(TestCase):
 
     def test_conversation_url(self):
         self.assertEqual(self.url,'/conversation/1')
-
+ 
     def test_get_conversation(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)

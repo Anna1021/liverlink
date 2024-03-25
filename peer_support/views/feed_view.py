@@ -4,9 +4,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
 from peer_support.models import Post
 from peer_support.forms import PostForm, ReportForm
-from .helpers import retrieve_friend_posts
+from .helpers import retrieve_friend_posts, get_page
 from django.contrib import messages
-from django.core.paginator import Paginator
 
 
 class FeedView(LoginRequiredMixin, FormView):
@@ -48,9 +47,7 @@ class FeedView(LoginRequiredMixin, FormView):
                                 ).exclude(author__in=request.user.blocked_users.all())
         user_posts = user_posts.order_by("-created_at")
         annotated_posts = self.annotate_posts(request, user_posts)
-        paginator = Paginator(annotated_posts, 10)
-        page_number = request.GET.get('page')
-        posts = paginator.get_page(page_number)
+        posts = get_page(request,annotated_posts)
         return posts
     
     def annotate_posts(self, request, posts):

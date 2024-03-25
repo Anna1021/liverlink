@@ -1,5 +1,8 @@
 @import "./light-theme.css";
 @import "./dark-theme.css";
+@import "./georgia.css";
+@import "./tahoma.css";
+@import "./comic-sans.css";
 /*
  * Alerts
  */

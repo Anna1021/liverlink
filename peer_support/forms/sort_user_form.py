@@ -5,8 +5,10 @@ from .form_choices import SORT_USER_CHOICES
 class SortUserForm(forms.Form):
     """Form enabling the sorting of users"""
 
-    sort_by = forms.ChoiceField(choices=SORT_USER_CHOICES, required=False, label="Sort by")
-
+    sort_by = forms.ChoiceField(choices=SORT_USER_CHOICES, required=False,label="Sort by")
+    weighting_types = {"user_type": 1,"age": 0.4, "hospital": 1, "age_of_diagnosis": 0.2, "condition": 1,
+                     "child_age_of_diagnosis": 0.2, "child_condition": 1, "expertise": 2}
+    
     def sort_by_username(self, users, order):
         return users.order_by(order + "username")
 
@@ -35,7 +37,6 @@ class SortUserForm(forms.Form):
         cleaned_data = self.cleaned_data
         sort_by = cleaned_data.get("sort_by")
         sort_option = self.get_sort_option(sort_by)
-
         if sort_option:
             users = sort_option(users)
         elif sort_by == "" and current_user:
@@ -46,24 +47,10 @@ class SortUserForm(forms.Form):
         """Calculates the score of each user in relation to the current user"""
 
         score = 0
-        weighting_types = {
-            "user_type": 1,
-            "age": 0.4,
-            "hospital": 1,
-            "age_of_diagnosis": 0.2,
-            "condition": 1,
-            "child_age_of_diagnosis": 0.2,
-            "child_condition": 1,
-        }
-        score = self.calculate_user_type_score(current_user, other_user, weighting_types, score)
-        score = self.calculate_age_score(current_user, other_user, weighting_types, score)
-        weighting_user = {
-            "gender": 0.2,
-            "language": 0.9,
-            "ethnicity": 0.2,
-            "location": 1,
-            "hospital": 1,
-        }
+        
+        score = self.calculate_user_type_score(current_user, other_user, score)
+        score = self.calculate_age_score(current_user, other_user,score)
+        weighting_user = {"gender": 0.2, "language": 0.9, "ethnicity": 0.2, "location": 1, "hospital": 1,}
         matches = {
             attribute: getattr(current_user, attribute, None)
             == getattr(other_user, attribute, None)
@@ -74,52 +61,49 @@ class SortUserForm(forms.Form):
         )
         return score
 
-    def calculate_age_score(self, current_user, other_user, weighting, score):
+    def calculate_age_score(self, current_user, other_user, score):
         """Calclates score based on age proximity"""
 
         age_difference = abs(
             current_user.date_of_birth.year - other_user.date_of_birth.year
         )
         if age_difference <= 5:
-            score += 1 * weighting["age"]
+            score += 1 * self.weighting_types["age"]
         return score
-
-    def calculate_user_type_score(self, current_user, other_user, weighting, score):
+    
+    def calculate_user_type_score(self, current_user, other_user, score):
         """Calculates user type specific score."""
-
-        if hasattr(current_user, "patient") and hasattr(other_user, "patient"):
-            score += 1 * weighting["user_type"]
-            score += self.calculate_condition_match(
-                current_user.patient,
-                other_user.patient,
-                weighting["condition"],
-                weighting["age_of_diagnosis"],
-            )
-        elif hasattr(current_user, "parent") and hasattr(other_user, "parent"):
-            score += 1 * weighting["user_type"]
-            score += self.calculate_condition_match(
-                current_user.parent,
-                other_user.parent,
-                weighting["child_condition"],
-                weighting["child_age_of_diagnosis"],
-            )
-        elif hasattr(current_user, "mentor") and hasattr(other_user, "patient"):
-            score += 1 * weighting["user_type"]
-            score += self.calculate_condition_match(
-                current_user.mentor,
-                other_user.patient,
-                weighting["condition"],
-                weighting["age_of_diagnosis"],
-            )
+        
+        if hasattr(current_user, 'patient') and hasattr(other_user, 'patient'):
+            score += 1 * self.weighting_types['user_type']
+            score += self.calculate_condition_match(current_user.patient, other_user.patient, self.get_key_value_pair('condition'), self.get_key_value_pair('age_of_diagnosis'))
+        elif hasattr(current_user, 'parent') and hasattr(other_user, 'parent'):
+            score += 1 * self.weighting_types['user_type']
+            score += self.calculate_condition_match(current_user.parent, other_user.parent, self.get_key_value_pair('child_condition'), self.get_key_value_pair('child_age_of_diagnosis'))
+        elif hasattr(current_user, 'mentor') and hasattr(other_user, 'patient'):
+            score += 1 * self.weighting_types['user_type']
+            score += self.calculate_condition_match(current_user.mentor, other_user.patient, self.get_key_value_pair('condition'), self.get_key_value_pair('age_of_diagnosis'))
+        elif hasattr(current_user, 'professional') and hasattr(other_user, 'patient'):
+            score += 1 * self.weighting_types['user_type']
+            condition = self.get_key_value_pair('expertise')
+            new_condition = (condition[0], 'condition', condition[2])
+            score += self.calculate_condition_match(current_user.professional, other_user.patient, new_condition, None)
         return score
-
-    def calculate_condition_match(self,user_type_1, user_type_2, condition_weight, age_diagnosis_weight):
+    
+    def calculate_condition_match(self,user_type_1, user_type_2, condition, age_of_diagnosis):
         score = 0
-        if getattr(user_type_1, 'condition', None) == getattr(user_type_2, 'condition', None):
-            score += condition_weight
-        age_of_diagnosis_1 = getattr(user_type_1, 'age_of_diagnosis', None)
-        age_of_diagnosis_2 = getattr(user_type_2, 'age_of_diagnosis', None)
-        if age_of_diagnosis_1 and age_of_diagnosis_2:
-            if abs(age_of_diagnosis_1 - age_of_diagnosis_2) < 5:
-                score += age_diagnosis_weight
+        condition_1 = getattr(user_type_1, condition[0], None) 
+        condition_2 = getattr(user_type_2, condition[1], None)
+        if condition_1 and condition_2 and (condition_1==condition_2):
+            score += condition[2]
+        if not age_of_diagnosis:
+            return score
+        age_of_diagnosis_1 = getattr(user_type_1, age_of_diagnosis[0], None)
+        age_of_diagnosis_2 = getattr(user_type_2, age_of_diagnosis[1], None)
+        if age_of_diagnosis_1 and age_of_diagnosis_2 and (abs(age_of_diagnosis_1 - age_of_diagnosis_2) < 5):
+                score += age_of_diagnosis[2]
         return score
+
+    def get_key_value_pair(self, key_value):
+        value = self.weighting_types[key_value]
+        return (key_value, key_value, value)

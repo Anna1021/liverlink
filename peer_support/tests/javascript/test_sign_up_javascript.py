@@ -32,17 +32,13 @@ class SignUpJavascriptTest(StaticLiveServerTestCase):
             dropdown_element = self.wait.until(EC.presence_of_element_located((By.ID, 'id_user_type')))
             select = Select(dropdown_element)
 
-            select.select_by_visible_text('Patient')
-            age_of_diagnosis = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='age_of_diagnosis']")))
-            self.assertTrue(age_of_diagnosis.is_displayed(), "Age of diagnosis field is not visible for Patient")
-            
-            select.select_by_visible_text('Parent')
-            child_age_of_diagnosis = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='child_age_of_diagnosis']")))
-            self.assertTrue(child_age_of_diagnosis.is_displayed(), "Child age of diagnosis field is not visible for Parent")
-
             select.select_by_visible_text('Mentor')
-            mentor_age_of_diagnosis = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='age_of_diagnosis']")))
-            self.assertTrue(mentor_age_of_diagnosis.is_displayed(), "Age of diagnosis field is not visible for Mentor")
+            mentor_age_of_diagnosis = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='referral_code']")))
+            self.assertTrue(mentor_age_of_diagnosis.is_displayed(), "Referral code field is not visible for Mentor")
+
+            select.select_by_visible_text('Professional')
+            mentor_age_of_diagnosis = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//input[@name='referral_code']")))
+            self.assertTrue(mentor_age_of_diagnosis.is_displayed(), "Referral code field is not visible for Professional")
 
         except TimeoutException as e:
             self.fail(f"Test failed due to an unexpected exception: {e}")

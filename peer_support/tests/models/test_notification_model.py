@@ -175,6 +175,20 @@ class NotificationModelTestCase(TestCase):
         self.assertEqual(new_notification.object_id, conversation.id)
         self.assertEqual(new_notification.content_object, conversation)
 
+    def test_create_object_notification_with_post(self):
+        post = Post.objects.get(id=1)
+        liking_user = User.objects.get(id=2)
+        new_notification = Notification.objects.create(user=post.author, notifying_user=liking_user, content_object=post, title="New Post Like")
+        new_notification.full_clean()
+        self.assertEqual(new_notification.title, "New Post Like")
+        self.assertEqual(new_notification.description, "@janedoe has liked your post.")
+        self.assertEqual(new_notification.user, post.author)
+        self.assertEqual(new_notification.notifying_user, liking_user)
+        self.assertEqual(new_notification.viewed, False)
+        self.assertEqual(new_notification.content_type, ContentType.objects.get_for_model(Post))
+        self.assertEqual(new_notification.object_id, post.id)
+        self.assertEqual(new_notification.content_object, post)
+
     def test_create_object_notification_with_post_comment(self):
         comment = PostComment.objects.get(id=1)
         post = Post.objects.get(id=1)
@@ -249,6 +263,14 @@ class NotificationModelTestCase(TestCase):
         expected_url = reverse('conversation', kwargs={'conversation_id': conversation.id})
         self.assertEqual(new_notification.get_URL(), expected_url)
         self.assertEqual(new_notification.get_conversation_URL(), expected_url)
+
+    def test_get_URL_for_notification_post(self):
+        post = Post.objects.get(id=1)
+        liking_user = User.objects.get(id=2)
+        new_notification = Notification.objects.create(user=post.author, notifying_user=liking_user, content_object=post)
+        expected_url = reverse('post_detail', kwargs={'post_id': post.id})
+        self.assertEqual(new_notification.get_URL(), expected_url)
+        self.assertEqual(new_notification.get_post_URL(), expected_url)
 
     def test_get_URL_for_notification_post_comment(self):
         comment = PostComment.objects.get(id=1)

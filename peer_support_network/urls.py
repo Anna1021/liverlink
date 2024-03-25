@@ -60,10 +60,11 @@ urlpatterns = [
     path('post/<int:post_id>/', views.PostView.as_view() , name='post_detail'),
     path('feed/', views.FeedView.as_view(), name='feed'),
     path('delete_post/<int:post_id>', views.DeletePostView.as_view(), name='delete_post'),
-    path('like_post/<int:post_id>', views.like_post, name='like_post'),
+    path('like_post/<int:post_id>', views.LikePostView.as_view(), name='like_post'),
     path('delete_comment/<int:comment_id>', views.DeleteCommentView.as_view(), name='delete_comment'),
     path('delete_conversation/<int:conversation_id>',views.DeleteConversationView.as_view(),name='delete_conversation'),
-    path('demographic_information/',views.demographic_information,name='demographic-information'),
+    path('demographic_information/',views.DemographicInformationView.as_view(),name='demographic-information'),
     path('delete_question/<int:id>/', views.delete_question, name='delete_question'),
     path('delete_reply/<int:reply_id>/', views.delete_reply, name='delete_reply'),
+    path('accessibility/', views.AccessibilityView.as_view(), name='accessibility'),
 ]
