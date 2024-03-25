@@ -1,4 +1,4 @@
-"""Unit test of javascript in dashbaord view"""
+"""Unit test of javascript in dashboard view"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
@@ -9,8 +9,8 @@ from selenium.common.exceptions import TimeoutException
 from peer_support.models import User
 from selenium.webdriver.chrome.service import Service
 
-class DashbaordTutorialJavascriptTest(StaticLiveServerTestCase):
-    """Unit test of javascript in dashbaord view"""
+class DashboardTutorialJavascriptTest(StaticLiveServerTestCase):
+    """Unit test of javascript in dashboard view"""
 
     fixtures = [
         'peer_support/tests/fixtures/default_admin.json',
@@ -37,7 +37,7 @@ class DashbaordTutorialJavascriptTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_tutorial_display(self):
+    def test_tutorial_displayed_on_first_login(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         user = User.objects.get(username='@johndoe')
         user.first_login = True
@@ -55,7 +55,7 @@ class DashbaordTutorialJavascriptTest(StaticLiveServerTestCase):
         except TimeoutException as e:
             self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
         
-    def test_tutorial_not_display(self):
+    def test_tutorial_not_displayed_if_not_first_login(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         user = User.objects.get(username='@admin')
         user.first_login = False

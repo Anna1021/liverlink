@@ -1,4 +1,4 @@
-"""Unit test of javascript in dashbaord view"""
+"""Unit test of javascript to add users to a conversation."""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
@@ -10,7 +10,7 @@ from peer_support.models import User
 from selenium.webdriver.chrome.service import Service
 
 class UserFormJavascriptTest(StaticLiveServerTestCase):
-    """Unit test of javascript in dashbaord view"""
+    """Unit test of javascript to add users to a conversation."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_admin.json',
@@ -38,7 +38,7 @@ class UserFormJavascriptTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_tutorial_display(self):
+    def test_create_group_conversation(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         user = User.objects.get(username='@petrapickles')
         user.first_login = False
