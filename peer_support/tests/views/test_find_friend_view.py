@@ -1,4 +1,4 @@
-"""Tests of the Peer Select view."""
+"""Tests of the Find Friend view."""
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.forms import FilterUserForm, SortUserForm, SearchUserForm
@@ -6,8 +6,8 @@ from peer_support.models import User
 from peer_support.tests.helpers import reverse_with_next
 from django.utils.http import urlencode
 
-class PeerSelectViewTestCase(TestCase):
-    """Tests of the Peer Select view."""
+class FindFriendViewTestCase(TestCase):
+    """Tests of the Find Friend view."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
@@ -18,17 +18,17 @@ class PeerSelectViewTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.url = reverse('peer_select')
+        self.url = reverse('find_friends')
         self.user = User.objects.get(username='@johndoe')
         self.client.force_login(self.user)
 
-    def test_peer_select_url(self):
+    def test_find_friends_url(self):
         self.assertEqual(self.url,'/find_friends/')
 
-    def test_get_peer_select(self):
+    def test_get_find_friends(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'peer_select.html')
+        self.assertTemplateUsed(response, 'find_friends.html')
         self.assertIsInstance(response.context['form_sort'], SortUserForm)
         self.assertIsInstance(response.context['form_filter'], FilterUserForm)
         self.assertIsInstance(response.context['form_search'], SearchUserForm)
