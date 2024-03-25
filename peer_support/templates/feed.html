@@ -20,7 +20,6 @@
         </button>
       </form>
     </div>
-  
   </div>
 
   <button type="button" class="btn apply-btn mt-2 mb-2" id="create-post" data-bs-toggle="modal" data-bs-target="#create_post">Create post</button>
@@ -41,20 +40,52 @@
         </div>
     </div>
   </div>
-  <div class="row justify-content-center pb-2">
-    <div class="col-md-2 text-center">
-      {% if posts.has_previous %}
-        <a href="?page={{ posts.previous_page_number }}" class="btn btn-primary"><i class="bi bi-arrow-left"></i></a>
-      {% endif %}
-    </div>
-    <div class="col-md-2 text-center">
-      <span class="current-page btn btn-primary">{{ posts.number }}</span>
-    </div>
-    <div class="col-md-2 text-center">
-      {% if posts.has_next %}
-        <a href="?page={{ posts.next_page_number }}" class="btn btn-primary"><i class="bi bi-arrow-right"></i></a>
-      {% endif %}
-    </div>
+  <div class="row pb-2">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        {% if posts.has_previous %}
+        <a class="page-link" href="?page={{ posts.previous_page_number }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+          <span class="sr-only">Previous</span>
+        </a>
+        {% else %}
+        <a class="page-link" href="?page={{ posts.number }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+          <span class="sr-only">Previous</span>
+        </a>
+        {% endif %}
+      </li>
+      {% for page_num in posts.paginator.page_range %}
+        {% if page_num == posts.number %} 
+          {% with page_num|add:"-1" as prev_page_num %}
+            {% with page_num|add:"1" as next_page_num %}
+            <li class="page-item"><a class="page-link">...</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ prev_page_num }}">{{ prev_page_num }}</a></li>
+            <li class="page-item active"><a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ next_page_num }}">{{ next_page_num }}</a></li>
+            {% endwith %}
+          {% endwith %} 
+        {% endif %}
+        {% if page_num < 4 %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a></li>
+        {% elif forloop.last %}
+          {% with page_num|add:"-1" as prev_page_num %}
+            {% with page_num|add:"-2" as prev_prev_page_num %}
+            <li class="page-item"><span class="page-link">...</span></li>
+            <li class="page-item"><a class="page-link" href="?page={{ prev_prev_page_num }}">{{ prev_prev_page_num }}</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ prev_page_num }}">{{ prev_page_num }}</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a></li>
+            {% endwith %}
+          {% endwith %}   
+        {% endif %}   
+      {% endfor %}
+      <li class="page-item">
+        <a class="page-link" href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+          <span class="sr-only">Next</span>
+        </a>
+      </li>
+    </ul>
   </div>
  
   <div class="scrollable-feed"> 
