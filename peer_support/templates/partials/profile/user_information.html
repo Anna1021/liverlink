@@ -79,6 +79,18 @@
             {% endif %}
         </div>
     </div>
+    <div class="row">
+        <div class="profile-subheading col-md-6">
+            <label>Transplant</label>
+        </div>
+        <div class="col-md-6">
+            {% if patient %}
+                <p>{{ patient.transplant }}</p>
+            {% elif mentor %}
+                <p>{{ mentor.transplant }}</p>
+            {% endif %}
+        </div>
+    </div>
 {% endif %}
 {% if parent %}
     <div class="row">
