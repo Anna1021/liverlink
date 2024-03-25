@@ -4,8 +4,23 @@
     <h2>Friends List</h2>
     <hr>
     {% include 'partials/search_filter_sort_users.html' %}
+    <div class="row justify-content-center pb-2">
+        <div class="col-md-2 text-center">
+          {% if friends.has_previous %}
+            <a href="?page={{ friends.previous_page_number }}" class="btn btn-primary"><i class="bi bi-arrow-left"></i></a>
+          {% endif %}
+        </div>
+        <div class="col-md-2 text-center">
+          <span class="current-page btn btn-primary">{{ friends.number }}</span>
+        </div>
+        <div class="col-md-2 text-center">
+          {% if friends.has_next %}
+            <a href="?page={{ friends.next_page_number }}" class="btn btn-primary"><i class="bi bi-arrow-right"></i></a>
+          {% endif %}
+        </div>
+    </div>
     <div class="row">
-        {% for friend in friends %}
+        {% for friend in friends.object_list %}
             {% include "partials/user_card.html" with user=friend.friend %}
         {% endfor %}
     </div>

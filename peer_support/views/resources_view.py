@@ -6,7 +6,7 @@ from peer_support.forms import ReportForm
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.shortcuts import render
-from django.core.paginator import Paginator
+from .helpers import get_page
 
 
 class ResourcesView(LoginRequiredMixin, View):
@@ -14,9 +14,7 @@ class ResourcesView(LoginRequiredMixin, View):
     
     def get(self, request):
         questions = Question.objects.order_by("-created_at")
-        paginator = Paginator(questions, 10)
-        page_number = request.GET.get("page") 
-        questions = paginator.get_page(page_number)
+        questions = get_page(request,questions)
         context = {"questions": questions, "report_form": ReportForm()}        
         return render(request, "resources.html", context)
 

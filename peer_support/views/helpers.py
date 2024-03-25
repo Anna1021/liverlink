@@ -7,7 +7,7 @@ from datetime import date
 import pycountry
 import pycountry_convert as pc
 from django.db.models import Q
-
+from django.core.paginator import Paginator
 
 def login_prohibited(view_function):
     """Decorator for view functions that redirect users away if they are logged in."""
@@ -101,6 +101,10 @@ def no_conversation_url(request):
     context = {"user_conversations": request.user.sort_conversations()}
     return redirect(reverse("conversation", kwargs={"conversation_id": 0}), context)
 
+def get_page(request,objects):
+    paginator = Paginator(objects,10)
+    page_number = request.GET.get("page")
+    return paginator.get_page(page_number)
 
 def retrieve_friend_posts(request):
     user_friends = request.user.friends.all()
