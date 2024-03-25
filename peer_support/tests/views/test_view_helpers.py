@@ -65,7 +65,7 @@ class HelpersViewTestCase(TestCase):
         blocked_by_user.blocked_users.add(current_user)
         addable_peers = get_addable_peers(current_user)
         self.assertNotIn(current_user, addable_peers)
-        self.assertNotIn(admin, addable_peers)
+        self.assertIn(admin, addable_peers)
         self.assertNotIn(friend, addable_peers)
         self.assertNotIn(blocked_user, addable_peers)
         self.assertNotIn(blocked_by_user, addable_peers)

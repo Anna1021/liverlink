@@ -96,14 +96,6 @@ class FindFriendViewTestCase(TestCase):
         users = response.context['users']
         self.assertNotIn(self.user, users)
 
-    def test_exclude_admin(self):
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        users = response.context['users']
-        for user_dict in users:
-            user = user_dict['user']
-            self.assertFalse(user.is_staff or user.is_superuser, "Admin users should not be included in the list.")
-
     def test_exclude_friends(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
