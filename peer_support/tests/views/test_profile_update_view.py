@@ -4,8 +4,9 @@ from django.contrib import messages
 from django.test import TestCase
 from django.urls import reverse
 from peer_support.forms import PatientForm, ParentForm, MentorForm, UserForm, ProfessionalForm
-from peer_support.models import Patient, Parent, Mentor, User, Professional
+from peer_support.models import Patient, Parent, Mentor, User, Professional, Referral
 from peer_support.tests.helpers import reverse_with_next
+from peer_support.views.helpers import get_referral_code
 
 class ProfileUpdateViewTestCase(TestCase):
     """Test suite for the profile update view."""
@@ -130,14 +131,28 @@ class ProfileUpdateViewTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
-        self.assertTrue(isinstance(form, MentorForm))    
+        self.assertTrue(isinstance(form, MentorForm))
 
     def test_get_professional_form_when_current_user_is_professional(self):
         self.client.force_login(self.professional)
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, 'settings.html')
         form = response.context['form']
-        self.assertTrue(isinstance(form, ProfessionalForm))    
+        self.assertTrue(isinstance(form, ProfessionalForm))
+
+    def test_referral_code_is_none_when_current_user_is_not_professional(self):
+        for user in [self.admin, self.patient, self.parent, self.mentor]:
+            self.client.force_login(user)
+            response = self.client.get(self.url)
+            referral_code = response.context['referral_code']
+            self.assertIsNone(referral_code)
+
+    def test_referral_code_when_current_user_is_professional(self):
+        Referral.objects.create(referrer=self.professional, code=self.professional.referral_code)
+        self.client.force_login(self.professional)
+        response = self.client.get(self.url)
+        referral_code = response.context['referral_code']
+        self.assertEqual(referral_code, self.professional.referral_code)
 
     def test_get_profile(self):
         self.client.force_login(self.patient)
