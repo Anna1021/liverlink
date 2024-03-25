@@ -9,7 +9,7 @@
 <div class="picture-grid pt-2 pb-2 ps-scrollable">
     {% for picture in profile_pictures %}
     <div class="picture-container">
-        <img src="{% static 'profile_pictures/'| add:picture %}" alt="Profile Picture">
+        <img src="{% static 'profile_pictures/'|add:picture %}" alt="Profile Picture">
     </div>
     {% endfor %}
 </div>
