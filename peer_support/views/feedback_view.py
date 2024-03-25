@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import Feedback
+from .helpers import get_page
 
 
 class FeedbackView(LoginRequiredMixin, View):
@@ -19,4 +20,5 @@ class FeedbackView(LoginRequiredMixin, View):
             messages.error(request, "You do not have access to this view.")
             return redirect(reverse("feed"))
         feedback = Feedback.objects.order_by("-submitted_at")
+        feedback = get_page(request,feedback)
         return render(request, "feedback.html", {"feedback": feedback})

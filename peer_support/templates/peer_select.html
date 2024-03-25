@@ -7,19 +7,32 @@
     <div class="row">
         {% include 'partials/search_filter_sort_users.html' %}
     </div>
+    <div class="row justify-content-center pb-2">
+        <div class="col-md-2 text-center">
+          {% if users.has_previous %}
+            <a href="?page={{ users.previous_page_number }}" class="btn btn-primary"><i class="bi bi-arrow-left"></i></a>
+          {% endif %}
+        </div>
+        <div class="col-md-2 text-center">
+          <span class="current-page btn btn-primary">{{ users.number }}</span>
+        </div>
+        <div class="col-md-2 text-center">
+          {% if users.has_next %}
+            <a href="?page={{ users.next_page_number }}" class="btn btn-primary"><i class="bi bi-arrow-right"></i></a>
+          {% endif %}
+        </div>
+    </div>
     <div style="overflow-y:auto;">
         <hr style="margin-top: 0;">
-        {% if users|length == 0 %}
-        <p>No users</p>
-        {% else %}
         <div class="container my-2">
             <div class="row">
-                {% for friend in users %}
+                {% for friend in users.object_list %}
                     {% include "partials/user_card.html" with parent_template="find_friends" user=friend.user %}
+                {% empty %}
+                    <p>No users</p>
                 {% endfor %}
             </div>
         </div>
-        {% endif %}
     </div>
 </div>
 <script>

@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render, reverse, redirect
 from django.views import View
 from peer_support.models import Report
+from .helpers import get_page
 
 
 class ModerationView(LoginRequiredMixin, View):
@@ -16,4 +17,5 @@ class ModerationView(LoginRequiredMixin, View):
             messages.error(request, "You do not have access to this view.")
             return redirect(reverse("feed"))
         reports = Report.objects.all()
+        reports = get_page(request, reports)
         return render(request, "moderation.html", {"reports": reports})
