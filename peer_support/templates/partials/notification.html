@@ -1,19 +1,19 @@
 {% load static %}
 <div class="notification-list d-flex justify-content-between">
-    <div class="notification-list_content">
-        <div class="notification-list-img d-flex align-items-center">
-            <a href="{{ notification.get_URL }}" aria-label="Link to notification object">
+    <a href="{{ notification.get_URL }}" aria-label="Link to notification object" style="text-decoration: none; color: inherit;">
+        <div class="notification-list_content">
+            <div class="notification-list-img d-flex align-items-center">
                 {% if notification.notifying_user %}
                     <img src="{% static notification.notifying_user.userprofile.profile_picture %}" alt="user">
                 {% endif %}
-            </a>
+            </div>
+            <div class="notification-list_detail">
+                <p><b>{{ notification.title }}</b></p>
+                <p class="subtext">{{ notification.description }}</p>
+                <p class="subtext"><small>{{ notification.created }}</small></p>
+            </div>
         </div>
-        <div class="notification-list_detail">
-            <p><b>{{ notification.title }}</b></p>
-            <p class="subtext">{{ notification.description }}</p>
-            <p class="subtext"><small>{{ notification.created }}</small></p>
-        </div>
-    </div>
+    </a>
     <div class="d-flex align-items-center">
         {% if notification.get_is_friend_request %}
             <button class="btn btn-success accept-request" onclick="window.location.href='/accept_friend_request/{{ notification.content_object.id }}/{{ notification.id }}';"><i class="bi bi-check"></i></button>
