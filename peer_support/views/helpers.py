@@ -73,7 +73,6 @@ def get_addable_peers(current_user):
     return eligible_users
 
 
-
 def check_blocked_dm(current_user, conversation):
     """Check if the conversation is a DM and, if so, whether there is a block between the 2 users."""
 
@@ -152,18 +151,18 @@ def country_to_continent_specific(country_code):
 
 def map_blank_key(key):
     """Return 'Unknown' if the key is blank or None, otherwise return the ethnicity."""
-     
+
     return key if key else "Unknown"
 
 
 def get_user_type(user):
-    if hasattr(user, 'parent'):
+    if hasattr(user, "parent"):
         return "PARENT"
-    elif hasattr(user, 'patient'):
+    elif hasattr(user, "patient"):
         return "PATIENT"
-    elif hasattr(user, 'mentor'):
+    elif hasattr(user, "mentor"):
         return "MENTOR"
-    elif hasattr(user, 'professional'):
+    elif hasattr(user, "professional"):
         return "PROFESSIONAL"
     else:
         return "ADMIN"
