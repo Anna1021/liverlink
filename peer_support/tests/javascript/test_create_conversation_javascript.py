@@ -9,7 +9,7 @@ from peer_support.models import User
 from selenium.common.exceptions import TimeoutException
 
 class CreateConversationJavascriptTest(StaticLiveServerTestCase):
-    """Unit test of javascript in peer_select view"""
+    """Unit test of javascript in find_friends view"""
     
     fixtures = ['peer_support/tests/fixtures/default_user.json',
                 'peer_support/tests/fixtures/other_users.json',

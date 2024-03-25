@@ -1,4 +1,4 @@
-"""Unit test of javascript in peer_select view"""
+"""Unit test of javascript in find_friends view"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
@@ -9,7 +9,7 @@ from selenium.common.exceptions import TimeoutException
 from peer_support.models import User
 
 class PeerSelectJavascriptTest(StaticLiveServerTestCase):
-    """Unit test of javascript in peer_select view"""
+    """Unit test of javascript in find_friends view"""
 
     fixtures = ['peer_support/tests/fixtures/default_user.json']
 
@@ -28,7 +28,7 @@ class PeerSelectJavascriptTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_dynamic_form_peer_select(self):
+    def test_dynamic_form_find_friends(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         user = User.objects.get(username='@johndoe')
         user.first_login = False
