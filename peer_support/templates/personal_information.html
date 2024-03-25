@@ -1,4 +1,5 @@
 {% extends 'settings.html' %}
+{% load static %}
 {% block title %}
     <div class="ps-title-text">Personal information</div>
 {% endblock %}
@@ -16,4 +17,5 @@
             <div class="text-muted"><em>Trusted users can sign up to LiverLink as mentors or professionals using this code.</em></div>
     {% endif %}
     {% include 'partials/profile-settings/deactivate_user_modal.html' %}
+    <script src="{% static 'js/profile_update_form.js' %}"></script>
 {% endblock %}
