@@ -4,21 +4,28 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from peer_support.models import Question, Response, Notification
 from peer_support.forms import NewReplyForm
 
+MAX_DEPTH = 10
 class ReplyPageView(LoginRequiredMixin, View):
     """Allows users to reply to a question"""
-    
+
+
     template_name = 'resources.html'
     form_class = NewReplyForm
 
     def get(self, request):
         form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'MAX_DEPTH': MAX_DEPTH})
 
     def post(self, request):
         form = self.form_class(request.POST)
         if form.is_valid():
             question_id = request.POST.get('question')
             parent_id = request.POST.get('parent')
+            if parent_id:
+                parent_response = Response.objects.get(id=parent_id)
+                if parent_response.get_depth() >= MAX_DEPTH:
+                    return render(request, 'question.html', {'form': form, 'MAX_DEPTH': MAX_DEPTH , 'error': 'Maximum reply depth exceeded.'})
+                
             reply = form.save(commit=False)
             reply.user = request.user
             reply.question = Question.objects.get(id=question_id)
@@ -26,7 +33,7 @@ class ReplyPageView(LoginRequiredMixin, View):
                  reply.parent = Response.objects.get(id=parent_id)
             reply.save()
             self.send_notification(reply)
-            return redirect(f'/question/{question_id}#{reply.id}')
+            return render(request, 'question.html', {'form': form, 'MAX_DEPTH': MAX_DEPTH})
         else:
             return render(request, 'resources.html', {'form': form})
         

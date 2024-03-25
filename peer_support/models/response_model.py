@@ -14,3 +14,11 @@ class Response(models.Model):
 
     def get_responses(self):
         return Response.objects.filter(parent=self)
+    
+    def get_depth(self):
+        depth = 0
+        parent = self.parent
+        while parent:
+            depth += 1
+            parent = parent.parent
+        return depth
