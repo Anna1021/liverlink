@@ -28,8 +28,10 @@ class ProfileView(LoginRequiredMixin, View):
             context["patient"] = user.patient
         elif hasattr(user, "professional"):
             context["professional"] = user.professional
-        else:
+        elif hasattr(user, "mentor"):
             context["mentor"] = user.mentor
+        else:
+            context["admin"] = user
         return context
 
     def get_context(self, user, posts, request):

@@ -34,6 +34,9 @@ class ProfileViewTest(TestCase):
         self.url_report = reverse('profile', kwargs={'username':self.user_to_report})
         self.url = reverse('profile',kwargs={'username':self.user.username})
         self.client.force_login(self.user)
+
+    def test_profile_url(self):
+        self.assertEqual(self.url,'/profile/@johndoe/')
     
     def test_successful_report_profile(self):
         report_data = {
@@ -205,9 +208,6 @@ class ProfileViewTest(TestCase):
         conversation = Conversation.objects.first()
         redirect_url = reverse('conversation', kwargs={'conversation_id': conversation.id})
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_profile_url(self):
-        self.assertEqual(self.url,'/profile/@johndoe/')
 
     def test_profile(self):
         response = self.client.get(self.url)
