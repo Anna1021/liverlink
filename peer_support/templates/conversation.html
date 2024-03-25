@@ -58,6 +58,7 @@
                 <div {% if message.sender in user.blocked_users.all %} data-text="{{message.content|censor}}" data-blocked="true" class="text-muted" {% endif %}>{{ message.content|censor }}</div>
             </div>
             {% include 'partials/message_menu.html' %}
+            {% include 'partials/report_modal.html' with object_id=message.id report_type='report_message' %}
         </div>
     {% empty %}
         Type out your first message in the box below!

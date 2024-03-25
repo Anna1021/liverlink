@@ -10,9 +10,15 @@
             <button class= "dropdown-item" type="submit" name="delete" value="me">Delete for me</button>
             {% if user == message.sender %}
             <button class= "dropdown-item delete_all" type="submit" name="delete" value="all">Delete for everyone</button>
-            {% else %}
-            {% include 'partials/report_dropdown.html' with form=report_form object_id=message.id report_type='report_message' %}
-            {%endif%}
         </form></li>
+            {% else %}
+        </form></li>
+        <li>
+            <div class="dropdown-item" id="report-link" data-bs-auto-close="false">
+                <button type="button" class="dropdown-item mt-2 mb-2" id="report-item" data-bs-toggle="modal" data-bs-target="#report_item_{{message.id}}">Report</button>
+            </div>
+        </li>
+        {%endif%}
+        
     </ul>
 </div>

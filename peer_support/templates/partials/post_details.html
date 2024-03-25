@@ -19,7 +19,7 @@
             {% if post.author == request.user %}
             <li><a class="dropdown-item" href="{% url 'delete_post' post_id=post.id %}">Delete</a></li>
             {% else %}
-            {% include 'partials/report_dropdown.html' with form=report_form object_id=post.id report_type='report_post' %}
+            <button type="button" class="dropdown-item mt-2 mb-2" id="report-item" data-bs-toggle="modal" data-bs-target="#report_item_{{post.id}}">Report</button>
             {% endif %}
             {% if from_feed %}
             <li><a class="dropdown-item" href="{% url 'post_detail' post_id=post.id %}">View Post</a></li>
