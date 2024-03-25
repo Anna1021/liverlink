@@ -9,7 +9,7 @@
     <ul>
         {% for comment in post.get_comments %}
             {% include 'partials/reply.html' with comment=comment %}
-            {% include 'partials/report_modal.html' with object_id=comment.id report_type='report_comment' %}
+            {% include 'partials/report_modal.html' with object_id=comment.id report_type='report_response' %}
         {% endfor %}
     </ul>
 
