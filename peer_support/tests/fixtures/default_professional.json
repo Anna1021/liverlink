@@ -1,0 +1,12 @@
+[
+    {
+        "model": "peer_support.professional",
+        "pk": 1,
+        "fields": {
+            "user_ptr": 1,
+            "expertise": "Cirrhosis",
+            "referral_code": "9C274FF391",
+            "is_active": true
+        }
+    }
+]

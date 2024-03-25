@@ -19,6 +19,7 @@ class ProfileViewTest(TestCase):
                 'peer_support/tests/fixtures/other_mentors.json',
                 'peer_support/tests/fixtures/default_post.json',
                 'peer_support/tests/fixtures/other_posts.json',
+                'peer_support/tests/fixtures/other_professionals.json',
                 'peer_support/tests/fixtures/default_report_user.json',
             ]
 
@@ -333,6 +334,15 @@ class ProfileViewTest(TestCase):
         self.assertTemplateUsed(response, 'profile.html')
         mentor = response.context['user_type']
         self.assertEqual(mentor, "MENTOR")
+
+    def test_get_profile_professional(self):
+        user = User.objects.get(username='@craighughes')
+        url = reverse('profile', kwargs={'username': user.username})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profile.html')
+        professional = response.context['user_type']
+        self.assertEqual(professional, "PROFESSIONAL")
 
     def test_get_profile_not_logged_in(self):
         self.client.logout()

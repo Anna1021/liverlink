@@ -142,6 +142,14 @@ class UserModelTestCase(TestCase):
         self.user.date_of_birth = second_user.date_of_birth
         self._assert_user_is_valid()
 
+    def test_date_of_birth_must_not_be_blank(self):
+        self.user.date_of_birth = None
+        self._assert_user_is_invalid()
+
+    def test_date_of_birth_must_be_16_years_ago(self):
+        self.user.date_of_birth = '2004-01-01'
+        self._assert_user_is_valid()
+
 
     def test_gender_may_be_blank(self):
         self.user.gender = None

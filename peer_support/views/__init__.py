@@ -30,7 +30,7 @@ from .clear_notifications_view import clear_notifications
 from .post_view import PostView
 from .delete_post_view import DeletePostView
 from .feed_view import FeedView
-from .like_post_view import like_post
+from .like_post_view import LikePostView
 from .conversation_details_view import ConversationDetailsView
 from .remove_friend_view import remove_friend
 from .moderation_view import ModerationView
@@ -42,7 +42,8 @@ from .delete_conversation_view import DeleteConversationView
 from .submit_feedback_view import SubmitFeedbackView
 from .feedback_view import FeedbackView
 from .delete_feedback_view import delete_feedback
-from .demographic_information import demographic_information
+from .demographic_information_view import DemographicInformationView
 from .delete_question_view import delete_question
 from .delete_reply_view import delete_reply
 from .delete_comment_view import DeleteCommentView
+from .accessibility_view import AccessibilityView

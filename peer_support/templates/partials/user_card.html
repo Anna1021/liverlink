@@ -2,6 +2,8 @@
 <div class="col-md-6 my-2">
     {% if friend.user_type == 'MENTOR' %}
         <div class="mentor-friend-inner-card">
+    {% elif friend.user_type == 'PROFESSIONAL' %}
+        <div class="professional-friend-inner-card">
     {% else %}
         <div class="friend-inner-card">
     {% endif %}

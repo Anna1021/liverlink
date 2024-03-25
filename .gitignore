@@ -452,3 +452,6 @@ fabric.properties
 
 #Auto generated Zone Identifier files
 *:Zone.Identifier
+
+#VSCode
+.vscode/
