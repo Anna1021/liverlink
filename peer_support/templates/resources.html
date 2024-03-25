@@ -8,21 +8,7 @@
   <div class="page">
     <div class="section">
       <h1 class="title">All questions</h1>
-      <div class="row justify-content-center">
-        <div class="col-md-2 text-center">
-          {% if questions.has_previous %}
-            <a href="?page={{ questions.previous_page_number }}" class="btn btn-primary"><i class="bi bi-arrow-left"></i></a>
-          {% endif %}
-        </div>
-        <div class="col-md-2 text-center">
-          <span class="current-page btn btn-primary">{{ questions.number }}</span>
-        </div>
-        <div class="col-md-2 text-center">
-          {% if questions.has_next %}
-            <a href="?page={{ questions.next_page_number }}" class="btn btn-primary"><i class="bi bi-arrow-right"></i></a>
-          {% endif %}
-        </div>
-      </div>
+      {% include 'partials/pagination_bar.html' with type=questions%}
       <div class="scrollable-container">
         {% for question in questions %}
         <div class="question-list-item d-flex justify-content-between align-items-center">
