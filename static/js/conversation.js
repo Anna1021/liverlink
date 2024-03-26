@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    let menuExpanded = localStorage.getItem('sidebarExpanded');
+    if(menuExpanded!=null) $('#sidebar-toggle').prop('checked',true);
     let msg = sessionStorage.getItem(storageKey);
     if (msg!=null) $('#id_content').val(msg);
     var currentUrl = window.location.href;
@@ -72,6 +74,7 @@ window.addEventListener('beforeunload', function(e){
     if (!posting){
         sessionStorage.setItem(storageKey,$("#id_content").val());
         sessionStorage.setItem(scrollKey,$('#conversation').prop('scrollHeight')-$('#conversation').scrollTop());
+        localStorage.setItem('sidebarExpanded',$('#sidebar-toggle').prop('checked'))
     }else{
         sessionStorage.clear();
     }
