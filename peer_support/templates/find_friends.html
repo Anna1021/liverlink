@@ -1,6 +1,5 @@
 {% extends 'dashboard.html' %}
 {% block page %}
-{% load static %}
 <div class="container">
     <h2>Find friends</h2>
     <hr>
@@ -25,5 +24,4 @@
 <script>
     var sendFriendRequestUrl = "{% url 'send_friend_request' 0 %}";
 </script>
-<script src="{% static 'js/find_friends.js' %}"></script>
 {% endblock %}
