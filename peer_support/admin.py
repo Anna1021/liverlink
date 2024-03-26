@@ -18,7 +18,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ("username", "id")
     list_filter = ["is_active", "date_joined"]
     inlines = [UserProfileInline]
-    list_display = ["id", "username", "is_active"]
+    list_display = ["id", "username", "is_staff", "is_active"]
 
 
 @admin.register(Patient)
@@ -53,6 +53,15 @@ class MentorAdmin(admin.ModelAdmin):
     inlines = [UserProfileInline]
     list_display = ["id", "username", "is_active"]
 
+@admin.register(Professional)
+class ProfessionalAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for professionals."""
+
+    ordering = ("username",)
+    search_fields = ("username", "id")
+    list_filter = ["is_active", "date_joined"]
+    inlines = [UserProfileInline]
+    list_display = ["id", "username", "is_active", "referral_code"]
 
 @admin.register(Referral)
 class ReferralAdmin(admin.ModelAdmin):
@@ -96,3 +105,11 @@ class ResponseAdmin(admin.ModelAdmin):
     search_fields = ("user", "question")
     list_filter = ["created_at"]
     list_display = ["user", "question"]
+
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for feedback."""
+
+    search_fields = ("title", "content")
+    list_filter = ["submitted_at"]
+    list_display = ["title"]
