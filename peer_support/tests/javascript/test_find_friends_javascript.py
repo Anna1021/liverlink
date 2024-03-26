@@ -18,7 +18,7 @@ class FindFreindsJavascriptTest(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        #options.add_argument("--headless") 
+        options.add_argument("--headless") 
         cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(40)
         cls.wait = WebDriverWait(cls.selenium, 20)
