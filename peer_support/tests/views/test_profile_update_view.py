@@ -6,7 +6,6 @@ from django.urls import reverse
 from peer_support.forms import PatientForm, ParentForm, MentorForm, UserForm, ProfessionalForm
 from peer_support.models import Patient, Parent, Mentor, User, Professional, Referral
 from peer_support.tests.helpers import reverse_with_next
-from peer_support.views.helpers import get_referral_code
 
 class ProfileUpdateViewTestCase(TestCase):
     """Test suite for the profile update view."""
@@ -94,7 +93,8 @@ class ProfileUpdateViewTestCase(TestCase):
             'email': 'testprofessional@example.org',
             'date_of_birth': '1991-01-01',
             'gender': 'M',
-            'location': 'US',
+            'location': 'GB',
+            'hospital': 'Bolton NHS Foundation Trust',
             'ethnicity': 'RO',
             'language': 'en',
             'bio': 'I am a test professional.',
@@ -209,6 +209,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.patient.date_of_birth, datetime.date(2004, 3, 2)),
         self.assertEqual(self.patient.gender, 'F'),
         self.assertEqual(self.patient.location, 'GB'),
+        self.assertEqual(self.patient.hospital, "Guy’s and St Thomas’ NHS Foundation Trust")
         self.assertEqual(self.patient.ethnicity, 'BR'),
         self.assertEqual(self.patient.language, 'en'),
         self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe"),
@@ -235,6 +236,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.parent.date_of_birth, datetime.date(1978, 8, 12))
         self.assertEqual(self.parent.gender, 'M')
         self.assertEqual(self.parent.location, 'US')
+        self.assertEqual(self.parent.hospital, '')
         self.assertEqual(self.parent.ethnicity, 'OW')
         self.assertEqual(self.parent.bio, "Hi, I'm Alex Smith, an avid reader and tech enthusiast.")
         self.assertEqual(self.parent.child_condition, "Biliary atresia")
@@ -260,6 +262,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.mentor.date_of_birth, datetime.date(2001, 1, 1))
         self.assertEqual(self.mentor.gender, 'M')
         self.assertEqual(self.mentor.location, 'GB')
+        self.assertEqual(self.mentor.hospital, "Airedale NHS Foundation Trust")
         self.assertEqual(self.mentor.ethnicity, 'BR')
         self.assertEqual(self.mentor.language, 'en')
         self.assertEqual(self.mentor.bio, "I'm a test user")
@@ -287,6 +290,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.professional.date_of_birth, datetime.date(1981, 1, 3))
         self.assertEqual(self.professional.gender, 'F')
         self.assertEqual(self.professional.location, 'US')
+        self.assertEqual(self.professional.hospital, '')
         self.assertEqual(self.professional.ethnicity, 'AS')
         self.assertEqual(self.professional.bio, "I'm a professional therapist and I'm here to help you.")
         self.assertEqual(self.professional.expertise, 'Biliary atresia')
@@ -312,6 +316,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.patient.date_of_birth, datetime.date(2004, 3, 2))
         self.assertEqual(self.patient.gender, 'F')
         self.assertEqual(self.patient.location, 'GB')
+        self.assertEqual(self.patient.hospital, "Guy’s and St Thomas’ NHS Foundation Trust")
         self.assertEqual(self.patient.ethnicity, 'BR')
         self.assertEqual(self.patient.language, 'en')
         self.assertEqual(self.patient.bio, "Hi, I'm Jane Doe")
@@ -338,6 +343,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.admin.date_of_birth, datetime.date(1990, 1, 1)),
         self.assertEqual(self.admin.gender, 'N'),
         self.assertEqual(self.admin.location, 'US'),
+        self.assertEqual(self.admin.hospital, '')
         self.assertEqual(self.admin.ethnicity, 'RO'),
         self.assertEqual(self.admin.language, 'en'),
         self.assertEqual(self.admin.bio, "I am a test admin.")
@@ -362,6 +368,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.patient.date_of_birth, datetime.date(2002, 1, 1)),
         self.assertEqual(self.patient.gender, 'F'),
         self.assertEqual(self.patient.location, 'US'),
+        self.assertEqual(self.patient.hospital, '')
         self.assertEqual(self.patient.ethnicity, 'RO'),
         self.assertEqual(self.patient.language, 'en'),
         self.assertEqual(self.patient.bio, "I am a test patient."),
@@ -389,6 +396,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.parent.date_of_birth, datetime.date(1990, 1, 1)),
         self.assertEqual(self.parent.gender, 'M'),
         self.assertEqual(self.parent.location, 'US'),
+        self.assertEqual(self.parent.hospital, '')
         self.assertEqual(self.parent.ethnicity, 'RO'),
         self.assertEqual(self.parent.language, 'en'),
         self.assertEqual(self.parent.bio, "I am a test parent."),
@@ -416,6 +424,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.mentor.date_of_birth, datetime.date(1991, 1, 1)),
         self.assertEqual(self.mentor.gender, 'M'),
         self.assertEqual(self.mentor.location, 'US'),
+        self.assertEqual(self.mentor.hospital, '')
         self.assertEqual(self.mentor.ethnicity, 'RO'),
         self.assertEqual(self.mentor.language, 'en'),
         self.assertEqual(self.mentor.bio, 'I am a test mentor.'),
@@ -443,7 +452,8 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.professional.email, 'testprofessional@example.org')
         self.assertEqual(self.professional.date_of_birth, datetime.date(1991, 1, 1)),
         self.assertEqual(self.professional.gender, 'M'),
-        self.assertEqual(self.professional.location, 'US'),
+        self.assertEqual(self.professional.location, 'GB'),
+        self.assertEqual(self.professional.hospital, 'Bolton NHS Foundation Trust')
         self.assertEqual(self.professional.ethnicity, 'RO'),
         self.assertEqual(self.professional.language, 'en'),
         self.assertEqual(self.professional.bio, 'I am a test professional.'),
