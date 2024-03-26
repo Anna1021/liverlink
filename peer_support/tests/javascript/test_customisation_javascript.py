@@ -34,7 +34,7 @@ class CustomisationJavascriptTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_dynamic_button_disabling(self):
+    def test_profile_picture_updates(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         user = User.objects.get(username='@johndoe')
         user.first_login = False
