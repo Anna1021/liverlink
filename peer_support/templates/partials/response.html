@@ -1,11 +1,37 @@
+{% load static %}
 {% load profanity %}
+{% load reporting_tags %}
 <blockquote id="{{response.id}}">
-  <p {% if response.user in current_user.blocked_users.all %} data-text="{{response.body}}" name="blocked-response" class="response-body text-muted" {% endif %} class="response-body">{{response.body |censor}}</p>
+  <div class="response-container d-flex justify-content-between align-items-start">
+    {% if response.user in current_user.blocked_users.all %} 
+    <p data-text="{{response.body|censor}}" data-blocked="true" class="response-body text-muted" >
+    {% elif response|is_object_reported_by_user:user %}
+    <p data-text="{{ response.body|censor }}" data-reported="true" class="text-muted response-body">
+    {% else %} 
+    <p class="response-body"> 
+    {% endif %}
+    {{response.body |censor}}</p>
+    <div class="dropdown">
+      <a href="#" class="delete-icon" id="actionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="bi bi-three-dots-vertical"></span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown">
+          {% if response.user == current_user %}
+          <li>
+            <button type="submit" class="dropdown-item" onclick="confirmDeleteResponse({{ response.id }})">
+                Delete
+            </button>
+          </li>
+          {% else %}
+          {% include 'partials/report_dropdown.html' with form=report_form object_id=response.id report_type='report_response' %}
+          {% endif %}
+      </ul>
+    </div>
+  </div>
+
   <small class="response-author">by <a href="{% url 'profile' response.user.username %}" class="username">{{response.user.username}}</a></small>
 
-  {% if user.is_authenticated %}
-    <button class="reply-button" onclick="handleReplyButton({{response.id}})">Reply</button>
-  {% endif %}
+  <button class="reply-button" onclick="handleReplyButton({{response.id}})">Reply</button>
   <blockquote id="reply-form-container-{{response.id}}" class="reply-form-container">
     <form method="POST" action="/reply" class="reply-form">
       {% csrf_token %}
@@ -16,11 +42,8 @@
       <input type="submit" class="btn btn-primary" value="Reply"/>
     </form>
   </blockquote>
-  {% if user.is_authenticated and response.user == user %}
-  <button onclick="confirmDeleteResponse({{ response.id }})" class="delete-response-button">Delete</button>
-  {% endif %}
+  
   {% for children in response.get_responses %}
   {% include 'partials/response.html' with response=children %}
   {% endfor %}
-
 </blockquote>

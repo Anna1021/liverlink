@@ -20,6 +20,8 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50, blank=False, validators=[validate_is_profane])
     email = models.EmailField(unique=True, blank=False, validators=[validate_is_profane])
     date_of_birth = models.DateField(blank=False, null=False)
+    date_of_birth = models.DateField(blank=False, null=False)
+    date_of_birth = models.DateField(blank=False, null=False)
     gender = models.CharField(max_length=50, choices=GENDER_CHOICES, blank=True)
     location = models.CharField(max_length=50, choices=COUNTRY_CHOICES, blank=True)
     hospital = models.CharField(max_length=500, choices=HOSPITAL_CHOICES, blank=True)
@@ -29,9 +31,10 @@ class User(AbstractUser):
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
     blocked_users = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='blocked_by')
     conversations = models.ManyToManyField('Conversation', blank=True)
+    conversations = models.ManyToManyField('Conversation', blank=True)
     first_login = models.BooleanField(default=True)
 
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'date_of_birth']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'date_of_birth']
 
     class Meta:
         """Model options."""

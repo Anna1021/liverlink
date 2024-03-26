@@ -23,19 +23,25 @@ class AcceptReportView(LoginRequiredMixin, View):
         """Processes the reported object based on its type."""
         
         reported_object = report.content_object
+        report.delete()
         if not reported_object:
             return False
         if isinstance(reported_object, Message):
-            self.handle_reported_message(reported_object)
+            self.reported_message(reported_object)
+        elif isinstance(reported_object, User):
+            self.reported_user(reported_object)
         else:
-            self.handle_reported_user(reported_object)
-        report.delete()
+            self.simple_delete(reported_object)            
         return True
 
-    def handle_reported_message(self, message):
+    def reported_message(self, message):
         all_users = User.objects.all()  
         message.delete(all_users) 
 
-    def handle_reported_user(self, user):
+    def reported_user(self, user):
         user.is_active = False
         user.save()
+    
+    def simple_delete(self,reported_object):
+        reported_object.delete()
+        

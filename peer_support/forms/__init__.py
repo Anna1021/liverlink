@@ -11,6 +11,7 @@ from .message_form import MessageForm
 from .patient_form import PatientForm
 from .parent_form import ParentForm 
 from .mentor_form import MentorForm
+from .professional_form import ProfessionalForm
 from .message_form import MessageForm
 from .filter_user_form import FilterUserForm
 from .sort_user_form import SortUserForm
@@ -21,3 +22,4 @@ from .new_response_form import NewResponseForm
 from .new_reply_form import NewReplyForm
 from .report_form import ReportForm
 from .add_users_form import AddUsersForm
+from .feedback_form import FeedbackForm

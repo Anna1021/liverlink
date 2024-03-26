@@ -1,0 +1,50 @@
+{% load profanity %}
+{% load static %}
+{% load reporting_tags %}
+<li>
+    <div class="card-body post-card">
+        <div class="row">
+            <div class="col-md-10">
+                <a href="{% url 'profile' comment.author.username %}"><p>{{ comment.author }}</p></a>
+                
+                <p {% if comment.author in user.blocked_users.all %} data-text="{{comment.content |censor}}" 
+                data-blocked="true" class="text-muted"
+                {% elif comment|is_object_reported_by_user:user %} data-text="{{ comment.content |censor}}"
+                 data-reported="true" class="text-muted" {% endif %}
+                 >{{ comment.content |censor}}</p>
+            </div>
+            <div class="col-md-2 nav-item dropdown">
+                <a class="nav-link" href="#" id="message-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi-three-dots-vertical"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="message-menu-dropdown">
+                    {% if comment.author == user %}
+                    <li><a class="dropdown-item" href="{% url 'delete_comment' comment.id %}">Delete</a></li>
+                    {% else %}
+                    {% include 'partials/report_dropdown.html' with form=report_form object_id=comment.id report_type='report_comment' %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <!-- Reply form for each comment -->
+        <form method="post" action="{% url 'post_detail' post_id=post.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+            {{ comment_form.as_p }}
+            <button class="btn btn-primary" type="submit">Reply</button>
+        </form>
+
+        <!-- Display replies to the comment -->
+        <blockquote class="post-comment-container">
+            <ul>
+                {% for reply in comment.get_replies %}
+                    <li>
+                        {% include 'partials/reply.html' with comment=reply %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </blockquote>
+    </div>
+</li>
+<script src="{% static 'js/reporting.js' %}"></script>
+<script src="{% static 'js/blocking.js' %}"></script>

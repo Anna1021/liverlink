@@ -1,5 +1,6 @@
 [
   {
+    "//": "Containts content_type id of message",
     "model": "peer_support.report",
     "pk": 1,
     "fields": {

@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
-import os
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'peer_support',
     'profanity',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -73,7 +74,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'peer_support_network.wsgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
+#WSGI_APPLICATION = 'peer_support_network.wsgi.application'
+ASGI_APPLICATION = 'peer_support_network.asgi.application'
 
 
 # Database

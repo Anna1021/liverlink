@@ -1,5 +1,8 @@
 @import "./light-theme.css";
 @import "./dark-theme.css";
+@import "./georgia.css";
+@import "./tahoma.css";
+@import "./comic-sans.css";
 /*
  * Alerts
  */
@@ -58,6 +61,11 @@ p.cover-text {
   background-size: cover;
   -o-background-size: cover;
   z-index: -1;
+}
+
+.card-header {
+  background-color: transparent !important;
+  border-bottom: none !important;
 }
 
 /*
@@ -168,3 +176,23 @@ body {
    -webkit-box-shadow: 0 0 0px 1000px rgb(255, 249, 249) inset;
    transition: background-color 5000s ease-in-out 0s;
  }
+
+ .dropdown-item {
+  position: relative;
+  display: block; 
+}
+
+.dropdown-item:hover > .dropdown-menu.nested-dropdown {
+  display: block;
+  left: -100%;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  right: 100%;
+}
+
+.dropdown-menu.nested-dropdown {
+  min-width: 150px; 
+  display: none;
+}
+
