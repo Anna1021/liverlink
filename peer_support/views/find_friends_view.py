@@ -23,13 +23,24 @@ class PeerSelectView(LoginRequiredMixin, View):
             {"user": user, "user_type": get_user_type(user)} for user in users
         ]
         users_with_types = get_page(request,users_with_types)
+        extra_query=self.get_extra_query(request)
         context = {
             "users": users_with_types,
             "form_sort": form_sort,
             "form_filter": form_filter,
             "form_search": form_search,
+            "extra_query":extra_query,
         }
         return render(request, self.template_name, context)
+
+    def get_extra_query(self,request):
+        query_params = request.GET.copy()
+        if "page" in query_params:
+            del query_params["page"]
+        extra_query=""
+        for key,value in query_params.items():
+            extra_query+= "&"+key+"="+value
+        return extra_query
 
     def process_search(self, users, form_search):
         """Process search form."""
