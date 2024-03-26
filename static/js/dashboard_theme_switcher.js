@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  var lightThemeLogo = '/static/images/dark-liver-link-logo-text.png';
+  var lightThemeLogo = '/static/images/black-liver-link-logo-text.png';
   var darkThemeLogo = '/static/images/white-liver-link-logo-text.png';
   var darkBackground = '/static/images/background_dark.jpg';
   var lightBackground = '/static/images/background_light.jpg';
