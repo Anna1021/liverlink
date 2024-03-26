@@ -6,6 +6,8 @@
         <div class="modal-content">
             <div class="ps-subheading-text bl-header">Users you've blocked</div>
 
+            {% if block_list %}
+
             <table class="table table-hover bl-table">
 
                 <thead>
@@ -26,24 +28,25 @@
                         <td><button type="button" class="btn btn-unblock block-user-toggle-btn" data-user-id="{{user.id}}" data-action="unblock">Unblock</button></td>
                     </tr>
 
-                    {% empty %}
-
-                    No users to display
-
                     {% endfor %}
 
                 </tbody>
         
             </table>
+
+            {% else %}
+
+            <div class="empty-text">No users to display</div>
+
+            {% endif %}
             
         </div>
     </div>
 
 </div>
 
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
-  <script>
-      var unblockUserUrl = "{% url 'unblock_user' 0 %}";
-      var blockUserUrl = "{% url 'block_user' 0 %}";
-  </script>
-  <script src="{% static 'js/display_blocklist.js' %}"></script>
+<script>
+    var unblockUserUrl = "{% url 'unblock_user' 0 %}";
+    var blockUserUrl = "{% url 'block_user' 0 %}";
+</script>
+<script src="{% static 'js/display_blocklist.js' %}"></script>

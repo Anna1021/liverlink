@@ -160,6 +160,8 @@ blockquote {
 
 .response-body {
   margin: 0;
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 
 .reply-button {
@@ -175,6 +177,7 @@ blockquote {
   margin-top: 20px;
   border-top: 1px solid lightgray;
   padding: 30px;
+  padding-bottom: 0px;
 }
 
 .reply-form-container {

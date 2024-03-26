@@ -20,8 +20,6 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50, blank=False, validators=[validate_is_profane])
     email = models.EmailField(unique=True, blank=False, validators=[validate_is_profane])
     date_of_birth = models.DateField(blank=False, null=False)
-    date_of_birth = models.DateField(blank=False, null=False)
-    date_of_birth = models.DateField(blank=False, null=False)
     gender = models.CharField(max_length=50, choices=GENDER_CHOICES, blank=True)
     location = models.CharField(max_length=50, choices=COUNTRY_CHOICES, blank=True)
     hospital = models.CharField(max_length=500, choices=HOSPITAL_CHOICES, blank=True)
@@ -30,7 +28,6 @@ class User(AbstractUser):
     bio = models.CharField(max_length=500, blank=True, validators=[validate_is_profane])
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
     blocked_users = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='blocked_by')
-    conversations = models.ManyToManyField('Conversation', blank=True)
     conversations = models.ManyToManyField('Conversation', blank=True)
     first_login = models.BooleanField(default=True)
 
@@ -80,3 +77,10 @@ class User(AbstractUser):
         """Return a sorted list of the user's conversations."""
 
         return self.conversations.order_by("-last_updated")
+
+    def save(self, *args, **kwargs):
+        """Clear the hospital field if the user's location is not UK - hospital is a UK-only field"""
+
+        if self.location != 'GB':
+            self.hospital = ""
+        super().save(*args, **kwargs)

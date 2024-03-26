@@ -31,7 +31,9 @@ class PasswordViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'password.html')
         form = response.context['form']
+        blocklist = response.context['block_list']
         self.assertTrue(isinstance(form, PasswordForm))
+        self.assertQuerySetEqual(blocklist, self.user.blocked_users.all())
 
     def test_get_password_redirects_when_not_logged_in(self):
         self.client.logout()

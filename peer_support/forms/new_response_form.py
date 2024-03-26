@@ -7,3 +7,6 @@ class NewResponseForm(forms.ModelForm):
     class Meta:
         model = Response
         fields = ['body']
+        widgets = {
+            'body': forms.Textarea(attrs={'rows':10,'cols':50})
+        }

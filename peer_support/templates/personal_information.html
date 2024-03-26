@@ -1,4 +1,5 @@
 {% extends 'settings.html' %}
+{% load static %}
 {% block title %}
     <div class="ps-title-text">Personal information</div>
 {% endblock %}
@@ -9,5 +10,12 @@
     {% include 'partials/bootstrap_form.html' with form=form %}
     <span><input type="submit" value="Update" class="btn btn-primary"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate_user">Deactivate account</button></span>
     </form>
+    {% if referral_code != None %}
+        <div class="divider-large"></div>
+        <div class="ps-subheading-text">Referral Code</div>
+            Your referral code: {{ referral_code }}
+            <div class="text-muted"><em>Trusted users can sign up to LiverLink as mentors or professionals using this code.</em></div>
+    {% endif %}
     {% include 'partials/profile-settings/deactivate_user_modal.html' %}
+    <script src="{% static 'js/profile_update_form.js' %}"></script>
 {% endblock %}

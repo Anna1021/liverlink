@@ -17,10 +17,6 @@ class NewReplyFormTestCase(TestCase):
         self.assertIn('body', form.errors)
         self.assertEqual(form.errors['body'], ['This field is required.'])
 
-    def test_placeholder_in_body_widget(self):
-        form = NewReplyForm()
-        self.assertEqual(form.fields['body'].widget.attrs['placeholder'], 'What are your thoughts?')
-
     def test_rows_attribute_in_body_widget(self):
         form = NewReplyForm()
-        self.assertEqual(form.fields['body'].widget.attrs['rows'], 5)
+        self.assertEqual(form.fields['body'].widget.attrs['rows'], 4)

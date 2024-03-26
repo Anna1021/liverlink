@@ -7,11 +7,10 @@ class ProfessionalForm(UserForm, forms.ModelForm):
     """Form to update professional profiles."""
 
     expertise = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
-    referral_code = forms.CharField(disabled=True, required=False)
 
     class Meta:
         """Form options."""
 
         model = Professional
-        fields = UserForm.Meta.fields + ['referral_code', 'expertise']
+        fields = UserForm.Meta.fields + ['expertise']
         widgets = UserForm.Meta.widgets

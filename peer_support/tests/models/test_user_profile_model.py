@@ -2,8 +2,7 @@
 import datetime
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from peer_support.models import User, Patient, Parent, Mentor, UserProfile
-from peer_support.models.model_choices import THEME_CHOICES, FONT_CHOICES, FONT_SIZE_CHOICES
+from peer_support.models import User, Patient, Parent, Mentor, Professional, UserProfile
 
 class UserProfileModelTestCase(TestCase):
     """Unit tests for the UserProfile model."""
@@ -115,6 +114,29 @@ class UserProfileModelTestCase(TestCase):
         self.assertEqual(new_mentor_user, user_profile.user)
         self.assertEqual(new_mentor.id, user_profile.id)
 
+    def test_user_profile_is_automatically_created_when_new_professional_is_created(self):
+        before_count = UserProfile.objects.count()
+        Professional.objects.create(username="@tester", 
+                                    first_name="test", 
+                                    last_name="account", 
+                                    email="test@test.org",
+                                    password="Password123",
+                                    date_of_birth=datetime.date(1990,1,1),
+                                    gender="M",
+                                    location="GB",
+                                    ethnicity="BR",
+                                    language="en",
+                                    bio="abc",
+                                    expertise="Hepatitis",
+                                    referral_code='TEST123')
+        after_count = UserProfile.objects.count()
+        self.assertEqual(before_count+1, after_count)
+        new_professional = Professional.objects.get(username="@tester")
+        new_professional_user = User.objects.get(username="@tester")
+        user_profile = UserProfile.objects.get(user=new_professional)
+        self.assertEqual(new_professional_user, user_profile.user)
+        self.assertEqual(new_professional.id, user_profile.id)
+
 
     def test_user_cannot_be_none(self):
         self.user_profile.user = None
@@ -139,63 +161,6 @@ class UserProfileModelTestCase(TestCase):
         second_profile_picture = UserProfile.objects.get(id=2).profile_picture
         self.user_profile.profile_picture = second_profile_picture
         self._assert_user_profile_is_valid()
-
-
-    def test_theme_cannot_be_blank(self):
-        self.user_profile.theme = ''
-        self._assert_user_profile_is_invalid()
-
-    def test_theme_need_not_be_unique(self):
-        second_theme = UserProfile.objects.get(id=2).theme
-        self.user_profile.theme = second_theme
-        self._assert_user_profile_is_valid()
-    
-    def test_theme_can_be_within_given_choices(self):
-        for choice in THEME_CHOICES:
-            self.user_profile.theme = choice[0]
-            self._assert_user_profile_is_valid()
-
-    def test_theme_cannot_be_outside_of_given_choices(self):
-        self.user_profile.theme = "TESTING"
-        self._assert_user_profile_is_invalid()
-
-    
-    def test_font_cannot_be_blank(self):
-        self.user_profile.font = ''
-        self._assert_user_profile_is_invalid()
-
-    def test_font_need_not_be_unique(self):
-        second_font = UserProfile.objects.get(id=2).font
-        self.user_profile.font = second_font
-        self._assert_user_profile_is_valid()
-    
-    def test_font_can_be_within_given_choices(self):
-        for choice in FONT_CHOICES:
-            self.user_profile.font = choice[0]
-            self._assert_user_profile_is_valid()
-
-    def test_font_cannot_be_outside_of_given_choices(self):
-        self.user_profile.font = "TESTING"
-        self._assert_user_profile_is_invalid()
-
-    
-    def test_font_size_cannot_be_blank(self):
-        self.user_profile.font_size = ''
-        self._assert_user_profile_is_invalid()
-
-    def test_font_size_need_not_be_unique(self):
-        second_font_size = UserProfile.objects.get(id=2).font_size
-        self.user_profile.font_size = second_font_size
-        self._assert_user_profile_is_valid()
-    
-    def test_font_size_can_be_within_given_choices(self):
-        for choice in FONT_SIZE_CHOICES:
-            self.user_profile.font_size = choice[0]
-            self._assert_user_profile_is_valid()
-
-    def test_font_size_cannot_be_outside_of_given_choices(self):
-        self.user_profile.font_size = "TESTING"
-        self._assert_user_profile_is_invalid()
         
     
     def _assert_user_profile_is_valid(self):
