@@ -12,7 +12,6 @@ $(document).ready(function () {
     var className = theme === 'light-theme'? 'bi bi-moon-fill': 'bi bi-sun';
     $('#theme').removeClass();
     $('#theme').addClass(className);
-    console.log('current class name:', className);
     $('body').css('background-image', 'url(' + backgroundImageSrc + ')'); // Set the background image
     localStorage.setItem("currentLogo", logoImageSrc);
     localStorage.setItem("currentBackground", backgroundImageSrc); 
@@ -27,7 +26,6 @@ $(document).ready(function () {
 
   function getCurrentTheme() {
     var themeSelected = $('#main').attr('class');
-    console.log("themeSelected:", themeSelected);
     return themeSelected;
   }
 

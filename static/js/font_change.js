@@ -8,7 +8,6 @@ $(document).ready(function () {
   
     function getCurrentFont() {
       var fontSelected = $("#font-selector").val();
-      console.log("fontSelected:", fontSelected);
       return fontSelected;
     }
   
