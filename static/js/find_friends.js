@@ -33,6 +33,7 @@ $(document).ready(function () {
         $('#id_transplant').parent().hide();
         $('#id_child_transplant').parent().hide();
         $('#id_professional_expertise').parent().hide();
+        $('#id_mentor_transplant').parent().hide();
 
     }
 
@@ -59,7 +60,7 @@ $(document).ready(function () {
                     $('#id_mentor_age_of_diagnosis_min').parent().show();
                     $('#id_mentor_age_of_diagnosis_max').parent().show();
                     $('#id_mentor_condition').parent().show();
-                    $('#id_transplant').parent().show();
+                    $('#id_mentor_transplant').parent().show();
                 } else if (userType === 'PF') {
                     $('#id_professional_expertise').parent().show();
                 }

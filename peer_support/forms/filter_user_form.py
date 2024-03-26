@@ -22,15 +22,16 @@ class FilterUserForm(forms.Form):
     age_of_diagnosis_min = forms.IntegerField(required = False, min_value =0)
     age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
     condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
+    transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
     child_age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     child_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
     child_condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
+    child_transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
     mentor_age_of_diagnosis_min = forms.IntegerField(required=False, min_value=0)
     mentor_age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)
     mentor_condition = forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
-    professional_expertise = forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)
-    transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
-    child_transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
+    mentor_transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
+    professional_expertise = forms.ChoiceField(choices=ALL_CHOICE+CONDITION_CHOICES, required=False)   
 
     def __init__(self, *args, **kwargs):
         """Initialise query set with users tasks"""
@@ -144,7 +145,7 @@ class FilterUserForm(forms.Form):
             'mentor_age_of_diagnosis_min': 'mentor__age_of_diagnosis__gte',
             'mentor_age_of_diagnosis_max': 'mentor__age_of_diagnosis__lte',
             'mentor_condition': 'mentor__condition__icontains',
-            'transplant': 'mentor__transplant__icontains',  }
+            'mentor_transplant': 'mentor__transplant__icontains',  }
         mentors = User.objects.filter(mentor__isnull=False)
         return self.filter_by(mentors,filter_criteria)
     
