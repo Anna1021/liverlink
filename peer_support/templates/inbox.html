@@ -12,18 +12,18 @@
             <option value="friend request" {% if request.GET.type == "friend request" %} selected {% endif %}>Friend Request</option>
             <option value="post comment" {% if request.GET.type == "post comment" %} selected {% endif %}>Post Comment</option>
             <option value="post" {% if request.GET.type == "post" %} selected {% endif %}>Post Like</option>
-            <option value="response" {% if request.GET.type == "response" %} selected {% endif %}>Response to Your Question</option>
-            <option value="conversation" {% if request.GET.type == "conversation" %} selected {% endif %}>New Conversation</option>
-            <option value="group conversation" {% if request.GET.type == "group conversation" %} selected {% endif %}>Added to Group Conversation</option>
+            <option value="response" {% if request.GET.type == "response" %} selected {% endif %}>Response to Question</option>
+            <option value="conversation" {% if request.GET.type == "conversation" or request.GET.type == "group conversation" %} selected {% endif %}>Conversation</option>
         </select>
     
         <!-- Filter notifications by timeframe -->
         <label for="notification_timeframe">Timeframe:</label>
         <select name="timeframe" id="notification_timeframe">
             <option value="">All</option>
-            <option value="today" {% if request.GET.timeframe == "today" %} selected {% endif %}>Today</option>
-            <option value="this_week" {% if request.GET.timeframe == "this_week" %} selected {% endif %}>This Week</option>
-            <option value="older" {% if request.GET.timeframe == "older" %} selected {% endif %}>Older</option>
+            <option value="past_24_hours" {% if request.GET.timeframe == "past_24_hours" %} selected {% endif %}>Past 24 Hours</option>
+            <option value="past_7_days" {% if request.GET.timeframe == "past_7_days" %} selected {% endif %}>Past 7 Days</option>
+            <option value="past_4_weeks" {% if request.GET.timeframe == "past_4_weeks" %} selected {% endif %}>Past 4 Weeks</option>
+            <option value="earlier" {% if request.GET.timeframe == "earlier" %} selected {% endif %}>Earlier</option>
         </select>
     </div>
 

@@ -163,15 +163,16 @@ def filter_by_timeframe(notifications, timeframe):
     """Filter notifications by the specified timeframe."""
 
     now = timezone.now()
-    if timeframe == 'today':
-        start_of_day = timezone.make_aware(timezone.datetime(now.year, now.month, now.day))
-        notifications = notifications.filter(created__gte=start_of_day)
-    elif timeframe == 'this_week':
-        start_of_week = now - timedelta(days=now.weekday())
-        start_of_week = timezone.make_aware(timezone.datetime(start_of_week.year, start_of_week.month, start_of_week.day))
-        end_of_week = start_of_week + timedelta(days=6)
-        notifications = notifications.filter(created__range=[start_of_week, end_of_week])
-    elif timeframe == 'older':
+    if timeframe == 'past_24_hours':
+        start_time = now - timedelta(days=1)
+        notifications = notifications.filter(created__gte=start_time)
+    elif timeframe == 'past_7_days':
+        start_time = now - timedelta(days=7)
+        notifications = notifications.filter(created__gte=start_time)
+    elif timeframe == 'past_4_weeks':
+        start_time = now - timedelta(weeks=4)
+        notifications = notifications.filter(created__gte=start_time)
+    elif timeframe == 'earlier':
         start_of_week = now - timedelta(days=now.weekday())
         start_of_week = timezone.make_aware(timezone.datetime(start_of_week.year, start_of_week.month, start_of_week.day))
         notifications = notifications.filter(created__lt=start_of_week)
