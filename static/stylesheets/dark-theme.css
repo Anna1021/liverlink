@@ -139,6 +139,11 @@
   color: #91BBD3
 }
 
+.dark-theme .leave-btn{
+  color: white;
+  background-color: rgb(255, 0, 0);
+}
+
 .dark-theme #loginBox {
   border-radius: 20px;
   background-color:#2E2D38;

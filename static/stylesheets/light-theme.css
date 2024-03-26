@@ -182,6 +182,10 @@
   color: #639191;
 }
 
+.light-theme .leave-btn{
+  color: black;
+  background-color: rgb(252, 74, 74);
+}
 
 .light-theme .form-control {
   display: block;
