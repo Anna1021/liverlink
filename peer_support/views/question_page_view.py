@@ -9,7 +9,7 @@ class QuestionPageView(LoginRequiredMixin, View):
     """Displays a single question and all responses"""
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
-    max_depth = 10
+    max_depth = 20
 
     def get(self, request, id, *args, **kwargs):
         context = self.get_context(request, id)

@@ -15,7 +15,13 @@ class NewQuestionForm(forms.ModelForm):
             MaxLengthValidator(150, message="Title cannot be more than 150 characters long")
         ]
     )
-
+    body = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'rows': 10,
+            'placeholder': 'Detail your question here...'
+        }),
+        max_length=300
+    )
     class Meta:
         model = Question
         fields = ['title', 'body']
