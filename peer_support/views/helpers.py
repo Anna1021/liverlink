@@ -173,9 +173,8 @@ def filter_by_timeframe(notifications, timeframe):
         start_time = now - timedelta(weeks=4)
         notifications = notifications.filter(created__gte=start_time)
     elif timeframe == 'earlier':
-        start_of_week = now - timedelta(days=now.weekday())
-        start_of_week = timezone.make_aware(timezone.datetime(start_of_week.year, start_of_week.month, start_of_week.day))
-        notifications = notifications.filter(created__lt=start_of_week)
+        start_time = now - timedelta(weeks=4)  
+        notifications = notifications.filter(created__lt=start_time)
     return notifications
 
 def filter_by_type(notifications, type):

@@ -141,16 +141,16 @@ class HelpersViewTestCase(TestCase):
         notifications = Notification.objects.all()
         notifications_within_past_4_weeks = filter_by_timeframe(notifications, 'past_4_weeks')
         self.assertIn(past_4_weeks_notification, notifications_within_past_4_weeks)
-        notifications_created_4_weeks_ago = filter_by_timeframe(notifications, 'earlier')
-        self.assertIn(past_4_weeks_notification, notifications_created_4_weeks_ago)
+        earlier_notifications = filter_by_timeframe(notifications, 'earlier')
+        self.assertNotIn(past_4_weeks_notification, earlier_notifications)
 
-    def test_earlier_notification_is_created_4_weeks_ago(self):
+    def test_earlier_notification_created_4_weeks_ago(self):
         earlier_notification = Notification.objects.create(created=timezone.now() - timedelta(weeks=5), user=self.user)
+        recent_notification = Notification.objects.create(created=timezone.now() - timedelta(weeks=3), user=self.user)
         notifications = Notification.objects.all()
-        notifications_created_4_weeks_ago = filter_by_timeframe(notifications, 'earlier')
-        self.assertIn(earlier_notification, notifications_created_4_weeks_ago)
-        notifications_within_past_4_weeks = filter_by_timeframe(notifications, 'past_4_weeks')
-        self.assertNotIn(earlier_notification, notifications_within_past_4_weeks)
+        earlier_notifications = filter_by_timeframe(notifications, 'earlier')
+        self.assertIn(earlier_notification, earlier_notifications)
+        self.assertNotIn(recent_notification, earlier_notifications)
 
     """Test filtering notifications by type through content_type."""
     def test_filter_notification_by_content_type(self):
