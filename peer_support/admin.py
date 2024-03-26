@@ -125,3 +125,15 @@ class PostAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.filter(visibility='G') 
+    
+@admin.register(PostComment)
+class PostCommentAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for post comments."""
+
+    search_fields = ("parent__username", "content")
+    list_filter = ["created_at", "author__username"]
+    list_display = ["author"]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(post__visibility='G') 
