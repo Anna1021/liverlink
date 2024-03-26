@@ -1,16 +1,16 @@
-"""Unit tests of the mentor form."""
+"""Unit tests of the professional form."""
 import datetime
 from django import forms
 from django.test import TestCase
-from peer_support.forms import MentorForm
-from peer_support.models import Mentor
+from peer_support.forms import ProfessionalForm
+from peer_support.models import Professional
 
-class MentorFormTestCase(TestCase):
-    """Unit tests of the mentor form."""
+class ProfessionalFormTestCase(TestCase):
+    """Unit tests of the professional form."""
 
     fixtures = [
         'peer_support/tests/fixtures/default_user.json',
-        'peer_support/tests/fixtures/default_mentor.json',
+        'peer_support/tests/fixtures/default_professional.json',
     ]
 
     def setUp(self):
@@ -25,13 +25,11 @@ class MentorFormTestCase(TestCase):
             'ethnicity': 'RO',
             'language': 'en',
             'bio': 'I am a test mentor.',
-            'condition': 'Haemochromatosis',
-            'transplant': 'Y',
-            'age_of_diagnosis': 21
+            'expertise': 'Haemochromatosis'
         }
 
     def test_form_has_necessary_fields(self):
-        form = MentorForm()
+        form = ProfessionalForm()
         self.assertIn('first_name', form.fields)
         self.assertIn('last_name', form.fields)
         self.assertIn('username', form.fields)
@@ -58,27 +56,23 @@ class MentorFormTestCase(TestCase):
         self.assertIn('bio', form.fields)
         bio_widget = form.fields['bio'].widget
         self.assertTrue(isinstance(bio_widget, forms.Textarea))
-        self.assertIn('condition', form.fields)
-        self.assertIn('transplant', form.fields)
-        self.assertIn('age_of_diagnosis', form.fields)
-        aod_widget = form.fields['age_of_diagnosis'].widget
-        self.assertTrue(isinstance(aod_widget, forms.NumberInput))
+        self.assertIn('expertise', form.fields)
 
-    def test_valid_mentor_form(self):
-        form = MentorForm(data=self.form_input)
+    def test_valid_professional_form(self):
+        form = ProfessionalForm(data=self.form_input)
         self.assertTrue(form.is_valid())
 
     def test_form_uses_model_validation(self):
         self.form_input['username'] = 'badusername'
-        form = MentorForm(data=self.form_input)
+        form = ProfessionalForm(data=self.form_input)
         self.assertFalse(form.is_valid())
 
     def test_form_must_save_correctly(self):
-        user = Mentor.objects.get(username='@johndoe')
-        form = MentorForm(instance=user, data=self.form_input)
-        before_count = Mentor.objects.count()
+        user = Professional.objects.get(username='@johndoe')
+        form = ProfessionalForm(instance=user, data=self.form_input)
+        before_count = Professional.objects.count()
         form.save()
-        after_count = Mentor.objects.count()
+        after_count = Professional.objects.count()
         self.assertEqual(after_count, before_count)
         self.assertEqual(user.username, '@janedoe')
         self.assertEqual(user.first_name, 'Jane')
@@ -90,7 +84,5 @@ class MentorFormTestCase(TestCase):
         self.assertEqual(user.ethnicity, 'RO')
         self.assertEqual(user.language, 'en')
         self.assertEqual(user.bio, 'I am a test mentor.'),
-        self.assertEqual(user.condition, 'Haemochromatosis'),
-        self.assertEqual(user.transplant, 'Y'),
-        self.assertEqual(user.age_of_diagnosis, 21),
+        self.assertEqual(user.expertise, 'Haemochromatosis'),
         self.assertEqual(before_count, after_count)
