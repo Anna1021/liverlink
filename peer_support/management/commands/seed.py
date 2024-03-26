@@ -641,10 +641,11 @@ class Command(BaseCommand):
 
     def generate_patient(self):
         user_data = self.generate_user_data()
+        date_of_birth = self.faker.date_of_birth(minimum_age=16, maximum_age=25)
         condition = self.faker.random_element(elements=(tuple(condition[0] for condition in CONDITION_CHOICES)))
         age_of_diagnosis = randint(0, 20)
         transplant = self.faker.random_element(elements=(tuple(transplant[0] for transplant in TRANSPLANT_CHOICES)))
-        user_data.update({'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'transplant': transplant})
+        user_data.update({'date_of_birth': date_of_birth, 'condition': condition, 'age_of_diagnosis': age_of_diagnosis, 'transplant': transplant})
         self.try_create_patient(user_data)
 
     def generate_parent(self):
@@ -717,14 +718,14 @@ class Command(BaseCommand):
     def generate_question(self):
         author = self.users[randint(0, len(self.users) - 1)]
         title = self.faker.sentence()
-        body = self.faker.text(max_nb_chars=100)
+        body = self.faker.text(max_nb_chars=500)
         author = {"username": author.username}
         self.try_create_question({"author": author, "title": title, "body": body})
 
     def generate_response(self):
         user = self.users[randint(0, len(self.users) - 1)]
         question = self.questions[randint(0, len(self.questions) - 1)]
-        body = self.faker.text(max_nb_chars=100)
+        body = self.faker.text(max_nb_chars=300)
         user = {"username": user.username}
         question = {"title": question.title}
         self.try_create_response({"user": user, "question": question, "body": body})

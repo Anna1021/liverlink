@@ -90,25 +90,25 @@ class FilterUserFormTestCase(TestCase):
 
     def test_min_age(self):
         form_data = self.showAll
-        form_data['min_age'] = 25
+        form_data['min_age'] = 24
         form = FilterUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(results.exists())
-        self.assertIn(User.objects.get(username='@peterpickles'), results)
-        self.assertNotIn(User.objects.get(username='@petrapickles'), results)
+        self.assertIn(User.objects.get(username='@petrapickles'), results)
+        self.assertNotIn(User.objects.get(username='@peterpickles'), results)
         self.assertNotIn(User.objects.get(username='@janedoe'), results)
 
     def test_max_age(self):
         form_data = self.showAll
-        form_data['max_age'] = 25
+        form_data['max_age'] = 23
         form = FilterUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(results.exists())
         self.assertIn(User.objects.get(username='@janedoe'), results)
-        self.assertIn(User.objects.get(username='@petrapickles'), results)
-        self.assertNotIn(User.objects.get(username='@peterpickles'), results)
+        self.assertIn(User.objects.get(username='@peterpickles'), results)
+        self.assertNotIn(User.objects.get(username='@petrapickles'), results)
 
     def test_language(self):
         form_data = self.showAll
