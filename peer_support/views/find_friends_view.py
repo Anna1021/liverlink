@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views import View
 from django.contrib import messages
 from peer_support.forms import SortUserForm, FilterUserForm, SearchUserForm
-from .helpers import get_addable_peers, get_user_type
+from .helpers import get_addable_peers, get_user_type,get_page
 
 
 class PeerSelectView(LoginRequiredMixin, View):
@@ -22,6 +22,7 @@ class PeerSelectView(LoginRequiredMixin, View):
         users_with_types = [
             {"user": user, "user_type": get_user_type(user)} for user in users
         ]
+        users_with_types = get_page(request,users_with_types)
         context = {
             "users": users_with_types,
             "form_sort": form_sort,
