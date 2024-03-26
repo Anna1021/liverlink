@@ -11,7 +11,7 @@ from .sign_up_view import SignUpView
 from .view_mixins import LoginProhibitedMixin
 from .profile_deactivate_view import deactivate_user
 from .conversation_view import ConversationView
-from .peer_select_view import PeerSelectView
+from .find_friends_view import PeerSelectView
 from .create_conversation_view import CreateConversationView
 from .new_question_page_view import new_question_page
 from .resources_view import ResourcesView

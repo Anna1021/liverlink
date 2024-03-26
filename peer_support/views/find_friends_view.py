@@ -8,7 +8,7 @@ from .helpers import get_addable_peers, get_user_type
 class PeerSelectView(LoginRequiredMixin, View):
     """Displays the page for viewing users on network."""
 
-    template_name = 'peer_select.html'
+    template_name = 'find_friends.html'
 
     def get(self, request):
         users = get_addable_peers(request.user)
