@@ -2,9 +2,9 @@
 <div class="feedback-header">
 <div class="friend-inner-card col-12 row mt-2 mb-2 ml-1 card-spacing">
     <div class="col-11">
-        <div class="feedback-title">{{ fb.title |censor}}</div>
+        <div class="feedback-title">{{ fb.title | censor }}</div>
         <div class="feedback-date">Submitted at: {{ fb.submitted_at }}</div>
-        <div class="feedback-content">{{ fb.content |censor}}</div>
+        <div class="feedback-content">{{ fb.content | censor }}</div>
     </div>
     <div class="col-1 my-auto">
         <button class="btn btn-danger decline" onclick="window.location.href='/delete_feedback/{{fb.id}}';" ><i class="bi bi-x"></i></button>
