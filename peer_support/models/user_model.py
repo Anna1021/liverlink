@@ -77,3 +77,10 @@ class User(AbstractUser):
         """Return a sorted list of the user's conversations."""
 
         return self.conversations.order_by("-last_updated")
+
+    def save(self, *args, **kwargs):
+        """Clear the hospital field if the user's location is not UK - hospital is a UK-only field"""
+
+        if self.location != 'GB':
+            self.hospital = ""
+        super().save(*args, **kwargs)
