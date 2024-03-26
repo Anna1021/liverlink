@@ -19,3 +19,4 @@ class NewQuestionForm(forms.ModelForm):
     class Meta:
         model = Question
         fields = ["title", "body"]
+        widgets = {"body": forms.Textarea(attrs={"rows": 10, "cols": 50})}

@@ -8,9 +8,17 @@ class Response(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, null=False, on_delete=models.CASCADE, related_name='responses')
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
-    body = models.TextField(null=False)
+    body = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def get_responses(self):
         return Response.objects.filter(parent=self)
+    
+    def get_depth(self):
+        depth = 0
+        parent = self.parent
+        while parent:
+            depth += 1
+            parent = parent.parent
+        return depth

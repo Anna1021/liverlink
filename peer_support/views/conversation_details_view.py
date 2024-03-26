@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from peer_support.models import Conversation
+from peer_support.models import Conversation, Notification, User
 from peer_support.forms import AddUsersForm
 from .helpers import get_conversation, conversation_is_direct, no_conversation_url
 
@@ -33,6 +33,8 @@ class ConversationDetailsView(LoginRequiredMixin, FormView):
         form = AddUsersForm(request.user, conversation, data=request.POST)
         if form.is_valid():
             form.save(conversation)
+            for user_id in request.POST.get('users'):
+                Notification.objects.create(content_object=conversation, user=User.objects.get(id=user_id), notifying_user=request.user)
             return render(request, self.template_name, self.get_context_data(request.user, conversation))
         else:
             messages.error(request, "You have to add at least 1 person")
