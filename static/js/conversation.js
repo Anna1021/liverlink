@@ -1,6 +1,12 @@
 $(document).ready(function() {
     let menuExpanded = localStorage.getItem('sidebarExpanded');
-    if(menuExpanded!=null) $('#sidebar-toggle').prop('checked',true);
+    console.log(menuExpanded)
+    if(menuNotExpanded!=null && menuNotExpanded=="true") {
+        $('#sidebar-toggle').prop('checked',true);
+    } else{
+        $('#sidebar-toggle').prop('checked',false);
+    }
+    console.log($('#sidebar-toggle').prop('checked'))
     let pageScroll = localStorage.getItem('pageScroll');
     if(pageScroll!=null) window.scrollTo(0,pageScroll);
     let msg = sessionStorage.getItem(storageKey);
