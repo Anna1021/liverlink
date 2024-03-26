@@ -80,6 +80,8 @@ $(document).ready(function () {
         var location = $("select[name='location']").val();
         if (location === 'GB') {
             $('#id_hospital').parent().show();
+        } else {
+            $('#id_hospital').val('any');
         }
     }
     
