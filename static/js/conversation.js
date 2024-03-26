@@ -74,9 +74,9 @@ window.addEventListener('beforeunload', function(e){
     if (!posting){
         sessionStorage.setItem(storageKey,$("#id_content").val());
         sessionStorage.setItem(scrollKey,$('#conversation').prop('scrollHeight')-$('#conversation').scrollTop());
-        localStorage.setItem('sidebarExpanded',$('#sidebar-toggle').prop('checked'))
     }else{
         sessionStorage.clear();
     }
+    localStorage.setItem('sidebarExpanded',$('#sidebar-toggle').prop('checked'))
     return '';
 })
