@@ -16,6 +16,6 @@ class ModerationView(LoginRequiredMixin, View):
         if not current_user.is_staff:
             messages.error(request, "You do not have access to this view.")
             return redirect(reverse("feed"))
-        reports = Report.objects.all()
+        reports = Report.objects.order_by("-id")
         reports = get_page(request, reports)
         return render(request, "moderation.html", {"reports": reports})
