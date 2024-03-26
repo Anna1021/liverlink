@@ -38,6 +38,7 @@
                 </div>
                 {% else %}
                 {% include 'partials/profile/user_actions_dropdown.html' %}
+                {% include 'partials/report_modal.html' with object_id=user.id report_type='report_user' %}
                 {% endif %}
             </div>
         </div>

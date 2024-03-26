@@ -45,6 +45,7 @@
     {% for post in posts.object_list %}
     <div class="post-card pb-2">
       {% include 'partials/post_details.html' with post=post from_feed=True %}
+      {% include 'partials/report_modal.html' with object_id=post.id report_type='report_post' %}
     </div>
     {% empty %}
     <p>No posts available.</p>

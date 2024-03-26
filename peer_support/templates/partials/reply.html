@@ -21,7 +21,7 @@
                     {% if comment.author == user %}
                     <li><a class="dropdown-item" href="{% url 'delete_comment' comment.id %}">Delete</a></li>
                     {% else %}
-                    {% include 'partials/report_dropdown.html' with form=report_form object_id=comment.id report_type='report_comment' %}
+                    <button type="button" class="dropdown-item mt-2 mb-2" id="report-item" data-bs-toggle="modal" data-bs-target="#report_comment_{{comment.id}}">Report</button>
                     {% endif %}
                 </ul>
             </div>
@@ -40,6 +40,7 @@
                 {% for reply in comment.get_replies %}
                     <li>
                         {% include 'partials/reply.html' with comment=reply %}
+                        {% include 'partials/report_modal.html' with object_id=reply.id report_type='report_comment' %}
                     </li>
                 {% endfor %}
             </ul>

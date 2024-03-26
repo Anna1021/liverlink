@@ -31,11 +31,12 @@
                     </form>
                 </li>
                 {% else %}
-                {% include 'partials/report_dropdown.html' with form=report_form object_id=question.id report_type='report_question' %}
+                <button type="button" class="dropdown-item mt-2 mb-2" id="report-item" data-bs-toggle="modal" data-bs-target="#report_question_{{question.id}}">Report</button>
                 {% endif %}
             </ul>
           </div>
         </div>
+        {% include 'partials/report_modal.html' with object_id=question.id report_type='report_question' %}
         {% endfor %}
       </div>
       <hr>

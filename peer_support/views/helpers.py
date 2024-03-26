@@ -52,7 +52,7 @@ def get_referral_code(user):
 
 
 def get_addable_peers(current_user):
-    """Gets users who are not admin, friends, blocked or have been requested"""
+    """Gets users who are not friends, blocked, deactivated or have been requested"""
 
     friends_ids = current_user.friends.values_list("id", flat=True)
     requested_users = FriendRequest.objects.filter(sender=current_user).values_list(
@@ -61,8 +61,7 @@ def get_addable_peers(current_user):
     blocked_users_ids = current_user.blocked_users.values_list("id", flat=True)
     blocked_by_ids = current_user.blocked_by.values_list("id", flat=True)
     eligible_users = (
-        User.objects.exclude(is_staff=True)
-        .exclude(id=current_user.id)
+        User.objects.exclude(id=current_user.id)
         .exclude(id__in=friends_ids)
         .exclude(id__in=blocked_users_ids)
         .exclude(id__in=blocked_by_ids)

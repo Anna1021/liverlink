@@ -23,11 +23,13 @@
                         </form>
                     </li>
                     {% else %}
-                    {% include 'partials/report_dropdown.html' with form=report_form object_id=question.id report_type='report_question' %}
+                    <button type="button" class="dropdown-item mt-2 mb-2" id="report-item" data-bs-toggle="modal" data-bs-target="#report_question_{{question.id}}">Report</button>
                 </ul>
                 {% endif %}
             </div>
         </div>
+    {% include 'partials/report_modal.html' with object_id=question.id report_type='report_question' %}
+
     {% if question.author in user.blocked_users.all %}
     <p data-text="{{ question.body|censor }}" data-blocked="true" class="question-body text-muted">
     {% elif question|is_object_reported_by_user:user %}
@@ -48,6 +50,7 @@
         {% else %}
             {% for response in question.get_responses %}
                 {% include 'partials/response.html' with response=response %}
+                {% include 'partials/report_modal.html' with object_id=response.id report_type='report_response' %}
             {% endfor %}
         {% endif %}
     </div>

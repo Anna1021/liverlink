@@ -3,13 +3,13 @@ from django.shortcuts import render
 from django.views import View
 from django.contrib import messages
 from peer_support.forms import SortUserForm, FilterUserForm, SearchUserForm
-from .helpers import get_addable_peers, get_user_type, get_page
+from .helpers import get_addable_peers, get_user_type
 
 
 class PeerSelectView(LoginRequiredMixin, View):
     """Displays the page for viewing users on network."""
 
-    template_name = "peer_select.html"
+    template_name = "find_friends.html"
 
     def get(self, request):
         users = get_addable_peers(request.user)
@@ -19,9 +19,15 @@ class PeerSelectView(LoginRequiredMixin, View):
         users = self.process_search(users, form_search)
         users = self.process_filter(users, form_filter)
         users = self.process_sort(users, form_sort, request.user)
-        users_with_types = [{'user': user, 'user_type': get_user_type(user)} for user in users]
-        users_with_types = get_page(request,users_with_types)
-        context = {'users': users_with_types, 'form_sort': form_sort, 'form_filter': form_filter, 'form_search': form_search}
+        users_with_types = [
+            {"user": user, "user_type": get_user_type(user)} for user in users
+        ]
+        context = {
+            "users": users_with_types,
+            "form_sort": form_sort,
+            "form_filter": form_filter,
+            "form_search": form_search,
+        }
         return render(request, self.template_name, context)
 
     def process_search(self, users, form_search):
