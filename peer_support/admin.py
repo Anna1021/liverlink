@@ -113,3 +113,15 @@ class FeedbackAdmin(admin.ModelAdmin):
     search_fields = ("title", "content")
     list_filter = ["submitted_at"]
     list_display = ["title"]
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    """Configuration of the admin interface for posts."""
+
+    search_fields = ("author__username", "content")
+    list_filter = ["created_at"]
+    list_display = ["author"]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(visibility='G') 
