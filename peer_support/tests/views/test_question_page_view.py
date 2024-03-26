@@ -25,8 +25,8 @@ class QuestionPageTestCase(TestCase):
         self.client.force_login(self.user)
         self.reply_url = reverse('question', args=(self.question.id,))
         self.user = User.objects.get(username='@johndoe')
-        self.question = Question.objects.create(title='Test Question', body='Test Body', author=self.user)
-        self.response = Response.objects.create(body='Test Response', user=self.user, question=self.question)
+        self.second_question = Question.objects.create(title='Test Question', body='Test Body', author=self.user)
+        self.second_response = Response.objects.create(body='Test Response', user=self.user, question=self.question)
         self.response_id = Response.objects.get(body='Test Response', user=self.user, question=self.question).id
         self.reply_form_data = {
             'body': 'Test Reply Body',
