@@ -120,7 +120,7 @@ class PostAdmin(admin.ModelAdmin):
 
     search_fields = ("author__username", "content")
     list_filter = ["created_at"]
-    list_display = ["author"]
+    list_display = ["author", "content"]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -132,7 +132,7 @@ class PostCommentAdmin(admin.ModelAdmin):
 
     search_fields = ("parent__username", "content")
     list_filter = ["created_at", "author__username"]
-    list_display = ["author"]
+    list_display = ["author", "content"]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
