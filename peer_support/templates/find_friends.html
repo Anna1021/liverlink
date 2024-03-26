@@ -13,7 +13,7 @@
         <div class="container my-2">
             <div class="row">
                 {% for friend in users.object_list %}
-                    {% include "partials/user_card.html" with parent_template="find_friends" user=friend %}
+                    {% include "partials/user_card.html" with parent_template="find_friends" user=friend.user %}
                 {% empty %}
                     <p>No users</p>
                 {% endfor %}
