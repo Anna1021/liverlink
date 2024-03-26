@@ -1,6 +1,5 @@
 from django.db import models
 from peer_support.models import User
-from .model_choices import THEME_CHOICES, FONT_CHOICES, FONT_SIZE_CHOICES
 
 
 class UserProfile(models.Model):
