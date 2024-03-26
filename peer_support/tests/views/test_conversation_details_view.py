@@ -1,7 +1,8 @@
 """Tests of the conversation details view."""
 from django.test import TestCase
 from django.urls import reverse
-from peer_support.models import User, Conversation
+from django.contrib.contenttypes.models import ContentType
+from peer_support.models import User, Conversation, Notification, GroupConversation
 from peer_support.forms import AddUsersForm
 from django.contrib import messages
 
@@ -100,6 +101,28 @@ class ConversationDetailsViewTestCase(TestCase):
         form = response.context['form']
         self.assertTrue(isinstance(form, AddUsersForm))
         self.assertFalse(form.is_bound)
+
+    def test_successful_add_user_sends_notification_to_added_user(self):
+        conversation_before_count = self.conversation.users.count()
+        notification_before_count = Notification.objects.count()
+        self.assertNotIn(self.user_to_add[0], self.conversation.users.all())
+        response = self.client.post(self.url, data=self.form_input)
+        conversation_after_count = self.conversation.users.count()
+        notification_after_count = Notification.objects.count()
+        self.assertIn(self.user_to_add[0], self.conversation.users.all())
+        self.assertEqual(conversation_after_count, conversation_before_count + 1)
+        self.assertEqual(notification_after_count, notification_before_count + 1)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'conversation_details.html')
+        new_notification = Notification.objects.last()
+        content_type = ContentType.objects.get_for_model(GroupConversation)
+        self.assertEqual(new_notification.title, "New Group Conversation")
+        self.assertEqual(new_notification.description, "@johndoe has added you to a group conversation.")
+        self.assertEqual(new_notification.user, self.user_to_add[0])
+        self.assertEqual(new_notification.notifying_user, self.user)
+        self.assertEqual(new_notification.content_type, content_type)
+        self.assertEqual(new_notification.object_id, self.conversation.id)
+        self.assertEqual(new_notification.content_object, self.conversation.as_group())
 
     def test_successful_rename_conversation(self):
         self.assertEqual(self.conversation.as_group().name, None)
