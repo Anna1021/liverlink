@@ -89,7 +89,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=150)),
-                ('body', models.TextField()),
+                ('body', models.CharField(max_length=500)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
@@ -175,10 +175,7 @@ class Migration(migrations.Migration):
             name='UserProfile',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('profile_picture', models.CharField(blank=True, default='profile_pictures/sky.jpg', max_length=500)),
-                ('theme', models.CharField(choices=[('DF', 'Default theme'), ('LM', 'Light mode'), ('DM', 'Dark mode')], default='DF', max_length=50)),
-                ('font', models.CharField(choices=[('DF', 'Default font'), ('AR', 'Arial'), ('CA', 'Calibri')], default='DF', max_length=50)),
-                ('font_size', models.CharField(choices=[('DF', 'Default size'), ('LG', 'Large'), ('XL', 'Extra large')], default='DF', max_length=50)),
+                ('profile_picture', models.CharField(blank=True, default='profile_pictures/Firefly Create a social media avatar of the night sky 96511.jpg', max_length=500)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -186,7 +183,7 @@ class Migration(migrations.Migration):
             name='Response',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('body', models.TextField()),
+                ('body', models.CharField(max_length=300)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='peer_support.response')),

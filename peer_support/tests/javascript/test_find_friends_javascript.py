@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from peer_support.models import User
 
-class PeerSelectJavascriptTest(StaticLiveServerTestCase):
+class FindFreindsJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in find_friends view"""
 
     fixtures = ['peer_support/tests/fixtures/default_user.json']

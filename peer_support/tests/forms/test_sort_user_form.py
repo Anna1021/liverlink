@@ -163,7 +163,7 @@ class SortUserFormTestCase(TestCase):
         form = SortUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         sorted_users = form.sort_users(self.users, self.current_user_mentor)
-        expected_order = ['@johndoe', '@petrapickles','@janedoe', '@peterpickles', '@sambennet','@craighughes', '@rajpatel', '@mohamedalf', '@carlosmartinez', '@alexsmith', '@lindajohnson', '@annamiller', '@hazelsmith']
+        expected_order = ['@petrapickles', '@johndoe', '@janedoe', '@peterpickles', '@sambennet','@craighughes', '@rajpatel', '@mohamedalf', '@carlosmartinez', '@alexsmith', '@lindajohnson', '@annamiller', '@hazelsmith']
         sorted_usernames = [user.username for user in sorted_users]
         self.assertEqual(sorted_usernames, expected_order)   
     

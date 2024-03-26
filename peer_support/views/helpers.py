@@ -34,7 +34,7 @@ def notifications(request):
 
 
 def create_referral(user):
-    """Only creates referrals if the user is a mentor."""
+    """ Only creates referrals if the user is a professional."""
 
     if isinstance(user, Professional): 
         code = uuid.uuid4().hex[:10].upper()

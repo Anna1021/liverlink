@@ -334,6 +334,19 @@ class UserModelTestCase(TestCase):
         language_name = self.user.language_name()
         self.assertEqual(language_name, "")
 
+
+    def test_save_user_clears_hospital_field_if_location_is_not_UK(self):
+        self.user.location = 'GB'
+        self.user.hospital = 'Airedale NHS Foundation Trust'
+        self.user.save()
+        self.assertEqual(self.user.location, 'GB')
+        self.assertEqual(self.user.hospital, 'Airedale NHS Foundation Trust')
+        self.user.location = 'PA'
+        self.user.save()
+        self.assertEqual(self.user.location, 'PA')
+        self.assertEqual(self.user.hospital, '')
+
+
     def _assert_user_is_valid(self):
         try:
             self.user.full_clean()
