@@ -164,7 +164,7 @@ def filter_by_timeframe(notifications, timeframe):
 
     now = timezone.now()
     if timeframe == 'past_24_hours':
-        start_time = now - timedelta(days=1)
+        start_time = now - timedelta(hours=24)
         notifications = notifications.filter(created__gte=start_time)
     elif timeframe == 'past_7_days':
         start_time = now - timedelta(days=7)

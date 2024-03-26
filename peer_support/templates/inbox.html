@@ -12,7 +12,7 @@
             <option value="friend request" {% if request.GET.type == "friend request" %} selected {% endif %}>Friend Request</option>
             <option value="post comment" {% if request.GET.type == "post comment" %} selected {% endif %}>Post Comment</option>
             <option value="post" {% if request.GET.type == "post" %} selected {% endif %}>Post Like</option>
-            <option value="response" {% if request.GET.type == "response" %} selected {% endif %}>Response to Question</option>
+            <option value="response" {% if request.GET.type == "response" %} selected {% endif %}>Response</option>
             <option value="conversation" {% if request.GET.type == "conversation" or request.GET.type == "group conversation" %} selected {% endif %}>Conversation</option>
         </select>
     
