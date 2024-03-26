@@ -1,14 +1,14 @@
 <div class="row pb-2">
     <ul class="pagination justify-content-center">
       <li class="page-item">
-        <a class="page-link" href="?page=1" aria-label="First">
+        <a class="page-link" href="?page=1{{extra_query}}" aria-label="First">
           <span aria-hidden="true">&laquo;</span>
           <span class="sr-only">First</span>
         </a>
       </li>
       <li class="page-item">
         {% if type.has_previous %}
-        <a class="page-link" href="?page={{ type.previous_page_number }}" aria-label="Previous">
+        <a class="page-link" href="?page={{ type.previous_page_number }}{{extra_query}}" aria-label="Previous">
           <span aria-hidden="true">&lsaquo;</span>
           <span class="sr-only">Previous</span>
         </a>
@@ -20,13 +20,13 @@
             {% with page_num|add:"1" as next_page_num %}
             {% if page_num > 2 %}
               <li class="page-item"><a class="page-link">...</a></li>
-              <li class="page-item"><a class="page-link" href="?page={{ prev_page_num }}">{{ prev_page_num }}</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ prev_page_num }}{{extra_query}}">{{ prev_page_num }}</a></li>
             {% elif page_num > 1 %}
-              <li class="page-item"><a class="page-link" href="?page={{ prev_page_num }}">{{ prev_page_num }}</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ prev_page_num }}{{extra_query}}">{{ prev_page_num }}</a></li>
             {% endif %}
-            <li class="page-item active"><a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a></li>
+            <li class="page-item active"><a class="page-link" href="?page={{ page_num }}{{extra_query}}">{{ page_num }}</a></li>
             {% if page_num < type.paginator.num_pages %}
-              <li class="page-item"><a class="page-link" href="?page={{ next_page_num }}">{{ next_page_num }}</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ next_page_num }}{{extra_query}}">{{ next_page_num }}</a></li>
               <li class="page-item"><a class="page-link">...</a></li>
             {% endif %}
             {% endwith %}
@@ -35,14 +35,14 @@
       {% endfor %}
       <li class="page-item">
         {% if type.has_next %}
-        <a class="page-link" href="?page={{ type.next_page_number }}" aria-label="Next">
+        <a class="page-link" href="?page={{ type.next_page_number }}{{extra_query}}" aria-label="Next">
           <span aria-hidden="true">&rsaquo;</span>
           <span class="sr-only">Next</span>
         </a>
         {% endif %}
       </li>
       <li class="page-item">
-        <a class="page-link" href="?page={{ type.paginator.num_pages }}" aria-label="Next">
+        <a class="page-link" href="?page={{ type.paginator.num_pages }}{{extra_query}}" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
           <span class="sr-only">Next</span>
         </a>
