@@ -27,7 +27,7 @@
             </div>
         </div>
         <!-- Reply form for each comment -->
-        <form method="post" action="{% url 'post_detail' post_id=post.id %}">
+        <form method="post" action="{% url 'post' post_id=post.id %}">
             {% csrf_token %}
             <input type="hidden" name="parent_id" value="{{ comment.id }}">
             {{ comment_form.as_p }}

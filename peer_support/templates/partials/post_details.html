@@ -22,13 +22,13 @@
             <button type="button" class="dropdown-item" id="report-item" data-bs-toggle="modal" data-bs-target="#report_post_{{post.id}}">Report</button>
             {% endif %}
             {% if from_feed %}
-            <li><a class="dropdown-item" href="{% url 'post_detail' post_id=post.id %}">View Post</a></li>
+            <li><a class="dropdown-item" href="{% url 'post' post_id=post.id %}">View Post</a></li>
             {% endif %}
         </ul>
     </div>
 </div>
 {% if from_feed %}
-    <a href="{% url 'post_detail' post_id=post.id %}"  class="profile-subheading">
+    <a href="{% url 'post' post_id=post.id %}"  class="profile-subheading">
 {% else %}
     <a>
 {% endif %}

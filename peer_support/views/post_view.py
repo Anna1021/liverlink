@@ -21,7 +21,7 @@ class PostView(LoginRequiredMixin, FormView):
         post.liked_by_user = post.likes.filter(id=request.user.id).exists()
         comments = PostComment.objects.filter(post=post, parent=None) 
         comment_form = CommentForm(request.user,post)
-        return render(request, 'post_detail.html', {'post': post,'comments': comments, 'comment_form': comment_form,'report_form': ReportForm()})
+        return render(request, 'post.html', {'post': post,'comments': comments, 'comment_form': comment_form,'report_form': ReportForm()})
 
     def post(self, request, post_id):
         if 'report_comment' in request.POST:
@@ -32,7 +32,7 @@ class PostView(LoginRequiredMixin, FormView):
             self.post_report(request, post_id)
         else:
             self.comment_submission(request, post_id)
-        return redirect('post_detail', post_id=post_id)
+        return redirect('post', post_id=post_id)
     
     def comment_report(self, request, comment_id):
         comment = get_object_or_404(PostComment, id=comment_id)
@@ -59,7 +59,7 @@ class PostView(LoginRequiredMixin, FormView):
             parent_id = request.POST.get('parent_id')
             comment = form.save(parent_id)
             self.send_notification(comment)
-            return redirect('post_detail', post_id=post_id)
+            return redirect('post', post_id=post_id)
         else:
             messages.error(request, "There was an issue with the report.")
 

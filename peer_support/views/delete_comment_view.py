@@ -23,4 +23,4 @@ class DeleteCommentView(LoginRequiredMixin, View):
             return redirect("feed")
         comment.delete()
         messages.success(request, "Comment successfully deleted.")
-        return redirect(reverse("post_detail", kwargs={"post_id": post.id}))
+        return redirect(reverse("post", kwargs={"post_id": post.id}))

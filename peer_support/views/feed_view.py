@@ -13,8 +13,6 @@ class FeedView(LoginRequiredMixin, FormView):
     
     def get(self, request):
         feed_type = request.GET.get("feed_type", "global")  
-        print(feed_type)
-        print(request.GET.get("feed_type"))
         user_posts = self.retrieve_posts(request)
         form = PostForm(request.user)
         current_user = request.user
