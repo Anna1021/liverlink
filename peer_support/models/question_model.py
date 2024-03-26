@@ -7,7 +7,7 @@ class Question(models.Model):
 
     author = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
     title = models.CharField(max_length=150, null=False)
-    body = models.TextField(null=False)
+    body = body = models.CharField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
