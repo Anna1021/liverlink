@@ -11,7 +11,7 @@
     <p class="response-body"> 
     {% endif %}
     {{response.body |censor}}</p>
-    <div class="dropdown">
+    <div class="dropdown">s
       <a href="#" class="delete-icon" id="actionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           <span class="bi bi-three-dots-vertical"></span>
       </a>
@@ -30,9 +30,7 @@
   </div>
 
   <small class="response-author">by <a href="{% url 'profile' response.user.username %}" class="username">{{response.user.username}}</a></small>
-  Depth: {{ response.get_depth }}
-  MaxDepth: {{ MAX_DEPTH}}
-  {% if response.get_depth <= MAX_DEPTH %}
+  {% if response.get_depth <= max_depth %}
   <button class="reply-button" onclick="handleReplyButton({{response.id}})">Reply</button>
   <blockquote id="reply-form-container-{{response.id}}" class="reply-form-container">
     <form method="POST" action="/reply" class="reply-form">

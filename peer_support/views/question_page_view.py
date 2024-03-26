@@ -16,12 +16,14 @@ class QuestionPageView(LoginRequiredMixin, View):
     
     def get_context(self, request ,question_id):
         question = get_object_or_404(Question, id=question_id)
+        max_depth = 10
         context = {
             'question': question,
             'response_form': NewResponseForm(),
             'reply_form': NewReplyForm(),
             'current_user': request.user,
             'report_form': ReportForm(),
+            'max_depth': max_depth,
         }
         return context
 
