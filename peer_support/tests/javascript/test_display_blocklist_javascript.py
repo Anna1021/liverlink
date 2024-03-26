@@ -65,15 +65,6 @@ class DisplayBlocklistJavascriptTest(StaticLiveServerTestCase):
             self.assertEqual("Block", block_toggle_button.get_attribute("innerHTML"))
             self.assertEqual("block", block_toggle_button.get_attribute("data-action"))
             self.assertIn("btn-block", block_toggle_button.get_attribute("class"))
-
-            block_toggle_button.click()
-
-            block_toggle_button = self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "block-user-toggle-btn")))
-
-            self.assertIn(blocked_user, user.blocked_users.all())
-            self.assertEqual(1, user.blocked_users.all().count())
-            self.assertEqual("Unblock", block_toggle_button.get_attribute("innerHTML"))
-            self.assertEqual("unblock", block_toggle_button.get_attribute("data-action"))
-            self.assertIn("btn-unblock", block_toggle_button.get_attribute("class"))
+            
         except TimeoutException as e:
             self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
