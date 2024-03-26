@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    let menuExpanded = localStorage.getItem('sidebarExpanded');
+    let menuNotExpanded = localStorage.getItem('sidebarExpanded');
     if(menuNotExpanded!=null && menuNotExpanded=="true") {
         $('#sidebar-toggle').prop('checked',true);
     } else{
