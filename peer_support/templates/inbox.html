@@ -3,6 +3,30 @@
 {% load static %}
 <div class="container">
     <h3 class="m-b-50 heading-line pt-3">Notifications</h3>
+    <div class="notification-container">
+
+        <!-- Filter notifications by type -->
+        <label for="notification_type">Type:</label>
+        <select name="type" id="notification_type">
+            <option value="">All</option>
+            <option value="friend request" {% if request.GET.type == "friend request" %} selected {% endif %}>Friend Request</option>
+            <option value="post comment" {% if request.GET.type == "post comment" %} selected {% endif %}>Post Comment</option>
+            <option value="post" {% if request.GET.type == "post" %} selected {% endif %}>Post Like</option>
+            <option value="response" {% if request.GET.type == "response" %} selected {% endif %}>Response to Your Question</option>
+            <option value="conversation" {% if request.GET.type == "conversation" %} selected {% endif %}>New Conversation</option>
+            <option value="group conversation" {% if request.GET.type == "group conversation" %} selected {% endif %}>Added to Group Conversation</option>
+        </select>
+    
+        <!-- Filter notifications by timeframe -->
+        <label for="notification_timeframe">Timeframe:</label>
+        <select name="timeframe" id="notification_timeframe">
+            <option value="">All</option>
+            <option value="today" {% if request.GET.timeframe == "today" %} selected {% endif %}>Today</option>
+            <option value="this_week" {% if request.GET.timeframe == "this_week" %} selected {% endif %}>This Week</option>
+            <option value="older" {% if request.GET.timeframe == "older" %} selected {% endif %}>Older</option>
+        </select>
+    </div>
+
     <form action="{% url 'clear_notifications' %}" method="post" onsubmit="return confirm('Are you sure you want to clear all?')">
         {% csrf_token %}
         <button class="m-b-50 btn btn-danger btn-sm">Clear all</button>

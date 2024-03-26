@@ -1,5 +1,4 @@
 {% extends 'dashboard.html' %}
-<!-- {% load static %} -->
 {% block page %}
 
 <title>Feed</title>
@@ -20,7 +19,6 @@
         </button>
       </form>
     </div>
-  
   </div>
 
   <button type="button" class="btn apply-btn mt-2 mb-2" id="create-post" data-bs-toggle="modal" data-bs-target="#create_post">Create post</button>
@@ -67,8 +65,4 @@
     {% endfor %}
   </div>
 </div>
-
-
-<script src="{% static 'js/feed.js' %}"></script>
-
 {% endblock %}

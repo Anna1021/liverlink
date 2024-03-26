@@ -7,6 +7,8 @@ from datetime import date
 import pycountry
 import pycountry_convert as pc
 from django.db.models import Q
+from datetime import timedelta
+from django.utils import timezone
 
 def login_prohibited(view_function):
     """Decorator for view functions that redirect users away if they are logged in."""
@@ -26,6 +28,7 @@ def notifications(request):
         return {'has_unviewed_notifications': has_unviewed_notifications}
     else:
         return {'has_unviewed_notifications': False}
+
 
 def create_referral(user):
     """ Only creates referrals if the user is a mentor. """
@@ -121,7 +124,7 @@ def country_to_continent(country_code):
         return "Unknown"
     
 def country_to_continent_specific(country_code):
-    """gets continent and full country name from code returns both"""
+    """gets continent and full country name from code returns both."""
 
     country = pycountry.countries.get(alpha_2=country_code)
     country_name = country.name if country else "Unknown"
@@ -144,3 +147,37 @@ def get_user_type(user):
         return "PROFESSIONAL"
     else:
         return "ADMIN"
+
+def filter_notifications(request, notifications):
+    """Filter notifications by type and/or timeframe."""
+    
+    type = request.GET.get('type', None)
+    timeframe = request.GET.get('timeframe', None)
+    if type:
+        notifications = filter_by_type(notifications, type)
+    if timeframe:
+        notifications = filter_by_timeframe(notifications, timeframe)
+    return notifications
+
+def filter_by_timeframe(notifications, timeframe):
+    """Filter notifications by the specified timeframe."""
+
+    now = timezone.now()
+    if timeframe == 'today':
+        start_of_day = timezone.make_aware(timezone.datetime(now.year, now.month, now.day))
+        notifications = notifications.filter(created__gte=start_of_day)
+    elif timeframe == 'this_week':
+        start_of_week = now - timedelta(days=now.weekday())
+        start_of_week = timezone.make_aware(timezone.datetime(start_of_week.year, start_of_week.month, start_of_week.day))
+        end_of_week = start_of_week + timedelta(days=6)
+        notifications = notifications.filter(created__range=[start_of_week, end_of_week])
+    elif timeframe == 'older':
+        start_of_week = now - timedelta(days=now.weekday())
+        start_of_week = timezone.make_aware(timezone.datetime(start_of_week.year, start_of_week.month, start_of_week.day))
+        notifications = notifications.filter(created__lt=start_of_week)
+    return notifications
+
+def filter_by_type(notifications, type):
+    """Filter notifications by the specified type."""
+
+    return notifications.filter(content_type__model=type.lower().replace(" ", ""))
