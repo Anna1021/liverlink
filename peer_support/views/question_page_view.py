@@ -89,7 +89,6 @@ class QuestionPageView(LoginRequiredMixin, View):
         if reply.parent and reply.parent.user != reply.user:
             Notification.objects.create(content_object=reply, user=reply.parent.user, notifying_user=reply.user,
                                         description=f"{reply.user} has replied to your reply.")
-            
         
     def send_notification_question(self, response):
         if response.user != response.question.author:

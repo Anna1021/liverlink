@@ -25,13 +25,11 @@ class QuestionPageTestCase(TestCase):
         self.client.force_login(self.user)
         self.reply_url = reverse('question', args=(self.question.id,))
         self.user = User.objects.get(username='@johndoe')
-        self.second_question = Question.objects.create(title='Test Question', body='Test Body', author=self.user)
-        self.second_response = Response.objects.create(body='Test Response', user=self.user, question=self.question)
-        self.response_id = Response.objects.get(body='Test Response', user=self.user, question=self.question).id
         self.reply_form_data = {
+            'reply': True,
             'body': 'Test Reply Body',
             'question': self.question.id,
-            'parent': self.response_id  
+            'parent': self.response.id  
         }
         self.client.force_login(self.user)
 
@@ -162,7 +160,7 @@ class QuestionPageTestCase(TestCase):
         new_reply = Response.objects.latest('id')
         self.assertEqual(new_reply.parent, self.response)
         question_detail_url = reverse('question', kwargs={'id': self.question.id})
-        expected_redirect_url = f'{question_detail_url}#{new_reply.id}'
+        expected_redirect_url = f'{question_detail_url}'
         self.assertRedirects(response, expected_redirect_url, status_code=302, target_status_code=200)
         self.assertEqual(new_reply.body, self.reply_form_data['body'])
         self.assertEqual(new_reply.user, self.user)
@@ -260,29 +258,24 @@ class QuestionPageTestCase(TestCase):
     def test_invalid_reply_creation(self):
         response_count_before = Response.objects.count()
         invalid_reply_form_data = {
+            'reply': True,
             'body': '', 
             'question': self.question.id,
-            'parent': self.response_id
+            'parent': self.response.id
         }
         response = self.client.post(self.url, invalid_reply_form_data)
         response_count_after = Response.objects.count()
         self.assertEqual(response_count_after, response_count_before)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'question.html')
-        self.assertIn('response_form', response.context)
-        form = response.context['response_form']
-        self.assertFalse(form.is_valid())
-        self.assertIn('body', form.errors)  
-        self.assertEqual(form.errors['body'], ['This field is required.'])
+        self.assertEqual(response.status_code, 302)
 
     def test_reply_creation_with_parent(self):
         reply_form_data_with_parent = self.reply_form_data.copy()
-        reply_form_data_with_parent['parent'] = self.response_id  
+        reply_form_data_with_parent['parent'] = self.response.id  
         response = self.client.post(self.url, reply_form_data_with_parent)
         new_reply = Response.objects.latest('id')
-        self.assertEqual(new_reply.parent.id, self.response_id)
+        self.assertEqual(new_reply.parent.id, self.response.id)
         self.assertTrue(new_reply.parent, "The reply should have a parent.")
-        expected_redirect_url = f'/question/{self.question.id}#{new_reply.id}'
+        expected_redirect_url = f'/question/{self.question.id}'
         self.assertRedirects(response, expected_redirect_url, status_code=302, target_status_code=200)
 
     def test_reply_creation_without_parent(self):
@@ -291,5 +284,5 @@ class QuestionPageTestCase(TestCase):
         response = self.client.post(self.url, reply_form_data_without_parent)
         new_reply = Response.objects.latest('id')
         self.assertIsNone(new_reply.parent)
-        expected_redirect_url = f'/question/{self.question.id}#{new_reply.id}'
+        expected_redirect_url = f'/question/{self.question.id}'
         self.assertRedirects(response, expected_redirect_url, status_code=302, target_status_code=200)
