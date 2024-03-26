@@ -81,7 +81,7 @@
 }
 
 #id_content{
-    width : 94%;
+    width : 100%;
 }
 
 .user-list-header{
@@ -93,7 +93,7 @@
 
 .user-list{
     list-style-type: none;
-    background-color: #2e2d38;
+    background-color: #77758c;
     padding-left: 0;
     width: 100%;
     border-radius: 5px;
@@ -151,10 +151,6 @@
 .other-bubble{
     float: left;
     background-color: bisque;
-}
-
-.leave-btn{
-    width:50%;
 }
 
 .leave-confirmation{

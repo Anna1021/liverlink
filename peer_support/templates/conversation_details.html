@@ -28,11 +28,11 @@
     </ul>
 
     <div class="cnav-item dropdown d-flex justify-content-center">
-        <a class="nav-link btn btn-danger leave-btn" style="color:white"href="#" id="leave-group-dropdown" role="button"
+        <a class="btn btn-danger leave-btn w-50" style="color:white"href="#" id="leave-group-dropdown" role="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Leave group
         </a>
-        <ul class="dropdown-menu dropdown-menu-end leave-confirmation leave-btn"
+        <ul class="dropdown-menu dropdown-menu-end leave-confirmation w-50"
                 aria-labelledby="leave-group-dropdown">
             <li><a href="{% url 'leave_conversation' conversation.id %}"
                         class="btn btn-outline-danger d-flex justify-content-center">Confirm</a></li>

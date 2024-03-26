@@ -139,6 +139,11 @@
   color: #91BBD3
 }
 
+.dark-theme .leave-btn{
+  color: white;
+  background-color: rgb(255, 0, 0);
+}
+
 .dark-theme #loginBox {
   border-radius: 20px;
   background-color:#2E2D38;
@@ -171,10 +176,12 @@
     border-radius: 20px;
     background-color: var(--dark-main-bg-color);
     color: white;
+    margin-top:5px;
     padding-right: 30px;
     padding-top: 20px;
     padding-left: 30px;
     padding-bottom: 20px;
+    max-height:100%;
 }
 
 /*
@@ -370,4 +377,10 @@ background-color: var(--dark-submit-btn-color);
 .dark-theme ::-webkit-scrollbar-track {  
   border-radius:10px;
   background: black;
+}
+
+.dark-theme .page-link {
+  background-color: #2E2D38;
+  border: none;
+  color: white;
 }
