@@ -28,7 +28,7 @@ class FindFreindsJavascriptTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_dynamic_form_find_friends(self):
+    def test_dynamic_form_user_types(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
         user = User.objects.get(username='@johndoe')
         user.first_login = False
@@ -67,6 +67,24 @@ class FindFreindsJavascriptTest(StaticLiveServerTestCase):
             
             expertise_field = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//select[@name='professional_expertise']")))
             assert expertise_field.is_displayed(), "expertise field is not visible"
+
+        except TimeoutException as e:
+            self.fail(f"Test failed due to timeout while self.waiting for the question to be visible or interactable: {e}")
+
+    def test_dynamic_form_location(self):
+        self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
+        user = User.objects.get(username='@johndoe')
+        user.first_login = False
+        user.save()
+        try:
+            username_input = self.wait.until(EC.element_to_be_clickable((By.NAME, "username")))
+            username_input.send_keys('@johndoe')
+            password_input = self.wait.until(EC.element_to_be_clickable((By.NAME, "password")))
+            password_input.send_keys('Password123')
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Find Friends')]"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@id='dropdownMenuButton']"))).click()
+
 
             dropdown_element = self.wait.until(EC.presence_of_element_located((By.ID, 'id_location')))
             select = Select(dropdown_element)
