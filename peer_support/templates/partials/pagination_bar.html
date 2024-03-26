@@ -20,13 +20,15 @@
             {% with page_num|add:"1" as next_page_num %}
             {% if page_num > 2 %}
               <li class="page-item"><a class="page-link">...</a></li>
-              <li class="page-item"><a class="page-link" href="?page={{ prev_page_num }}{{extra_query}}">{{ prev_page_num }}</a></li>
-            {% elif page_num > 1 %}
+            {% endif %}
+            {% if page_num > 1 %}
               <li class="page-item"><a class="page-link" href="?page={{ prev_page_num }}{{extra_query}}">{{ prev_page_num }}</a></li>
             {% endif %}
             <li class="page-item active"><a class="page-link" href="?page={{ page_num }}{{extra_query}}">{{ page_num }}</a></li>
             {% if page_num < type.paginator.num_pages %}
               <li class="page-item"><a class="page-link" href="?page={{ next_page_num }}{{extra_query}}">{{ next_page_num }}</a></li>
+            {% endif %}
+            {% if page_num < type.paginator.num_pages|add:"-1" %}
               <li class="page-item"><a class="page-link">...</a></li>
             {% endif %}
             {% endwith %}
