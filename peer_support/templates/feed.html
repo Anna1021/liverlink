@@ -40,7 +40,9 @@
         </div>
     </div>
   </div>
-  {% include 'partials/pagination_bar.html' with type=posts %}
+  {% with "&feed_type="|add:feed_type|stringformat:'s' as feed_query %}
+  {% include 'partials/pagination_bar.html' with type=posts extra_query=feed_query %}
+  {% endwith %}
   <div class="scrollable-feed"> 
     {% for post in posts.object_list %}
     <div class="post-card pb-2">
