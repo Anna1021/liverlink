@@ -371,3 +371,9 @@ background-color: var(--dark-submit-btn-color);
   border-radius:10px;
   background: black;
 }
+
+.dark-theme .page-link {
+  background-color: #2E2D38;
+  border: none;
+  color: white;
+}

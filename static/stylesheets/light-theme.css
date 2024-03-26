@@ -449,3 +449,9 @@
   border-radius:10px;
   background: white;
 }
+
+.light-theme .page-link {
+  background-color: #CFF3F5;
+  border: none;
+  color: black;
+}
