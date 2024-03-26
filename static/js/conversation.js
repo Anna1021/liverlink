@@ -1,6 +1,8 @@
 $(document).ready(function() {
     let menuExpanded = localStorage.getItem('sidebarExpanded');
     if(menuExpanded!=null) $('#sidebar-toggle').prop('checked',true);
+    let pageScroll = localStorage.getItem('pageScroll');
+    if(pageScroll!=null) window.scrollTo(0,pageScroll);
     let msg = sessionStorage.getItem(storageKey);
     if (msg!=null) $('#id_content').val(msg);
     var currentUrl = window.location.href;
@@ -78,5 +80,6 @@ window.addEventListener('beforeunload', function(e){
         sessionStorage.clear();
     }
     localStorage.setItem('sidebarExpanded',$('#sidebar-toggle').prop('checked'))
+    localStorage.setItem('pageScroll',window.scrollY)
     return '';
 })
