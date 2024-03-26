@@ -20,7 +20,7 @@ $(document).ready(function () {
         });
     }
     
-    function hideAllConditionalFields() {
+    function hideAllUserConditionalFields() {
         $('#id_age_of_diagnosis_min').parent().hide();
         $('#id_age_of_diagnosis_max').parent().hide();
         $('#id_condition').parent().hide();
@@ -34,13 +34,17 @@ $(document).ready(function () {
         $('#id_child_transplant').parent().hide();
         $('#id_professional_expertise').parent().hide();
         $('#id_mentor_transplant').parent().hide();
-
     }
 
-    hideAllConditionalFields();
+    function hideLocationConditionalFields() {
+        $('#id_hospital').parent().hide();
+    }
 
-    function updateFieldVisibility() {
-        hideAllConditionalFields();
+    hideAllUserConditionalFields();
+    hideLocationConditionalFields();
+
+    function updateUserFieldVisibility() {
+        hideAllUserConditionalFields();
 
         // Check each user type checkbox to determine which fields to show
         $("input[name='user_type']").each(function () {
@@ -68,10 +72,23 @@ $(document).ready(function () {
         });
     }
 
+
+    function updateLocationFieldVisibility() {
+        hideLocationConditionalFields();
+    
+        // Check the location ChoiceField value
+        var location = $("select[name='location']").val();
+        if (location === 'GB') {
+            $('#id_hospital').parent().show();
+        }
+    }
+    
     // Bind the change event to user type checkboxes
-    $("input[name='user_type']").change(updateFieldVisibility);
+    $("input[name='user_type']").change(updateUserFieldVisibility);
+    $("select[name='location']").change(updateLocationFieldVisibility);
 
     // Initial call to set the correct visibility state based on the current checkbox state
-    updateFieldVisibility();
+    updateUserFieldVisibility();
+    updateLocationFieldVisibility();
 });
 

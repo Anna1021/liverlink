@@ -1,3 +1,4 @@
+{% load static %}
 <div class="row">
     <form method="get" class="px-4 py-3" novalidate>
         {% csrf_token %}
@@ -25,3 +26,4 @@
         </div>
     </form>
 </div>
+<script src="{% static 'js/find_friends.js' %}"></script>
