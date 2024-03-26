@@ -70,14 +70,21 @@
         <button onclick="scrollDown()" class="btn btn-primary mr-2"><i class="bi-arrow-down"></i></button>
     </div>
     <form method="post" id="message-form" {% if blocked_dm %} inert style="opacity: 50%;" {% endif %}>
-        {% if blocked_dm %}
-        <div style="opacity: 50%;">You can no longer send messages to this user.</div>
-        {% endif %}
-        {% csrf_token %}
-        {{ message_form.content }}
-        <input type="hidden" name="first_message" value="{{ first_message }}">
-        <button type="submit" id="send-message" class="btn btn-primary mt-2"><i class="bi bi-arrow-right"></i></button>
+        <div class="row">
+            <div class="col-11">
+                {% if blocked_dm %}
+                <div style="opacity: 50%;">You can no longer send messages to this user.</div>
+                {% endif %}
+                {% csrf_token %}
+                {{ message_form.content }}
+            </div>
+            <div class="col-1">
+                <input type="hidden" name="first_message" value="{{ first_message }}">
+                <button type="submit" id="send-message" class="btn btn-primary"><i class="bi bi-arrow-right"></i></button>
+            </div>
+        </div>
     </form>
+    
     {% else %}
         Pick a conversation or start a new conversation!
         {% endif %}
