@@ -5,6 +5,7 @@ class Professional(User):
     """Model used for professional authentication, and professional related information."""
     
     expertise = models.CharField(max_length=50, blank=True, null=True)
+    """The referral code is that which referred the user to the platform."""
     referral_code = models.CharField(blank=False, null=False,max_length=10) 
     
     class Meta:
