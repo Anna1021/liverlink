@@ -98,13 +98,28 @@ i.ps-icons {
  * Blocklist modal styling
  */ 
 
+.empty-text {
+    text-align: center;
+    color: grey;
+    padding-top: 5px;
+    padding-bottom: 8px;
+    border-top: #DEE2E6;
+    border-top-width: medium;
+    border-top-style: solid;
+}
+
 .bl-table {
     table-layout: fixed;
+    margin-bottom: 0;
 }
 
 .bl-header {
     text-align: center; 
     padding-top: 10px;
+}
+
+table.bl-table thead th {
+    padding: 0;
 }
  
 .table-hover tbody tr:hover th, .table-hover tbody tr:hover td {

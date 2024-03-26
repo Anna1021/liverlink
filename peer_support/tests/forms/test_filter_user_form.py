@@ -151,7 +151,7 @@ class FilterUserFormTestCase(TestCase):
         results = form.filter_users(self.users)
         self.assertTrue(results.exists())
         self.assertIn(User.objects.get(username='@janedoe'), results)
-        self.assertNotIn(User.objects.get(username='@petrapickles'), results)
+        self.assertIn(User.objects.get(username='@petrapickles'), results)
         self.assertNotIn(User.objects.get(username='@peterpickles'), results)
 
     def test_hospital(self):

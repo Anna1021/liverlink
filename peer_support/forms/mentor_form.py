@@ -8,12 +8,11 @@ class MentorForm(UserForm, forms.ModelForm):
     """Form to update mentor profiles."""
 
     condition = forms.ChoiceField(choices=CONDITION_CHOICES, required=False)
-    referral_code = forms.CharField(disabled=True, required=False)
     transplant = forms.ChoiceField(choices=TRANSPLANT_CHOICES, required=False)
 
     class Meta:
         """Form options."""
 
         model = Mentor
-        fields = PatientForm.Meta.fields + ["referral_code"]
+        fields = PatientForm.Meta.fields
         widgets = PatientForm.Meta.widgets

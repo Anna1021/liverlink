@@ -29,7 +29,6 @@ urlpatterns = [
     path('update_profile_picture/', views.update_profile_picture, name='update_profile_picture'),
     path('information/', views.InformationView.as_view(), name='information'),
     path('deactivate_user/', views.deactivate_user, name='deactivate_user'),
-    path('settings/other_users/', views.OtherUserSettingsView.as_view(), name='other_user_settings'),
     path('block_user/<int:user_id>', views.BlockUserView.as_view(), name='block_user'),
     path('unblock_user/<int:user_id>', views.UnblockUserView.as_view(), name='unblock_user'),
     path('remove_friend/<int:user_id>', views.remove_friend, name='remove_friend'),

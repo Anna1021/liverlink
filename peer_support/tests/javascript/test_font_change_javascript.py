@@ -1,7 +1,6 @@
-"""Unit test of javascript theme switcher"""
+"""Unit test of javascript for font change."""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -11,8 +10,8 @@ from peer_support.models import User
 from selenium.webdriver.support.ui import Select
 
 
-class ThemeSwitcherTest(StaticLiveServerTestCase):
-    """Unit test of javascript in font change"""
+class FontChangeJavascriptTest(StaticLiveServerTestCase):
+    """Unit test of javascript for font change."""
     
     fixtures = ['peer_support/tests/fixtures/default_user.json']
 
@@ -25,6 +24,7 @@ class ThemeSwitcherTest(StaticLiveServerTestCase):
         cls.selenium = WebDriver(options=options)
         cls.selenium.implicitly_wait(10)
         cls.wait = WebDriverWait(cls.selenium, 50)
+        
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
@@ -58,7 +58,7 @@ class ThemeSwitcherTest(StaticLiveServerTestCase):
             select.select_by_visible_text('Georgia')
             font_family = main_div.value_of_css_property('font-family')
             self.assertIn('Georgia', font_family)
-            select.select_by_visible_text('Comic-Sans')
+            select.select_by_visible_text('Comic Sans')
             font_family = main_div.value_of_css_property('font-family')
             self.assertIn('Comic Sans MS', font_family)
 

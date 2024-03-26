@@ -4,7 +4,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from django.urls import reverse
 from peer_support.forms import PasswordForm
-from .helpers import get_referral_code
 
 class PasswordView(LoginRequiredMixin, FormView):
     """Display password change screen and handle password change requests."""
@@ -28,9 +27,7 @@ class PasswordView(LoginRequiredMixin, FormView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
-        referral_code = get_referral_code(user)  
-        context['referral_code'] = referral_code
+        context['block_list'] = self.request.user.blocked_users.all()
         return context
 
     def get_success_url(self):

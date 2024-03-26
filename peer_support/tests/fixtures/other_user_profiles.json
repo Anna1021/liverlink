@@ -4,10 +4,7 @@
         "pk": 2,
         "fields": {
             "user": 2,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "DF",
-            "font": "CA",
-            "font_size": "XL"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
             }
     },
     {
@@ -15,10 +12,7 @@
         "pk": 3,
         "fields": {
             "user": 3,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "LM",
-            "font": "AR",
-            "font_size": "XL"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
             }
     },
     {
@@ -26,10 +20,7 @@
         "pk": 4,
         "fields": {
             "user": 4,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "DM",
-            "font": "AR",
-            "font_size": "LG"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
             }
     },
     {
@@ -37,10 +28,7 @@
         "pk": 5,
         "fields": {
             "user": 5,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "DM",
-            "font": "DF",
-            "font_size": "XL"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
             }
     },
     {
@@ -48,10 +36,7 @@
         "pk": 6,
         "fields": {
             "user": 6,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "DF",
-            "font": "DF",
-            "font_size": "XL"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
             }
     },
     {
@@ -59,10 +44,7 @@
         "pk": 7,
         "fields": {
             "user": 7,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "LM",
-            "font": "DF",
-            "font_size": "DF"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
             }
     },
     {
@@ -70,10 +52,7 @@
         "pk": 8,
         "fields": {
             "user": 8,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "DM",
-            "font": "CA",
-            "font_size": "LG"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
         }
     },
     {
@@ -81,10 +60,7 @@
         "pk": 9,
         "fields": {
             "user": 9,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "LM",
-            "font": "AR",
-            "font_size": "MD"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
         }
     },
     {
@@ -92,10 +68,7 @@
         "pk": 10,
         "fields": {
             "user": 10,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "DF",
-            "font": "DF",
-            "font_size": "SM"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
         }
     },
     {
@@ -103,10 +76,7 @@
         "pk": 12,
         "fields": {
             "user": 12,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "DF",
-            "font": "DF",
-            "font_size": "SM"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
         }
     },
     {
@@ -114,10 +84,7 @@
         "pk": 13,
         "fields": {
             "user": 13,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "DF",
-            "font": "DF",
-            "font_size": "SM"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
         }
     },
     {
@@ -125,10 +92,7 @@
         "pk": 14,
         "fields": {
             "user": 14,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg",
-            "theme": "DF",
-            "font": "DF",
-            "font_size": "SM"
+            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
         }
     }
 ]
