@@ -1,7 +1,7 @@
 $(document).ready(function () {
-  var lightThemeLogo = '/static/images/Liver_Link_logo_black.png';
-  var darkThemeLogo = '/static/images/LiverLinkLogoCropped.png';
-  var darkBackground = '/static/images/background2.jpg';
+  var lightThemeLogo = '/static/images/dark-liver-link-logo-text.png';
+  var darkThemeLogo = '/static/images/white-liver-link-logo-text.png';
+  var darkBackground = '/static/images/background_dark.jpg';
   var lightBackground = '/static/images/background_light.jpg';
 
   // Set image source based on theme and save to local storage
