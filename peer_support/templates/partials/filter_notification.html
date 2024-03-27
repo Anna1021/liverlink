@@ -1,6 +1,5 @@
 <div class="notification-container">
-
-    <!-- Filter notifications by type -->
+    
     <label for="notification_type">Type:</label>
     <select name="type" id="notification_type">
         <option value="">All</option>
@@ -12,7 +11,6 @@
         <option value="other" {% if request.GET.type == "other" %} selected {% endif %}>Other</option>
     </select>
 
-    <!-- Filter notifications by timeframe -->
     <label for="notification_timeframe">Timeframe:</label>
     <select name="timeframe" id="notification_timeframe">
         <option value="">All</option>

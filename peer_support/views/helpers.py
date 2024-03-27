@@ -7,8 +7,6 @@ from datetime import date
 import pycountry
 import pycountry_convert as pc
 from django.db.models import Q
-from datetime import timedelta
-from django.utils import timezone
 
 def login_prohibited(view_function):
     """Decorator for view functions that redirect users away if they are logged in."""
@@ -147,41 +145,3 @@ def get_user_type(user):
         return "PROFESSIONAL"
     else:
         return "ADMIN"
-
-def filter_notifications(request, notifications):
-    """Filter notifications by type and/or timeframe."""
-    
-    type = request.GET.get('type', None)
-    timeframe = request.GET.get('timeframe', None)
-    if type:
-        notifications = filter_by_type(notifications, type)
-    if timeframe:
-        notifications = filter_by_timeframe(notifications, timeframe)
-    return notifications
-
-def filter_by_timeframe(notifications, timeframe):
-    """Filter notifications by the specified timeframe."""
-
-    now = timezone.now()
-    if timeframe == 'past_24_hours':
-        start_time = now - timedelta(hours=24)
-        notifications = notifications.filter(created__gte=start_time, created__lt=now)
-    elif timeframe == 'past_7_days':
-        start_time = now - timedelta(days=7)
-        notifications = notifications.filter(created__gte=start_time, created__lt=now)
-    elif timeframe == 'past_4_weeks':
-        start_time = now - timedelta(weeks=4)
-        notifications = notifications.filter(created__gte=start_time, created__lt=now)
-    elif timeframe == 'earlier':
-        start_time = now - timedelta(weeks=4)  
-        notifications = notifications.filter(created__lt=start_time)
-    else:
-        notifications = notifications.none()
-    return notifications
-
-def filter_by_type(notifications, type):
-    """Filter notifications by the specified type."""
-    if type == 'other':
-        return notifications.filter(content_type__isnull=True)
-    else:
-        return notifications.filter(content_type__model=type.lower().replace(" ", ""))
