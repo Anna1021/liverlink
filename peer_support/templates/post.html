@@ -1,24 +1,21 @@
 {% extends 'dashboard.html' %} 
 {% block page %}
-<div class="card shadow box-area my-2"> 
-    {% include 'partials/post_details.html' with post=post %}
-    {% include 'partials/report_modal.html' with object_id=post.id report_type='report_post' %}
-    <hr />
-    <!-- Display existing comments -->
-    <h4>Comments</h4>
-    <ul>
-        {% for comment in post.get_comments %}
-            {% include 'partials/reply.html' with comment=comment %}
-            {% include 'partials/report_modal.html' with object_id=comment.id report_type='report_comment' %}
-        {% endfor %}
-    </ul>
+{% include 'partials/post_details.html' with post=post %}
+{% include 'partials/report_modal.html' with object_id=post.id report_type='report_post' %}
+<hr />
 
-    <!-- Add Comment -->
-    <h4>Add Comment</h4>
-    <form method="post" action="{% url 'post' post_id=post.id %}">
-        {% csrf_token %}
-        {% include 'partials/bootstrap_form.html' with form=comment_form %}
-        <button class="btn apply-btn mb-3" type="submit">Submit comment</button>
-    </form>
-</div>
+<h4>Comments</h4>
+<ul>
+    {% for comment in post.get_comments %}
+        {% include 'partials/reply.html' with comment=comment %}
+        {% include 'partials/report_modal.html' with object_id=comment.id report_type='report_comment' %}
+    {% endfor %}
+</ul>
+
+<h4>Add Comment</h4>
+<form method="post" action="{% url 'post' post_id=post.id %}">
+    {% csrf_token %}
+    {% include 'partials/bootstrap_form.html' with form=comment_form %}
+    <button class="btn apply-btn mb-3" type="submit">Submit comment</button>
+</form>
 {% endblock %}
