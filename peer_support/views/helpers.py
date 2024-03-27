@@ -165,13 +165,13 @@ def filter_by_timeframe(notifications, timeframe):
     now = timezone.now()
     if timeframe == 'past_24_hours':
         start_time = now - timedelta(hours=24)
-        notifications = notifications.filter(created__gte=start_time)
+        notifications = notifications.filter(created__gte=start_time, created__lt=now)
     elif timeframe == 'past_7_days':
         start_time = now - timedelta(days=7)
-        notifications = notifications.filter(created__gte=start_time)
+        notifications = notifications.filter(created__gte=start_time, created__lt=now)
     elif timeframe == 'past_4_weeks':
         start_time = now - timedelta(weeks=4)
-        notifications = notifications.filter(created__gte=start_time)
+        notifications = notifications.filter(created__gte=start_time, created__lt=now)
     elif timeframe == 'earlier':
         start_time = now - timedelta(weeks=4)  
         notifications = notifications.filter(created__lt=start_time)

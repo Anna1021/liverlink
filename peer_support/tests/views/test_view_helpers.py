@@ -144,13 +144,25 @@ class HelpersViewTestCase(TestCase):
         earlier_notifications = filter_by_timeframe(notifications, 'earlier')
         self.assertNotIn(past_4_weeks_notification, earlier_notifications)
 
-    def test_earlier_notification_created_4_weeks_ago(self):
+    def test_earlier_notification_created_more_than_4_weeks_ago(self):
         earlier_notification = Notification.objects.create(created=timezone.now() - timedelta(weeks=5), user=self.user)
-        recent_notification = Notification.objects.create(created=timezone.now() - timedelta(weeks=3), user=self.user)
+        past_4_weeks_notification = Notification.objects.create(created=timezone.now() - timedelta(weeks=3), user=self.user)
         notifications = Notification.objects.all()
         earlier_notifications = filter_by_timeframe(notifications, 'earlier')
         self.assertIn(earlier_notification, earlier_notifications)
-        self.assertNotIn(recent_notification, earlier_notifications)
+        self.assertNotIn(past_4_weeks_notification, earlier_notifications)
+    
+    def test_notification_with_invalid_timeframe(self):
+        notifications = Notification.objects.all()
+        invalid_notification = Notification.objects.create(created=timezone.now() - timedelta(weeks=-9999), user=self.user)
+        notifications_within_past_24_hours = filter_by_timeframe(notifications, 'past_24_hours')
+        notifications_within_past_7_days = filter_by_timeframe(notifications, 'past_7_days')
+        notifications_within_past_4_weeks = filter_by_timeframe(notifications, 'past_4_weeks')        
+        earlier_notifications = filter_by_timeframe(notifications, 'earlier')
+        self.assertNotIn(invalid_notification, notifications_within_past_24_hours)
+        self.assertNotIn(invalid_notification, notifications_within_past_7_days)
+        self.assertNotIn(invalid_notification, notifications_within_past_4_weeks)
+        self.assertNotIn(invalid_notification, earlier_notifications)
 
     """Test filtering notifications by type through content_type."""
     def test_filter_notification_by_content_type(self):
