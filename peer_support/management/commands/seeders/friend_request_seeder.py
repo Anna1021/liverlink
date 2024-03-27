@@ -10,6 +10,7 @@ friend_request_fixtures = [
     {"sender": patient_fixtures[1], "receiver": parent_fixtures[1]},
 ]
 
+
 class FriendRequestSeeder:
     """Seed friend requests into the database."""
 

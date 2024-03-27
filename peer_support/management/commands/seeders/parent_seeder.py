@@ -50,6 +50,7 @@ parent_fixtures = [
     },
 ]
 
+
 class ParentSeeder:
     """Seed parents into the database."""
 

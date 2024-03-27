@@ -28,6 +28,7 @@ notification_fixtures = [
     },
 ]
 
+
 class NotificationSeeder:
     """Seed notifications into the database."""
 

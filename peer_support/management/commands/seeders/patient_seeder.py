@@ -50,6 +50,7 @@ patient_fixtures = [
     },
 ]
 
+
 class PatientSeeder:
     """Seed patients into the database."""
 

@@ -28,6 +28,7 @@ conversation_fixtures = [
     },
 ]
 
+
 class ConversationAndMessageSeeder:
     """Seed conversations and messages into the database."""
 

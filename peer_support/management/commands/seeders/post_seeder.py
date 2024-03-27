@@ -24,6 +24,7 @@ post_fixtures = [
     },
 ]
 
+
 class PostSeeder:
     """Seed posts into the database."""
 

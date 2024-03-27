@@ -12,6 +12,7 @@ post_comment_fixtures = [
     {"post": post_fixtures[2], "author": mentor_fixtures[0], "content": "Hi, I am a mentor."},
 ]
 
+
 class PostCommentSeeder:
     """Seed post comments into the database."""
 

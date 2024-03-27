@@ -1,10 +1,11 @@
-from peer_support.models import Feedback, User
+from peer_support.models import Feedback
 
 feedback_fixtures = [
     {"title": "Fix this", "content": "This is broken."},
     {"title": "Improve that", "content": "This could be improved"},
     {"title": "Add this", "content": "This is missing."},
 ]
+
 
 class FeedbackSeeder:
     """Seed feedback into the database."""

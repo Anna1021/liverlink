@@ -27,6 +27,7 @@ question_fixtures = [
     },
 ]
 
+
 class QuestionSeeder:
     """Seed questions into the database."""
 

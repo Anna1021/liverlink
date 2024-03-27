@@ -27,6 +27,7 @@ report_fixtures = [
     },
 ]
 
+
 class ReportSeeder:
     """Seed reports into the database."""
 

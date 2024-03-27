@@ -1,6 +1,5 @@
-from random import randint
 import uuid
-from peer_support.forms.form_choices import CONDITION_CHOICES, TRANSPLANT_CHOICES
+from peer_support.forms.form_choices import CONDITION_CHOICES
 from peer_support.management.commands.seeders.user_seeder import UserSeeder
 from peer_support.models import Professional
 
@@ -46,6 +45,7 @@ professional_fixtures = [
         "referral_code": "GHI789",
     },
 ]
+
 
 class ProfessionalSeeder:
     """Seed professionals into the database."""

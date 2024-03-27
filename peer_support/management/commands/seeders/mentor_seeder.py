@@ -52,6 +52,7 @@ mentor_fixtures = [
     },
 ]
 
+
 class MentorSeeder:
     """Seed mentors into the database."""
 

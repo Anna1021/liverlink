@@ -28,6 +28,7 @@ response_fixtures = [
     },
 ]
 
+
 class ResponseSeeder:
     """Seed responses into the database."""
 
