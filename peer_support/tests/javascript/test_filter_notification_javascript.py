@@ -9,8 +9,6 @@ from selenium.common.exceptions import TimeoutException
 from peer_support.models import User
 from selenium.webdriver.chrome.service import Service
 
-import time
-
 class FilterNotificationTest(StaticLiveServerTestCase):
     """Unit test of javascript of dropdown list in inbox view"""
 
