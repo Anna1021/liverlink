@@ -1,8 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 import time
-from peer_support.models import Conversation
-from asgiref.sync import sync_to_async
+from channels.db import database_sync_to_async
  
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -34,8 +33,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         usernames = await self.get_users(conversation_id)
         await self.send(text_data = json.dumps({"sender":sender,"users":str(usernames)[2:-2]}))
 
-    @sync_to_async
+    @database_sync_to_async
     def get_users(self,conversation_id):
+        from peer_support.models import Conversation
         conversation = Conversation.objects.get(id=conversation_id)
         users = list(conversation.users.all())
         return list(map(lambda user: user.username,users))
