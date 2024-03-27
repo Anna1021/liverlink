@@ -181,5 +181,7 @@ def filter_by_timeframe(notifications, timeframe):
 
 def filter_by_type(notifications, type):
     """Filter notifications by the specified type."""
-
-    return notifications.filter(content_type__model=type.lower().replace(" ", ""))
+    if type == 'other':
+        return notifications.filter(content_type__isnull=True)
+    else:
+        return notifications.filter(content_type__model=type.lower().replace(" ", ""))
