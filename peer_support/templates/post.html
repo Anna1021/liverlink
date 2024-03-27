@@ -16,6 +16,6 @@
 <form method="post" action="{% url 'post' post_id=post.id %}" class="comment-form">
     {% csrf_token %}
     {{ comment_form.content }}
-    <button class="btn apply-btn mb-3" type="submit" style="margin-top: 15px;">Submit comment</button>
+    <button class="btn apply-btn mb-3" type="submit">Submit comment</button>
 </form>
 {% endblock %}
