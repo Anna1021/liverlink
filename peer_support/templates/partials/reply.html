@@ -33,15 +33,14 @@
                 </ul>
             </div>
         </div>
-        <!-- Reply form for each comment -->
-        <form method="post" action="{% url 'post' post_id=post.id %}">
+
+        <form method="post" action="{% url 'post' post_id=post.id %}" class="comment-form">
             {% csrf_token %}
             <input type="hidden" name="parent_id" value="{{ comment.id }}">
-            {{ comment_form.as_p }}
-            <button class="btn btn-primary" type="submit">Reply</button>
+            {{ comment_form.content }}
+            <button class="btn btn-primary comment-button" type="submit" style="margin-top: 15px;">Reply</button>
         </form>
 
-        <!-- Display replies to the comment -->
         <blockquote class="post-comment-container">
             <ul>
                 {% for reply in comment.get_replies %}

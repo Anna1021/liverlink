@@ -15,7 +15,7 @@
 <h4>Add Comment</h4>
 <form method="post" action="{% url 'post' post_id=post.id %}">
     {% csrf_token %}
-    {% include 'partials/bootstrap_form.html' with form=comment_form %}
-    <button class="btn apply-btn mb-3" type="submit">Submit comment</button>
+    {{ comment_form.content }}
+    <button class="btn apply-btn mb-3" type="submit" style="margin-top: 15px;">Submit comment</button>
 </form>
 {% endblock %}
