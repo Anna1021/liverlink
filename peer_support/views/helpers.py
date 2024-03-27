@@ -9,6 +9,7 @@ import pycountry_convert as pc
 from django.db.models import Q
 from datetime import timedelta
 from django.utils import timezone
+from django.core.paginator import Paginator
 
 def login_prohibited(view_function):
     """Decorator for view functions that redirect users away if they are logged in."""
@@ -18,16 +19,21 @@ def login_prohibited(view_function):
             return redirect(settings.REDIRECT_URL_WHEN_LOGGED_IN)
         else:
             return view_function(request)
+
     return modified_view_function
+
 
 def notifications(request):
     """Returns whether notifications have been viewed for the current user."""
 
     if request.user.is_authenticated:
-        has_unviewed_notifications = Notification.objects.filter(user=request.user, viewed=False).exists()
-        return {'has_unviewed_notifications': has_unviewed_notifications}
+        has_unviewed_notifications = Notification.objects.filter(
+            user=request.user, viewed=False
+        ).exists()
+        return {"has_unviewed_notifications": has_unviewed_notifications}
     else:
-        return {'has_unviewed_notifications': False}
+        return {"has_unviewed_notifications": False}
+
 
 
 def create_referral(user):
@@ -37,6 +43,7 @@ def create_referral(user):
         code = uuid.uuid4().hex[:10].upper()
         referral = Referral.objects.create(referrer=user, code=code)
         return referral
+
 
 def get_referral_code(user):
     """Gets the referral code for a user, if it exists."""
@@ -51,7 +58,9 @@ def get_addable_peers(current_user):
     """Gets users who are not friends, blocked, deactivated or have been requested"""
 
     friends_ids = current_user.friends.values_list("id", flat=True)
-    requested_users = FriendRequest.objects.filter(sender=current_user).values_list('receiver_id', flat=True)
+    requested_users = FriendRequest.objects.filter(sender=current_user).values_list(
+        "receiver_id", flat=True
+    )
     blocked_users_ids = current_user.blocked_users.values_list("id", flat=True)
     blocked_by_ids = current_user.blocked_by.values_list("id", flat=True)
     eligible_users = (
@@ -68,46 +77,59 @@ def get_addable_peers(current_user):
 
 def check_blocked_dm(current_user, conversation):
     """Check if the conversation is a DM and, if so, whether there is a block between the 2 users."""
-    
+
     if conversation.as_group() is None:
         user = conversation.users.exclude(id=current_user.id).get()
         if current_user in user.blocked_users.all() or user in current_user.blocked_users.all():
             return True
     return False
 
-def get_conversation(request,conversation_id):
+
+def get_conversation(request, conversation_id):
     conversations = request.user.conversations.filter(id=conversation_id)
     if conversations.count() == 0:
-        messages.error(request,"This conversation does not exist.")
+        messages.error(request, "This conversation does not exist.")
         return None
     return conversations.get(id=conversation_id)
 
-def conversation_is_direct(request,conversation):
+
+def conversation_is_direct(request, conversation):
     if conversation.as_group() is None:
-        messages.error(request,"You can only do this for a group conversation")
+        messages.error(request, "You can only do this for a group conversation")
         return True
     return False
 
 def no_conversation_url(request):
-    context = {'user_conversations':request.user.sort_conversations()}
-    return redirect(reverse('conversation',kwargs={'conversation_id':0}),context)
+    context = {"user_conversations": request.user.sort_conversations()}
+    return redirect(reverse("conversation", kwargs={"conversation_id": 0}), context)
+
+def get_page(request,objects):
+    paginator = Paginator(objects,10)
+    page_number = request.GET.get("page")
+    return paginator.get_page(page_number)
 
 def retrieve_friend_posts(request):
     user_friends = request.user.friends.all()
-    return Post.objects.filter(Q(author__in=user_friends) | Q(author=request.user)).order_by("-created_at")
+    return Post.objects.filter(
+        Q(author__in=user_friends) | Q(author=request.user)
+    ).order_by("-created_at")
 
-def get_post(request,post_id):
-    posts = (retrieve_friend_posts(request)|Post.objects.filter(visibility='G')).filter(id=post_id)
+
+def get_post(request, post_id):
+    posts = (retrieve_friend_posts(request) | Post.objects.filter(visibility="G")).filter(id=post_id)
     if posts.exists():
         return Post.objects.get(id=post_id)
+
 
 def get_comment(comment_id):
     comments = PostComment.objects.filter(id=comment_id)
     if comments.exists():
         return comments[0]
 
+
 def user_exists(username):
     return User.objects.filter(username=username).exists()
+
 
 def calculate_age(born):
     today = date.today()
@@ -122,7 +144,8 @@ def country_to_continent(country_code):
         return continent_name
     except KeyError:
         return "Unknown"
-    
+
+
 def country_to_continent_specific(country_code):
     """gets continent and full country name from code returns both."""
 
@@ -130,20 +153,22 @@ def country_to_continent_specific(country_code):
     country_name = country.name if country else "Unknown"
     continent_name = country_to_continent(country_code)
     return continent_name, country_name
-    
+
+
 def map_blank_key(key):
     """Return 'Unknown' if the key is blank or None, otherwise return the ethnicity."""
-     
+
     return key if key else "Unknown"
 
+
 def get_user_type(user):
-    if hasattr(user, 'parent'):
+    if hasattr(user, "parent"):
         return "PARENT"
-    elif hasattr(user, 'patient'):
+    elif hasattr(user, "patient"):
         return "PATIENT"
-    elif hasattr(user, 'mentor'):
+    elif hasattr(user, "mentor"):
         return "MENTOR"
-    elif hasattr(user, 'professional'):
+    elif hasattr(user, "professional"):
         return "PROFESSIONAL"
     else:
         return "ADMIN"

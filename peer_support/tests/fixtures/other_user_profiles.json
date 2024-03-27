@@ -4,7 +4,7 @@
         "pk": 2,
         "fields": {
             "user": 2,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/cat.jpg"
             }
     },
     {
@@ -12,7 +12,7 @@
         "pk": 3,
         "fields": {
             "user": 3,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/boy5.jpg"
             }
     },
     {
@@ -20,7 +20,7 @@
         "pk": 4,
         "fields": {
             "user": 4,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/girl4.jpg"
             }
     },
     {
@@ -28,7 +28,7 @@
         "pk": 5,
         "fields": {
             "user": 5,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/city.jpg"
             }
     },
     {
@@ -36,7 +36,7 @@
         "pk": 6,
         "fields": {
             "user": 6,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/girl4.jpg"
             }
     },
     {
@@ -44,7 +44,7 @@
         "pk": 7,
         "fields": {
             "user": 7,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/dog.jpg"
             }
     },
     {
@@ -52,7 +52,7 @@
         "pk": 8,
         "fields": {
             "user": 8,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/man1.jpg"
         }
     },
     {
@@ -60,7 +60,7 @@
         "pk": 9,
         "fields": {
             "user": 9,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/flowers.jpg"
         }
     },
     {
@@ -68,7 +68,7 @@
         "pk": 10,
         "fields": {
             "user": 10,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/cow.jpg"
         }
     },
     {
@@ -76,7 +76,7 @@
         "pk": 12,
         "fields": {
             "user": 12,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/mouse.jpg"
         }
     },
     {
@@ -84,7 +84,7 @@
         "pk": 13,
         "fields": {
             "user": 13,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/man7.jpg"
         }
     },
     {
@@ -92,7 +92,7 @@
         "pk": 14,
         "fields": {
             "user": 14,
-            "profile_picture": "profile_pictures/Firefly Create social media profile picture of nature 14730.jpg"
+            "profile_picture": "profile_pictures/bird.jpg"
         }
     }
 ]

@@ -21,7 +21,7 @@ class PostViewTestCase(TestCase):
         self.user = User.objects.get(username='@johndoe')
         self.post = Post.objects.get(pk=1)
         self.comment = PostComment.objects.get(pk=1)
-        self.url = reverse('post_detail', kwargs={'post_id': self.post.id})
+        self.url = reverse('post', kwargs={'post_id': self.post.id})
         self.redirect_url = reverse('feed')
         self.reply = PostComment.objects.get(pk=2)
         self.client.login(username=self.user.username, password='Password123')
@@ -36,7 +36,7 @@ class PostViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_cannot_get_nonexistent_post(self):
-        invalid_url = reverse('post_detail',kwargs={'post_id':4})
+        invalid_url = reverse('post',kwargs={'post_id':4})
         response = self.client.get(invalid_url,follow=True)
         self.assertRedirects(response, self.redirect_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed('feed.html')
@@ -45,7 +45,7 @@ class PostViewTestCase(TestCase):
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
     def test_cannot_get_post_of_blocked_user(self):
-        invalid_url = reverse('post_detail',kwargs={'post_id':3})
+        invalid_url = reverse('post',kwargs={'post_id':3})
         self.user.blocked_users.add(User.objects.get(id=3))
         response = self.client.get(invalid_url,follow=True)
         self.assertRedirects(response, self.redirect_url, status_code=302, target_status_code=200)
@@ -55,7 +55,7 @@ class PostViewTestCase(TestCase):
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
     def test_cannot_get_post_of_blocked_by_user(self):
-        invalid_url = reverse('post_detail',kwargs={'post_id':3})
+        invalid_url = reverse('post',kwargs={'post_id':3})
         blocking_user = User.objects.get(id=3)
         blocking_user.blocked_users.add(self.user)
         response = self.client.get(invalid_url,follow=True)
@@ -66,7 +66,7 @@ class PostViewTestCase(TestCase):
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
     def test_cannot_get_private_post_of_non_friend(self):
-        invalid_url = reverse('post_detail',kwargs={'post_id':5})
+        invalid_url = reverse('post',kwargs={'post_id':5})
         response = self.client.get(invalid_url,follow=True)
         self.assertRedirects(response, self.redirect_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed('feed.html')

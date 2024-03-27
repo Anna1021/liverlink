@@ -89,7 +89,7 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
             login_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]')))
             login_button.click()
 
-            friends_list_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Friends list')]")))
+            friends_list_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Friends List')]")))
             friends_list_button.click()
 
             second_user_profile_link = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/profile/@petrapickles/']")))

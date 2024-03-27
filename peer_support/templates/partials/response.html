@@ -23,7 +23,7 @@
             </button>
           </li>
           {% else %}
-          {% include 'partials/report_dropdown.html' with form=report_form object_id=response.id report_type='report_response' %}
+          <button type="button" class="dropdown-item" id="report-item" data-bs-toggle="modal" data-bs-target="#report_response_{{response.id}}">Report</button>
           {% endif %}
       </ul>
     </div>
@@ -51,5 +51,6 @@
   
   {% for children in response.get_responses %}
   {% include 'partials/response.html' with response=children %}
+  {% include 'partials/report_modal.html' with object_id=response.id report_type='report_response' %}
   {% endfor %}
 </blockquote>

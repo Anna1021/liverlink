@@ -3,8 +3,10 @@
 {% load static %}
 {% include 'partials/administrative_navbar.html' %} 
 <div class="mb-3">
+    
     <h1 class="mt-2">Feedback</h1>
-    {% for fb in feedback %}
+    {% include 'partials/pagination_bar.html' with type=feedback %}
+    {% for fb in feedback.object_list %}
         {% include 'partials/feedback_card.html' with feedback=fb %}
     {% empty %}
         <p>No feedback found.</p>

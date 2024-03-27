@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                alert('Profile picture updated successfully!');
+                window.location.reload();
             } else {
                 alert('Select a profile picture.');
             }

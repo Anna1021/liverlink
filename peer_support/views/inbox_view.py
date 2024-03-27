@@ -4,6 +4,7 @@ from django.views import View
 from peer_support.models import Notification
 from peer_support.views.helpers import filter_by_timeframe, filter_by_type
 
+
 class InboxView(LoginRequiredMixin, View):
     """Display the current user's inbox."""
 

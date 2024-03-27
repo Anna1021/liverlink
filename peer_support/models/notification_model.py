@@ -70,7 +70,7 @@ class Notification(models.Model):
             if self.content_type.name == "post"
             else self.content_object.post.id
         )
-        return reverse("post_detail", kwargs={"post_id": post_id})
+        return reverse("post", kwargs={"post_id": post_id})
 
     def get_question_URL(self):
         """Return the URL to the question being replied to."""

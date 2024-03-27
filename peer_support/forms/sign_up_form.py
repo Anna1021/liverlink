@@ -16,7 +16,13 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
         """Form options."""
 
         model = User
-        fields = ["first_name", "last_name", "username", "email", "date_of_birth"]
+        fields = [
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+            "date_of_birth",
+        ]
         widgets = {
             "date_of_birth": forms.DateInput(attrs={"type": "date"}),
         }

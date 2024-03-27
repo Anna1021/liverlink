@@ -13,12 +13,75 @@
     padding-left: 0px;
 }
 
+.conversation-sidebar {
+    width:200px;
+    transition: width 0.3s ease;
+    overflow-x: hidden;
+}
+  
+#sidebar-toggle {
+    display: none;
+}
+
+#sidebar-icon::before{
+    content:"\F284";
+}
+
+#sidebar-toggle:checked + label #sidebar-icon::before {
+    content:"\F285";
+}
+  
+#sidebar-toggle:checked ~ .conversation-sidebar {
+    width: 0px;
+}
+
+.conversation-content {
+    flex:1;
+    flex-grow: 1;
+} 
+
+#sidebar-toggle:checked ~ .conversation-sidebar i {
+    display:none;
+}
+  
+.conversation-sidebar label {
+    cursor: pointer;
+}
+
+@media (max-width: 770px){
+    .conversation-sidebar{
+        width:100%;
+        height:100%;
+        transition: height 0.3s ease;
+    }
+
+    .conversation-content {
+        display: none;
+    }
+
+    #sidebar-icon::before{
+        content:"\f282";
+    }
+    
+    #sidebar-toggle:checked + label #sidebar-icon::before {
+        content:"\f286";
+    }
+
+    #sidebar-toggle:checked ~ .conversation-content {
+        display: block; 
+    }
+
+    #sidebar-toggle:checked ~ .conversation-sidebar {
+        height: 0px;
+    }
+}
+
 .conversation-menu{
     height:85vh;
 }
 
 #id_content{
-    width : 94%;
+    width : 100%;
 }
 
 .user-list-header{
@@ -30,7 +93,7 @@
 
 .user-list{
     list-style-type: none;
-    background-color: #2e2d38;
+    background-color: #77758c;
     padding-left: 0;
     width: 100%;
     border-radius: 5px;
@@ -88,10 +151,6 @@
 .other-bubble{
     float: left;
     background-color: bisque;
-}
-
-.leave-btn{
-    width:50%;
 }
 
 .leave-confirmation{

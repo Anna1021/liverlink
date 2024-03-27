@@ -6,19 +6,18 @@
     <div class="row">
         {% include 'partials/search_filter_sort_users.html' %}
     </div>
+    {% include 'partials/pagination_bar.html' with type=users extra_query=extra_query %}
     <div style="overflow-y:auto;">
         <hr style="margin-top: 0;">
-        {% if users|length == 0 %}
-        <p>No users</p>
-        {% else %}
         <div class="container my-2">
             <div class="row">
-                {% for friend in users %}
+                {% for friend in users.object_list %}
                     {% include "partials/user_card.html" with parent_template="find_friends" user=friend.user %}
+                {% empty %}
+                    <p>No users</p>
                 {% endfor %}
             </div>
         </div>
-        {% endif %}
     </div>
 </div>
 <script>
