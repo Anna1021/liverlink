@@ -55,15 +55,15 @@ The packages used by this application are specified in `requirements.txt`
 
 Initial scaffolding by Jeroen Keppens
 
-Throughout our project, we made effective use of advanced Generative AI tools like ChatGPT and GitHub CoPilot. These tools played a key role in testing, code refinement, and quick issue resolution.
+Throughout our project, we made effective use of advanced Generative AI tools like ChatGPT and GitHub CoPilot. These tools played minor roles in testing, code refinement, and quick issue resolution.
 
 Testing Efficiency:
-ChatGPT generated test cases, ensuring comprehensive test coverage.
+ChatGPT generated minor test cases and helped with comprehensive test coverage.
 GitHub CoPilot suggested test snippets.
 
 Code Optimization:
 ChatGPT provided refactor suggestions for cleaner, more maintainable code.
-GitHub CoPilot offered intelligent recommendations for code structure enhancement.
+GitHub CoPilot offered suggestions for code structure enhancement.
 
 Swift Issue Resolution:
 ChatGPT generated potential solutions and debug steps, aiding in faster problem resolution.
