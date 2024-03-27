@@ -5,9 +5,16 @@
     <div class="card-body post-card">
         <div class="row">
             <div class="col-md-10">
-                <a href="{% url 'profile' comment.author.username %}"><p>{{ comment.author }}</p></a>
+                <div class="d-flex align-items-center pb-2">
+                    <a href="{% url 'profile' comment.author.username %}">
+                        <img src="{% static comment.author.userprofile.profile_picture %}" alt="Profile Picture" class="rounded-circle friend-profile-picture mr-3" style="width: 70px; height: 70px;">
+                    </a>
+                    <a href="{% url 'profile' comment.author.username %}">
+                        <p style="margin: 0;">{{ comment.author }}</p>
+                    </a>
+                </div>
                 
-                <p {% if comment.author in user.blocked_users.all %} data-text="{{comment.content |censor}}" 
+                <p {% if comment.author in user.blocked_users.all %} data-text="{{ comment.content | censor}}" 
                 data-blocked="true" class="text-muted"
                 {% elif comment|is_object_reported_by_user:user %} data-text="{{ comment.content |censor}}"
                  data-reported="true" class="text-muted" {% endif %}
