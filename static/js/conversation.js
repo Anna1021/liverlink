@@ -54,7 +54,7 @@ function scrollDown(){
 }
 
 let posting = false;
-const chatSocket = new WebSocket("ws://" + window.location.host + "/");
+const chatSocket = new WebSocket("wss://" + window.location.host + "/");
 if(conversation_id!=0){
     document.querySelector("#id_content").focus();
     document.querySelector('#message-form').addEventListener("submit", function(){
