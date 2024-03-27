@@ -51,7 +51,7 @@
       "username": "@peterpickles",
       "email": "peterpickles@example.org",
       "password": "pbkdf2_sha256$260000$4BNvFuAWoTT1XVU8D6hCay$KqDCG+bHl8TwYcvA60SGhOMluAheVOnF1PMz0wClilc=",
-      "date_of_birth": "1950-10-23",
+      "date_of_birth": "2000-10-23",
       "gender": "N",
       "location": "FR",
       "ethnicity": "AF",
