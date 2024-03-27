@@ -172,6 +172,17 @@ def get_user_type(user):
         return "PROFESSIONAL"
     else:
         return "ADMIN"
+    
+def filter_notifications(request, notifications):
+    """Filter notifications by type and/or timeframe."""
+    
+    type = request.GET.get('type', None)
+    timeframe = request.GET.get('timeframe', None)
+    if type:
+        notifications = filter_by_type(notifications, type)
+    if timeframe:
+        notifications = filter_by_timeframe(notifications, timeframe)
+    return notifications
 
 def filter_by_timeframe(notifications, timeframe):
     """Filter notifications by the specified timeframe."""

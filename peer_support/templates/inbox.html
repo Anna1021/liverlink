@@ -6,11 +6,12 @@
     
     {% include "partials/filter_notification.html" %}
 
-    <form action="{% url 'clear_notifications' %}" method="post" onsubmit="return confirm('Are you sure you want to clear all?')">
+    <form action="{% url 'clear_notifications' %}?type={{ request.GET.type }}&timeframe={{ request.GET.timeframe }}" method="post" onsubmit="return confirm('Are you sure you want to clear all?')">
         {% csrf_token %}
         <button class="m-b-50 btn btn-danger btn-sm">Clear all</button>
     </form> 
     {% for notification in notifications|dictsortreversed:"created" %}
         {% include "partials/notification.html" %}
     {% endfor %}
+</div>
 {% endblock %}

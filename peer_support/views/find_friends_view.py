@@ -5,8 +5,7 @@ from django.contrib import messages
 from peer_support.forms import SortUserForm, FilterUserForm, SearchUserForm
 from .helpers import get_addable_peers, get_user_type,get_page
 
-
-class PeerSelectView(LoginRequiredMixin, View):
+class FindFriendsView(LoginRequiredMixin, View):
     """Displays the page for viewing users on network."""
 
     template_name = "find_friends.html"
