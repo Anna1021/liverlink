@@ -9,7 +9,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import Select
 from peer_support.models import User
 
-class FindFreindsJavascriptTest(StaticLiveServerTestCase):
+class FindFriendsJavascriptTest(StaticLiveServerTestCase):
     """Unit test of javascript in find_friends view"""
 
     fixtures = ['peer_support/tests/fixtures/default_user.json']

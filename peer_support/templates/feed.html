@@ -1,5 +1,5 @@
 {% extends 'dashboard.html' %}
-<!-- {% load static %} -->
+{% load static %}
 {% block page %}
 
 <title>Feed</title>
@@ -54,8 +54,5 @@
     {% endfor %}
   </div>
 </div>
-
-
 <script src="{% static 'js/feed.js' %}"></script>
-
 {% endblock %}

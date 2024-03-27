@@ -1,0 +1,22 @@
+<div class="notification-container">
+    
+    <label for="notification_type">Type:</label>
+    <select name="type" id="notification_type">
+        <option value="">All</option>
+        <option value="friend request" {% if request.GET.type == "friend request" %} selected {% endif %}>Friend Request</option>
+        <option value="post comment" {% if request.GET.type == "post comment" %} selected {% endif %}>Post Comment</option>
+        <option value="post" {% if request.GET.type == "post" %} selected {% endif %}>Post Like</option>
+        <option value="response" {% if request.GET.type == "response" %} selected {% endif %}>Response</option>
+        <option value="conversation" {% if request.GET.type == "conversation" or request.GET.type == "group conversation" %} selected {% endif %}>Conversation</option>
+        <option value="other" {% if request.GET.type == "other" %} selected {% endif %}>Other</option>
+    </select>
+
+    <label for="notification_timeframe">Timeframe:</label>
+    <select name="timeframe" id="notification_timeframe">
+        <option value="">All</option>
+        <option value="past_24_hours" {% if request.GET.timeframe == "past_24_hours" %} selected {% endif %}>Past 24 Hours</option>
+        <option value="past_7_days" {% if request.GET.timeframe == "past_7_days" %} selected {% endif %}>Past 7 Days</option>
+        <option value="past_4_weeks" {% if request.GET.timeframe == "past_4_weeks" %} selected {% endif %}>Past 4 Weeks</option>
+        <option value="earlier" {% if request.GET.timeframe == "earlier" %} selected {% endif %}>Earlier</option>
+    </select>
+</div>

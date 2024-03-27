@@ -40,3 +40,10 @@
     --bs-text-opacity: 1;
     color: rgb(195, 192, 192);
 }
+
+.notification-container select {
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    font-size: 1rem;; 
+    padding: 0.175rem 0.1rem; 
+}

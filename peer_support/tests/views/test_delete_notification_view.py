@@ -23,10 +23,10 @@ class DeleteNotificationViewTestCase(TestCase):
         self.assertEqual(self.url, '/delete_notification/1/')
 
     def test_delete_notification(self):
-        self.assertEqual(Notification.objects.count(), 3)
+        self.assertEqual(Notification.objects.count(), 6)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(Notification.objects.count(), 2)
+        self.assertEqual(Notification.objects.count(), 5)
 
     def test_delete_notification_with_friend_request(self):
         friend_request = FriendRequest.objects.get(id=1)
@@ -36,11 +36,11 @@ class DeleteNotificationViewTestCase(TestCase):
         friend_request_notification.save()
         self.assertTrue(friend_request_notification.get_is_friend_request())
         before_friend_request_count = FriendRequest.objects.count()
-        self.assertEqual(Notification.objects.count(), 3)
+        self.assertEqual(Notification.objects.count(), 6)
         response = self.client.get(reverse('delete_notification', args=[2]), follow=True)
         after_friend_request_count = FriendRequest.objects.count()
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(Notification.objects.count(), 2)
+        self.assertEqual(Notification.objects.count(), 5)
         self.assertEqual(before_friend_request_count - 1, after_friend_request_count)
 
     def test_delete_notification_without_being_logged_in(self):
@@ -48,4 +48,4 @@ class DeleteNotificationViewTestCase(TestCase):
         redirect_url = reverse_with_next('log_in', self.url)
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-        self.assertEqual(Notification.objects.count(), 3)
+        self.assertEqual(Notification.objects.count(), 6)
