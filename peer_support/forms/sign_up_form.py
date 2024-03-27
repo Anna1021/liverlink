@@ -22,12 +22,6 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             "username",
             "email",
             "date_of_birth",
-            "gender",
-            "location",
-            "hospital",
-            "ethnicity",
-            "language",
-            "bio",
         ]
         widgets = {
             "date_of_birth": forms.DateInput(attrs={"type": "date"}),
