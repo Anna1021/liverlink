@@ -1,4 +1,4 @@
-"""Unit test of javascript in customisation view"""
+"""Unit test of javascript in profile update view"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
@@ -7,15 +7,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from peer_support.models import User
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.service import Service
 
-class CustomisationJavascriptTest(StaticLiveServerTestCase):
-    """Unit test of javascript in customisation view"""
+class ProfileUpdateFormJavascriptTest(StaticLiveServerTestCase):
+    """Unit test of javascript in profile update view"""
 
     fixtures = [
-        'peer_support/tests/fixtures/default_user.json',
-        'peer_support/tests/fixtures/default_patient.json',
-        'peer_support/tests/fixtures/default_user_profile.json'
+        'peer_support/tests/fixtures/other_users.json'
     ]
     
     @classmethod
@@ -34,27 +33,26 @@ class CustomisationJavascriptTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_profile_picture_updates(self):
+    def test_dynamic_hospital_field_visibility(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/log_in/'))
-        user = User.objects.get(username='@johndoe')
+        user = User.objects.get(username='@peterpickles')
         user.first_login = False
         user.save()
         try:
-            self.wait.until(EC.element_to_be_clickable((By.NAME, "username"))).send_keys('@johndoe')
+            self.wait.until(EC.element_to_be_clickable((By.NAME, "username"))).send_keys('@peterpickles')
             self.wait.until(EC.element_to_be_clickable((By.NAME, "password"))).send_keys('Password123')
             self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
             self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@id='user-account-dropdown']/span"))).click()
             self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Settings"))).click()
-            self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Customisation"))).click()
-            selected_picture = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//img[@alt='Profile Picture']")))
-            selected_picture.click()
-            
-            selected_picture_parent = selected_picture.find_element(By.XPATH, "..") 
-            self.assertTrue("picture-selected" in selected_picture_parent.get_attribute("class"), "Selected picture does not have the expected 'picture-selected' class.")
-            update_button = self.wait.until(EC.element_to_be_clickable((By.ID, "update-button")))
-            self.selenium.execute_script("arguments[0].click();", update_button)
-            self.wait.until(EC.alert_is_present(),"Timed out waiting for profile picture update confirmation alert.")
-            alert = self.selenium.switch_to.alert
-            self.assertEqual("Profile picture updated successfully!", alert.text)
+
+            self.assertNotEqual(user.location, 'GB')
+
+            location_field = self.wait.until(EC.presence_of_element_located((By.ID, "id_location")))
+            select = Select(location_field)
+
+            select.select_by_visible_text('United Kingdom')
+            hospital_field = self.wait.until(EC.visibility_of_element_located((By.ID, "id_hospital")))
+            self.assertTrue(hospital_field.is_displayed(), "Hospital field is not visible for user located in the UK")
+
         except TimeoutException as e:
-            self.fail(f"Test failed due to timeout while waiting for the question to be visible or interactable: {e}")
+            self.fail(f"Test failed due to timeout while waiting for the field to be visible or interactable: {e}")

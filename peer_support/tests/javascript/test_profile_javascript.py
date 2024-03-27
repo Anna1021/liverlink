@@ -169,7 +169,7 @@ class ProfileJavascriptTest(StaticLiveServerTestCase):
             self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@id='user-account-dropdown']/span"))).click()
             
             self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Settings"))).click()
-            self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Other users"))).click()
+            self.wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Password & security"))).click()
             self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@id='display-blocklist']"))).click()
             self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/profile/@petrapickles/']"))).click()
 
