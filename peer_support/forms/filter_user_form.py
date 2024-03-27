@@ -68,7 +68,7 @@ class FilterUserForm(forms.Form):
         filter_criteria = [
             ("language", self.cleaned_data.get("language")),
             ("ethnicity", self.cleaned_data.get("ethnicity")),
-            ("location", self.cleaned_data.get("country")),
+            ("location", self.cleaned_data.get("location")),
             ("hospital", self.cleaned_data.get("hospital")),
         ]
         for field_name, value in filter_criteria:

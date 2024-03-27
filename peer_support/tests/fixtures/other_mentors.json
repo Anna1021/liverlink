@@ -16,7 +16,7 @@
     "fields": {
       "user_ptr": 9,
       "condition": "Cirrhosis",
-      "transplant": "N",
+      "transplant": "No",
       "age_of_diagnosis": 13,
       "referral_code": "9C274FF391",
       "is_active": true
@@ -28,7 +28,7 @@
     "fields": {
       "user_ptr": 10,
       "condition": "Haemochromatosis",
-      "transplant": "Y",
+      "transplant": "Yes",
       "age_of_diagnosis": 45,
       "referral_code": "9C274FF391",
       "is_active": true
