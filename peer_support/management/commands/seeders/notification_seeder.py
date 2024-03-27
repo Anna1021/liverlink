@@ -1,12 +1,12 @@
 from random import randint
 import random
-from peer_support.management.commands.helpers import get_user, get_post
+from peer_support.management.commands.helpers import get_user, get_content_type
 from peer_support.management.commands.seeders.parent_seeder import parent_fixtures
 from peer_support.management.commands.seeders.patient_seeder import patient_fixtures
 from peer_support.management.commands.seeders.mentor_seeder import mentor_fixtures
 from peer_support.management.commands.seeders.post_comment_seeder import post_comment_fixtures
 from peer_support.management.commands.seeders.response_seeder import response_fixtures
-from peer_support.models import PostComment, User, Notification, Response, PostComment, FriendRequest
+from peer_support.models import PostComment, User, Notification, Response, PostComment, FriendRequest, Post
 
 notification_fixtures = [
     {
@@ -36,7 +36,7 @@ class NotificationSeeder:
     def __init__(self, faker):
         self.faker = faker
         self.users = User.objects.all()
-        self.posts = PostComment.objects.all()
+        self.posts = Post.objects.all()
         self.friend_requests = FriendRequest.objects.all()
         self.responses = Response.objects.all()
         self.post_comments = PostComment.objects.all()
@@ -78,7 +78,7 @@ class NotificationSeeder:
         user = {"username": user.username}
         notifying_user = {"username": friend_request.sender.username}
         content_type = "friendrequest"
-        object_id = {"sender": self.get_user(notifying_user), "receiver": self.get_user(user)}
+        object_id = {"sender": get_user(notifying_user), "receiver": get_user(user)}
         self.try_create_notification({"user": user, "notifying_user": notifying_user,
                                     "content_type": content_type, "object_id": object_id})
 
@@ -117,16 +117,16 @@ class NotificationSeeder:
             pass
 
     def create_notification(self, data):
-        data["user"] = self.get_user(data["user"])
+        data["user"] = get_user(data["user"])
         if data.get("content_type"):
             ids = {"postcomment": self.post_comments.filter(content=data["object_id"].get("content", None)),
             "response": self.responses.filter(body=data["object_id"].get("body", None)),
             "post": self.posts.filter(content=data["object_id"].get("content", None)),
             "friendrequest": self.friend_requests.filter(sender=data["object_id"].get("sender", None),
                                                           receiver=data["object_id"].get("receiver", None))}
-            data["notifying_user"] = self.get_user(data["notifying_user"])
+            data["notifying_user"] = get_user(data["notifying_user"])
             data["object_id"] = ids[data["content_type"]].first().id
-            data["content_type"] = self.get_content_type(data["content_type"])
+            data["content_type"] = get_content_type(data["content_type"])
             exists = Notification.objects.filter(content_type=data["content_type"], object_id=data["object_id"]).exists()
             if exists: Exception
         Notification.objects.create(**data)
