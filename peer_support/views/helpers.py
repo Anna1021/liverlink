@@ -175,6 +175,8 @@ def filter_by_timeframe(notifications, timeframe):
     elif timeframe == 'earlier':
         start_time = now - timedelta(weeks=4)  
         notifications = notifications.filter(created__lt=start_time)
+    else:
+        notifications = notifications.none()
     return notifications
 
 def filter_by_type(notifications, type):

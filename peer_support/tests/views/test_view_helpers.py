@@ -164,6 +164,12 @@ class HelpersViewTestCase(TestCase):
         self.assertNotIn(invalid_notification, notifications_within_past_4_weeks)
         self.assertNotIn(invalid_notification, earlier_notifications)
 
+    def test_notification_not_in_any_timeframe(self):
+        invalid_notification = Notification.objects.create(created=timezone.now() - timedelta(days=30), user=self.user)
+        notifications = Notification.objects.all()
+        invalid_timeframe_notifications = filter_by_timeframe(notifications, 'invalid_timeframe')
+        self.assertNotIn(invalid_notification, invalid_timeframe_notifications)
+
     """Test filtering notifications by type through content_type."""
     def test_filter_notification_by_content_type(self):
         post_comment_notification = Notification.objects.get(content_type_id=19)
