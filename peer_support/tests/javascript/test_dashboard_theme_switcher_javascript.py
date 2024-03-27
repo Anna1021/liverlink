@@ -1,7 +1,6 @@
 """Unit test of javascript theme switcher"""
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -52,12 +51,12 @@ class ThemeSwitcherTest(StaticLiveServerTestCase):
 
             self.wait.until(lambda driver: 'light-theme' in main_div.get_attribute('class'))
 
-            self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/Liver_Link_logo_black.png')
+            self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/black-liver-link-logo-text.png')
             self.assertEqual(theme_logo_image.get_attribute('class'), 'bi bi-moon-fill')
             theme_logo_image.click()
             self.wait.until(lambda driver: 'dark-theme' in main_div.get_attribute('class'))
 
-            self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/LiverLinkLogoCropped.png')
+            self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/white-liver-link-logo-text.png')
             self.assertEqual(theme_logo_image.get_attribute('class'), 'bi bi-sun')
 
         except TimeoutException as e:
@@ -73,7 +72,7 @@ class ThemeSwitcherTest(StaticLiveServerTestCase):
         self.wait.until(
             lambda driver: 'light-theme' in main_div.get_attribute('class')
         )
-        self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/Liver_Link_logo_black.png')
+        self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/black-liver-link-logo-text.png')
         self.assertEqual(theme_logo_image.get_attribute('class'), 'bi bi-moon-fill')
         # toggle back to the dark theme and verify changes
         theme_logo_image.click()
@@ -81,5 +80,5 @@ class ThemeSwitcherTest(StaticLiveServerTestCase):
             lambda driver: 'dark-theme' in main_div.get_attribute('class')
         )
 
-        self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/LiverLinkLogoCropped.png')
+        self.assertEqual(logo_image.get_attribute('src'), self.live_server_url + '/static/images/white-liver-link-logo-text.png')
         self.assertEqual(theme_logo_image.get_attribute('class'), 'bi bi-sun')
