@@ -4,6 +4,7 @@ from peer_support.models import Patient
 from .form_choices import CONDITION_CHOICES, TRANSPLANT_CHOICES
 from .helpers import validate_max_age
 
+
 class PatientForm(UserForm, forms.ModelForm):
     """Form to update patient profiles."""
 
@@ -15,7 +16,7 @@ class PatientForm(UserForm, forms.ModelForm):
         """Form options."""
 
         model = Patient
-        fields = UserForm.Meta.fields + ['condition', 'age_of_diagnosis', 'transplant']
+        fields = UserForm.Meta.fields + ["condition", "age_of_diagnosis", "transplant"]
         widgets = UserForm.Meta.widgets
 
     def clean_date_of_birth(self):

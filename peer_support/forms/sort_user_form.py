@@ -1,6 +1,7 @@
 from django import forms
 from .form_choices import SORT_USER_CHOICES
 
+
 class SortUserForm(forms.Form):
     """Form enabling the sorting of users"""
 
@@ -9,39 +10,41 @@ class SortUserForm(forms.Form):
                      "child_age_of_diagnosis": 0.2, "child_condition": 1, "expertise": 2}
     
     def sort_by_username(self, users, order):
-        return users.order_by(order + 'username')
+        return users.order_by(order + "username")
 
     def sort_by_age(self, users, order):
-        return users.order_by(order + 'date_of_birth')
+        return users.order_by(order + "date_of_birth")
 
     def sort_by_match_score(self, users, current_user):
-        user_scores = [(user, self.calculate_match_score(current_user, user)) for user in users]
+        user_scores = [
+            (user, self.calculate_match_score(current_user, user)) for user in users
+        ]
         sorted_users = sorted(user_scores, key=lambda x: x[1], reverse=True)
         return [user_score[0] for user_score in sorted_users]
 
     def get_sort_option(self, sort_by):
         sort_options = {
-            'username_asc': lambda users: self.sort_by_username(users, ''),
-            'username_desc': lambda users: self.sort_by_username(users, '-'),
-            'age_asc': lambda users: self.sort_by_age(users, '-'),
-            'age_desc': lambda users: self.sort_by_age(users, ''),
+            "username_asc": lambda users: self.sort_by_username(users, ""),
+            "username_desc": lambda users: self.sort_by_username(users, "-"),
+            "age_asc": lambda users: self.sort_by_age(users, "-"),
+            "age_desc": lambda users: self.sort_by_age(users, ""),
         }
         return sort_options.get(sort_by)
 
     def sort_users(self, users, current_user):
         """Sorts users based on the selected criterion."""
-        
+
         cleaned_data = self.cleaned_data
-        sort_by = cleaned_data.get('sort_by')
+        sort_by = cleaned_data.get("sort_by")
         sort_option = self.get_sort_option(sort_by)
         if sort_option:
             users = sort_option(users)
-        elif sort_by == '' and current_user:
+        elif sort_by == "" and current_user:
             users = self.sort_by_match_score(users, current_user)
         return users
-    
+
     def calculate_match_score(self, current_user, other_user):
-        """Calculates the score of each user in relation to the current user """
+        """Calculates the score of each user in relation to the current user"""
 
         score = 0
         
@@ -49,17 +52,23 @@ class SortUserForm(forms.Form):
         score = self.calculate_age_score(current_user, other_user,score)
         weighting_user = {"gender": 0.2, "language": 0.9, "ethnicity": 0.2, "location": 1, "hospital": 1,}
         matches = {
-            attribute: getattr(current_user, attribute, None) == getattr(other_user, attribute, None)
-            for attribute in weighting_user}
-        score += sum(weight for attribute, weight in weighting_user.items() if matches[attribute])
+            attribute: getattr(current_user, attribute, None)
+            == getattr(other_user, attribute, None)
+            for attribute in weighting_user
+        }
+        score += sum(
+            weight for attribute, weight in weighting_user.items() if matches[attribute]
+        )
         return score
 
     def calculate_age_score(self, current_user, other_user, score):
         """Calclates score based on age proximity"""
 
-        age_difference = abs(current_user.date_of_birth.year - other_user.date_of_birth.year)
+        age_difference = abs(
+            current_user.date_of_birth.year - other_user.date_of_birth.year
+        )
         if age_difference <= 5:
-            score += 1 * self.weighting_types['age']
+            score += 1 * self.weighting_types["age"]
         return score
     
     def calculate_user_type_score(self, current_user, other_user, score):
@@ -82,7 +91,7 @@ class SortUserForm(forms.Form):
         return score
     
     def calculate_condition_match(self,user_type_1, user_type_2, condition, age_of_diagnosis):
-        score=0
+        score = 0
         condition_1 = getattr(user_type_1, condition[0], None) 
         condition_2 = getattr(user_type_2, condition[1], None)
         if condition_1 and condition_2 and (condition_1==condition_2):
@@ -97,4 +106,4 @@ class SortUserForm(forms.Form):
 
     def get_key_value_pair(self, key_value):
         value = self.weighting_types[key_value]
-        return (key_value, key_value ,value)
+        return (key_value, key_value, value)

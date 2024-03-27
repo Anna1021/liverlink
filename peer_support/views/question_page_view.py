@@ -5,10 +5,12 @@ from peer_support.models import Question, Response, Notification
 from peer_support.forms import NewReplyForm, NewResponseForm, ReportForm
 from django.contrib import messages
 
+
 class QuestionPageView(LoginRequiredMixin, View):
     """Displays a single question and all responses"""
-    login_url = '/login/'
-    redirect_field_name = 'redirect_to'
+
+    login_url = "/login/"
+    redirect_field_name = "redirect_to"
     max_depth = 20
 
     def get(self, request, id, *args, **kwargs):
@@ -18,10 +20,10 @@ class QuestionPageView(LoginRequiredMixin, View):
     def get_context(self, request ,question_id):
         question = get_object_or_404(Question, id=question_id)
         context = {
-            'question': question,
-            'response_form': NewResponseForm(),
-            'reply_form': NewReplyForm(),
-            'current_user': request.user,
+            "question": question,
+            "response_form": NewResponseForm(),
+            "reply_form": NewReplyForm(),
+            "current_user": request.user,
             'report_form': ReportForm(),
             'max_depth': self.max_depth,
         }

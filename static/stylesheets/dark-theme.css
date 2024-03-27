@@ -9,7 +9,7 @@
 .dark-theme .log-in .btn{
   background-color: var(--dark-submit-btn-color);
   color: var(--btn-text-color);
-  border: 1px solid #720fe3;
+  border-color: transparent;
   display: inline-block;
   font-weight: 400;
   text-align: center;
@@ -24,7 +24,7 @@
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.25rem;
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 /*
@@ -112,15 +112,16 @@
 }
 
 .dark-theme .emp-profile {
-  padding: 3%;
-  margin-top: 3%;
-  margin-bottom: 5%;
-  border-radius: 0.8rem;
-  background: #2e2d38;
+  padding: 2.5%;
+  margin-top: 1.5%;
+  margin-bottom: 3%;
+  border-radius: 3.5rem;
+  background: var(--dark-main-bg-color);
 }
 .dark-theme .profile-subheading {
   color: #ffffff;
   font-weight: 600;
+  text-decoration: none;
 }
 
 .dark-theme .profile-head h5 {
@@ -128,11 +129,21 @@
   color: #ffffff;
 }
 
-.dark-theme .nav-tabs,
+.dark-theme .profile-head .nav-tabs,
 .dark-theme .nav-link.active {
   border: none;
   border-bottom: 2px solid #91BBD3;
 }
+
+.dark-theme .nav-link {
+  color: #91BBD3
+}
+
+.dark-theme .leave-btn{
+  color: white;
+  background-color: rgb(255, 0, 0);
+}
+
 .dark-theme #loginBox {
   border-radius: 20px;
   background-color:#2E2D38;
@@ -165,9 +176,12 @@
     border-radius: 20px;
     background-color: var(--dark-main-bg-color);
     color: white;
+    margin-top:5px;
     padding-right: 30px;
     padding-top: 20px;
     padding-left: 30px;
+    padding-bottom: 20px;
+    max-height:100%;
 }
 
 /*
@@ -177,7 +191,7 @@
 .dark-theme .SortFilter .btn {
   background-color: var(--dark-filter-btn-color);
   color: var(--dark-btn-text-color);
-  border-color: #d4aeff;
+  border-color: transparent;
   box-shadow: #d4aeff;
 }
 
@@ -276,7 +290,7 @@ background-color: var(--dark-submit-btn-color);
 .dark-theme .delete-response-button {
   background-color: rgb(205, 205, 233);
   color: black;
-  border-color: #9da1d3;
+  border-color: transparent;
   box-shadow: #afaeff;
   border-radius: 0.25rem;
 }
@@ -300,7 +314,6 @@ background-color: var(--dark-submit-btn-color);
 .dark-theme .apply-btn{
   color: #fff;
   background-color: #6c757d;
-  border-color: #6c757d;
 }
 
 .dark-theme .selected-feed {
@@ -314,11 +327,10 @@ background-color: var(--dark-submit-btn-color);
 }
 
 .dark-theme .post-card{
-  width: 100%;
-  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 20px;
-  background-color: var(--dark-main-bg-color);
+  background-color: #2E2D38;
   color: white;
   padding-right: 30px;
   padding-top: 20px;
@@ -334,4 +346,41 @@ background-color: var(--dark-submit-btn-color);
 
 .dark-theme .actions-icon:hover{
   color: var(--dark-submit-btn-color);
+}
+.dark-theme .navbar-item .button.active{
+  background-color: red;
+}
+
+.dark-theme a.ps-link {
+  text-decoration: none;
+  color: white;
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 20px;
+  padding-left: 5px;
+}
+
+.dark-theme a.ps-link:hover {
+  color:black
+}
+
+.dark-theme ::-webkit-scrollbar {
+  width: 10px;          
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {   
+  border-radius: 30px;
+  background: #91BBD3;
+}
+
+.dark-theme ::-webkit-scrollbar-track {  
+  border-radius:10px;
+  background: black;
+}
+
+.dark-theme .page-link {
+  background-color: #2E2D38;
+  border: none;
+  color: white;
 }

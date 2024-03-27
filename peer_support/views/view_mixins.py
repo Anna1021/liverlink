@@ -1,6 +1,7 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.shortcuts import redirect
 
+
 class LoginProhibitedMixin:
     """Mixin that redirects when a user is logged in."""
 
@@ -19,7 +20,7 @@ class LoginProhibitedMixin:
 
     def get_redirect_when_logged_in_url(self):
         """Returns the url to redirect to when not logged in."""
-        
+
         if self.redirect_when_logged_in_url is None:
             raise ImproperlyConfigured(
                 "LoginProhibitedMixin requires either a value for "

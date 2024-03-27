@@ -13,7 +13,7 @@ class ConversationView(LoginRequiredMixin, FormView):
 
     def get(self, request, conversation_id):
         if conversation_id == 0:
-            return render(request, self.template_name, {'user_conversations': request.user.sort_conversations()})
+            return render(request, self.template_name, {"user_conversations": request.user.sort_conversations()})
         conversation = get_conversation(request, conversation_id)
         if not conversation:
             return no_conversation_url(request)
@@ -99,7 +99,7 @@ class ConversationView(LoginRequiredMixin, FormView):
         else:
             messages.error(request,"This message is not valid")
         
-    def handle_report_message(self,request,message_id):
+    def handle_report_message(self, request, message_id):
         """Handles the report request for a message."""
 
         message = get_object_or_404(Message, id=message_id)
@@ -110,5 +110,5 @@ class ConversationView(LoginRequiredMixin, FormView):
             message.save()
             messages.success(request, "Message reported successfully.")
         else:
-            messages.error(request,"There was an issue with the report.")
+            messages.error(request, "There was an issue with the report.")
 

@@ -53,7 +53,7 @@ class ProfileUpdateViewTestCase(TestCase):
             'language': 'en',
             'bio': 'I am a test parent.',
             'child_condition': 'Haemochromatosis',
-            'child_transplant': 'N',
+            'child_transplant': 'No',
             'child_age_of_diagnosis': 21,
         }
         self.patient_form_input = {
@@ -68,7 +68,7 @@ class ProfileUpdateViewTestCase(TestCase):
             'language': 'en',
             'bio': 'I am a test patient.',
             'condition': 'Haemochromatosis',
-            'transplant': 'N',
+            'transplant': 'No',
             'age_of_diagnosis': 21,
         }
         self.mentor_form_input = {
@@ -84,7 +84,7 @@ class ProfileUpdateViewTestCase(TestCase):
             'bio': 'I am a test mentor.',
             'condition': 'Haemochromatosis',
             'age_of_diagnosis': 21,
-            'transplant': 'N',
+            'transplant': 'No',
         }
         self.professional_form_input = {
             'first_name': 'Test',
@@ -268,7 +268,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.mentor.bio, "I'm a test user")
         self.assertEqual(self.mentor.condition, 'Cirrhosis')
         self.assertEqual(self.mentor.age_of_diagnosis, 13) 
-        self.assertEqual(self.mentor.transplant, 'Y') 
+        self.assertEqual(self.mentor.transplant, 'Yes') 
         self.assertEqual(self.mentor.referral_code, '9C274FF391') 
 
     def test_unsuccessful_profile_update_for_professional(self):
@@ -374,7 +374,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.patient.bio, "I am a test patient."),
         self.assertEqual(self.patient.condition, "Haemochromatosis"),
         self.assertEqual(self.patient.age_of_diagnosis, 21),
-        self.assertEqual(self.patient.transplant, 'N')
+        self.assertEqual(self.patient.transplant, 'No')
 
     def test_successful_profile_update_for_parent(self):
         self.client.force_login(self.parent)
@@ -402,7 +402,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.parent.bio, "I am a test parent."),
         self.assertEqual(self.parent.child_condition, "Haemochromatosis"),
         self.assertEqual(self.parent.child_age_of_diagnosis, 21),
-        self.assertEqual(self.parent.child_transplant, 'N')
+        self.assertEqual(self.parent.child_transplant, 'No')
 
     def test_successful_profile_update_for_mentor(self):
         self.client.force_login(self.mentor)
@@ -431,7 +431,7 @@ class ProfileUpdateViewTestCase(TestCase):
         self.assertEqual(self.mentor.condition, 'Haemochromatosis'),
         self.assertEqual(self.mentor.age_of_diagnosis, 21),
         self.assertEqual(self.mentor.referral_code, '9C274FF391'),
-        self.assertEqual(self.mentor.transplant, 'N')
+        self.assertEqual(self.mentor.transplant, 'No')
 
     def test_successful_profile_update_for_professional(self):
         self.client.force_login(self.professional)

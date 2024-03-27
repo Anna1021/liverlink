@@ -1,26 +1,25 @@
 from django.views.generic.edit import FormView
-from django.shortcuts import redirect, render,reverse, get_object_or_404
+from django.shortcuts import redirect, render, reverse, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
 from peer_support.models import Post
 from peer_support.forms import PostForm, ReportForm
-from .helpers import retrieve_friend_posts
+from .helpers import retrieve_friend_posts, get_page
 from django.contrib import messages
-from django.core.paginator import Paginator
 
 
 class FeedView(LoginRequiredMixin, FormView):
     """Displays posts on both global and friend feeds."""
     
-    def get(self,request):
-        feed_type = request.GET.get('feed_type','global')  
+    def get(self, request):
+        feed_type = request.GET.get("feed_type", "global")  
         user_posts = self.retrieve_posts(request)
         form = PostForm(request.user)
         current_user = request.user
         if current_user.first_login == True:
             current_user.first_login = False
             current_user.save()
-            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form, 'report_form': ReportForm(),'first':True})
+            return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form, 'report_form': ReportForm(), 'first':True})
         return render(request, 'feed.html', {'posts': user_posts, 'feed_type': feed_type, 'form':form, 'report_form': ReportForm()})
 
     def post(self,request):
@@ -48,10 +47,15 @@ class FeedView(LoginRequiredMixin, FormView):
                                 ).exclude(author__in=request.user.blocked_users.all())
         user_posts = user_posts.order_by("-created_at")
         annotated_posts = self.annotate_posts(request, user_posts)
-        paginator = Paginator(annotated_posts, 10)
-        page_number = request.GET.get('page')
-        posts = paginator.get_page(page_number)
+        posts = get_page(request,annotated_posts)
         return posts
+    
+    def annotate_posts(self, request, posts):
+        """Annotate each post with whether the current user has liked the post."""
+
+        return posts.annotate(
+            liked_by_user=Count("likes", filter=Q(likes=request.user))
+        ).order_by("-created_at")
 
     def report_post(self, request, post_id):
         post = get_object_or_404(Post, id=post_id)
@@ -61,10 +65,4 @@ class FeedView(LoginRequiredMixin, FormView):
             messages.success(request, "Post reported successfully.")
         else:
             messages.error(request, "There was an issue with the report.")
-    
-    def annotate_posts(self, request, posts):
-        """Annotate each post with whether the current user has liked the post."""
 
-        return posts.annotate(
-            liked_by_user=Count("likes", filter=Q(likes=request.user))
-        ).order_by("-created_at")

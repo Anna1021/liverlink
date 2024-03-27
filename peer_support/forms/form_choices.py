@@ -76,6 +76,11 @@ SORT_USER_CHOICES = [
 
 TRANSPLANT_CHOICES = [
     ('', '---------'),
-    ('Y', 'Yes'), 
-    ('N', 'No'),
+    ('Yes', 'Yes'), 
+    ('No', 'No'),
+]
+
+POST_VISIBILITY_CHOICES = [
+    ("G", "Global"),
+    ("F", "Friends"),
 ]

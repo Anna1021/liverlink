@@ -7,7 +7,9 @@
 {% block page %}
     <form action="{% url 'settings' %}" method="post">
     {% csrf_token %}
-    {% include 'partials/bootstrap_form.html' with form=form %}
+    <div class="pr-3 ps-scrollable">
+        {% include 'partials/bootstrap_form.html' with form=form %}
+    </div>
     <span><input type="submit" value="Update" class="btn btn-primary"> <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate_user">Deactivate account</button></span>
     </form>
     {% if referral_code != None %}

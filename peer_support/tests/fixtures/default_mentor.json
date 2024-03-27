@@ -7,7 +7,7 @@
             "condition": "Cirrhosis",
             "age_of_diagnosis": 13,
             "referral_code": "9C274FF391",
-            "transplant": "Y",
+            "transplant": "Yes",
             "is_active": true
         }
     }

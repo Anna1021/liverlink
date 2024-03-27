@@ -199,7 +199,7 @@ class FilterUserFormTestCase(TestCase):
             self.assertEqual(user.patient.condition, condition)
 
     def test_patient_transplant_status(self):
-        transplant = "Y"
+        transplant = "Yes"
         form_data = self.showAll
         form_data['user_type'] = ['PT']        
         form_data['transplant'] = transplant
@@ -243,7 +243,7 @@ class FilterUserFormTestCase(TestCase):
             self.assertEqual(user.parent.child_condition, child_condition)
 
     def test_child_transplant_status(self):
-        child_transplant = "Y"
+        child_transplant = "Yes"
         form_data = self.showAll
         form_data['user_type'] = ['PR']        
         form_data['child_transplant'] = child_transplant
@@ -287,7 +287,7 @@ class FilterUserFormTestCase(TestCase):
             self.assertEqual(user.mentor.condition, mentor_condition)
 
     def test_mentor_transplant_status(self):
-        transplant = "Y"
+        transplant = "Yes"
         form_data = self.showAll
         form_data['user_type'] = ['MT']        
         form_data['transplant'] = transplant

@@ -8,21 +8,7 @@
   <div class="page">
     <div class="section">
       <h1 class="title">All questions</h1>
-      <div class="row justify-content-center">
-        <div class="col-md-2 text-center">
-          {% if questions.has_previous %}
-            <a href="?page={{ questions.previous_page_number }}"> previous </a>
-          {% endif %}
-        </div>
-        <div class="col-md-2 text-center">
-          <span class="current-page">{{ questions.number }}</span>
-        </div>
-        <div class="col-md-2 text-center">
-          {% if questions.has_next %}
-            <a href="?page={{ questions.next_page_number }}"> next</a>
-          {% endif %}
-        </div>
-      </div>
+      {% include 'partials/pagination_bar.html' with type=questions%}
       <div class="scrollable-container">
         {% for question in questions %}
         <div class="question-list-item d-flex justify-content-between align-items-center">
@@ -45,12 +31,13 @@
                     </form>
                 </li>
                 {% else %}
-                {% include 'partials/report_dropdown.html' with form=report_form object_id=question.id report_type='report_question' %}
+                <button type="button" class="dropdown-item" id="report-item" data-bs-toggle="modal" data-bs-target="#report_question_{{question.id}}">Report</button>
                 {% endif %}
             </ul>
           </div>
         </div>
-          {% endfor %}
+        {% include 'partials/report_modal.html' with object_id=question.id report_type='report_question' %}
+        {% endfor %}
       </div>
       <hr>
       {% include 'partials/resource_table.html' %}

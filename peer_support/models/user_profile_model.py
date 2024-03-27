@@ -1,8 +1,9 @@
 from django.db import models
 from peer_support.models import User
 
+
 class UserProfile(models.Model):
     """Model used for user profile settings (preferences)."""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.CharField(max_length=500, blank=True, default='profile_pictures/Firefly Create a social media avatar of the night sky 96511.jpg')
+    profile_picture = models.CharField(max_length=500, blank=True, default='profile_pictures/sky.jpg')
