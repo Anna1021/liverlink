@@ -17,7 +17,7 @@ class FilterUserForm(forms.Form):
     gender = forms.MultipleChoiceField(choices = GENDER_CHOICES, widget=forms.CheckboxSelectMultiple, required=False)
     language = forms.ChoiceField(choices = ALL_CHOICE+LANGUAGE_CHOICES, required=False)
     ethnicity = forms.ChoiceField(choices = ALL_CHOICE+ETHNICITY_CHOICES, required=False)
-    country = forms.ChoiceField(choices = ALL_CHOICE+COUNTRY_CHOICES, required=False)
+    location = forms.ChoiceField(choices = ALL_CHOICE+COUNTRY_CHOICES, required=False)
     hospital = forms.ChoiceField(choices = ALL_CHOICE+HOSPITAL_CHOICES, required=False)
     age_of_diagnosis_min = forms.IntegerField(required = False, min_value =0)
     age_of_diagnosis_max = forms.IntegerField(required=False, min_value=0)

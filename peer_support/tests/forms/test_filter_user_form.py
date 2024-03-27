@@ -20,7 +20,7 @@ class FilterUserFormTestCase(TestCase):
             'gender': [],
             'language': 'any',
             'ethnicity': 'any',
-            'country': 'any',
+            'location': 'any',
             'hospital': 'any',
         }
 
@@ -33,7 +33,7 @@ class FilterUserFormTestCase(TestCase):
         self.assertIn('language', form.fields)
         self.assertIn('ethnicity', form.fields)
         self.assertIn('gender', form.fields)
-        self.assertIn('country', form.fields)
+        self.assertIn('location', form.fields)
     
     def test_form_validity(self):
         form_data = {
@@ -143,9 +143,9 @@ class FilterUserFormTestCase(TestCase):
         self.assertNotIn(User.objects.get(username='@petrapickles'), results)
         self.assertNotIn(User.objects.get(username='@peterpickles'), results)
 
-    def test_country(self):
+    def test_location(self):
         form_data = self.showAll
-        form_data['country'] = 'GB'
+        form_data['location'] = 'GB'
         form = FilterUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
