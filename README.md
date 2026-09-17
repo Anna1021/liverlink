@@ -88,8 +88,9 @@ external `DATABASE_URL` when creating the web service manually.
   and `DATABASE_URL`.
 
 The deployment creates database tables but does not copy the local SQLite data.
-Demo data is loaded with the idempotent `python manage.py seed_once` command. The seeded test
-administrator is `@johndoe` with password `Password123`. Run a single Daphne
+Demo data is loaded with the idempotent `python manage.py seed_once` command,
+which uses a lightweight dataset suitable for the free Render service. The seeded
+test administrator is `@johndoe` with password `Password123`. Run a single Daphne
 process: the current chat channel layer is in memory and cannot be shared across
 multiple processes or instances.
 

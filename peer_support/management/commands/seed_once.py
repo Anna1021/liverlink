@@ -16,6 +16,21 @@ from peer_support.models import (
     Report,
     Response,
 )
+from peer_support.management.commands.seeders import (
+    ConversationAndMessageSeeder,
+    FeedbackSeeder,
+    FriendRequestSeeder,
+    MentorSeeder,
+    NotificationSeeder,
+    ParentSeeder,
+    PatientSeeder,
+    PostCommentSeeder,
+    PostSeeder,
+    ProfessionalSeeder,
+    QuestionSeeder,
+    ReportSeeder,
+    ResponseSeeder,
+)
 
 
 class Command(BaseCommand):
@@ -24,19 +39,35 @@ class Command(BaseCommand):
     help = "Seeds missing demo data and skips when the complete demo dataset exists"
 
     targets = (
-        (Patient, 100),
-        (Parent, 100),
-        (Mentor, 100),
-        (Professional, 100),
-        (Post, 500),
-        (PostComment, 1000),
-        (Question, 250),
-        (Response, 1000),
-        (Conversation, 500),
-        (Report, 500),
-        (Feedback, 500),
-        (FriendRequest, 100),
-        (Notification, 500),
+        (Patient, 25),
+        (Parent, 25),
+        (Mentor, 25),
+        (Professional, 25),
+        (Post, 50),
+        (PostComment, 100),
+        (Question, 30),
+        (Response, 100),
+        (Conversation, 30),
+        (Report, 30),
+        (Feedback, 30),
+        (FriendRequest, 20),
+        (Notification, 50),
+    )
+
+    seeders = (
+        (PatientSeeder, "PATIENT_COUNT", 25),
+        (ParentSeeder, "PARENT_COUNT", 25),
+        (MentorSeeder, "MENTOR_COUNT", 25),
+        (ProfessionalSeeder, "PROFESSIONAL_COUNT", 25),
+        (PostSeeder, "POST_COUNT", 50),
+        (PostCommentSeeder, "POST_COMMENT_COUNT", 100),
+        (QuestionSeeder, "QUESTION_COUNT", 30),
+        (ResponseSeeder, "RESPONSE_COUNT", 100),
+        (ConversationAndMessageSeeder, "CONVERSATION_COUNT", 30),
+        (ReportSeeder, "REPORT_COUNT", 30),
+        (FeedbackSeeder, "FEEDBACK_COUNT", 30),
+        (FriendRequestSeeder, "FRIEND_REQUEST_COUNT", 20),
+        (NotificationSeeder, "NOTIFICATION_COUNT", 50),
     )
 
     def handle(self, *args, **options):
@@ -50,5 +81,7 @@ class Command(BaseCommand):
             return
 
         self.stdout.write("Seeding missing demo data: " + ", ".join(missing))
+        for seeder, attribute, target in self.seeders:
+            setattr(seeder, attribute, target)
         call_command("seed")
         self.stdout.write(self.style.SUCCESS("Demo data seeding complete."))
