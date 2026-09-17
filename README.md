@@ -92,12 +92,12 @@ after 30 days. If that slot is occupied, select a paid database or supply an
 external `DATABASE_URL` when creating the web service manually.
 
 - Build: `bash build.sh`
-- Start: `python manage.py migrate --noinput && daphne -b 0.0.0.0 -p $PORT peer_support_network.asgi:application`
+- Start: `python manage.py migrate --noinput && python manage.py seed_once && daphne -b 0.0.0.0 -p $PORT peer_support_network.asgi:application`
 - Environment: `PYTHON_VERSION=3.11.11`, `DEBUG=False`, a generated `SECRET_KEY`,
   and `DATABASE_URL`.
 
 The deployment creates database tables but does not copy the local SQLite data.
-Demo data can be loaded once with `python manage.py seed`. The seeded test
+Demo data is loaded with the idempotent `python manage.py seed_once` command. The seeded test
 administrator is `@johndoe` with password `Password123`. Run a single Daphne
 process: the current chat channel layer is in memory and cannot be shared across
 multiple processes or instances.
@@ -108,7 +108,8 @@ Run `python manage.py migrate` (the Render start command already does this).
 The original `0001_initial` migration is preserved for existing installations.
 Migration `0002` applies upstream model changes, and `0003` updates saved avatar
 paths to the renamed image files while preserving users and their avatar choices.
-Do not replace the database or add `seed` to the permanent start command.
+Do not replace the database or add the non-idempotent `seed` command to the
+permanent start command.
 
 ## Sources
 The packages used by this application are specified in `requirements.txt`
