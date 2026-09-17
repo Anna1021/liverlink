@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from peer_support.models import User, Mentor, Professional, Referral
 from peer_support.models.model_choices import *
 from random import randint
@@ -7,10 +8,13 @@ class UserSeeder:
     """Handle common user data"""
 
     DEFAULT_PASSWORD = "Password123"
+    default_password_hash = None
 
     def __init__(self, faker):
         self.faker = faker
         self.users = User.objects.all()
+        if UserSeeder.default_password_hash is None:
+            UserSeeder.default_password_hash = make_password(self.DEFAULT_PASSWORD)
 
     def generate_user_data(self):
         first_name = self.faker.first_name()
@@ -48,7 +52,9 @@ class UserSeeder:
         if profile_picture:
             user.userprofile.profile_picture = profile_picture
             user.userprofile.save()
-        user.set_password(self.DEFAULT_PASSWORD)
+        # Every seeded account uses the same documented test password. Reuse
+        # one secure hash so creating hundreds of demo users remains fast.
+        user.password = self.default_password_hash
         if data["username"] == "@johndoe":
             user.is_superuser = user.is_staff = True
         user.save()

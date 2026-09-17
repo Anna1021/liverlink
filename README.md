@@ -3,17 +3,8 @@
 A Django peer support application with profiles, posts, questions, peer matching,
 notifications, moderation, and live conversations using Django Channels.
 
-- Repository: [Anna1021/peer_suport](https://github.com/Anna1021/peer_suport)
+- Repository: [Anna1021/liverlink](https://github.com/Anna1021/liverlink)
 - Website: [peer-support-vpxu.onrender.com](https://peer-support-vpxu.onrender.com)
-
-## Version history
-
-This repository incorporates the 174 commits from
-[riyagill1091/SummertimeSadness](https://github.com/riyagill1091/SummertimeSadness)
-between the original local version `8fea709` (27 March 2024) and upstream `d4c787a`
-(28 March 2024). The September 2026 Render configuration is retained, including
-PostgreSQL, environment-based secrets, static file serving, and HTTP/HTTPS-aware
-WebSocket connections. Future changes are published to `Anna1021/peer_suport`.
 
 ## Team members
 The members of the team are:
