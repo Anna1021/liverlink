@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: peer-support
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: bash build.sh
+    startCommand: python manage.py migrate --noinput && daphne -b 0.0.0.0 -p $PORT peer_support_network.asgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.11
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: peer-support-db
+          property: connectionString
+databases:
+  - name: peer-support-db
+    plan: free
+    region: frankfurt
+    postgresMajorVersion: "16"

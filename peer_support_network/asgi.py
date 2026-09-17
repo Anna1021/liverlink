@@ -10,15 +10,17 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 import os
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter , URLRouter
-from peer_support import routing
 
 from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'peer_support_network.settings')
+django_application = get_asgi_application()
+# Consumers import models, so load routes after Django initializes its apps.
+from peer_support import routing
 
 application = ProtocolTypeRouter(
     {
-        "http" : get_asgi_application() , 
+        "http": django_application,
         "websocket" : AuthMiddlewareStack(
             URLRouter(
                 routing.websocket_urlpatterns

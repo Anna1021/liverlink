@@ -455,3 +455,4 @@ fabric.properties
 
 #VSCode
 .vscode/
+static_root/
