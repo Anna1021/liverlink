@@ -39,7 +39,7 @@
 }
 
 .ps-footer {
-    padding: 40px;
+    padding: 10px;
 }
 
 /*
@@ -57,16 +57,6 @@ li.ps-list-item:hover {
     border-radius: 5px;
 }
 
-a.ps-link {
-    text-decoration: none;
-    color: black;
-    display: block;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 20px;
-    padding-left: 5px;
-}
-
 /*
  * Asset styling
  */
@@ -74,13 +64,13 @@ a.ps-link {
 img.ps-profile-picture {
     margin-top: 10px;
     border-radius: 50%;
-    width: 190px;
-    height: 190px;
+    width: 100%;
+    height: auto;
     margin-bottom: 10px;
 }
 
 i.ps-icons {
-    color: black;
+    color: rgb(158, 158, 255);
     font-size: small;
 }
 
@@ -91,7 +81,6 @@ i.ps-icons {
 .ps-col {
     vertical-align: top;
     display: inline-block;
-    margin-right: 35px;
 }
 
 /*
@@ -148,4 +137,9 @@ img.bl-profile-picture{
     background-color: gainsboro;
     color: black;
     box-shadow: none;
+}
+
+.ps-scrollable{
+    max-height: 70vh;
+    overflow-y: scroll;
 }

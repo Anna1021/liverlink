@@ -7,7 +7,7 @@
             "description": "@johndoe has sent you a friend request.",
             "created": "2023-01-02 11:16:09.184106+01:00",
             "viewed": false,
-            "user": 2,
+            "user": 1,
             "notifying_user": 1,
             "content_type": 20,
             "object_id": 1
@@ -21,9 +21,51 @@
             "description": "@petrapickles has added you to a group conversation.",
             "created": "2024-01-02 11:16:09.184106+01:00",
             "viewed": false,
-            "user": 4,
+            "user": 1,
             "notifying_user": 3,
             "content_type": 10,
+            "object_id": 1
+        }
+    },
+    {
+        "model": "peer_support.notification",
+        "pk": 4,
+        "fields": {
+            "title": "New Friend Request",
+            "description": "@johndoe has sent you a friend request.",
+            "created": "2024-02-26 11:16:09.184106+01:00",
+            "viewed": false,
+            "user": 1,
+            "notifying_user": 1,
+            "content_type": 22,
+            "object_id": 1
+        }
+    },
+    {
+        "model": "peer_support.notification",
+        "pk": 5,
+        "fields": {
+            "title": "New Post Comment",
+            "description": "@johndoe has commented on your post.",
+            "created": "2023-01-02 11:16:09.184106+01:00",
+            "viewed": false,
+            "user": 1,
+            "notifying_user": 1,
+            "content_type": 19,
+            "object_id": 1
+        }
+    },
+    {
+        "model": "peer_support.notification",
+        "pk": 6,
+        "fields": {
+            "title": "New Response",
+            "description": "@johndoe has replied to your question.",
+            "created": "2023-01-02 11:16:09.184106+01:00",
+            "viewed": false,
+            "user": 1,
+            "notifying_user": 1,
+            "content_type": 17,
             "object_id": 1
         }
     }

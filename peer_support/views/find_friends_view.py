@@ -3,12 +3,12 @@ from django.shortcuts import render
 from django.views import View
 from django.contrib import messages
 from peer_support.forms import SortUserForm, FilterUserForm, SearchUserForm
-from .helpers import get_addable_peers, get_user_type
+from .helpers import get_addable_peers, get_user_type,get_page
 
-class PeerSelectView(LoginRequiredMixin, View):
+class FindFriendsView(LoginRequiredMixin, View):
     """Displays the page for viewing users on network."""
 
-    template_name = 'find_friends.html'
+    template_name = "find_friends.html"
 
     def get(self, request):
         users = get_addable_peers(request.user)
@@ -18,10 +18,29 @@ class PeerSelectView(LoginRequiredMixin, View):
         users = self.process_search(users, form_search)
         users = self.process_filter(users, form_filter)
         users = self.process_sort(users, form_sort, request.user)
-        users_with_types = [{'user': user, 'user_type': get_user_type(user)} for user in users]
-        context = {'users': users_with_types, 'form_sort': form_sort, 'form_filter': form_filter, 'form_search': form_search}
+        users_with_types = [
+            {"user": user, "user_type": get_user_type(user)} for user in users
+        ]
+        users_with_types = get_page(request,users_with_types)
+        extra_query=self.get_extra_query(request)
+        context = {
+            "users": users_with_types,
+            "form_sort": form_sort,
+            "form_filter": form_filter,
+            "form_search": form_search,
+            "extra_query":extra_query,
+        }
         return render(request, self.template_name, context)
-        
+
+    def get_extra_query(self,request):
+        query_params = request.GET.copy()
+        if "page" in query_params:
+            del query_params["page"]
+        extra_query=""
+        for key,value in query_params.items():
+            extra_query+= "&"+key+"="+value
+        return extra_query
+
     def process_search(self, users, form_search):
         """Process search form."""
 

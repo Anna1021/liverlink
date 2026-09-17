@@ -31,9 +31,9 @@ class DeletePostViewTestCase(TestCase):
         response = self.client.get(self.url, follow=True)
         posts_after = PostComment.objects.count()
         self.assertEqual(posts_after + 2, posts_before)
-        redirect_url = reverse('post_detail',kwargs={'post_id':self.post.id})
+        redirect_url = reverse('post',kwargs={'post_id':self.post.id})
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-        self.assertTemplateUsed(response, 'post_detail.html')
+        self.assertTemplateUsed(response, 'post.html')
 
     def test_cannot_delete_nonexistent_comment(self):
         invalid_url = reverse('delete_comment',kwargs={'comment_id':3})

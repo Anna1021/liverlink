@@ -5,6 +5,9 @@ from peer_support.forms import FilterUserForm, SortUserForm, SearchUserForm
 from peer_support.models import User
 from peer_support.tests.helpers import reverse_with_next
 from django.utils.http import urlencode
+from django.test import TestCase
+from django.http import QueryDict
+from peer_support.views import FindFriendsView
 
 class FindFriendViewTestCase(TestCase):
     """Tests of the Find Friend view."""
@@ -120,3 +123,10 @@ class FindFriendViewTestCase(TestCase):
         users = response.context['users']
         for user in users:
             self.assertNotIn(user, self.user.blocked_by.all())
+
+    def test_remove_page_parameter(self):
+        request = type('Request', (), {'GET': QueryDict('page=1&other_param=value')})
+        view = FindFriendsView()
+        extra_query = view.get_extra_query(request)
+
+        self.assertNotIn("page", extra_query)

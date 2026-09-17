@@ -4,8 +4,9 @@
     <h2>Friends List</h2>
     <hr>
     {% include 'partials/search_filter_sort_users.html' %}
+    {% include 'partials/pagination_bar.html' with type=friends %}
     <div class="row">
-        {% for friend in friends %}
+        {% for friend in friends.object_list %}
             {% include "partials/user_card.html" with user=friend.friend %}
         {% endfor %}
     </div>

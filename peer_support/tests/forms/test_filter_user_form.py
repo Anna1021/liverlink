@@ -1,4 +1,6 @@
 """Unit test of the filter peer form"""
+from datetime import datetime, timezone
+from unittest.mock import patch
 from django.test import TestCase
 from peer_support.forms import FilterUserForm 
 from peer_support.models import User
@@ -88,27 +90,29 @@ class FilterUserFormTestCase(TestCase):
         results = form.filter_users(self.users)
         self.assertTrue(all(user.professional for user in results))
 
-    def test_min_age(self):
+    @patch('peer_support.forms.filter_user_form.timezone.now', return_value=datetime(2024, 3, 28, tzinfo=timezone.utc))
+    def test_min_age(self, _now):
         form_data = self.showAll
-        form_data['min_age'] = 25
+        form_data['min_age'] = 24
         form = FilterUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(results.exists())
-        self.assertIn(User.objects.get(username='@peterpickles'), results)
-        self.assertNotIn(User.objects.get(username='@petrapickles'), results)
+        self.assertIn(User.objects.get(username='@petrapickles'), results)
+        self.assertNotIn(User.objects.get(username='@peterpickles'), results)
         self.assertNotIn(User.objects.get(username='@janedoe'), results)
 
-    def test_max_age(self):
+    @patch('peer_support.forms.filter_user_form.timezone.now', return_value=datetime(2024, 3, 28, tzinfo=timezone.utc))
+    def test_max_age(self, _now):
         form_data = self.showAll
-        form_data['max_age'] = 25
+        form_data['max_age'] = 23
         form = FilterUserForm(data=form_data)
         self.assertTrue(form.is_valid())
         results = form.filter_users(self.users)
         self.assertTrue(results.exists())
         self.assertIn(User.objects.get(username='@janedoe'), results)
-        self.assertIn(User.objects.get(username='@petrapickles'), results)
-        self.assertNotIn(User.objects.get(username='@peterpickles'), results)
+        self.assertIn(User.objects.get(username='@peterpickles'), results)
+        self.assertNotIn(User.objects.get(username='@petrapickles'), results)
 
     def test_language(self):
         form_data = self.showAll
@@ -199,7 +203,7 @@ class FilterUserFormTestCase(TestCase):
             self.assertEqual(user.patient.condition, condition)
 
     def test_patient_transplant_status(self):
-        transplant = "Y"
+        transplant = "Yes"
         form_data = self.showAll
         form_data['user_type'] = ['PT']        
         form_data['transplant'] = transplant
@@ -243,7 +247,7 @@ class FilterUserFormTestCase(TestCase):
             self.assertEqual(user.parent.child_condition, child_condition)
 
     def test_child_transplant_status(self):
-        child_transplant = "Y"
+        child_transplant = "Yes"
         form_data = self.showAll
         form_data['user_type'] = ['PR']        
         form_data['child_transplant'] = child_transplant
@@ -287,7 +291,7 @@ class FilterUserFormTestCase(TestCase):
             self.assertEqual(user.mentor.condition, mentor_condition)
 
     def test_mentor_transplant_status(self):
-        transplant = "Y"
+        transplant = "Yes"
         form_data = self.showAll
         form_data['user_type'] = ['MT']        
         form_data['transplant'] = transplant

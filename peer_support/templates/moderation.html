@@ -4,7 +4,8 @@
 {% include 'partials/administrative_navbar.html' %} 
 <div class="mb-3">
     <h1 class="mt-2 mb-3">Reports</h1>
-    {% for report in reports %}
+    {% include 'partials/pagination_bar.html' with type=reports %}
+    {% for report in reports.object_list %}
         {% include 'partials/report.html' with report=report %}
     {% empty %}
         <p>No reports found.</p>

@@ -26,7 +26,7 @@ class ParentFormTestCase(TestCase):
             'language': 'en',
             'bio': 'I am a test patient.',
             'child_condition': 'Haemochromatosis',
-            'child_transplant': 'Y',
+            'child_transplant': 'Yes',
             'child_age_of_diagnosis': 21,
         }
 
@@ -91,6 +91,6 @@ class ParentFormTestCase(TestCase):
         self.assertEqual(user.language, 'en')
         self.assertEqual(user.bio, 'I am a test patient.'),
         self.assertEqual(user.child_condition, 'Haemochromatosis'),
-        self.assertEqual(user.child_transplant, 'Y'),
+        self.assertEqual(user.child_transplant, 'Yes'),
         self.assertEqual(user.child_age_of_diagnosis, 21),
         self.assertEqual(before_count, after_count)

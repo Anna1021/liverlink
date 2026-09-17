@@ -1,5 +1,5 @@
 {% extends 'dashboard.html' %}
-<!-- {% load static %} -->
+{% load static %}
 {% block page %}
 
 <title>Feed</title>
@@ -20,7 +20,6 @@
         </button>
       </form>
     </div>
-  
   </div>
 
   <button type="button" class="btn apply-btn mt-2 mb-2" id="create-post" data-bs-toggle="modal" data-bs-target="#create_post">Create post</button>
@@ -29,7 +28,7 @@
         <div class="modal-content card">
           <div class="modal-header">
             <h5 class="modal-title">Create a new post</h5>
-            <button type="button" class="btn-close btn-outline-light" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-outline-light btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form method="post" class="px-4 py-3" novalidate>
@@ -41,34 +40,19 @@
         </div>
     </div>
   </div>
-  <div class="row justify-content-center">
-    <div class="col-md-2 text-center">
-      {% if posts.has_previous %}
-        <a href="?page={{ posts.previous_page_number }}"> previous </a>
-      {% endif %}
-    </div>
-    <div class="col-md-2 text-center">
-      <span class="current-page">{{ posts.number }}</span>
-    </div>
-    <div class="col-md-2 text-center">
-      {% if posts.has_next %}
-        <a href="?page={{ posts.next_page_number }}"> next</a>
-      {% endif %}
-    </div>
-  </div>
- 
+  {% with "&feed_type="|add:feed_type|stringformat:'s' as feed_query %}
+  {% include 'partials/pagination_bar.html' with type=posts extra_query=feed_query %}
+  {% endwith %}
   <div class="scrollable-feed"> 
     {% for post in posts.object_list %}
     <div class="post-card pb-2">
       {% include 'partials/post_details.html' with post=post from_feed=True %}
+      {% include 'partials/report_modal.html' with object_id=post.id report_type='report_post' %}
     </div>
     {% empty %}
     <p>No posts available.</p>
     {% endfor %}
   </div>
 </div>
-
-
 <script src="{% static 'js/feed.js' %}"></script>
-
 {% endblock %}

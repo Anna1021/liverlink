@@ -22,7 +22,7 @@ class ClearNotificationsViewTestCase(TestCase):
         self.assertEqual(self.url, '/clear_notifications/')
 
     def test_clear_notifications(self):
-        self.assertEqual(Notification.objects.count(), 3)
+        self.assertEqual(Notification.objects.count(), 6)
         user_notifications = Notification.objects.filter(user=self.user)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -34,4 +34,4 @@ class ClearNotificationsViewTestCase(TestCase):
         redirect_url = reverse_with_next('log_in', self.url)
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-        self.assertEqual(Notification.objects.count(), 3)
+        self.assertEqual(Notification.objects.count(), 6)

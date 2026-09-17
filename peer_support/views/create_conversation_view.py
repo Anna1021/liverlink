@@ -5,6 +5,7 @@ from django.urls import reverse
 from peer_support.forms import ConversationForm, MessageForm
 from peer_support.models import Notification
 
+
 class CreateConversationView(LoginRequiredMixin, FormView):
     """Displays the user's conversation"""
 
@@ -13,19 +14,36 @@ class CreateConversationView(LoginRequiredMixin, FormView):
 
     def get(self, request):
         form = ConversationForm(request.user)
-        return render(request, self.template_name, {'form': form, 'user_conversations': request.user.sort_conversations()})
+        return render(
+            request,
+            self.template_name,
+            {"form": form, "user_conversations": request.user.sort_conversations()},
+        )
 
     def post(self, request):
         """Post request for user to send message to conversation"""
 
-        form = ConversationForm(request.user, data = request.POST)
+        form = ConversationForm(request.user, data=request.POST)
         create_group = False
-        if request.POST.get('group'):
+        if request.POST.get("group"):
             create_group = True
         if form.is_valid():
             conversation = form.save(request.user, create_group)
             for user in conversation.users.exclude(id=request.user.id):
-                Notification.objects.create(content_object=conversation, user=user, notifying_user=request.user)
-            return redirect(reverse("conversation", kwargs={'conversation_id': conversation.id}), {'form': MessageForm(conversation, user=request.user), 'conversation': conversation, 'user_conversations': request.user.sort_conversations()})
+                Notification.objects.create(
+                    content_object=conversation, user=user, notifying_user=request.user
+                )
+            return redirect(
+                reverse("conversation", kwargs={"conversation_id": conversation.id}),
+                {
+                    "form": MessageForm(conversation, user=request.user),
+                    "conversation": conversation,
+                    "user_conversations": request.user.sort_conversations(),
+                },
+            )
         else:
-            return render(request, self.template_name, {'form': form, 'user_conversations': request.user.sort_conversations()})
+            return render(
+                request,
+                self.template_name,
+                {"form": form, "user_conversations": request.user.sort_conversations()},
+            )

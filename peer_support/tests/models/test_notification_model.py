@@ -268,7 +268,7 @@ class NotificationModelTestCase(TestCase):
         post = Post.objects.get(id=1)
         liking_user = User.objects.get(id=2)
         new_notification = Notification.objects.create(user=post.author, notifying_user=liking_user, content_object=post)
-        expected_url = reverse('post_detail', kwargs={'post_id': post.id})
+        expected_url = reverse('post', kwargs={'post_id': post.id})
         self.assertEqual(new_notification.get_URL(), expected_url)
         self.assertEqual(new_notification.get_post_URL(), expected_url)
 
@@ -276,7 +276,7 @@ class NotificationModelTestCase(TestCase):
         comment = PostComment.objects.get(id=1)
         post = Post.objects.get(id=1)
         new_notification = Notification.objects.create(user=post.author, notifying_user=comment.author, content_object=comment)
-        expected_url = reverse('post_detail', kwargs={'post_id': post.id})
+        expected_url = reverse('post', kwargs={'post_id': post.id})
         self.assertEqual(new_notification.get_URL(), expected_url)
         self.assertEqual(new_notification.get_post_URL(), expected_url)
 

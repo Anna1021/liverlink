@@ -38,6 +38,7 @@
                 </div>
                 {% else %}
                 {% include 'partials/profile/user_actions_dropdown.html' %}
+                {% include 'partials/report_modal.html' with object_id=user.id report_type='report_user' %}
                 {% endif %}
             </div>
         </div>
@@ -64,11 +65,17 @@
                             {% include 'partials/profile/user_information.html' %}
                         </div>
                         <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
-                            {% for post in posts %}
-                            {% include 'partials/post_details.html' with from_feed=True post=post %}
-                            {% empty %}
-                            This user has no posts yet
-                            {% endfor %}
+                            <div class="scrollable-feed"> 
+                                {% for post in posts %}
+                                <div class="post-card pb-2">
+                                {% include 'partials/post_details.html' with from_feed=True post=post %}
+                                </div>
+                                {% empty %}
+                                <div class="profile-subheading col-md-6">
+                                    This user has no posts yet
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>

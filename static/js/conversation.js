@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    let pageScroll = localStorage.getItem('pageScroll');
+    if(pageScroll!=null) window.scrollTo(0,pageScroll);
     let msg = sessionStorage.getItem(storageKey);
     if (msg!=null) $('#id_content').val(msg);
     var currentUrl = window.location.href;
@@ -6,10 +8,17 @@ $(document).ready(function() {
     if (currentUrl.indexOf('?') === -1) {
         var newUrl = currentUrl + '?first_message='+first_message;
         window.history.pushState({path: newUrl}, '', newUrl);
+        if(window.innerWidth<= 770) $('#sidebar-toggle').prop('checked',true);
         window.location.reload();
     }
     if ($('#conversation').scrollTop()<$('#conversation').prop('scrollHeight')-($('#conversation').prop('clientHeight')+120)){
         $('#scroll-down').show();
+    }
+    let menuNotExpanded = localStorage.getItem('sidebarExpanded');
+    if(menuNotExpanded!=null && menuNotExpanded=="true") {
+        $('#sidebar-toggle').prop('checked',true);
+    } else{
+        $('#sidebar-toggle').prop('checked',false);
     }
     function setScroll(){
         let scrollPos = 0;
@@ -75,5 +84,7 @@ window.addEventListener('beforeunload', function(e){
     }else{
         sessionStorage.clear();
     }
+    localStorage.setItem('sidebarExpanded',$('#sidebar-toggle').prop('checked'))
+    localStorage.setItem('pageScroll',window.scrollY)
     return '';
 })

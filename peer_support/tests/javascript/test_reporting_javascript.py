@@ -54,7 +54,7 @@ class ReportingJavascriptTest(StaticLiveServerTestCase):
             password_input.send_keys('Password123')
             self.wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@value="Log in"]'))).click()
             self.selenium.get(f'{self.live_server_url}/post/1/')
-            css_selector = "p.text-muted[data-reported='true']"
+            css_selector = "h6.text-muted[data-reported='true']"
 
             located_element = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, css_selector)))
             self.assertEqual("You have reported this. Click to reveal.", located_element.get_attribute("innerHTML"))
