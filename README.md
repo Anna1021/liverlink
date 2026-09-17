@@ -4,7 +4,7 @@ A Django peer support application with profiles, posts, questions, peer matching
 notifications, moderation, and live conversations using Django Channels.
 
 - Repository: [Anna1021/liverlink](https://github.com/Anna1021/liverlink)
-- Website: [peer-support-vpxu.onrender.com](https://peer-support-vpxu.onrender.com)
+- Website: [liverlink-app.onrender.com](https://liverlink-app.onrender.com)
 
 ## Team members
 The members of the team are:
@@ -20,10 +20,8 @@ The members of the team are:
 The project is called `peer_support_network`.  It currently consists of a single app `peer_support`.
 
 ## Deployed version of the application
-The deployed version of the application can be found at [*peer-support-vpxu.onrender.com*](https://peer-support-vpxu.onrender.com).
-The administrative interface can be found at [*peer-support-vpxu.onrender.com/admin*](https://peer-support-vpxu.onrender.com/admin).
-
-Production accounts are created separately; development seed accounts are not deployed.
+The deployed version of the application can be found at [*liverlink-app.onrender.com*](https://liverlink-app.onrender.com).
+The administrative interface can be found at [*liverlink-app.onrender.com/admin*](https://liverlink-app.onrender.com/admin).
 
 ## Installation instructions
 Use Python 3.11 (Render currently uses 3.11.11). From the project root:

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: liverlink
+    name: liverlink-app
     runtime: python
     plan: free
     region: frankfurt
