@@ -1,6 +1,5 @@
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
-from django.db import transaction
 
 from peer_support.models import (
     Conversation,
@@ -51,6 +50,5 @@ class Command(BaseCommand):
             return
 
         self.stdout.write("Seeding missing demo data: " + ", ".join(missing))
-        with transaction.atomic():
-            call_command("seed")
+        call_command("seed")
         self.stdout.write(self.style.SUCCESS("Demo data seeding complete."))
